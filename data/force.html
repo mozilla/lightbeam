@@ -1,0 +1,241 @@
+<!DOCTYPE hmtl>
+<meta charset="utf-8">
+<title>Collusion</title>
+<script src="d3.js"></script>
+<style>
+circle.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+marker {
+  stroke: none;
+  fill: #999;
+  fill-opacity: .6;  
+}
+
+line.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+html, body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9pt;
+}
+
+#sidebar {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 200px;
+  padding: 20px;
+}
+
+blockquote {
+  margin-left: 10px;
+  font-style: italic;
+}
+
+.attribution {
+  margin-left: 20px;
+}
+</style>
+<div id="sidebar">
+  <h1>Collusion</h1>
+  <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
+  <p>This is an interactive visualization of browser cookies. Hover over a node to learn more about it, and drag the nodes around to see more of the graph.</p>
+  <div id="info">
+    <h2 class="domain"></h2>
+  
+    <div class="referrers">
+      <p>The site <a target="_blank" class="domain"></a> tracks your behavior across the following websites.</p>
+      <ul></ul>
+    </div>
+  </div>
+</div>
+<div id="chart"></div>
+<script src="d3.layout.js"></script>
+<script src="d3.geom.js"></script>
+<script>
+var w = 960,
+    h = 500,
+    fill = d3.scale.category20();
+
+var vis = d3.select("#chart")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+vis.append("svg:defs")
+  .append("svg:marker")
+    .attr("id", "Triangle")
+    .attr("viewBox", "0 0 10 10")
+    .attr("refX", 30)
+    .attr("refY", 5)
+    .attr("markerUnits", "strokeWidth")
+    .attr("markerWidth", 4*2)
+    .attr("markerHeight", 3*2)
+    .attr("orient", "auto")
+    .append("svg:path")
+      .attr("d", "M 0 0 L 10 5 L 0 10 z");
+
+function draw(json) {
+  var force = d3.layout.force()
+      .charge(-120)
+      .distance(60)
+      .friction(0)
+      .nodes(json.nodes)
+      .links(json.links)
+      .size([w, h])
+      .start();
+
+  var link = vis.selectAll("line.link")
+      .data(json.links)
+    .enter().append("svg:line")
+      .attr("class", function(d) { return "link from-" + d.source.index +
+                                   " to-" + d.target.index; })
+      .style("stroke-width", 1)
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  function radius(d) {
+    return 5+d.strength;
+  }
+  
+  function selectArcs(d) {
+    return vis.selectAll("line.to-" + d.index +
+                         ",line.from-" + d.index);
+  }
+  
+  var node = vis.selectAll("circle.node")
+      .data(json.nodes)
+    .enter().append("svg:circle")
+      .attr("class", "node")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", radius)
+      .style("fill", function(d) { return fill(d.group); })
+      .call(force.drag)
+      .on("mouseout", function(d) {
+        selectArcs(d).attr("marker-end", null);
+      })
+      .on("mouseover", function(d) {
+        selectArcs(d).attr("marker-end", "url(#Triangle)");
+
+        $("#info").find(".domain").text(d.name);
+        $("#info").find("a.domain").attr("href", "http://" + d.name);
+        var referrers = $("#info").find(".referrers");
+        var domains = findReferringDomains(d);
+        if (domains.length) {
+          var list = referrers.find("ul");
+          list.empty();
+          domains.forEach(function(name) {
+            list.append('<li><a target="_blank" href="http://' +
+                        name + '">' + name + '</a></li>');
+          });
+          referrers.show();
+        } else {
+          referrers.hide();
+        }
+        $("#info").fadeIn();
+      });
+
+  node.append("svg:title")
+      .text(function(d) { return d.name; });
+
+  vis.style("opacity", 1e-6)
+    .transition()
+      .duration(1000)
+      .style("opacity", 1);
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+}
+
+function findReferringDomains(d, list, domain) {
+  if (!list) {
+    list = [];
+    domain = d.name;
+  }
+  if (d.referrers.length) {
+    d.referrers.forEach(function(link) {
+      if (list.indexOf(link.source.name) == -1 &&
+          link.source.name != domain) {
+        list.push(link.source.name);
+        findReferringDomains(link.source, list, domain);
+      }
+    });
+  }
+  return list;
+}
+</script>
+<script src="jquery.min.js"></script>
+<script>
+function removeDomainsWithOneReferrer(json) {
+  var toRemove = [];
+  
+  for (var domain in json) {
+    var referrers = 0;
+    for (var referrer in json[domain])
+      referrers++;
+    if (referrers == 1)
+      toRemove.push(domain);
+  }
+  
+  toRemove.forEach(function(domain) {
+    delete json[domain];
+  });
+}
+
+$(window).ready(function() {
+  $("#info").hide();
+  
+  var info = window.location.search.match(/^\?log=(.+)/);
+
+  if (info) {
+    onJson(JSON.parse(decodeURIComponent(info[1])));
+  } else
+    jQuery.getJSON("sample-tracking-info.json", onJson);
+
+  function onJson(json) {
+    var nodes = [];
+    var links = [];
+    var domainIds = {};
+
+    function getNodeId(domain) {
+      if (!(domain in domainIds)) {
+        domainIds[domain] = nodes.length;
+        nodes.push({name: domain, group: 1, strength: 0, referrers: []});
+      }
+      return domainIds[domain];
+    }
+    
+    //removeDomainsWithOneReferrer(json);
+    
+    for (var domain in json) {
+      var domainId = getNodeId(domain);
+      var referrerLinks = [];
+      for (var referrer in json[domain]) {
+        var referrerId = getNodeId(referrer);
+        referrerLinks.push({source: referrerId, target: domainId});
+      }
+      links.push.apply(links, referrerLinks);
+      nodes[domainId].referrers = referrerLinks;
+      nodes[domainId].strength += referrerLinks.length;
+      nodes[domainId].group += referrerLinks.length;
+    }
+
+    draw({nodes: nodes, links: links});
+  }  
+});
+</script>
