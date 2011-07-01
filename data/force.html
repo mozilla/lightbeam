@@ -258,16 +258,19 @@ $(window).ready(function() {
     var graphParts = {nodes: nodes, links: links};
     
     function addNode() {
-      graphParts.links.push({
-        source: 1,
+      var source = getNodeId("imdb.com");
+      var link = {
+        source: source,
         target: graphParts.nodes.length,
-      });
+      };
       graphParts.nodes.push({
         name: "blarg" + i++ + ".com",
         group: 1,
         strength: 1,
         referrers: []
       });
+      graphParts.links.push(link);
+      nodes[source].referrers.push(link);
     }
 
     addNode();
@@ -278,10 +281,10 @@ $(window).ready(function() {
       addNode();
       drawing.force.nodes(graphParts.nodes);
       drawing.force.links(graphParts.links);
-      createNodes(graphParts.nodes, drawing.force);
-      createLinks(graphParts.links);
       drawing.force.start();
-    }, 1000);
+      createLinks(graphParts.links);
+      createNodes(graphParts.nodes, drawing.force);
+    }, 10000);
   }  
 });
 </script>
