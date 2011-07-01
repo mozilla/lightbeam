@@ -82,27 +82,7 @@ vis.append("svg:defs")
     .append("svg:path")
       .attr("d", "M 0 0 L 10 5 L 0 10 z");
 
-function draw(json) {
-  var force = d3.layout.force()
-      .charge(-120)
-      .distance(60)
-      .friction(0)
-      .nodes(json.nodes)
-      .links(json.links)
-      .size([w, h])
-      .start();
-
-  var link = vis.selectAll("line.link")
-      .data(json.links)
-    .enter().append("svg:line")
-      .attr("class", function(d) { return "link from-" + d.source.index +
-                                   " to-" + d.target.index; })
-      .style("stroke-width", 1)
-      .attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
-
+function createNodes(nodes, force) {
   function radius(d) {
     return 5+d.strength;
   }
@@ -113,7 +93,7 @@ function draw(json) {
   }
   
   var node = vis.selectAll("circle.node")
-      .data(json.nodes)
+      .data(nodes)
     .enter().append("svg:circle")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
@@ -121,6 +101,7 @@ function draw(json) {
       .attr("r", radius)
       .style("fill", function(d) { return fill(d.group); })
       .call(force.drag)
+      .call(function(d) { console.log("new nodes", d); })
       .on("mouseout", function(d) {
         selectArcs(d).attr("marker-end", null);
       })
@@ -147,21 +128,57 @@ function draw(json) {
 
   node.append("svg:title")
       .text(function(d) { return d.name; });
+      
+  return node;
+}
 
+function createLinks(links) {
+  var link = vis.selectAll("line.link")
+      .data(links)
+    .enter().append("svg:line")
+      .attr("class", function(d) { return "link from-" + d.source.index +
+                                   " to-" + d.target.index; })
+      .style("stroke-width", 1)
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  return link;
+}
+
+function draw(json) {
+  var force = d3.layout.force()
+      .charge(-120)
+      .distance(60)
+      .friction(0)
+      .nodes(json.nodes)
+      .links(json.links)
+      .size([w, h])
+      .start();
+
+  createLinks(json.links);
+  createNodes(json.nodes, force);
+  
   vis.style("opacity", 1e-6)
     .transition()
       .duration(1000)
       .style("opacity", 1);
 
   force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
+     vis.selectAll("line.link").attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    node.attr("cx", function(d) { return d.x; })
+    vis.selectAll("circle.node").attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
   });
+  
+  return {
+    vis: vis,
+    force: force
+  };
 }
 
 function findReferringDomains(d, list, domain) {
@@ -237,7 +254,34 @@ $(window).ready(function() {
       nodes[domainId].group += referrerLinks.length;
     }
 
-    draw({nodes: nodes, links: links});
+    var i = 0;    
+    var graphParts = {nodes: nodes, links: links};
+    
+    function addNode() {
+      graphParts.links.push({
+        source: 1,
+        target: graphParts.nodes.length,
+      });
+      graphParts.nodes.push({
+        name: "blarg" + i++ + ".com",
+        group: 1,
+        strength: 1,
+        referrers: []
+      });
+    }
+
+    addNode();
+    var drawing = draw(graphParts);
+
+    setInterval(function() {
+      drawing.force.stop();
+      addNode();
+      drawing.force.nodes(graphParts.nodes);
+      drawing.force.links(graphParts.links);
+      createNodes(graphParts.nodes, drawing.force);
+      createLinks(graphParts.links);
+      drawing.force.start();
+    }, 1000);
   }  
 });
 </script>
