@@ -223,22 +223,6 @@ function findReferringDomains(d, list, domain) {
 </script>
 <script src="jquery.min.js"></script>
 <script>
-function removeDomainsWithOneReferrer(json) {
-  var toRemove = [];
-  
-  for (var domain in json) {
-    var referrers = 0;
-    for (var referrer in json[domain])
-      referrers++;
-    if (referrers == 1)
-      toRemove.push(domain);
-  }
-  
-  toRemove.forEach(function(domain) {
-    delete json[domain];
-  });
-}
-
 $(window).ready(function() {
   $("#info").hide();
   
@@ -261,8 +245,6 @@ $(window).ready(function() {
       }
       return domainIds[domain];
     }
-    
-    //removeDomainsWithOneReferrer(json);
         
     for (var domain in json) {
       var domainId = getNodeId(domain);
