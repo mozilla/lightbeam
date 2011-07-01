@@ -275,12 +275,10 @@ $(window).ready(function() {
     jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
       json.reverse();
       function showNextBrowse() {
-        if (json.length) {
+        if (json.length)
           graph.update(json.pop());
-        } else
-          clearInterval(intervalID);
       }
-      var intervalID = setInterval(showNextBrowse, 3000);
+      window.addEventListener("click", showNextBrowse, false);
       showNextBrowse();
     });
 });
