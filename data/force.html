@@ -86,15 +86,19 @@ vis.append("svg:g").attr("class", "links");
 vis.append("svg:g").attr("class", "nodes");
 
 function createNodes(nodes, force) {
+  function getReferringLinkCount(d) {
+    return selectReferringLinks(d)[0].length;
+  }
+  
   function radius(d) {
-    var added = d.strength / 3;
+    var added = getReferringLinkCount(d) / 3;
     if (added > 7)
       added = 7;
     return 4 + added;
   }
   
   function groupFill(d) {
-    return fill(d.group);
+    return fill(1 + getReferringLinkCount(d));
   }
   
   function selectArcs(d) {
@@ -196,20 +200,24 @@ function draw(json) {
   };
 }
 
+function selectReferringLinks(d) {
+  return vis.selectAll("line.to-" + d.index);
+}
+
 function findReferringDomains(d, list, domain) {
   if (!list) {
     list = [];
     domain = d.name;
   }
-  if (d.referrers.length) {
-    d.referrers.forEach(function(link) {
-      if (list.indexOf(link.source.name) == -1 &&
-          link.source.name != domain) {
-        list.push(link.source.name);
-        findReferringDomains(link.source, list, domain);
-      }
-    });
-  }
+  
+  selectReferringLinks(d).each(function(d) {
+    if (list.indexOf(d.source.name) == -1 &&
+        d.source.name != domain) {
+      list.push(d.source.name);
+      findReferringDomains(d.source, list, domain);
+    }
+  });
+
   return list;
 }
 </script>
@@ -249,28 +257,19 @@ $(window).ready(function() {
     function getNodeId(domain) {
       if (!(domain in domainIds)) {
         domainIds[domain] = nodes.length;
-        nodes.push({name: domain, group: 1, strength: 0, referrers: []});
+        nodes.push({name: domain});
       }
       return domainIds[domain];
     }
     
     //removeDomainsWithOneReferrer(json);
-    
-    function setNodeStrength(node) {
-      node.strength += node.referrers.length;
-      node.group += node.referrers.length;
-    }
-    
+        
     for (var domain in json) {
       var domainId = getNodeId(domain);
-      var referrerLinks = [];
       for (var referrer in json[domain]) {
         var referrerId = getNodeId(referrer);
-        referrerLinks.push({source: referrerId, target: domainId});
+        links.push({source: referrerId, target: domainId});
       }
-      links.push.apply(links, referrerLinks);
-      nodes[domainId].referrers = referrerLinks;
-      setNodeStrength(nodes[domainId]);
     }
 
     var i = 0;    
@@ -278,19 +277,11 @@ $(window).ready(function() {
     
     function addNode() {
       var domainId = getNodeId("doubleclick.net");
-      var link = {
+      graphParts.links.push({
         source: graphParts.nodes.length,
-        target: domainId,
-      };
-      graphParts.nodes.push({
-        name: "blarg" + i++ + ".com",
-        group: 1,
-        strength: 1,
-        referrers: []
+        target: domainId
       });
-      graphParts.links.push(link);
-      nodes[domainId].referrers.push(link);
-      setNodeStrength(nodes[domainId]);
+      graphParts.nodes.push({name: "blarg" + i++ + ".com"});
     }
 
     addNode();
