@@ -258,12 +258,10 @@ $(window).ready(function() {
     var graphParts = {nodes: nodes, links: links};
     
     function addNode() {
-      var domainId = getNodeId("doubleclick.net");
       graphParts.links.push({
-        source: graphParts.nodes.length,
-        target: domainId
+        source: getNodeId("blarg" + i++ + ".com"),
+        target: getNodeId("doubleclick.net")
       });
-      graphParts.nodes.push({name: "blarg" + i++ + ".com"});
     }
 
     addNode();
