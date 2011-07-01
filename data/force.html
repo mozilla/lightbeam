@@ -93,8 +93,15 @@ function createNodes(nodes, force) {
   }
   
   var node = vis.selectAll("circle.node")
-      .data(nodes)
-    .enter().append("svg:circle")
+      .data(nodes);
+
+  node.call(function(d) { console.log("updating nodes", d); })
+      .transition()
+      .duration(1000)
+      .attr("r", radius)
+      .style("fill", function(d) { return fill(d.group); });
+
+  node.enter().append("svg:circle")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
@@ -128,7 +135,7 @@ function createNodes(nodes, force) {
 
   node.append("svg:title")
       .text(function(d) { return d.name; });
-      
+
   return node;
 }
 
@@ -241,6 +248,11 @@ $(window).ready(function() {
     
     //removeDomainsWithOneReferrer(json);
     
+    function setNodeStrength(node) {
+      node.strength += node.referrers.length;
+      node.group += node.referrers.length;
+    }
+    
     for (var domain in json) {
       var domainId = getNodeId(domain);
       var referrerLinks = [];
@@ -250,18 +262,17 @@ $(window).ready(function() {
       }
       links.push.apply(links, referrerLinks);
       nodes[domainId].referrers = referrerLinks;
-      nodes[domainId].strength += referrerLinks.length;
-      nodes[domainId].group += referrerLinks.length;
+      setNodeStrength(nodes[domainId]);
     }
 
     var i = 0;    
     var graphParts = {nodes: nodes, links: links};
     
     function addNode() {
-      var source = getNodeId("imdb.com");
+      var domainId = getNodeId("doubleclick.net");
       var link = {
-        source: source,
-        target: graphParts.nodes.length,
+        source: graphParts.nodes.length,
+        target: domainId,
       };
       graphParts.nodes.push({
         name: "blarg" + i++ + ".com",
@@ -270,7 +281,8 @@ $(window).ready(function() {
         referrers: []
       });
       graphParts.links.push(link);
-      nodes[source].referrers.push(link);
+      nodes[domainId].referrers.push(link);
+      setNodeStrength(nodes[domainId]);
     }
 
     addNode();
