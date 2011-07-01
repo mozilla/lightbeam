@@ -223,60 +223,65 @@ function findReferringDomains(d, list, domain) {
 </script>
 <script src="jquery.min.js"></script>
 <script>
+function CollusionGraph() {
+  var nodes = [];
+  var links = [];
+  var domainIds = {};
+
+  function getNodeId(domain) {
+    if (!(domain in domainIds)) {
+      domainIds[domain] = nodes.length;
+      nodes.push({name: domain});
+    }
+    return domainIds[domain];
+  }
+
+  function addLink(options) {
+    var fromId = getNodeId(options.from);
+    var toId = getNodeId(options.to);
+    var link = vis.select("line.to-" + toId + ".from-" + fromId);
+    if (!link[0][0])
+      links.push({source: fromId, target: toId});
+  }
+
+  var drawing = draw({nodes: nodes, links: links});
+
+  return {
+    update: function(json) {
+      drawing.force.stop();
+
+      for (var domain in json)
+        for (var referrer in json[domain])
+          addLink({from: referrer, to: domain});
+
+      drawing.force.nodes(nodes);
+      drawing.force.links(links);
+      drawing.force.start();
+      createLinks(links);
+      createNodes(nodes, drawing.force);
+    }
+  };
+}
+
 $(window).ready(function() {
   $("#info").hide();
   
   var info = window.location.search.match(/^\?log=(.+)/);
-
+  var graph = CollusionGraph();
+  
   if (info) {
-    onJson(JSON.parse(decodeURIComponent(info[1])));
+    graph.update(JSON.parse(decodeURIComponent(info[1])));
   } else
-    jQuery.getJSON("sample-tracking-info.json", onJson);
-
-  function onJson(json) {
-    var nodes = [];
-    var links = [];
-    var domainIds = {};
-
-    function getNodeId(domain) {
-      if (!(domain in domainIds)) {
-        domainIds[domain] = nodes.length;
-        nodes.push({name: domain});
+    jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
+      json.reverse();
+      function showNextBrowse() {
+        if (json.length) {
+          graph.update(json.pop());
+        } else
+          clearInterval(intervalID);
       }
-      return domainIds[domain];
-    }
-        
-    function addLink(options) {
-      var fromId = getNodeId(options.from);
-      var toId = getNodeId(options.to);
-      var link = vis.select("line.to-" + toId + ".from-" + fromId);
-      if (!link[0][0])
-        links.push({source: fromId, target: toId});
-    }
-
-    for (var domain in json)
-      for (var referrer in json[domain])
-        addLink({from: referrer, to: domain});
-
-    var i = 0;    
-    var graphParts = {nodes: nodes, links: links};
-
-    function addNode() {
-      addLink({from: "blarg" + i++ + ".com", to: "doubleclick.net"});
-    }
-
-    addNode();
-    var drawing = draw(graphParts);
-
-    setInterval(function() {
-      drawing.force.stop();
-      addNode();
-      drawing.force.nodes(graphParts.nodes);
-      drawing.force.links(graphParts.links);
-      drawing.force.start();
-      createLinks(graphParts.links);
-      createNodes(graphParts.nodes, drawing.force);
-    }, 10000);
-  }  
+      var intervalID = setInterval(showNextBrowse, 3000);
+      showNextBrowse();
+    });
 });
 </script>
