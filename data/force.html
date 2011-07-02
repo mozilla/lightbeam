@@ -61,8 +61,7 @@ blockquote {
 <script src="d3.geom.js"></script>
 <script>
 var w = 960,
-    h = 500,
-    fill = d3.scale.category20();
+    h = 500;
 
 var vis = d3.select("#chart")
   .append("svg:svg")
@@ -98,7 +97,10 @@ function createNodes(nodes, force) {
   }
   
   function groupFill(d) {
-    return fill(1 + getReferringLinkCount(d));
+    if (d.trackerInfo)
+      return "#d62728";
+    else
+      return "#7f7f7f";
   }
   
   function selectArcs(d) {
@@ -112,7 +114,6 @@ function createNodes(nodes, force) {
   node.transition()
       .duration(1000)
       .attr("r", radius)
-      .style("fill", groupFill);
 
   node.enter().append("svg:circle")
       .attr("class", "node")
@@ -222,7 +223,7 @@ function findReferringDomains(d, list, domain) {
 </script>
 <script src="jquery.min.js"></script>
 <script>
-function CollusionGraph() {
+function CollusionGraph(trackers) {
   var nodes = [];
   var links = [];
   var domainIds = {};
@@ -230,7 +231,16 @@ function CollusionGraph() {
   function getNodeId(domain) {
     if (!(domain in domainIds)) {
       domainIds[domain] = nodes.length;
-      nodes.push({name: domain});
+      var trackerInfo = null;
+      for (var i = 0; i < trackers.length; i++)
+        if (trackers[i].domain == domain) {
+          trackerInfo = trackers[i];
+          break;
+        }
+      nodes.push({
+        name: domain,
+        trackerInfo: trackerInfo
+      });
     }
     return domainIds[domain];
   }
@@ -263,29 +273,31 @@ function CollusionGraph() {
 }
 
 $(window).ready(function() {
-  $("#info").hide();
+  jQuery.getJSON("trackers.json", function(trackers) {
+    $("#info").hide();
   
-  var graph = CollusionGraph();
-  var timeoutID = null;
+    var graph = CollusionGraph(trackers);
+    var timeoutID = null;
 
-  if (window.onGraph) {
-    window.onGraph(function(json) {
-      if (timeoutID !== null)
-       clearTimeout(timeoutID);
-      timeoutID = setTimeout(function() {
-        timeoutID = null;
-        graph.update(json);
-      }, 250);
-    });
-  } else
-    jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
-      json.reverse();
-      function showNextBrowse() {
-        if (json.length)
-          graph.update(json.pop());
-      }
-      window.addEventListener("click", showNextBrowse, false);
-      showNextBrowse();
-    });
+    if (window.onGraph) {
+      window.onGraph(function(json) {
+        if (timeoutID !== null)
+         clearTimeout(timeoutID);
+        timeoutID = setTimeout(function() {
+          timeoutID = null;
+          graph.update(json);
+        }, 250);
+      });
+    } else
+      jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
+        json.reverse();
+        function showNextBrowse() {
+          if (json.length)
+            graph.update(json.pop());
+        }
+        window.addEventListener("click", showNextBrowse, false);
+        showNextBrowse();
+      });
+  });
 });
 </script>
