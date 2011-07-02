@@ -1,6 +1,7 @@
 <!DOCTYPE hmtl>
 <meta charset="utf-8">
 <title>Collusion</title>
+<base target="_blank">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 <script src="d3.js"></script>
@@ -126,7 +127,7 @@ h2.domain img.favicon {
   <h2 class="domain"></h2>
 
   <div class="referrers">
-    <p>The site <a target="_blank" class="domain"></a> tracks your behavior across the following websites.</p>
+    <p>The site <a class="domain"></a> tracks your behavior across the following websites.</p>
     <ul></ul>
   </div>
 </div>
@@ -196,7 +197,7 @@ function showDomainInfo(d) {
     var list = referrers.find("ul");
     list.empty();
     domains.forEach(function(d) {
-      var item = $('<li><a target="_blank"></a></li>');
+      var item = $('<li><a></a></li>');
       item.find("a").text(d.name).setDomainLink(d);
       list.append(item);
     });
