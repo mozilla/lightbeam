@@ -84,6 +84,25 @@ vis.append("svg:defs")
 vis.append("svg:g").attr("class", "links");
 vis.append("svg:g").attr("class", "nodes");
 
+function showDomainInfo(d) {
+  $("#info").find(".domain").text(d.name);
+  $("#info").find("a.domain").attr("href", "http://" + d.name);
+  var referrers = $("#info").find(".referrers");
+  var domains = findReferringDomains(d);
+  if (domains.length) {
+    var list = referrers.find("ul");
+    list.empty();
+    domains.forEach(function(name) {
+      list.append('<li><a target="_blank" href="http://' +
+                  name + '">' + name + '</a></li>');
+    });
+    referrers.show();
+  } else {
+    referrers.hide();
+  }
+  $("#info").fadeIn();
+}
+
 function createNodes(nodes, force) {
   function getReferringLinkCount(d) {
     return selectReferringLinks(d)[0].length;
@@ -127,23 +146,7 @@ function createNodes(nodes, force) {
       })
       .on("mouseover", function(d) {
         selectArcs(d).attr("marker-end", "url(#Triangle)");
-
-        $("#info").find(".domain").text(d.name);
-        $("#info").find("a.domain").attr("href", "http://" + d.name);
-        var referrers = $("#info").find(".referrers");
-        var domains = findReferringDomains(d);
-        if (domains.length) {
-          var list = referrers.find("ul");
-          list.empty();
-          domains.forEach(function(name) {
-            list.append('<li><a target="_blank" href="http://' +
-                        name + '">' + name + '</a></li>');
-          });
-          referrers.show();
-        } else {
-          referrers.hide();
-        }
-        $("#info").fadeIn();
+        showDomainInfo(d);
       })
       .append("svg:title")
       .text(function(d) { return d.name; });
