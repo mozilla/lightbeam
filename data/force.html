@@ -38,6 +38,14 @@ a {
   padding: 20px;
 }
 
+#info {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 200px;
+  padding: 20px;
+}
+
 blockquote {
   margin-left: 10px;
   font-style: italic;
@@ -62,19 +70,66 @@ h2.domain img.favicon {
   color: #7f7f7f;
   fill: #7f7f7f;
 }
+
+.demo span.next {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.demo span.next:hover, a:hover {
+  background: yellow;
+}
 </style>
 <div id="sidebar">
   <h1>Collusion</h1>
-  <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
-  <p>This is an interactive visualization of the entities that track your behavior across the web.</p>
-  <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but this doesn't necessarily mean they don't collect data on you.</p>
-  <div id="info">
-    <h2 class="domain"></h2>
-  
-    <div class="referrers">
-      <p>The site <a target="_blank" class="domain"></a> tracks your behavior across the following websites.</p>
-      <ul></ul>
+  <div class="exposition">
+    <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
+    <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
+  </div>
+  <div class="live-data">
+    <p>Keep browsing the web. As you do so, a graph on this page will change. Each dot represents a website.</p>
+    <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but this doesn't necessarily mean they don't collect data on you.</p>
+    <p>Hover your mouse over the dots to learn more about them.</p>
+  </div>
+  <div class="demo">
+    <div class="step 0">
+      <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html">Collusion Firefox add-on</a> installed, we'll show you a demo of the software. If you install the add-on, you can see the collusion graph change in real-time as you browse the web.</p>
+      <p><span class="next">Click here</span> to see what happens when you start your browser and visit the Internet Movie Database at imdb.com.</p>
     </div>
+    <div class="step 1">
+      <p>Check it out! Each dot in this graph represents a website. The gray dot in the middle is imdb.com; the red dots near it are advertising sites that have created <a href="http://en.wikipedia.org/wiki/HTTP_cookie">cookies</a> in your browser and are now tracking your behavior on the IMDB.</p>
+      <p>Hover your mouse over any of the sites to learn more about them.</p>
+      <p>When you're done, <span class="next">click here</span> to continue your web adventure. Our next stop is the New York Times website.</p>
+    </div>
+    <div class="step 2">
+      <p>It looks like the New York Times is affiliated with some of the same advertising companies as the IMDB.</p>
+      <p>Because the same cookies were transmitted to the same advertisers when you visited both sites, those advertisers effectively track you <em>across</em> them. That's valuable data for their market research.</p>
+      <p>When you're ready, <span class="next">click here</span> to visit our next stop, the Huffington Post.</p>
+    </div>
+    <div class="step 3">
+      <p>Even more awesome collusion.</p>
+      <p>By the way, sites in <span class="tracker">red</span> are confirmed behavior trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but this doesn't necessarily mean they don't collect data on you.</p>
+      <p>If the graph is starting to look a bit confusing, try dragging the dots around with your mouse to get a better view.</p>
+      <p>Then, <span class="next">click here</span> to go to our next stop, gamespot.com.</p>
+    </div>
+    <div class="step 4">
+      <p>If you haven't realized it yet, companies are tracking you across most of the sites you visit daily on the web. It's quite likely that these companies know more about you than your government. Some of them might even know more about you than your best friends.</p>
+      <p><span class="next">Click here</span> to visit our final stop, reference.com.</p>
+    </div>
+    <div class="step 5">
+      <p>Thanks for trying out this demo. If you'd like to see this graph change in real time based on the sites you visit in your own browser, feel free to try the <a href="https://secure.toolness.com/xpi/collusion.html">Collusion Firefox add-on</a>. Even visiting the sites mentioned in the demo will probably give you different visualizations, because some services you may be logged into&mdash;like Facebook&mdash;can also track you across sites.</p>
+      <p>If you want to block companies from tracking you on the internet, you can install <a href="http://www.privacychoice.org/trackerblock/firefox">TrackerBlock</a> for Firefox and Internet Explorer.</p>
+      <p>For more in-depth analysis of what all this could mean for society at large, read <a href="http://www.amazon.com/Filter-Bubble-Internet-Hiding-Pariser/dp/067092038X/ref=tmm_pap_title_0">The Filter Bubble</a> by Eli Pariser.</p>
+      <p>Finally, if you have any questions or concerns about this demo, feel free to contact its author, <a href="http://twitter.com/toolness">@toolness</a>.</p>
+    </div>
+  </div>
+</div>
+<div id="info">
+  <h2 class="domain"></h2>
+
+  <div class="referrers">
+    <p>The site <a target="_blank" class="domain"></a> tracks your behavior across the following websites.</p>
+    <ul></ul>
   </div>
 </div>
 <div id="chart"></div>
@@ -322,17 +377,29 @@ function CollusionGraph(trackers) {
 function showDemo(graph) {
   jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
     json.reverse();
-    function showNextBrowse() {
-      if (json.length)
+    $(".demo").find(".step").hide();
+    $(".demo").show();
+    $(".demo").find(".step.0").fadeIn();
+
+    var step = 0;
+
+    function showNextStep() {
+      $(".exposition").slideUp();
+      $(".demo").find(".step." + step).fadeOut(function() {
+        step++;
+        $(".demo").find(".step." + step).fadeIn();
         graph.update(json.pop());
+      });
     }
-    window.addEventListener("click", showNextBrowse, false);
-    showNextBrowse();
+
+    $(".demo").find(".next").click(showNextStep);
   });
 }
 
 function showLiveBrowserData(graph) {
   var timeoutID = null;
+
+  $(".live-data").fadeIn();
 
   window.onGraph(function(json) {
     if (timeoutID !== null)
@@ -346,6 +413,8 @@ function showLiveBrowserData(graph) {
 
 $(window).ready(function() {
   $("#info").hide();
+  $(".demo").hide();
+  $(".live-data").hide();
   jQuery.getJSON("trackers.json", function(trackers) {  
     var graph = CollusionGraph(trackers);
 
