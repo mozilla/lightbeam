@@ -48,11 +48,22 @@ h2.domain img.favicon {
 .attribution {
   margin-left: 20px;
 }
+
+.tracker {
+  color: #d62728;
+  fill: #d62728;
+}
+
+.site {
+  color: #7f7f7f;
+  fill: #7f7f7f;
+}
 </style>
 <div id="sidebar">
   <h1>Collusion</h1>
   <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
-  <p>This is an interactive visualization of browser cookies. Hover over a node to learn more about it, and drag the nodes around to see more of the graph.</p>
+  <p>This is an interactive visualization of the entities that track your behavior on the web.</p>
+  <p></p>
   <div id="info">
     <h2 class="domain"></h2>
   
@@ -136,13 +147,6 @@ function createNodes(nodes, force) {
     return 4 + added;
   }
   
-  function groupFill(d) {
-    if (d.trackerInfo)
-      return "#d62728";
-    else
-      return "#7f7f7f";
-  }
-  
   function selectArcs(d) {
     return vis.selectAll("line.to-" + d.index +
                          ",line.from-" + d.index);
@@ -156,11 +160,12 @@ function createNodes(nodes, force) {
       .attr("r", radius)
 
   node.enter().append("svg:circle")
-      .attr("class", "node")
+      .attr("class", function(d) {
+        return "node " + (d.trackerInfo ? "tracker" : "site");
+      })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", radius)
-      .style("fill", groupFill)
       .call(force.drag)
       .on("mouseout", function(d) {
         selectArcs(d).attr("marker-end", null);
