@@ -296,31 +296,40 @@ function CollusionGraph(trackers) {
   };
 }
 
+function showDemo(graph) {
+  jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
+    json.reverse();
+    function showNextBrowse() {
+      if (json.length)
+        graph.update(json.pop());
+    }
+    window.addEventListener("click", showNextBrowse, false);
+    showNextBrowse();
+  });
+}
+
+function showLiveBrowserData(graph) {
+  var timeoutID = null;
+
+  window.onGraph(function(json) {
+    if (timeoutID !== null)
+     clearTimeout(timeoutID);
+    timeoutID = setTimeout(function() {
+      timeoutID = null;
+      graph.update(json);
+    }, 250);
+  });
+}
+
 $(window).ready(function() {
   $("#info").hide();
   jQuery.getJSON("trackers.json", function(trackers) {  
     var graph = CollusionGraph(trackers);
-    var timeoutID = null;
 
-    if (window.onGraph) {
-      window.onGraph(function(json) {
-        if (timeoutID !== null)
-         clearTimeout(timeoutID);
-        timeoutID = setTimeout(function() {
-          timeoutID = null;
-          graph.update(json);
-        }, 250);
-      });
-    } else
-      jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
-        json.reverse();
-        function showNextBrowse() {
-          if (json.length)
-            graph.update(json.pop());
-        }
-        window.addEventListener("click", showNextBrowse, false);
-        showNextBrowse();
-      });
+    if (window.onGraph)
+      showLiveBrowserData(graph);
+    else
+      showDemo(graph);
   });
 });
 </script>
