@@ -143,9 +143,8 @@ function createNodes(nodes, force) {
           referrers.hide();
         }
         $("#info").fadeIn();
-      });
-
-  node.append("svg:title")
+      })
+      .append("svg:title")
       .text(function(d) { return d.name; });
 
   return node;
