@@ -26,6 +26,10 @@ html, body {
   font-size: 9pt;
 }
 
+a {
+  color: black;
+}
+
 #sidebar {
   position: absolute;
   top: 0px;
@@ -63,7 +67,7 @@ h2.domain img.favicon {
   <h1>Collusion</h1>
   <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
   <p>This is an interactive visualization of the entities that track your behavior across the web.</p>
-  <p></p>
+  <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but this doesn't necessarily mean they don't collect data on you.</p>
   <div id="info">
     <h2 class="domain"></h2>
   
@@ -76,6 +80,7 @@ h2.domain img.favicon {
 <div id="chart"></div>
 <script src="d3.layout.js"></script>
 <script src="d3.geom.js"></script>
+<script src="jquery.min.js"></script>
 <script>
 var w = 960,
     h = 500;
@@ -101,20 +106,33 @@ vis.append("svg:defs")
 vis.append("svg:g").attr("class", "links");
 vis.append("svg:g").attr("class", "nodes");
 
+jQuery.fn.extend({
+  setDomainLink: function(d) {
+    this.removeClass("tracker").removeClass("site");
+    if (d.trackerInfo) {
+      var TRACKER_INFO = "http://www.privacychoice.org/companies/index/";
+      var trackerId = d.trackerInfo.network_id;
+      this.attr("href", TRACKER_INFO + trackerId);
+      this.addClass("tracker");
+    } else {
+      this.attr("href", "http://" + d.name);
+      this.addClass("site");
+    }
+  }
+});
+
 function showDomainInfo(d) {
   $("#info").find(".domain").text(d.name);
   var img = $('<img>');
   if (d.trackerInfo) {
     var TRACKER_LOGO = "http://images.privacychoice.org/images/network/";
-    var TRACKER_INFO = "http://www.privacychoice.org/companies/index/";
     var trackerId = d.trackerInfo.network_id;
     $("#info").find("h2.domain").empty();
     img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
-    $("#info").find("a.domain").attr("href", TRACKER_INFO + trackerId);
   } else {
     img.attr("src", 'http://' + d.name + '/favicon.ico').addClass("favicon");
-    $("#info").find("a.domain").attr("href", "http://" + d.name);
   }
+  $("#info").find("a.domain").setDomainLink(d);
   $("#info").find("h2.domain").prepend(img);
   img.load(function() { img.show(); })
      .error(function() { img.remove(); })
@@ -124,9 +142,10 @@ function showDomainInfo(d) {
   if (domains.length) {
     var list = referrers.find("ul");
     list.empty();
-    domains.forEach(function(name) {
-      list.append('<li><a target="_blank" href="http://' +
-                  name + '">' + name + '</a></li>');
+    domains.forEach(function(d) {
+      var item = $('<li><a target="_blank"></a></li>');
+      item.find("a").text(d.name).setDomainLink(d);
+      list.append(item);
     });
     referrers.show();
   } else {
@@ -240,9 +259,9 @@ function findReferringDomains(d, list, domain) {
   }
   
   selectReferringLinks(d).each(function(d) {
-    if (list.indexOf(d.source.name) == -1 &&
+    if (list.indexOf(d.source) == -1 &&
         d.source.name != domain) {
-      list.push(d.source.name);
+      list.push(d.source);
       findReferringDomains(d.source, list, domain);
     }
   });
@@ -250,7 +269,6 @@ function findReferringDomains(d, list, domain) {
   return list;
 }
 </script>
-<script src="jquery.min.js"></script>
 <script>
 function CollusionGraph(trackers) {
   var nodes = [];
