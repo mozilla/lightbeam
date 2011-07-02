@@ -86,12 +86,12 @@ h2.domain img.favicon {
     <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
     <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
   </div>
-  <div class="live-data">
+  <div class="live-data" style="display: none;">
     <p>Keep browsing the web. As you do so, a graph on this page will change. Each dot represents a website.</p>
     <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but this doesn't necessarily mean they don't collect data on you.</p>
     <p>Hover your mouse over the dots to learn more about them.</p>
   </div>
-  <div class="demo">
+  <div class="demo" style="display: none;">
     <div class="step 0">
       <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html">Collusion Firefox add-on</a> installed, we'll show you a demo of the software. If you install the add-on, you can see the collusion graph change in real-time as you browse the web.</p>
       <p><span class="next">Click here</span> to see what happens when you start your browser and visit the Internet Movie Database at imdb.com.</p>
@@ -124,7 +124,7 @@ h2.domain img.favicon {
     </div>
   </div>
 </div>
-<div id="info">
+<div id="info" style="display: none;">
   <h2 class="domain"></h2>
 
   <div class="referrers">
@@ -412,9 +412,6 @@ function showLiveBrowserData(graph) {
 }
 
 $(window).ready(function() {
-  $("#info").hide();
-  $(".demo").hide();
-  $(".live-data").hide();
   jQuery.getJSON("trackers.json", function(trackers) {  
     var graph = CollusionGraph(trackers);
 
