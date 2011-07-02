@@ -266,11 +266,18 @@ function CollusionGraph() {
 $(window).ready(function() {
   $("#info").hide();
   
-  var info = window.location.search.match(/^\?log=(.+)/);
   var graph = CollusionGraph();
-  
-  if (info) {
-    graph.update(JSON.parse(decodeURIComponent(info[1])));
+  var timeoutID = null;
+
+  if (window.onGraph) {
+    window.onGraph(function(json) {
+      if (timeoutID !== null)
+       clearTimeout(timeoutID);
+      timeoutID = setTimeout(function() {
+        timeoutID = null;
+        graph.update(json);
+      }, 250);
+    });
   } else
     jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
       json.reverse();
