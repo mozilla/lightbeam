@@ -39,6 +39,12 @@ blockquote {
   font-style: italic;
 }
 
+h2.domain img.favicon {
+  width: 16px;
+  height: 16px;
+  padding-right: 4px;
+}
+
 .attribution {
   margin-left: 20px;
 }
@@ -86,7 +92,22 @@ vis.append("svg:g").attr("class", "nodes");
 
 function showDomainInfo(d) {
   $("#info").find(".domain").text(d.name);
-  $("#info").find("a.domain").attr("href", "http://" + d.name);
+  var img = $('<img>');
+  if (d.trackerInfo) {
+    var TRACKER_LOGO = "http://images.privacychoice.org/images/network/";
+    var TRACKER_INFO = "http://www.privacychoice.org/companies/index/";
+    var trackerId = d.trackerInfo.network_id;
+    $("#info").find("h2.domain").empty();
+    img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
+    $("#info").find("a.domain").attr("href", TRACKER_INFO + trackerId);
+  } else {
+    img.attr("src", 'http://' + d.name + '/favicon.ico').addClass("favicon");
+    $("#info").find("a.domain").attr("href", "http://" + d.name);
+  }
+  $("#info").find("h2.domain").prepend(img);
+  img.load(function() { img.show(); })
+     .error(function() { img.remove(); })
+     .hide();
   var referrers = $("#info").find(".referrers");
   var domains = findReferringDomains(d);
   if (domains.length) {
