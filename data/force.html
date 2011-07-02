@@ -297,9 +297,8 @@ function CollusionGraph(trackers) {
 }
 
 $(window).ready(function() {
-  jQuery.getJSON("trackers.json", function(trackers) {
-    $("#info").hide();
-  
+  $("#info").hide();
+  jQuery.getJSON("trackers.json", function(trackers) {  
     var graph = CollusionGraph(trackers);
     var timeoutID = null;
 
