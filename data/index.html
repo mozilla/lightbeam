@@ -40,7 +40,7 @@ a {
   pointer-events: none;
 }
 
-#info {
+div.info {
   position: absolute;
   top: 0px;
   left: 440px;
@@ -49,7 +49,7 @@ a {
   pointer-events: none;
 }
 
-#sidebar a, #info a, span.next {
+#sidebar a, .info a, span.next {
   pointer-events: auto;
 }
 
@@ -62,6 +62,10 @@ h2.domain img.favicon {
   width: 16px;
   height: 16px;
   padding-right: 4px;
+}
+
+h2.domain img.tracker {
+  height: 30px;
 }
 
 .attribution {
@@ -130,15 +134,18 @@ h2.domain img.favicon {
     </div>
   </div>
 </div>
-<div id="info" style="display: none;">
-  <h2 class="domain"></h2>
+<div id="chart"></div>
+<div id="domain-infos"></div>
+<div id="templates">
+  <div class="info" style="display: none;">
+    <h2 class="domain"></h2>
 
-  <div class="referrers">
-    <p>The site <a class="domain"></a> tracks your behavior across the following websites.</p>
-    <ul></ul>
+    <div class="referrers">
+      <p>The site <a class="domain"></a> tracks your behavior across the following websites.</p>
+      <ul></ul>
+    </div>
   </div>
 </div>
-<div id="chart"></div>
 <script src="d3.layout.js"></script>
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
@@ -183,22 +190,30 @@ jQuery.fn.extend({
 });
 
 function showDomainInfo(d) {
-  $("#info").find(".domain").text(d.name);
-  var img = $('<img>');
-  if (d.trackerInfo) {
-    var TRACKER_LOGO = "http://images.privacychoice.org/images/network/";
-    var trackerId = d.trackerInfo.network_id;
-    $("#info").find("h2.domain").empty();
-    img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
-  } else {
-    img.attr("src", 'http://' + d.name + '/favicon.ico').addClass("favicon");
+  var className = d.name.replace(/\./g, '-dot-');
+  var info = $("#domain-infos").find("." + className);
+
+  $("#domain-infos .info").hide();
+
+  if (!info.length) {
+    info = $("#templates .info").clone();
+    info.addClass(className);
+    info.find(".domain").text(d.name);
+    var img = $('<img>');
+    if (d.trackerInfo) {
+      var TRACKER_LOGO = "http://images.privacychoice.org/images/network/";
+      var trackerId = d.trackerInfo.network_id;
+      info.find("h2.domain").empty();
+      img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
+    } else {
+      img.attr("src", 'http://' + d.name + '/favicon.ico').addClass("favicon");
+    }
+    info.find("a.domain").setDomainLink(d);
+    info.find("h2.domain").prepend(img);
+    img.error(function() { img.remove(); });
+    $("#domain-infos").append(info);
   }
-  $("#info").find("a.domain").setDomainLink(d);
-  $("#info").find("h2.domain").prepend(img);
-  img.load(function() { img.show(); })
-     .error(function() { img.remove(); })
-     .hide();
-  var referrers = $("#info").find(".referrers");
+  var referrers = info.find(".referrers");
   var domains = findReferringDomains(d);
   if (domains.length) {
     var list = referrers.find("ul");
@@ -212,7 +227,7 @@ function showDomainInfo(d) {
   } else {
     referrers.hide();
   }
-  $("#info").fadeIn();
+  info.show();
 }
 
 function createNodes(nodes, force) {
