@@ -399,10 +399,13 @@ function showDemo(graph) {
   function findPageLoadIntervals(json, requestReferrer) {
     var requests = [];
 
+    if (typeof(requestRefferer) == "string")
+      requestReferrer = [requestReferrer];
+      
     for (var domain in json)
       for (var referrer in json[domain]) {
         var time = json[domain][referrer][0];
-        if (referrer == requestReferrer) {
+        if (requestReferrer.indexOf(referrer) != -1) {
           requests.push(time);
         }
       }
@@ -440,7 +443,7 @@ function showDemo(graph) {
     var DOMAINS = [
       "imdb.com",
       "nytimes.com",
-      "huffingtonpost.com",
+      ["huffingtonpost.com", "atwola.com"],
       "gamespot.com",
       "reference.com"
     ];
@@ -448,8 +451,7 @@ function showDemo(graph) {
     function showNextStep() {
       $(".exposition").slideUp();
       $(".demo").find(".step." + step).fadeOut(function() {
-        var domain = DOMAINS[step];
-        var times = findPageLoadIntervals(json, domain);
+        var times = findPageLoadIntervals(json, DOMAINS[step]);
         var nextTime = times.pop();
         var virtualTime = 0;
 
