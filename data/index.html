@@ -396,20 +396,76 @@ function CollusionGraph(trackers) {
 }
 
 function showDemo(graph) {
-  jQuery.getJSON("sample-tracking-info-over-time.json", function(json) {
-    json.reverse();
+  function findPageLoadIntervals(json, requestReferrer) {
+    var requests = [];
+
+    for (var domain in json)
+      for (var referrer in json[domain]) {
+        var time = json[domain][referrer][0];
+        if (referrer == requestReferrer) {
+          requests.push(time);
+        }
+      }
+
+    var uniqueRequests = [];
+    requests.forEach(function(time) {
+      if (uniqueRequests.indexOf(time) == -1)
+        uniqueRequests.push(time);
+    });
+
+    return uniqueRequests.sort().reverse();
+  }
+
+  function getJsonAtTime(json, maxTime) {
+    var filtered = {};
+
+    for (var domain in json) {
+      filtered[domain] = {};
+      for (var referrer in json[domain]) {
+        var time = json[domain][referrer][0];
+        if (time <= maxTime)
+          filtered[domain][referrer] = json[domain][referrer];
+      }
+    }
+
+    return filtered;
+  }
+  
+  jQuery.getJSON("sample-tracking-info.json", function(json) {
     $(".demo").find(".step").hide();
     $(".demo").show();
     $(".demo").find(".step.0").fadeIn();
 
     var step = 0;
+    var DOMAINS = [
+      "imdb.com",
+      "nytimes.com",
+      "huffingtonpost.com",
+      "gamespot.com",
+      "reference.com"
+    ];
 
     function showNextStep() {
       $(".exposition").slideUp();
       $(".demo").find(".step." + step).fadeOut(function() {
+        var domain = DOMAINS[step];
+        var times = findPageLoadIntervals(json, domain);
+        var nextTime = times.pop();
+        var virtualTime = 0;
+
+        function triggerNextRequest() {
+          virtualTime = nextTime;
+          graph.update(getJsonAtTime(json, virtualTime));
+          if (times.length) {
+            nextTime = times.pop();
+            setTimeout(triggerNextRequest, nextTime - virtualTime);
+          } else
+            $(".demo").find(".step." + step).fadeIn();
+        }
+        
+        triggerNextRequest();
+
         step++;
-        $(".demo").find(".step." + step).fadeIn();
-        graph.update(json.pop());
       });
     }
 
@@ -417,28 +473,31 @@ function showDemo(graph) {
   });
 }
 
-function showLiveBrowserData(graph) {
+function makeBufferedGraphUpdate(graph) {
   var timeoutID = null;
-
-  $(".live-data").fadeIn();
-
-  window.onGraph(function(json) {
+  
+  return function(json) {
     if (timeoutID !== null)
      clearTimeout(timeoutID);
     timeoutID = setTimeout(function() {
       timeoutID = null;
+      
+      // This is for debugging purposes only!
+      // window.lastJSON = json;
+      
       graph.update(json);
     }, 250);
-  });
+  };
 }
 
 $(window).ready(function() {
   jQuery.getJSON("trackers.json", function(trackers) {  
     var graph = CollusionGraph(trackers);
 
-    if (window.onGraph)
-      showLiveBrowserData(graph);
-    else
+    if (window.onGraph) {
+      $(".live-data").fadeIn();
+      window.onGraph(makeBufferedGraphUpdate(graph));
+    } else
       showDemo(graph);
   });
 });
