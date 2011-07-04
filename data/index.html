@@ -208,9 +208,9 @@ function showDomainInfo(d) {
       var trackerId = d.trackerInfo.network_id;
       info.find("h2.domain").empty();
       img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
-    } else {
-      img.attr("src", 'http://' + d.name + '/favicon.ico').addClass("favicon");
-    }
+    } else
+      img.attr("src", 'http://' + d.name + '/favicon.ico')
+         .addClass("favicon");
     info.find("a.domain").setDomainLink(d);
     info.find("h2.domain").prepend(img);
     img.error(function() { img.remove(); });
