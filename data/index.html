@@ -160,8 +160,9 @@ h2.domain img.tracker {
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
 <script>
-var SVG_WIDTH = 640,
-    SVG_HEIGHT = 480;
+var isAddonInstalled = ('onGraph' in window),
+    SVG_WIDTH = isAddonInstalled ? $(window).width() : 640,
+    SVG_HEIGHT = isAddonInstalled ? $(window).height() : 480;
 
 var vis = d3.select("#chart")
   .append("svg:svg")
@@ -506,7 +507,9 @@ $(window).ready(function() {
   jQuery.getJSON("trackers.json", function(trackers) {  
     var graph = CollusionGraph(trackers);
 
-    if (window.onGraph) {
+    $("#page").width(SVG_WIDTH);
+
+    if (isAddonInstalled) {
       $(".live-data").fadeIn();
       window.onGraph(makeBufferedGraphUpdate(graph));
     } else
