@@ -34,6 +34,11 @@ a {
   color: black;
 }
 
+#page {
+  position: relative;
+  width: 640px;
+}
+
 #sidebar {
   position: absolute;
   top: 0px;
@@ -46,7 +51,7 @@ a {
 div.info {
   position: absolute;
   top: 0px;
-  left: 400px;
+  right: 0px;
   width: 200px;
   padding: 20px;
   pointer-events: none;
@@ -94,6 +99,7 @@ h2.domain img.tracker {
   background: yellow;
 }
 </style>
+<div id="page">
 <div id="sidebar">
   <h1>Collusion</h1>
   <div class="exposition">
@@ -139,6 +145,7 @@ h2.domain img.tracker {
 </div>
 <div id="chart"></div>
 <div id="domain-infos"></div>
+</div>
 <div id="templates">
   <div class="info" style="display: none;">
     <h2 class="domain"></h2>
