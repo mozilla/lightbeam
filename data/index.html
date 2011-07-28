@@ -102,6 +102,17 @@ h2.domain img.tracker {
 .byline {
   margin-top: -10px;
 }
+
+#addon-installation-detected {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: green;
+  padding: 5px;
+  color: white;
+  width: 100%;
+  text-align: center;
+}
 </style>
 <div id="page">
 <div id="sidebar">
@@ -151,6 +162,9 @@ h2.domain img.tracker {
 <div id="chart"></div>
 <div id="domain-infos"></div>
 </div>
+<div id="addon-installation-detected" style="display: none;">
+  Collusion add-on detected! Reload this page to see your graph.
+</div>
 <div id="templates">
   <div class="info" style="display: none;">
     <h2 class="domain"></h2>
@@ -165,9 +179,12 @@ h2.domain img.tracker {
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
 <script>
-var isAddonInstalled = ('onGraph' in window),
-    SVG_WIDTH = isAddonInstalled ? $(window).width() : 640,
-    SVG_HEIGHT = isAddonInstalled ? $(window).height() : 480;
+function isAddonInstalled() {
+  return ('onGraph' in window);
+}
+
+var SVG_WIDTH = isAddonInstalled() ? $(window).width() : 640,
+    SVG_HEIGHT = isAddonInstalled() ? $(window).height() : 480;
 
 var vis = d3.select("#chart")
   .append("svg:svg")
@@ -514,11 +531,16 @@ $(window).ready(function() {
 
     $("#page").width(SVG_WIDTH);
 
-    if (isAddonInstalled) {
+    if (isAddonInstalled()) {
       $(".live-data").fadeIn();
       window.onGraph(makeBufferedGraphUpdate(graph));
-    } else
+    } else {
       showDemo(graph);
+      setInterval(function displayMessageIfAddonIsInstalled() {
+        if (isAddonInstalled())
+          $("#addon-installation-detected").slideDown();
+      }, 1000);
+    }
   });
 });
 </script>
