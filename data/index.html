@@ -106,6 +106,7 @@ h2.domain img.tracker {
 .live-data {
   background-color: rgba(0, 0, 0, 0.1);
   padding: 5px;
+  margin-top: 15px;
 }
 
 #addon-installation-detected {
@@ -122,6 +123,29 @@ h2.domain img.tracker {
 .privacy-policy {
   font-size: 8pt;
 }
+
+div.settings-menu {
+  padding: 5px;
+  pointer-events: auto;
+  color: white;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+div.settings-menu > ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  font-size: 8pt;
+}
+
+div.settings-menu > ul > li {
+  cursor: pointer;
+}
+
+div.settings-menu > ul > li:hover {
+  color: yellow;
+  background: black;
+}
 </style>
 <div id="page">
 <div id="sidebar">
@@ -135,6 +159,11 @@ h2.domain img.tracker {
     <p>Keep browsing the web. As you do so, a graph on this page will change. Each dot represents a website.</p>
     <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but this doesn't necessarily mean they don't collect data on you.</p>
     <p>Hover your mouse over the dots to learn more about them.</p>
+    <div class="settings-menu">
+      <ul>
+        <li id="reset-graph">Reset Graph</li>
+      </ul>
+    </div>
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect sites you visit solely to show you how they're connected. We don't keep them and don't give away the information to anyone except you.</p>
   </div>
   <div class="demo" style="display: none;">
@@ -536,6 +565,9 @@ function makeBufferedGraphUpdate(graph) {
 }
 
 $(window).ready(function() {
+  if (isAddonInstalled())
+    $(".exposition").hide();
+
   jQuery.getJSON("trackers.json", function(trackers) {  
     var graph = CollusionGraph(trackers);
 
@@ -544,6 +576,10 @@ $(window).ready(function() {
     if (isAddonInstalled()) {
       $(".live-data").fadeIn();
       window.onGraph(makeBufferedGraphUpdate(graph));
+      $("#reset-graph").click(function() {
+        window.resetGraph();
+        window.location.reload();
+      });
     } else {
       showDemo(graph);
       setInterval(function displayMessageIfAddonIsInstalled() {
