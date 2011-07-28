@@ -577,8 +577,11 @@ $(window).ready(function() {
       $(".live-data").fadeIn();
       window.onGraph(makeBufferedGraphUpdate(graph));
       $("#reset-graph").click(function() {
-        window.resetGraph();
-        window.location.reload();
+        if ('resetGraph' in window) {
+          window.resetGraph();
+          window.location.reload();
+        } else
+          alert("You need to update your add-on to use this feature.");
       });
     } else {
       showDemo(graph);
