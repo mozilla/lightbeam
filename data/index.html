@@ -303,6 +303,12 @@ function showDomainInfo(d) {
 }
 
 function createNodes(nodes, force) {
+      
+  /* Represent each site as a node consisting of an svg group <g>
+   * containing a <circle> and an <image>, where the image shows
+   * the favicon; circle size shows number of links, color shows
+   * type of site. */
+      
   function getReferringLinkCount(d) {
     return selectReferringLinks(d)[0].length;
   }
@@ -319,29 +325,43 @@ function createNodes(nodes, force) {
                          ",line.from-" + d.index);
   }
   
-  var node = vis.select("g.nodes").selectAll("circle.node")
+  var node = vis.select("g.nodes").selectAll("g.node") 
       .data(nodes);
 
   node.transition()
       .duration(1000)
-      .attr("r", radius)
-
-  node.enter().append("svg:circle")
-      .attr("class", function(d) {
-        return "node " + (d.trackerInfo ? "tracker" : "site");
+      .attr("r", radius);
+      
+  var gs = node.enter().append("svg:g")
+      .attr("class", "node")
+      .attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
       })
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
-      .attr("r", radius)
-      .call(force.drag)
       .on("mouseout", function(d) {
         selectArcs(d).attr("marker-end", null);
       })
       .on("mouseover", function(d) {
         selectArcs(d).attr("marker-end", "url(#Triangle)");
         showDomainInfo(d);
-      })
-      .append("svg:title")
+      });
+
+  gs.append("svg:circle")
+      .attr("cx", "0")
+      .attr("cy", "0")
+      .attr("r", radius)
+      .attr("class", function(d) {
+         return "node " + (d.trackerInfo ? "tracker" : "site");
+      });
+
+  gs.append("svg:image")
+      .attr("class", "node")
+      .attr("width", "16")
+      .attr("height", "16")
+      .attr("x", "-8")
+      .attr("y", "-8")
+      .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } )
+
+  gs.append("svg:title")
       .text(function(d) { return d.name; });
 
   return node;
@@ -386,8 +406,9 @@ function draw(json) {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    vis.selectAll("circle.node").attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
+     vis.selectAll("g.node").attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+     });
   });
   
   return {
