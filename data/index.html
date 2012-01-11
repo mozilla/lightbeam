@@ -14,13 +14,18 @@ circle.node {
 
 marker {
   stroke: none;
-  fill: #999;
-  fill-opacity: .6;  
+  fill: #000;
+  fill-opacity: 1;  
 }
 
 line.link {
   stroke: #999;
   stroke-opacity: .6;
+}
+
+line.bold {
+  stroke: #000;
+  stroke-opacity: 1;
 }
 
 html, body {
@@ -338,11 +343,20 @@ function createNodes(nodes, force) {
         return "translate(" + d.x + "," + d.y + ")";
       })
       .on("mouseout", function(d) {
-        selectArcs(d).attr("marker-end", null);
+        selectArcs(d).attr("marker-end", null).classed("bold", false);
+        d3.select(this).attr("transform", function(d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        });
       })
       .on("mouseover", function(d) {
-        selectArcs(d).attr("marker-end", "url(#Triangle)");
+        selectArcs(d).attr("marker-end", "url(#Triangle)").classed("bold", true);
         showDomainInfo(d);
+        // TODO also pull to front - but z-index is ignored in svg; last element wins.
+        // will have to create an extra element, always at the end of the document,
+        // and overlay that.
+        d3.select(this).attr("transform", function(d) {
+          return "translate(" + d.x + "," + d.y + ") scale(2, 2)";
+          });
       });
 
   gs.append("svg:circle")
