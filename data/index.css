@@ -5,7 +5,7 @@ circle.node {
 
 marker {
   stroke: none;
-  fill: #000;
+  fill: #fff;
   fill-opacity: 1;  
 }
 
@@ -15,7 +15,7 @@ line.link {
 }
 
 line.bold {
-  stroke: #000;
+  stroke: #fff;
   stroke-opacity: 1;
 }
 
@@ -24,6 +24,7 @@ html, body {
   font-size: 9pt;
   margin: 0;
   padding: 0;
+  background-color: #333
 }
 
 a {
