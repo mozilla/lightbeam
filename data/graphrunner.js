@@ -153,7 +153,8 @@ function createNodes(nodes, force) {
       .attr("height", "16")
       .attr("x", "-8") // offset to make 16x16 favicon appear centered
       .attr("y", "-8")
-      .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
+      .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } )
+      .call(force.drag);
 
   gs.append("svg:title")
       .text(function(d) { return d.name; });
