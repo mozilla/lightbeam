@@ -267,7 +267,9 @@ function CollusionGraph(trackers) {
   var drawing = draw({nodes: nodes, links: links});
 
   return {
+    data: null,
     update: function(json) {
+      this.data = json;
       drawing.force.stop();
 
       for (var domain in json)
@@ -398,6 +400,10 @@ $(window).ready(function() {
           window.location.reload();
         } else
           alert("You need to update your add-on to use this feature.");
+      });
+      $("#export-graph").click(function() {
+        var data = JSON.stringify(graph.data);
+        window.open("data:application/json," + data);
       });
     } else {
       showDemo(graph);
