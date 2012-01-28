@@ -137,7 +137,8 @@ function createNodes(nodes, force) {
         d3.select(this).attr("transform", function(d) {
           return "translate(" + d.x + "," + d.y + ")";
         });
-      });
+      })
+    .call(force.drag);
 
   gs.append("svg:circle")
       .attr("cx", "0")
@@ -145,7 +146,7 @@ function createNodes(nodes, force) {
       .attr("r", radius)
       .attr("class", function(d) {
          return "node " + (d.trackerInfo ? "tracker" : "site");
-      });
+       });
 
   gs.append("svg:image")
       .attr("class", "node")
@@ -153,8 +154,7 @@ function createNodes(nodes, force) {
       .attr("height", "16")
       .attr("x", "-8") // offset to make 16x16 favicon appear centered
       .attr("y", "-8")
-      .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } )
-      .call(force.drag);
+      .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
 
   gs.append("svg:title")
       .text(function(d) { return d.name; });
