@@ -24,6 +24,9 @@ import subprocess
 import cgi
 import json
 
+ROOT = os.path.abspath(os.path.dirname(__file__))
+path = lambda *x: os.path.join(ROOT, *x)
+
 CFX = 'cfx'
 SCP = 'scp'
 HTML_TEMPLATE = """
@@ -82,12 +85,17 @@ HTML_TEMPLATE = """
 def deploy_xpi(name):
     info = get_deployment(name)
 
+    frontendurl_filename = path('data', 'frontend-url')
+    frontendurl = open(frontendurl_filename, 'w')
+    frontendurl.write(info['url'])
+    frontendurl.close()
+
     UPDATE_RDF_URL = info['xpi_url'] + "%(update_rdf)s"
     XPI_URL = info['xpi_url'] + "%(xpi)s"
     HTML_URL = info['xpi_url'] + "%(html)s"
     SCP_TARGET = env.hosts[0] + ':' + info['xpi_dir'] + '/'
 
-    pkgdir = os.path.abspath(os.path.dirname(__file__))
+    pkgdir = ROOT
     config = json.load(open(os.path.join(pkgdir, 'package.json')))
 
     update_rdf = '%s.update.rdf' % config['name']
@@ -125,7 +133,8 @@ def deploy_xpi(name):
     os.remove(update_rdf_abspath)
     os.remove(xpi_abspath)
     os.remove(html_abspath)
-
+    os.remove(frontendurl_filename)
+    
     print "Download the addon at:"
     print HTML_URL % locals()
 
