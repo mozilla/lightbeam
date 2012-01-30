@@ -10,12 +10,12 @@ def get_deployment(name):
     return env.deployments[name]
     
 @task
-def deploy(name):
+def deploy_frontend(name):
     info = get_deployment(name)
     run('mkdir -p %s' % info['remote_dir'])
     rsync_project(remote_dir=info['remote_dir'],
                   local_dir='data/')
-    print "files placed in %s" % info['url']
+    print "front-end files placed in %s" % info['url']
 
 import os
 import sys
@@ -128,3 +128,8 @@ def deploy_xpi(name):
 
     print "Download the addon at:"
     print HTML_URL % locals()
+
+@task
+def deploy(name):
+    deploy_frontend(name)
+    deploy_xpi(name)
