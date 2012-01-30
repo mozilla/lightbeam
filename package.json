@@ -10,7 +10,7 @@
     "preferences": [
       {
         "name": "collusion.urls",
-        "title": "Comma-separated list of URLs to expose Collusion APIs to",
+        "title": "Trusted front-ends (comma-separated list)",
         "type": "string",
         "value": "http://collusion.toolness.org/"
       }
