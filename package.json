@@ -12,7 +12,7 @@
         "name": "collusion.urls",
         "title": "Trusted front-ends (comma-separated list)",
         "type": "string",
-        "value": "http://collusion.toolness.org/"
+        "value": "http://collusion.toolness.org/,http://dev-collusion.toolness.org/"
       }
     ]
 }
