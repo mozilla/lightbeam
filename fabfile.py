@@ -1,3 +1,5 @@
+import json
+
 from fabric.api import *
 from fabric.contrib.project import rsync_project
 
@@ -6,12 +8,31 @@ try:
 except ImportError:
     pass
 
-def get_deployment(name):
-    return env.deployments[name]
-    
-@task
-def deploy_frontend(name):
-    info = get_deployment(name)
+def deployment_task(func):
+    def task_func(name):
+        if name not in env.deployments:
+            print "Unknown deployment '%s'." % name
+            print "Available deployments: ",
+            print ', '.join(env.deployments)
+            abort("Couldn't find deployment.")
+        info = env.deployments[name]
+        
+        print "Using deployment '%s'." % name
+        cfg_filename = path('data', 'deployment.json')
+        cfg = open(cfg_filename, 'w')
+        cfg.write(json.dumps(dict(
+            name=name,
+            url=info['url'],
+            xpi_url=info['xpi_url']
+            )))
+        cfg.close()
+        
+        func(info)
+    task_func.__name__ = func.__name__
+    return task(task_func)
+
+@deployment_task
+def deploy_frontend(info):
     run('mkdir -p %s' % info['remote_dir'])
     rsync_project(remote_dir=info['remote_dir'],
                   local_dir='data/')
@@ -22,7 +43,6 @@ import sys
 import datetime
 import subprocess
 import cgi
-import json
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 path = lambda *x: os.path.join(ROOT, *x)
@@ -81,15 +101,8 @@ HTML_TEMPLATE = """
 </html>
 """
 
-@task
-def deploy_xpi(name):
-    info = get_deployment(name)
-
-    frontendurl_filename = path('data', 'frontend-url')
-    frontendurl = open(frontendurl_filename, 'w')
-    frontendurl.write(info['url'])
-    frontendurl.close()
-
+@deployment_task
+def deploy_xpi(info):
     UPDATE_RDF_URL = info['xpi_url'] + "%(update_rdf)s"
     XPI_URL = info['xpi_url'] + "%(xpi)s"
     HTML_URL = info['xpi_url'] + "%(html)s"
@@ -133,7 +146,6 @@ def deploy_xpi(name):
     os.remove(update_rdf_abspath)
     os.remove(xpi_abspath)
     os.remove(html_abspath)
-    os.remove(frontendurl_filename)
     
     print "Download the addon at:"
     print HTML_URL % locals()
@@ -142,3 +154,7 @@ def deploy_xpi(name):
 def deploy(name):
     deploy_frontend(name)
     deploy_xpi(name)
+
+@deployment_task
+def configure(info):
+    print "Generated data/deployment.json."
