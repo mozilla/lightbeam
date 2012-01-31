@@ -94,7 +94,8 @@ h2.domain img.tracker {
 }
 
 .demo span.next:hover, a:hover {
-  background: firebrick;
+  background: yellow;
+  color: black;
 }
 
 .byline {
