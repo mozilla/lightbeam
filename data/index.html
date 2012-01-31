@@ -29,7 +29,7 @@
   </div>
   <div class="demo" style="display: none;">
     <div class="step 0">
-      <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html">Collusion Firefox add-on</a> installed, we'll show you a demo of the software.</p>
+      <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a> installed, we'll show you a demo of the software.</p>
       <p><span class="next">Click here</span> to see what happens when you start your browser and visit the Internet Movie Database at imdb.com.</p>
     </div>
     <div class="step 1">
@@ -53,7 +53,7 @@
       <p><span class="next">Click here</span> to visit our final stop, reference.com.</p>
     </div>
     <div class="step 5">
-      <p>Thanks for trying out this demo. If you'd like to see this graph change in real time based on the sites you visit in your own browser, feel free to try the <a href="https://secure.toolness.com/xpi/collusion.html">Collusion Firefox add-on</a>. Even visiting the sites mentioned in the demo will probably give you different visualizations, because some services you may be logged into&mdash;like Facebook&mdash;can also track you across sites.</p>
+      <p>Thanks for trying out this demo. If you'd like to see this graph change in real time based on the sites you visit in your own browser, feel free to try the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a>. Even visiting the sites mentioned in the demo will probably give you different visualizations, because some services you may be logged into&mdash;like Facebook&mdash;can also track you across sites.</p>
       <p>If you want to block companies from tracking you on the internet, you can install <a href="http://www.privacychoice.org/trackerblock/firefox">TrackerBlock</a> for Firefox and Internet Explorer.</p>
       <p>For more information about the making of this demo, check out the <a href="http://www.toolness.com/wp/2011/07/collusion/">blog post</a> and <a href="https://github.com/toolness/collusion">code repository</a>. Feel free to tweet at <a href="http://twitter.com/toolness">toolness</a> if you have any feedback!</p>
     </div>
@@ -61,6 +61,9 @@
 </div>
 <div id="chart"></div>
 <div id="domain-infos"></div>
+</div>
+<div id="deployment-info">
+  This is a <em class="deployment-name"></em> deployment based on commit <a href="" class="deployment-commit"></a>.
 </div>
 <div id="addon-installation-detected" style="display: none;">
   Collusion add-on detected! Reload this page to see your graph.
@@ -79,3 +82,15 @@
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
 <script src="graphrunner.js"></script>
+<script>
+$(window).ready(function() {
+  var BASE_COMMIT = "https://github.com/toolness/collusion/commit/";
+  jQuery.getJSON("deployment.json", function(info) {
+    $(".xpi-download").attr("href", info.xpi_url + "collusion.html");
+    $(document.documentElement).addClass("deployment-" + info.name);
+    $(".deployment-name").text(info.name);
+    $(".deployment-commit").text(info.commit.slice(0, 10));
+    $("a.deployment-commit").attr("href", BASE_COMMIT + info.commit);
+  });
+});
+</script>

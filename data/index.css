@@ -143,3 +143,15 @@ div.settings-menu > ul > li:hover {
   color: yellow;
   background: black;
 }
+
+#deployment-info {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  background: yellow;
+  padding: 10px;
+}
+
+html.deployment-production #deployment-info {
+  display: none;
+}
