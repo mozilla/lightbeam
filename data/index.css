@@ -126,7 +126,6 @@ div.settings-menu {
   padding: 5px;
   pointer-events: auto;
   color: white;
-  background: rgba(0, 0, 0, 0.75);
 }
 
 div.settings-menu > ul {
@@ -138,11 +137,18 @@ div.settings-menu > ul {
 
 div.settings-menu > ul > li {
   cursor: pointer;
+  padding: 5px;
+  margin-top: 5px;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+div.settings-menu > ul > li:first-child {
+  margin-top: 0px;
 }
 
 div.settings-menu > ul > li:hover {
-  color: yellow;
-  background: black;
+  background: white;
+  color: black;
 }
 
 #deployment-info {
