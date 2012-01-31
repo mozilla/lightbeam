@@ -30,16 +30,17 @@ def deployment_task(func):
             print ', '.join(env.deployments)
             abort("Couldn't find deployment.")
         info = env.deployments[name]
-        
-        print "Using deployment '%s'." % name
-        cfg_filename = path('data', 'deployment.json')
-        cfg = open(cfg_filename, 'w')
-        cfg.write(json.dumps(dict(
+        info['cfg'] = dict(
             name=name,
             url=info['url'],
             xpi_url=info['xpi_url'],
             commit=get_git_commit()
-            )))
+            )
+
+        print "Using deployment '%s'." % name
+        cfg_filename = path('data', 'deployment.json')
+        cfg = open(cfg_filename, 'w')
+        cfg.write(json.dumps(info['cfg']))
         cfg.close()
         
         func(info)
@@ -63,7 +64,7 @@ SCP = 'scp'
 HTML_TEMPLATE = """
 <html>
 <head>
-  <title>{config[fullName]}</title>
+  <title>{config[fullName]} ({info[cfg][name]})</title>
   <style>
   body {{
     font-family: Helvetica Neue, sans-serif;
@@ -96,11 +97,11 @@ HTML_TEMPLATE = """
 </head>
 <body>
 <div class="main-info">
-  <div class="title">{config[fullName]}</div>
+  <div class="title">{config[fullName]} ({info[cfg][name]})</div>
   <div class="desc">{config[description]}</div>
 </div>
 <div class="details">
-  <div class="version">Version {config[version]}</div>
+  <div class="version">Version {config[version]} &mdash; commit <a href="https://github.com/toolness/collusion/commit/{info[cfg][commit]}">{short_commit}</a></div>
   <div class="author">By {config[author]}</div>
   <div class="pubdate">Published on {pubdate}</div>
 </div>
@@ -144,6 +145,7 @@ def deploy_xpi(info):
     html_abspath = os.path.join(pkgdir, html)
     for prop in ['fullName', 'description', 'author']:
         config[prop] = cgi.escape(config[prop])
+    short_commit = info['cfg']['commit'][:10]
     open(html_abspath, 'w').write(HTML_TEMPLATE.format(**locals()))
 
     # Build the XPI and update.rdf.
