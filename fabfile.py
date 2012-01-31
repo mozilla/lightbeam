@@ -1,12 +1,26 @@
+import os
 import json
 
 from fabric.api import *
 from fabric.contrib.project import rsync_project
 
+ROOT = os.path.abspath(os.path.dirname(__file__))
+path = lambda *x: os.path.join(ROOT, *x)
+
 try:
     import fabfile_local
 except ImportError:
     pass
+
+def get_git_commit():
+    try:
+        head = open(path('.git', 'HEAD'), 'r').read()
+        if head.startswith('ref: '):
+            ref = open(path('.git', head.split()[1].strip()), 'r').read()
+            return ref.strip()
+        return head.strip()
+    except Exception:
+        return "unknown"
 
 def deployment_task(func):
     def task_func(name):
@@ -23,7 +37,8 @@ def deployment_task(func):
         cfg.write(json.dumps(dict(
             name=name,
             url=info['url'],
-            xpi_url=info['xpi_url']
+            xpi_url=info['xpi_url'],
+            commit=get_git_commit()
             )))
         cfg.close()
         
@@ -38,14 +53,10 @@ def deploy_frontend(info):
                   local_dir='data/')
     print "front-end files placed in %s" % info['url']
 
-import os
 import sys
 import datetime
 import subprocess
 import cgi
-
-ROOT = os.path.abspath(os.path.dirname(__file__))
-path = lambda *x: os.path.join(ROOT, *x)
 
 CFX = 'cfx'
 SCP = 'scp'
