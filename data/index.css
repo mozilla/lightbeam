@@ -24,11 +24,12 @@ html, body {
   font-size: 9pt;
   margin: 0;
   padding: 0;
-  background-color: #333
+  background-color: #333;
+  color: #f0f0f0;
 }
 
 a {
-  color: black;
+  color: white;
 }
 
 #page {
@@ -93,7 +94,7 @@ h2.domain img.tracker {
 }
 
 .demo span.next:hover, a:hover {
-  background: yellow;
+  background: firebrick;
 }
 
 .byline {
@@ -148,7 +149,8 @@ div.settings-menu > ul > li:hover {
   position: fixed;
   bottom: 0px;
   right: 0px;
-  background: yellow;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
   padding: 10px;
 }
 
