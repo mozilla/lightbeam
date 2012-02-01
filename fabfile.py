@@ -51,7 +51,8 @@ def deployment_task(func):
 def deploy_frontend(info):
     run('mkdir -p %s' % info['remote_dir'])
     rsync_project(remote_dir=info['remote_dir'],
-                  local_dir='data/')
+                  local_dir='website/',
+                  extra_opts='--copy-links')
     print "front-end files placed in %s" % info['url']
 
 import sys
