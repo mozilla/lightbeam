@@ -1,13 +1,22 @@
+// taken from http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return unescape(pair[1]);
+    }
+  }
+}
+
 function isAddonInstalled() {
   return ('onGraph' in window);
 }
 
-function isPageBig() {
-  return isAddonInstalled() || window.location.search.match("page=big");
-}
-
-var SVG_WIDTH =  isPageBig() ? $(window).width() : 640,
-    SVG_HEIGHT = isPageBig() ? $(window).height() : 480;
+var graphUrl = getQueryVariable("graph_url");
+var SVG_WIDTH =  isAddonInstalled() || graphUrl ? $(window).width() : 640,
+    SVG_HEIGHT = isAddonInstalled() || graphUrl ? $(window).height() : 480;
 
 var vis = d3.select("#chart")
   .append("svg:svg")
@@ -413,6 +422,13 @@ $(window).ready(function() {
 
     $("#page").width(SVG_WIDTH);
 
+    if (graphUrl) {
+      jQuery.getJSON(graphUrl, function(data) {
+        graph.update(data);
+      });
+      return;
+    }
+    
     if (isAddonInstalled()) {
       $(".live-data").fadeIn();
       window.onGraph(makeBufferedGraphUpdate(graph));
