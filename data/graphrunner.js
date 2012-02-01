@@ -1,4 +1,4 @@
-var GraphRunner = (function() {
+var GraphRunner = (function(jQuery, d3, addon) {
   // taken from http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
@@ -12,7 +12,7 @@ var GraphRunner = (function() {
   }
 
   function isAddonInstalled() {
-    return ('onGraph' in window);
+    return addon.onGraph;
   }
 
   var graphUrl = getQueryVariable("graph_url");
@@ -389,7 +389,7 @@ var GraphRunner = (function() {
         timeoutID = null;
 
         // This is for debugging purposes only!
-        // window.lastJSON = json;
+        GraphRunner.lastJSON = json;
 
         graph.update(json);
       }, 250);
@@ -411,8 +411,8 @@ var GraphRunner = (function() {
         if (files.length == 1) {
           var reader = new FileReader();
           reader.onload = function() {
-            if ('importGraph' in window) {
-              window.importGraph(reader.result);
+            if (addon.importGraph) {
+              addon.importGraph(reader.result);
               window.location.reload();
             } else
               graph.update(JSON.parse(reader.result));
@@ -432,10 +432,10 @@ var GraphRunner = (function() {
     
       if (isAddonInstalled()) {
         $(".live-data").fadeIn();
-        window.onGraph(makeBufferedGraphUpdate(graph));
+        addon.onGraph(makeBufferedGraphUpdate(graph));
         $("#reset-graph").click(function() {
-          if ('resetGraph' in window) {
-            window.resetGraph();
+          if (addon.resetGraph) {
+            addon.resetGraph();
             window.location.reload();
           } else
             alert("You need to update your add-on to use this feature.");
@@ -455,8 +455,13 @@ var GraphRunner = (function() {
   }
   
   var GraphRunner = {
-    init: init
+    init: init,
+    lastJSON: null
   };
   
   return GraphRunner;
-})();
+})(jQuery, d3, {
+  onGraph: window.onGraph,
+  importGraph: window.importGraph,
+  resetGraph: window.resetGraph
+});
