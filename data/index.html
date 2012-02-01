@@ -81,9 +81,89 @@
 <script src="d3.layout.js"></script>
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
+<script src="collusion-addon.js"></script>
+<script src="demo.js"></script>
 <script src="graphrunner.js"></script>
 <script>
+// taken from http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return unescape(pair[1]);
+    }
+  }
+}
+
 $(window).ready(function() {
+  var addon = CollusionAddon;
+  var graphUrl = getQueryVariable("graph_url");
+
+  if (addon.isInstalled())
+    $(".exposition").hide();
+
+  jQuery.getJSON("trackers.json", function(trackers) {
+    var runner = GraphRunner.Runner({
+      width: addon.isInstalled() || graphUrl ? $(window).width() : 640,
+      height: addon.isInstalled() || graphUrl ? $(window).height() : 480,
+      trackers: trackers
+    });
+    var graph = runner.graph;
+
+    $(document.body).bind("dragover", function(event) {
+      event.preventDefault();
+    }).bind("drop", function(event) {
+      event.preventDefault();
+      var files = event.originalEvent.dataTransfer.files;
+      if (files.length == 1) {
+        var reader = new FileReader();
+        reader.onload = function() {
+          if (addon.importGraph) {
+            addon.importGraph(reader.result);
+            window.location.reload();
+          } else
+            graph.update(JSON.parse(reader.result));
+        };
+        reader.readAsText(files[0], "UTF-8");
+      }
+    });
+
+    $("#page").width(runner.width);
+
+    if (graphUrl) {
+      jQuery.getJSON(graphUrl, function(data) {
+        graph.update(data);
+      });
+      return;
+    }
+
+    if (addon.isInstalled()) {
+      $(".live-data").fadeIn();
+      addon.onGraph(runner.updateGraph);
+      $("#reset-graph").click(function() {
+        if (addon.resetGraph) {
+          addon.resetGraph();
+          window.location.reload();
+        } else
+          alert("You need to update your add-on to use this feature.");
+      });
+      $("#export-graph").click(function() {
+        var data = JSON.stringify(graph.data);
+        window.open("data:application/json," + data);
+      });
+    } else {
+      Demo.show(graph);
+      setInterval(function displayMessageIfAddonIsInstalled() {
+        if (addon.isInstalled())
+          $("#addon-installation-detected").slideDown();
+      }, 1000);
+    }
+  });
+});
+
+$(window).ready(function addDeploymentInfo() {
   var BASE_COMMIT = "https://github.com/toolness/collusion/commit/";
   jQuery.getJSON("deployment.json", function(info) {
     $(".xpi-download").attr("href", info.xpi_url + "collusion.html");
