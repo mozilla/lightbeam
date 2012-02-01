@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="qunit.css">
 <script src="qunit.js"></script>
 <script src="../jquery.min.js"></script>
+<script src="../anonymizer/anonymizer.js"></script>
 <h1 id="qunit-header">Collusion Unit Tests</h1>
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
@@ -27,6 +28,28 @@ asyncTest("smoke test", function() {
         start();
       }
     }, 100);
+  });
+});
+
+module("anonymizer");
+
+test("anonymizer works", function() {
+  deepEqual(anonymize({
+    "yahoo.com": {
+      "mozilla.org": [1, "text/plain"],
+      "youtube.com": [2, "text/plain"]
+    },
+    "mozilla.org": {
+      "google.com": [3, "text/plain"]
+    }
+  }), {
+    "1.anon": {
+      "2.anon": [1, "text/plain"],
+      "3.anon": [2, "text/plain"]
+    },
+    "2.anon": {
+      "4.anon": [3, "text/plain"]
+    }
   });
 });
 </script>
