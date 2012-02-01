@@ -40,20 +40,18 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
   vis.append("svg:g").attr("class", "links");
   vis.append("svg:g").attr("class", "nodes");
 
-  jQuery.fn.extend({
-    setDomainLink: function(d) {
-      this.removeClass("tracker").removeClass("site");
-      if (d.trackerInfo) {
-        var TRACKER_INFO = "http://www.privacychoice.org/companies/index/";
-        var trackerId = d.trackerInfo.network_id;
-        this.attr("href", TRACKER_INFO + trackerId);
-        this.addClass("tracker");
-      } else {
-        this.attr("href", "http://" + d.name);
-        this.addClass("site");
-      }
+  function setDomainLink(target, d) {
+    target.removeClass("tracker").removeClass("site");
+    if (d.trackerInfo) {
+      var TRACKER_INFO = "http://www.privacychoice.org/companies/index/";
+      var trackerId = d.trackerInfo.network_id;
+      target.attr("href", TRACKER_INFO + trackerId);
+      target.addClass("tracker");
+    } else {
+      target.attr("href", "http://" + d.name);
+      target.addClass("site");
     }
-  });
+  }
 
   function showDomainInfo(d) {
     var className = d.name.replace(/\./g, '-dot-');
@@ -74,7 +72,7 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
       } else
         img.attr("src", 'http://' + d.name + '/favicon.ico')
            .addClass("favicon");
-      info.find("a.domain").setDomainLink(d);
+      setDomainLink(info.find("a.domain"), d);
       info.find("h2.domain").prepend(img);
       img.error(function() { img.remove(); });
       $("#domain-infos").append(info);
@@ -86,7 +84,7 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
       list.empty();
       domains.forEach(function(d) {
         var item = $('<li><a></a></li>');
-        item.find("a").text(d.name).setDomainLink(d);
+        setDomainLink(item.find("a").text(d.name), d);
         list.append(item);
       });
       referrers.show();
