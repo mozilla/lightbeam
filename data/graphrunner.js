@@ -11,13 +11,9 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
     }
   }
 
-  function isAddonInstalled() {
-    return addon.onGraph;
-  }
-
   var graphUrl = getQueryVariable("graph_url");
-  var SVG_WIDTH =  isAddonInstalled() || graphUrl ? $(window).width() : 640,
-      SVG_HEIGHT = isAddonInstalled() || graphUrl ? $(window).height() : 480;
+  var SVG_WIDTH =  addon.isInstalled() || graphUrl ? $(window).width() : 640,
+      SVG_HEIGHT = addon.isInstalled() || graphUrl ? $(window).height() : 480;
 
   var vis = d3.select("#chart")
     .append("svg:svg")
@@ -315,7 +311,7 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
   }
 
   function init() {
-    if (isAddonInstalled())
+    if (addon.isInstalled())
       $(".exposition").hide();
   
     jQuery.getJSON("trackers.json", function(trackers) {
@@ -348,7 +344,7 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
         return;
       }
     
-      if (isAddonInstalled()) {
+      if (addon.isInstalled()) {
         $(".live-data").fadeIn();
         addon.onGraph(makeBufferedGraphUpdate(graph));
         $("#reset-graph").click(function() {
@@ -365,7 +361,7 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
       } else {
         Demo.show(graph);
         setInterval(function displayMessageIfAddonIsInstalled() {
-          if (isAddonInstalled())
+          if (addon.isInstalled())
             $("#addon-installation-detected").slideDown();
         }, 1000);
       }
@@ -378,8 +374,4 @@ var GraphRunner = (function(jQuery, d3, Demo, addon) {
   };
   
   return GraphRunner;
-})(jQuery, d3, Demo, {
-  onGraph: window.onGraph,
-  importGraph: window.importGraph,
-  resetGraph: window.resetGraph
-});
+})(jQuery, d3, Demo, CollusionAddon);
