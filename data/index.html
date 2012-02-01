@@ -84,6 +84,7 @@
 <script src="graphrunner.js"></script>
 <script>
 $(window).ready(function() {
+  GraphRunner.init();
   var BASE_COMMIT = "https://github.com/toolness/collusion/commit/";
   jQuery.getJSON("deployment.json", function(info) {
     $(".xpi-download").attr("href", info.xpi_url + "collusion.html");
