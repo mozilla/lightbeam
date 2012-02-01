@@ -2,8 +2,12 @@ function isAddonInstalled() {
   return ('onGraph' in window);
 }
 
-var SVG_WIDTH = isAddonInstalled() ? $(window).width() : 640,
-    SVG_HEIGHT = isAddonInstalled() ? $(window).height() : 480;
+function isPageBig() {
+  return isAddonInstalled() || window.location.search.match("page=big");
+}
+
+var SVG_WIDTH =  isPageBig() ? $(window).width() : 640,
+    SVG_HEIGHT = isPageBig() ? $(window).height() : 480;
 
 var vis = d3.select("#chart")
   .append("svg:svg")
