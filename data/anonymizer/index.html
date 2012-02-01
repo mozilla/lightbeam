@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Graph Anonymizer</title>
+<style>
+html, body {
+  height: 100%;
+}
+</style>
+<p>Drag an exported Collusion graph into this page and we'll give you an anonymized version of it.</p>
+<a style="display: none" id="export">Here is the anonymized version.</a>
+<script src="../jquery.min.js"></script>
+<script src="anonymizer.js"></script>
+<script>
+$(window).ready(function() {
+  $(document.body).bind("dragover", function(event) {
+    event.preventDefault();
+  }).bind("drop", function(event) {
+    event.preventDefault();
+    var files = event.originalEvent.dataTransfer.files;
+    if (files.length == 1) {
+      var reader = new FileReader();
+      reader.onload = function() {
+        var anonymized = anonymize(JSON.parse(reader.result));
+        var url = "data:application/json," + JSON.stringify(anonymized);
+        $("a#export").attr("href", url).fadeIn();;
+      };
+      reader.readAsText(files[0], "UTF-8");
+    }
+  });
+});
+</script>

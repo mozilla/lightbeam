@@ -1,9 +1,22 @@
+// taken from http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return unescape(pair[1]);
+    }
+  }
+}
+
 function isAddonInstalled() {
   return ('onGraph' in window);
 }
 
-var SVG_WIDTH = isAddonInstalled() ? $(window).width() : 640,
-    SVG_HEIGHT = isAddonInstalled() ? $(window).height() : 480;
+var graphUrl = getQueryVariable("graph_url");
+var SVG_WIDTH =  isAddonInstalled() || graphUrl ? $(window).width() : 640,
+    SVG_HEIGHT = isAddonInstalled() || graphUrl ? $(window).height() : 480;
 
 var vis = d3.select("#chart")
   .append("svg:svg")
@@ -138,7 +151,7 @@ function createNodes(nodes, force) {
           return "translate(" + d.x + "," + d.y + ")";
         });
       })
-    .call(force.drag);
+      .call(force.drag);
 
   gs.append("svg:circle")
       .attr("cx", "0")
@@ -389,7 +402,32 @@ $(window).ready(function() {
   jQuery.getJSON("trackers.json", function(trackers) {
     var graph = CollusionGraph(trackers);
 
+    $(document.body).bind("dragover", function(event) {
+      event.preventDefault();
+    }).bind("drop", function(event) {
+      event.preventDefault();
+      var files = event.originalEvent.dataTransfer.files;
+      if (files.length == 1) {
+        var reader = new FileReader();
+        reader.onload = function() {
+          if ('importGraph' in window) {
+            window.importGraph(reader.result);
+            window.location.reload();
+          } else
+            graph.update(JSON.parse(reader.result));
+        };
+        reader.readAsText(files[0], "UTF-8");
+      }
+    });
+
     $("#page").width(SVG_WIDTH);
+
+    if (graphUrl) {
+      jQuery.getJSON(graphUrl, function(data) {
+        graph.update(data);
+      });
+      return;
+    }
 
     if (isAddonInstalled()) {
       $(".live-data").fadeIn();

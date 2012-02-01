@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Collusion Unit Tests</title>
+<link rel="stylesheet" href="qunit.css">
+<script src="qunit.js"></script>
+<script src="../jquery.min.js"></script>
+<script src="../anonymizer/anonymizer.js"></script>
+<h1 id="qunit-header">Collusion Unit Tests</h1>
+<h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="qunit-fixture"></div>
+<script>
+module("general");
+
+asyncTest("smoke test", function() {
+  var iframe = $('<iframe src="../index.html"></iframe>');
+  iframe.appendTo(document.body).hide().load(function() {
+    var interval = setInterval(function() {
+      iframe.show();
+      var visible = iframe.contents().find(".demo:visible," + 
+                                           ".live-data:visible");
+      iframe.hide();
+      if (visible.length == 1) {
+        ok(true, ".demo or .live-data is visible.");
+        iframe.remove();
+        start();
+      }
+    }, 100);
+  });
+});
+
+module("anonymizer");
+
+test("anonymizer works", function() {
+  deepEqual(anonymize({
+    "yahoo.com": {
+      "mozilla.org": [1, "text/plain"],
+      "youtube.com": [2, "text/plain"]
+    },
+    "mozilla.org": {
+      "google.com": [3, "text/plain"]
+    }
+  }), {
+    "1.anon": {
+      "2.anon": [1, "text/plain"],
+      "3.anon": [2, "text/plain"]
+    },
+    "2.anon": {
+      "4.anon": [3, "text/plain"]
+    }
+  });
+});
+</script>

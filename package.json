@@ -2,9 +2,17 @@
     "name": "collusion", 
     "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
     "author": "Atul Varma", 
-    "version": "0.14", 
+    "version": "0.15.2", 
     "url": "https://github.com/toolness/collusion",
     "fullName": "Collusion", 
     "id": "jid1-F9UJ2thwoAm5gQ",
-    "description": "Visualize who's tracking you in real time. To get started, click on the Collusion icon in the bottom-right corner of your browser. (You may need to show the Add-on Bar to see the icon.)"
+    "description": "Visualize who's tracking you in real time. To get started, click on the Collusion icon in the bottom-right corner of your browser. (You may need to show the Add-on Bar to see the icon.)",
+    "preferences": [
+      {
+        "name": "collusion.urls",
+        "title": "Trusted front-ends (comma-separated list)",
+        "type": "string",
+        "value": ""
+      }
+    ]
 }
