@@ -385,26 +385,27 @@ function makeBufferedGraphUpdate(graph) {
 $(window).ready(function() {
   if (isAddonInstalled())
     $(".exposition").hide();
-
-  $(document.body).bind("dragover", function(event) {
-    event.preventDefault();
-  }).bind("drop", function(event) {
-    event.preventDefault();
-    var files = event.originalEvent.dataTransfer.files;
-    if (files.length == 1) {
-      var reader = new FileReader();
-      reader.onload = function() {
-        if ('importGraph' in window) {
-          window.importGraph(reader.result);
-          window.location.reload();
-        }
-      };
-      reader.readAsText(files[0], "UTF-8");
-    }
-  });
   
   jQuery.getJSON("trackers.json", function(trackers) {
     var graph = CollusionGraph(trackers);
+
+    $(document.body).bind("dragover", function(event) {
+      event.preventDefault();
+    }).bind("drop", function(event) {
+      event.preventDefault();
+      var files = event.originalEvent.dataTransfer.files;
+      if (files.length == 1) {
+        var reader = new FileReader();
+        reader.onload = function() {
+          if ('importGraph' in window) {
+            window.importGraph(reader.result);
+            window.location.reload();
+          } else
+            graph.update(JSON.parse(reader.result));
+        };
+        reader.readAsText(files[0], "UTF-8");
+      }
+    });
 
     $("#page").width(SVG_WIDTH);
 
