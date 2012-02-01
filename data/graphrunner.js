@@ -1,4 +1,4 @@
-var GraphRunner = (function(jQuery, d3, addon) {
+var GraphRunner = (function(jQuery, d3, Demo, addon) {
   // taken from http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
@@ -299,86 +299,6 @@ var GraphRunner = (function(jQuery, d3, addon) {
     };
   }
 
-  function showDemo(graph) {
-    function findPageLoadIntervals(json, requestReferrer) {
-      var requests = [];
-
-      if (typeof(requestRefferer) == "string")
-        requestReferrer = [requestReferrer];
-
-      for (var domain in json)
-        for (var referrer in json[domain]) {
-          var time = json[domain][referrer][0];
-          if (requestReferrer.indexOf(referrer) != -1) {
-            requests.push(time);
-          }
-        }
-
-      var uniqueRequests = [];
-      requests.forEach(function(time) {
-        if (uniqueRequests.indexOf(time) == -1)
-          uniqueRequests.push(time);
-      });
-
-      return uniqueRequests.sort().reverse();
-    }
-
-    function getJsonAtTime(json, maxTime) {
-      var filtered = {};
-
-      for (var domain in json) {
-        filtered[domain] = {};
-        for (var referrer in json[domain]) {
-          var time = json[domain][referrer][0];
-          if (time <= maxTime)
-            filtered[domain][referrer] = json[domain][referrer];
-        }
-      }
-
-      return filtered;
-    }
-
-    jQuery.getJSON("sample-tracking-info.json", function(json) {
-      $(".demo").find(".step").hide();
-      $(".demo").show();
-      $(".demo").find(".step.0").fadeIn();
-
-      var step = 0;
-      var DOMAINS = [
-        "imdb.com",
-        "nytimes.com",
-        ["huffingtonpost.com", "atwola.com"],
-        "gamespot.com",
-        "reference.com"
-      ];
-
-      function showNextStep() {
-        $(".exposition").slideUp();
-        $(".demo").find(".step." + step).fadeOut(function() {
-          var times = findPageLoadIntervals(json, DOMAINS[step]);
-          var nextTime = times.pop();
-          var virtualTime = 0;
-
-          function triggerNextRequest() {
-            virtualTime = nextTime;
-            graph.update(getJsonAtTime(json, virtualTime));
-            if (times.length) {
-              nextTime = times.pop();
-              setTimeout(triggerNextRequest, nextTime - virtualTime);
-            } else
-              $(".demo").find(".step." + step).fadeIn();
-          }
-
-          triggerNextRequest();
-
-          step++;
-        });
-      }
-
-      $(".demo").find(".next").click(showNextStep);
-    });
-  }
-
   function makeBufferedGraphUpdate(graph) {
     var timeoutID = null;
 
@@ -445,7 +365,7 @@ var GraphRunner = (function(jQuery, d3, addon) {
           window.open("data:application/json," + data);
         });
       } else {
-        showDemo(graph);
+        Demo.show(graph);
         setInterval(function displayMessageIfAddonIsInstalled() {
           if (isAddonInstalled())
             $("#addon-installation-detected").slideDown();
@@ -460,7 +380,7 @@ var GraphRunner = (function(jQuery, d3, addon) {
   };
   
   return GraphRunner;
-})(jQuery, d3, {
+})(jQuery, d3, Demo, {
   onGraph: window.onGraph,
   importGraph: window.importGraph,
   resetGraph: window.resetGraph
