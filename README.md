@@ -13,6 +13,25 @@ the add-on.
 
 If you only want to see the demo, you don't need any of these; all you need is a modern browser.
 
+## Quick Start
+
+First, [install][] the Mozilla Add-on SDK if you haven't already, and activate it in a command line terminal.
+
+Then, check out the Collusion repository and enter it:
+
+    git clone git://github.com/toolness/collusion.git
+    cd collusion
+
+Finally, run:
+
+    python develop.py
+
+This will set up the web front-end for Collusion on port 8888 and start Firefox with a temporary profile that has Collusion installed. Just click on the Collusion icon at the bottom-right of the browser window to open the web front-end.
+
+At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `python develop.py` again.
+
+  [install]: https://addons.mozilla.org/en-US/developers/docs/sdk/latest/dev-guide/addon-development/installation.html
+
 ## Software Used
 
 The following software is bundled with the repository and doesn't need to be manually obtained.

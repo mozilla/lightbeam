@@ -1,8 +1,8 @@
 import os
-import json
 
 from fabric.api import *
 from fabric.contrib.project import rsync_project
+from develop import json, get_git_commit
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 path = lambda *x: os.path.join(ROOT, *x)
@@ -11,16 +11,6 @@ try:
     import fabfile_local
 except ImportError:
     pass
-
-def get_git_commit():
-    try:
-        head = open(path('.git', 'HEAD'), 'r').read()
-        if head.startswith('ref: '):
-            ref = open(path('.git', head.split()[1].strip()), 'r').read()
-            return ref.strip()
-        return head.strip()
-    except Exception:
-        return "unknown"
 
 def deployment_task(func):
     def task_func(name):
