@@ -42,6 +42,9 @@ def run(server_class=BaseHTTPServer.HTTPServer,
     httpd.serve_forever()
 
 if __name__ == '__main__':
+    if 'CUDDLEFISH_ROOT' not in os.environ:
+        print "WARNING: You don't seem to have the Add-on SDK activated. To learn how to activate it, visit: https://addons.mozilla.org/en-US/developers/docs/sdk/latest/dev-guide/addon-development/installation.html"
+        print
     t = threading.Thread(target=run)
     t.setDaemon(True)
     t.start()
