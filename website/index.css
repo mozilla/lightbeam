@@ -1,6 +1,7 @@
 circle.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
+  fill: #fff;
+  color: #fff;
+  stroke-width: 2px;
 }
 
 marker {
@@ -79,18 +80,15 @@ h2.domain img.tracker {
 }
 
 .tracker {
-  color: #d62728;
-  fill: #d62728;
+  stroke: #d62728;
 }
 
 .site {
-  color: #7f7f7f;
-  fill: #7f7f7f;
+  stroke: #7f7f7f;
 }
 
 .visited {
-  color: #0000ff;
-  fill: #0000ff;
+  stroke: #0000ff;
 }
 
 .demo span.next {
