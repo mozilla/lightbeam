@@ -280,8 +280,8 @@ var GraphRunner = (function(jQuery, d3) {
             for (var referrer in json[domain].referrers)
               addLink({from: referrer, to: domain});
 
-          for each (var node in nodes) {
-            node.wasVisited = json[node.name].visited;
+          for (var n = 0; n < nodes.length; n++) {
+            nodes[n].wasVisited = json[nodes[n].name].visited;
           }
 
           drawing.force.nodes(nodes);
