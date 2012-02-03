@@ -117,23 +117,11 @@ var GraphRunner = (function(jQuery, d3) {
             return "translate(" + d.x + "," + d.y + ")";
           })
           .on("mouseover", function(d) {
-            /* On mouseover, make the node appear larger, pull it to front,
-               and make the links black so they stand out from the crowd. */
             selectArcs(d).attr("marker-end", "url(#Triangle)").classed("bold", true);
             showDomainInfo(d);
-            d3.select(this).attr("transform", function(d) {
-              return "translate(" + d.x + "," + d.y + ") scale(2, 2)";
-              });
-            /* SVG z-index is determined by node order within DOM, so move the node
-               to the end of its parent in order to bring it to the front: */
-            this.parentNode.appendChild(this);
           })
           .on("mouseout", function(d) {
-            /* Upon leaving, undo the changes made in mouseover */
             selectArcs(d).attr("marker-end", null).classed("bold", false);
-            d3.select(this).attr("transform", function(d) {
-              return "translate(" + d.x + "," + d.y + ")";
-            });
           })
           .call(force.drag);
 
