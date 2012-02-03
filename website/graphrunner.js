@@ -281,7 +281,6 @@ var GraphRunner = (function(jQuery, d3) {
               addLink({from: referrer, to: domain});
 
           for each (var node in nodes) {
-            $("#debug").html("node is " + node.name);
             node.wasVisited = json[node.name].visited;
           }
 

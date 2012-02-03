@@ -104,6 +104,7 @@ $(window).ready(function() {
   if (addon.isInstalled())
     $(".exposition").hide();
 
+  // get list of known trackers from trackers.json file hosted on website:
   jQuery.getJSON("trackers.json", function(trackers) {
     var runner = GraphRunner.Runner({
       width: addon.isInstalled() || graphUrl ? $(window).width() : 640,
