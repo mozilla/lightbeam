@@ -184,8 +184,8 @@ var GraphRunner = (function(jQuery, d3) {
 
     function draw(json) {
       var force = d3.layout.force()
-          .charge(-120)
-          .distance(60)
+          .charge(-500)
+          .distance(120)
           .friction(0)
           .nodes(json.nodes)
           .links(json.links)
