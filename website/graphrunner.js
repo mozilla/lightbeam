@@ -119,9 +119,19 @@ var GraphRunner = (function(jQuery, d3) {
           .on("mouseover", function(d) {
             selectArcs(d).attr("marker-end", "url(#Triangle)").classed("bold", true);
             showDomainInfo(d);
+            var connectedDomains = [d.name];
+            findReferringDomains(d).forEach( function(e) {
+              connectedDomains.push(e.name);
+            });
+
+            d3.selectAll("g.node").attr("opacity", function(d) {
+              // TODO nodes connected to this one should also have opacity
+              return (connectedDomains.indexOf(d.name) > -1)? "1.0": "0.2";
+            });
           })
           .on("mouseout", function(d) {
             selectArcs(d).attr("marker-end", null).classed("bold", false);
+            d3.selectAll("g.node").attr("opacity", "1.0");
           })
           .call(force.drag);
 
