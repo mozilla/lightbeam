@@ -281,7 +281,11 @@ var GraphRunner = (function(jQuery, d3) {
               addLink({from: referrer, to: domain});
 
           for (var n = 0; n < nodes.length; n++) {
-            nodes[n].wasVisited = json[nodes[n].name].visited;
+            if (json[nodes[n].name]) {
+              nodes[n].wasVisited = json[nodes[n].name].visited;
+            } else {
+              nodes[n].wasVisited = false;
+            }
           }
 
           drawing.force.nodes(nodes);

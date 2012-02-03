@@ -7,8 +7,8 @@ var Demo = (function() {
         requestReferrer = [requestReferrer];
 
       for (var domain in json)
-        for (var referrer in json[domain]) {
-          var time = json[domain][referrer][0];
+        for (var referrer in json[domain].referrers) {
+          var time = json[domain].referrers[referrer][0];
           if (requestReferrer.indexOf(referrer) != -1) {
             requests.push(time);
           }
@@ -27,11 +27,11 @@ var Demo = (function() {
       var filtered = {};
 
       for (var domain in json) {
-        filtered[domain] = {};
-        for (var referrer in json[domain]) {
-          var time = json[domain][referrer][0];
+        filtered[domain] = {referrers: {}};
+        for (var referrer in json[domain].referrers) {
+          var time = json[domain].referrers[referrer][0];
           if (time <= maxTime)
-            filtered[domain][referrer] = json[domain][referrer];
+            filtered[domain].referrers[referrer] = json[domain].referrers[referrer];
         }
       }
 
@@ -61,7 +61,7 @@ var Demo = (function() {
 
           function triggerNextRequest() {
             virtualTime = nextTime;
-            graph.update(getJsonAtTime(json, virtualTime));
+            graph.update(getJsonAtTime(json, virtualTime);
             if (times.length) {
               nextTime = times.pop();
               setTimeout(triggerNextRequest, nextTime - virtualTime);
@@ -82,6 +82,6 @@ var Demo = (function() {
   var Demo = {
     show: show
   };
-  
+
   return Demo;
 })();
