@@ -61,7 +61,7 @@ var Demo = (function() {
 
           function triggerNextRequest() {
             virtualTime = nextTime;
-            graph.update(getJsonAtTime(json, virtualTime);
+            graph.update(getJsonAtTime(json, virtualTime));
             if (times.length) {
               nextTime = times.pop();
               setTimeout(triggerNextRequest, nextTime - virtualTime);
