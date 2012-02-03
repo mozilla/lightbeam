@@ -88,6 +88,11 @@ h2.domain img.tracker {
   fill: #7f7f7f;
 }
 
+.visited {
+  color: #0000ff;
+  fill: #0000ff;
+}
+
 .demo span.next {
   cursor: pointer;
   font-weight: bold;

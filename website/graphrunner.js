@@ -140,9 +140,17 @@ var GraphRunner = (function(jQuery, d3) {
       gs.append("svg:circle")
           .attr("cx", "0")
           .attr("cy", "0")
-          .attr("r", radius)
+          .attr("r", 12) // was radius
           .attr("class", function(d) {
-             return "node " + (d.trackerInfo ? "tracker" : "site");
+              var categorization;
+              if (d.wasVisited) {
+                categorization = "visited";
+              } else if (d.trackerInfo) {
+                categorization = "tracker";
+              } else {
+                categorization = "site";
+              }
+              return "node " + categorization;
           });
 
       gs.append("svg:image")
@@ -269,8 +277,13 @@ var GraphRunner = (function(jQuery, d3) {
           drawing.force.stop();
 
           for (var domain in json)
-            for (var referrer in json[domain])
+            for (var referrer in json[domain].referrers)
               addLink({from: referrer, to: domain});
+
+          for each (var node in nodes) {
+            $("#debug").html("node is " + node.name);
+            node.wasVisited = json[node.name].visited;
+          }
 
           drawing.force.nodes(nodes);
           drawing.force.links(links);
@@ -297,22 +310,22 @@ var GraphRunner = (function(jQuery, d3) {
         }, 250);
       };
     }
-    
+
     var graph = CollusionGraph(trackers);
-    
+
     var self = {
       graph: graph,
       width: SVG_WIDTH,
       height: SVG_HEIGHT,
       updateGraph: makeBufferedGraphUpdate(graph)
     };
-    
+
     return self;
   }
-  
+
   var GraphRunner = {
     Runner: Runner
   };
-  
+
   return GraphRunner;
 })(jQuery, d3);
