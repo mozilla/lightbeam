@@ -124,14 +124,14 @@ var GraphRunner = (function(jQuery, d3) {
               connectedDomains.push(e.name);
             });
 
-            d3.selectAll("g.node").attr("opacity", function(d) {
-              // TODO nodes connected to this one should also have opacity
-              return (connectedDomains.indexOf(d.name) > -1)? "1.0": "0.2";
+            d3.selectAll("g.node").classed("unrelated-domain", function(d) {
+              // TODO nodes connected to this one shouldn't have this class.
+              return (connectedDomains.indexOf(d.name) == -1);
             });
           })
           .on("mouseout", function(d) {
             selectArcs(d).attr("marker-end", null).classed("bold", false);
-            d3.selectAll("g.node").attr("opacity", "1.0");
+            d3.selectAll("g.node").classed("unrelated-domain", false);
           })
           .call(force.drag);
 
