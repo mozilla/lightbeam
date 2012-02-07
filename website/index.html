@@ -23,6 +23,7 @@
       <ul>
         <li id="reset-graph">Reset Graph</li>
         <li id="export-graph">Export Graph</li>
+        <li id="hide-ui">Hide UI</li>
       </ul>
     </div>
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect sites you visit solely to show you how they're connected. We don't keep them and don't give away the information to anyone except you.</p>
@@ -113,6 +114,7 @@ $(window).ready(function() {
     });
     var graph = runner.graph;
 
+    // Enable drag-and-drop to import collusion graph data from a json file:
     $(document.body).bind("dragover", function(event) {
       event.preventDefault();
     }).bind("drop", function(event) {
@@ -153,6 +155,11 @@ $(window).ready(function() {
       $("#export-graph").click(function() {
         var data = JSON.stringify(graph.data);
         window.open("data:application/json," + data);
+      });
+      $("#hide-ui").click(function() {
+        $("#sidebar").slideUp();
+        $("#domain-infos").slideUp();
+        $("#deployment-info").slideUp();
       });
     } else {
       Demo.show(graph);
