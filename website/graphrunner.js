@@ -109,7 +109,7 @@ var GraphRunner = (function(jQuery, d3) {
           .duration(1000)
           .attr("r", radius);
 
-      // For eadch node, create svg group <g> to hold circle, image, and title
+      // For each node, create svg group <g> to hold circle, image, and title
       var gs = node.enter().append("svg:g")
           .attr("class", "node")
           .attr("transform", function(d) {
@@ -283,6 +283,14 @@ var GraphRunner = (function(jQuery, d3) {
               nodes[n].wasVisited = json[nodes[n].name].visited;
             } else {
               nodes[n].wasVisited = false;
+            }
+            /* For nodes that don't already have a position, initialize them near the center.
+             * This way the graph will start from center. If it already has a position, leave it.
+             * Note that initializing them all exactly at center causes there to be zero distance,
+             * which makes the repulsive force explode!! So add some random factor. */
+            if (typeof nodes[n].x == "undefined") {
+              nodes[n].x = nodes[n].px = SVG_WIDTH / 2 + Math.floor( Math.random() * 50 ) ;
+              nodes[n].y = nodes[n].py = SVG_HEIGHT / 2 + Math.floor( Math.random() * 50 );
             }
           }
 
