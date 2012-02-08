@@ -22,6 +22,9 @@ var GraphRunner = (function(jQuery, d3) {
         .append("svg:path")
           .attr("d", "M 0 0 L 10 5 L 0 10 z");
 
+    vis.append("svg:rect").attr("rx", 8)
+      .attr("width", 64).attr("height", 16).attr("id", "domain-label");
+    vis.append("svg:text").attr("id", "domain-label-text");
     vis.append("svg:g").attr("class", "links");
     vis.append("svg:g").attr("class", "nodes");
 
@@ -102,6 +105,27 @@ var GraphRunner = (function(jQuery, d3) {
                              ",line.from-" + d.index);
       }
 
+      function getClassForSite(d) {
+        if (d.wasVisited) {
+          return "visited";
+        } else if (d.trackerInfo) {
+          return "tracker";
+        } else {
+          return "site";
+        }
+      }
+
+      function showPopupLabel(d) {
+        // Show popup label to display domain:
+        d3.select("#domain-label").classed("hidden", false)
+          .attr("x", d.x).attr("y", d.y - 4)
+          .attr("width", d.name.length * 7 + 16)
+          .attr("class", "round-border " + getClassForSite(d));
+        d3.select("#domain-label-text").attr("x", d.x + 16).attr("y", d.y + 7).text(d.name);
+        /* TODO label width and text offset determined by trial-and-error
+         * and will not necessarily be correct with different font sizes.*/
+      }
+
       var node = vis.select("g.nodes").selectAll("g.node")
           .data(nodes);
 
@@ -118,20 +142,25 @@ var GraphRunner = (function(jQuery, d3) {
           })
           .on("mouseover", function(d) {
             selectArcs(d).attr("marker-end", "url(#Triangle)").classed("bold", true);
+            // TODO make all the unrelated links either gone or like 5% opacity
             showDomainInfo(d);
+            showPopupLabel(d);
+
+            // Create a subgraph of the directly connected nodes, make them opaque and the rest
+            // translucent.
+            // TODO: Subgraph should also include nodes connected to this one (both directions)
             var connectedDomains = [d.name];
             findReferringDomains(d).forEach( function(e) {
               connectedDomains.push(e.name);
             });
-
             d3.selectAll("g.node").classed("unrelated-domain", function(d) {
-              // TODO nodes connected to this one shouldn't have this class.
-              return (connectedDomains.indexOf(d.name) == -1);
+                return (connectedDomains.indexOf(d.name) == -1);
             });
           })
           .on("mouseout", function(d) {
             selectArcs(d).attr("marker-end", null).classed("bold", false);
             d3.selectAll("g.node").classed("unrelated-domain", false);
+            d3.select("#domain-label").classed("hidden", true);
           })
           .call(force.drag);
 
@@ -140,16 +169,8 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("cy", "0")
           .attr("r", 12) // was radius
           .attr("class", function(d) {
-              var categorization;
-              if (d.wasVisited) {
-                categorization = "visited";
-              } else if (d.trackerInfo) {
-                categorization = "tracker";
-              } else {
-                categorization = "site";
-              }
-              return "node " + categorization;
-          });
+                return "node round-border " + getClassForSite(d);
+              });
 
       gs.append("svg:image")
           .attr("class", "node")
@@ -158,9 +179,6 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("x", "-8") // offset to make 16x16 favicon appear centered
           .attr("y", "-8")
           .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
-
-      gs.append("svg:title")
-          .text(function(d) { return d.name; });
 
       return node;
     }

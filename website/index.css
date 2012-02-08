@@ -9,9 +9,8 @@ g.node.unrelated-domain {
   opacity: 0.2;
 }
 
-circle.node {
+.round-border {
   fill: #fff;
-  color: #fff;
   stroke-width: 2px;
 }
 
@@ -181,4 +180,8 @@ div.settings-menu > ul > li:hover {
 
 html.deployment-production #deployment-info {
   display: none;
+}
+
+#domain-label.hidden {
+  opacity: 0;
 }
