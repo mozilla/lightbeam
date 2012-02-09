@@ -6,7 +6,7 @@ g.node {
 }
 
 g.node.unrelated-domain {
-  opacity: 0.2;
+  opacity: 0.15;
 }
 
 .round-border {
@@ -32,6 +32,10 @@ line.link {
 line.bold {
   stroke: #fff;
   stroke-opacity: 1;
+}
+
+line.hidden {
+  stroke-opacity: 0;
 }
 
 html, body {

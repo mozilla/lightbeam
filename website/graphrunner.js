@@ -22,10 +22,10 @@ var GraphRunner = (function(jQuery, d3) {
         .append("svg:path")
           .attr("d", "M 0 0 L 10 5 L 0 10 z");
 
+    vis.append("svg:g").attr("class", "links");
     vis.append("svg:rect").attr("rx", 8)
       .attr("width", 64).attr("height", 16).attr("id", "domain-label");
     vis.append("svg:text").attr("id", "domain-label-text");
-    vis.append("svg:g").attr("class", "links");
     vis.append("svg:g").attr("class", "nodes");
 
     function setDomainLink(target, d) {
@@ -126,6 +126,15 @@ var GraphRunner = (function(jQuery, d3) {
          * and will not necessarily be correct with different font sizes.*/
       }
 
+      function getConnectedDomains(d) {
+        // TODO: Subgraph should also include nodes connected to this one (both directions)
+        var connectedDomains = [d.name];
+        findReferringDomains(d).forEach( function(e) {
+          connectedDomains.push(e.name);
+        });
+        return connectedDomains;
+      }
+
       var node = vis.select("g.nodes").selectAll("g.node")
           .data(nodes);
 
@@ -141,28 +150,27 @@ var GraphRunner = (function(jQuery, d3) {
             return "translate(" + d.x + "," + d.y + ")";
           })
           .on("mouseover", function(d) {
-            selectArcs(d).attr("marker-end", "url(#Triangle)").classed("bold", true);
-            // TODO make all the unrelated links either gone or like 5% opacity
+            /* Hide all lines except the ones going in or out of this node;
+             * make those ones bold and show the triangles on the ends */
+            vis.selectAll("line").classed("hidden", true);
+            selectArcs(d).attr("marker-end", "url(#Triangle)")
+                  .classed("hidden", false).classed("bold", true);
             showDomainInfo(d);
             showPopupLabel(d);
 
-            // Create a subgraph of the directly connected nodes, make them opaque and the rest
-            // translucent.
-            // TODO: Subgraph should also include nodes connected to this one (both directions)
-            var connectedDomains = [d.name];
-            findReferringDomains(d).forEach( function(e) {
-              connectedDomains.push(e.name);
-            });
+            // Make directly-connected nodes opaque, the rest translucent:
+            var subGraph = getConnectedDomains(d);
             d3.selectAll("g.node").classed("unrelated-domain", function(d) {
-                return (connectedDomains.indexOf(d.name) == -1);
+                return (subGraph.indexOf(d.name) == -1);
             });
           })
           .on("mouseout", function(d) {
+            vis.selectAll("line").classed("hidden", false);
             selectArcs(d).attr("marker-end", null).classed("bold", false);
             d3.selectAll("g.node").classed("unrelated-domain", false);
             d3.select("#domain-label").classed("hidden", true);
           })
-          .call(force.drag);
+        .call(force.drag);
 
       gs.append("svg:circle")
           .attr("cx", "0")
