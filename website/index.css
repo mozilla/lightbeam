@@ -34,7 +34,8 @@ line.bold {
   stroke-opacity: 1;
 }
 
-line.hidden {
+.hidden {
+  opacity: 0;
   stroke-opacity: 0;
 }
 
@@ -184,8 +185,4 @@ div.settings-menu > ul > li:hover {
 
 html.deployment-production #deployment-info {
   display: none;
-}
-
-#domain-label.hidden {
-  opacity: 0;
 }

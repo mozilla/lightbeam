@@ -15,13 +15,15 @@ var GraphRunner = (function(jQuery, d3) {
     var SVG_WIDTH = options.width;
     var SVG_HEIGHT = options.height;
 
+    // Create the SVG element and populate it with some basic definitions
+    // LONGTERM TODO: Since this is static markup, move it to index.html?
     var vis = d3.select("#chart")
       .append("svg:svg")
         .attr("width", SVG_WIDTH)
         .attr("height", SVG_HEIGHT);
 
-    vis.append("svg:defs")
-      .append("svg:marker")
+    var defs = vis.append("svg:defs");
+    defs.append("svg:marker")
         .attr("id", "Triangle")
         .attr("viewBox", "0 0 10 10")
         .attr("refX", 30)
@@ -32,6 +34,22 @@ var GraphRunner = (function(jQuery, d3) {
         .attr("orient", "auto")
         .append("svg:path")
           .attr("d", "M 0 0 L 10 5 L 0 10 z");
+
+    var gradient = defs.append("svg:radialGradient")
+      .attr("id", "glow-gradient")
+      .attr("cx", "50%")
+      .attr("cy", "50%")
+      .attr("r", "50%")
+      .attr("fx", "50%")
+      .attr("fy", "50%");
+
+    gradient.append("svg:stop")
+      .attr("offset", "0%")
+      .attr("style", "stop-color:rgb(200, 240, 255);stop-opacity:1");
+
+    gradient.append("svg:stop")
+      .attr("offset", "100%")
+      .attr("style", "stop-color:rgb(0,0,0);stop-opacity:0");
 
     vis.append("svg:g").attr("class", "links");
     vis.append("svg:rect").attr("rx", 8)
@@ -117,9 +135,10 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function getClassForSite(d) {
-        if (d.wasVisited) {
+        /*if (d.wasVisited) {
           return "visited";
-        } else if (d.trackerInfo) {
+        } else */
+        if (d.trackerInfo) {
           return "tracker";
         } else {
           return "site";
@@ -191,13 +210,23 @@ var GraphRunner = (function(jQuery, d3) {
           })
         .call(force.drag);
 
+      // glow if site is visited
+      gs.append("svg:circle")
+        .attr("cx", "0")
+        .attr("cy", "0")
+        .attr("r", "40")
+        .attr("fill", "url(#glow-gradient)")
+        .classed("hidden", function(d) {
+                return !d.wasVisited;
+              });
+
       gs.append("svg:circle")
           .attr("cx", "0")
           .attr("cy", "0")
           .attr("r", 12) // was radius
           .attr("class", function(d) {
                 return "node round-border " + getClassForSite(d);
-              });
+                });
 
       gs.append("svg:image")
           .attr("class", "node")
