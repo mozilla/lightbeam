@@ -1,4 +1,13 @@
 var GraphRunner = (function(jQuery, d3) {
+  var isNodeBeingDragged = false;
+  window.addEventListener("mousedown", function(e) {
+    if ($(e.target).closest("g.node").length)
+      isNodeBeingDragged = true;
+  }, true);
+  window.addEventListener("mouseup", function(e) {
+    isNodeBeingDragged = false;
+  }, true);
+
   function Runner(options) {
     var trackers = options.trackers;
     var SVG_WIDTH = options.width;
@@ -158,6 +167,8 @@ var GraphRunner = (function(jQuery, d3) {
             });
           })
           .on("mouseout", function(d) {
+            if (isNodeBeingDragged)
+              return;
             selectArcs(d).attr("marker-end", null).classed("bold", false);
             d3.selectAll("g.node").classed("unrelated-domain", false);
             d3.select("#domain-label").classed("hidden", true);
