@@ -143,6 +143,12 @@ var GraphRunner = (function(jQuery, d3) {
         findReferringDomains(d).forEach( function(e) {
           connectedDomains.push(e.name);
         });
+        vis.selectAll("line.from-" + d.index).each(function(e) {
+          console.log("Every each!");
+            console.log("Pushing " + e.source.name);
+          connectedDomains.push(e.target.name);
+        });
+
         return connectedDomains;
       }
 
