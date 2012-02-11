@@ -135,9 +135,6 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function getClassForSite(d) {
-        /*if (d.wasVisited) {
-          return "visited";
-        } else */
         if (d.trackerInfo) {
           return "tracker";
         } else {
@@ -157,14 +154,11 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function getConnectedDomains(d) {
-        // TODO: Subgraph should also include nodes connected to this one (both directions)
         var connectedDomains = [d.name];
         findReferringDomains(d).forEach( function(e) {
           connectedDomains.push(e.name);
         });
         vis.selectAll("line.from-" + d.index).each(function(e) {
-          console.log("Every each!");
-            console.log("Pushing " + e.source.name);
           connectedDomains.push(e.target.name);
         });
 
@@ -186,6 +180,8 @@ var GraphRunner = (function(jQuery, d3) {
             return "translate(" + d.x + "," + d.y + ")";
           })
           .on("mouseover", function(d) {
+            if (isNodeBeingDragged)
+              return;
             /* Hide all lines except the ones going in or out of this node;
              * make those ones bold and show the triangles on the ends */
             vis.selectAll("line").classed("hidden", true);
@@ -201,8 +197,6 @@ var GraphRunner = (function(jQuery, d3) {
             });
           })
           .on("mouseout", function(d) {
-            if (isNodeBeingDragged)
-              return;
             vis.selectAll("line").classed("hidden", false);
             selectArcs(d).attr("marker-end", null).classed("bold", false);
             d3.selectAll("g.node").classed("unrelated-domain", false);
