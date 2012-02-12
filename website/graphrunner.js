@@ -339,7 +339,9 @@ var GraphRunner = (function(jQuery, d3) {
       return {
         data: null,
         update: function(json) {
+          console.log("Previous data in graphrunner: " + JSON.stringify(this.data));
           this.data = json;
+          console.log("New data in graphrunner: " + JSON.stringify(this.data));
           drawing.force.stop();
 
           for (var domain in json)
