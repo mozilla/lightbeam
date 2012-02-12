@@ -22,9 +22,11 @@
     <p>Hover your mouse over the dots to learn more about them.</p>
     <div class="settings-menu">
       <ul>
-        <li id="reset-graph">Reset Graph</li>
+        <li id="reset-graph">Reset Graph (Current Session Only)</li>
         <li id="export-graph">Export Graph</li>
         <li id="hide-ui">Hide UI</li>
+        <li id="save-graph">Save Your Graph</li>
+        <li id="clear-graph-history">Clear Graph History</li>
       </ul>
     </div>
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect sites you visit solely to show you how they're connected. We don't keep them and don't give away the information to anyone except you.</p>
@@ -165,6 +167,17 @@ $(window).ready(function() {
         $("#sidebar").slideUp();
         $("#domain-infos").slideUp();
         $("#deployment-info").slideUp();
+      });
+      $("#save-graph").click(function() {
+        var data = JSON.stringify(graph.data);
+        addon.saveGraph(data);
+        alert("Woo hoo! Graph Saved!");
+      });
+      $("#clear-graph-history").click(function() {
+        var data = "{}";
+        addon.saveGraph(data);
+        addon.getSavedGraph();
+        alert("Graph History Nuked!");  
       });
     } else {
       Demo.show(graph);
