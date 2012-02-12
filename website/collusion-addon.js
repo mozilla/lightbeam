@@ -5,7 +5,9 @@ var CollusionAddon = (function() {
     },
     onGraph: window.onGraph,
     importGraph: window.importGraph,
-    resetGraph: window.resetGraph
+    resetGraph: window.resetGraph,
+    saveGraph: window.saveGraph,
+    getSavedGraph: window.getSavedGraph
   };
   
   return self;

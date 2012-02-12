@@ -76,6 +76,9 @@ var GraphRunner = (function(jQuery, d3) {
 
       $("#domain-infos .info").hide();
 
+      // TODO Why do we clone the div instead of just clearing the one and adding to it?
+      // Oh, I see, we create a clone for each domain and then re-use it if it's already
+      // created. An optimization?
       if (!info.length) {
         info = $("#templates .info").clone();
         info.addClass(className);
@@ -94,6 +97,8 @@ var GraphRunner = (function(jQuery, d3) {
         img.error(function() { img.remove(); });
         $("#domain-infos").append(info);
       }
+
+      // List referrers, if any (sites that set cookies read by this site)
       var referrers = info.find(".referrers");
       var domains = findReferringDomains(d);
       if (domains.length) {
@@ -108,6 +113,26 @@ var GraphRunner = (function(jQuery, d3) {
       } else {
         referrers.hide();
       }
+
+      // List referees, if any (sites that read cookies set by this site)
+      var referrees = info.find(".referrees");
+      domains = [];
+      vis.selectAll("line.from-" + d.index).each(function(e) {
+        domains.push(e.target);
+      });
+      if (domains.length) {
+        var list = referrees.find("ul");
+        list.empty();
+        domains.forEach(function(d) {
+          var item = $('<li><a></a></li>');
+          setDomainLink(item.find("a").text(d.name), d);
+          list.append(item);
+        });
+        referrees.show();
+      } else {
+        referrees.hide();
+      }
+
       info.show();
     }
 
@@ -339,13 +364,32 @@ var GraphRunner = (function(jQuery, d3) {
       return {
         data: null,
         update: function(json) {
+          console.log("Previous data in graphrunner: " + JSON.stringify(this.data));
           this.data = json;
+          console.log("New data in graphrunner: " + JSON.stringify(this.data));
           drawing.force.stop();
 
+          function playSfx (sound) {
+				var snd = new Audio(sound);
+				snd.play();
+				}
+
+         function rasaCheck(obj){
+         	var nodeCounter = 0;
+           for (var site in obj) {
+           	 if (JSON.stringify(obj[site].referrers) != "{}") {
+           	 	nodeCounter +=1;
+           	 	}
+             }
+            return nodeCounter;
+           }
+
+         if (rasaCheck(json) >0) {
+			playSfx("Holga_shuttersound.ogg");
+			}
           for (var domain in json)
             for (var referrer in json[domain].referrers)
               addLink({from: referrer, to: domain});
-
           for (var n = 0; n < nodes.length; n++) {
             if (json[nodes[n].name]) {
               nodes[n].wasVisited = json[nodes[n].name].visited;
