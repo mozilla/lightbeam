@@ -1,4 +1,5 @@
 var graphCallback = null;
+var index-content-script-graph;
 
 unsafeWindow.onGraph = function onGraph(cb) {
   graphCallback = cb;
@@ -18,7 +19,8 @@ unsafeWindow.saveGraph = function saveGraph(data) {
 };
 
 unsafeWindow.getSavedGraph = function getSavedGraph() {
-  self.port.emit('getSavedGraph')
+  self.port.emit('getSavedGraph');
+  return index-content-script-graph;
 };
 
 self.port.on("log", function(log) {
@@ -28,13 +30,12 @@ self.port.on("log", function(log) {
     graphCallback(log);
 });
 
-self.port.on("getSavedGraph", function(log) {
-  if (log != null) {
-      log = JSON.parse(log);
-  } else {
-      log = {};
-  }
-  if (graphCallback) {
-    graphCallback(log);
-  }
+self.port.on("getSavedGraph", function(graph) {
+  /*if (graph != null) {
+      graph = JSON.parse(graph);
+      if (graphCallback) {
+        graphCallback(graph);
+      }
+  }*/
+  index-content-script-graph = graph;
 });

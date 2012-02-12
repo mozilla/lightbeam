@@ -27,6 +27,7 @@
         <li id="hide-ui">Hide UI</li>
         <li id="save-graph">Save Your Graph</li>
         <li id="clear-graph-history">Clear Graph History</li>
+        <li id="load-graph">Load Saved Graph</li>
       </ul>
     </div>
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect sites you visit solely to show you how they're connected. We don't keep them and don't give away the information to anyone except you.</p>
@@ -173,11 +174,20 @@ $(window).ready(function() {
         addon.saveGraph(data);
         alert("Woo hoo! Graph Saved!");
       });
+      $("#load-graph").click(function() {
+        var saved = addon.getSavedGraph();
+        alert(saved);
+        //window.location.reload();
+      });
       $("#clear-graph-history").click(function() {
-        var data = "{}";
+        var to_import = "{'localhost':{'referrers':{},'visited':true}}"
+        addon.importGraph(to_import);
+        var data = JSON.stringify(graph.data);
         addon.saveGraph(data);
+        //var data = "{}";
+        //addon.saveGraph(data);
         addon.getSavedGraph();
-        alert("Graph History Nuked!");  
+        window.location.reload(); 
       });
     } else {
       Demo.show(graph);
