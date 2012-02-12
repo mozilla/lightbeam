@@ -47,7 +47,10 @@ var CollusionGraphBookmarklet = (function() {
         domains.push(domain);
     }
 
-    function addSrc(node) { add(node.src); }
+    function addSrc(node) {
+      if (node.className != "collusion-bookmarklet")
+        add(node.src);
+    }
     
     exports.forEach("iframe", addSrc);
     exports.forEach(document.scripts, addSrc);
@@ -76,38 +79,36 @@ var CollusionGraphBookmarklet = (function() {
   };
   
   exports.makeLinkToGraph = function(baseURI) {
-    var link = document.createElement('div');
-    var graph = exports.makeGraphJSON();
-
-    document.documentElement.appendChild(link);
-
-    link.textContent = "Click here for a collusion graph of this page.";
-    link.style.position = "fixed";
-    link.style.bottom = "0px";
-    link.style.left = "0px";
-    link.style.color = "white";
-    link.style.backgroundColor = "black";
-    link.style.padding = "10px";
-    link.style.textDecoration = "none";
-    link.style.fontFamily = "sans-serif";
-    link.style.fontSize = "large";
-    link.style.zIndex = 99999999;
-    link.style.cursor = "pointer";
-    link.onclick = function() {
-      var collusion = window.open(baseURI + "../index.html?graph_url=opener");
+    function sendGraphOnReady(target) {
       window.addEventListener("message", function(event) {
-        if (event.source == collusion) {
-          collusion.postMessage(JSON.stringify(graph), "*");
+        if (event.source == target) {
+          target.postMessage(JSON.stringify(graph), "*");
         }
       });
-    };
+    }
+    
+    var link = document.createElement('iframe');
+    var graph = exports.makeGraphJSON();
+
+    link.setAttribute("src", baseURI + "../index.html?graph_url=parent");
+    link.setAttribute("scrolling", "no");
+    document.documentElement.appendChild(link);
+    sendGraphOnReady(link.contentWindow);
+    
+    link.style.position = "fixed";
+    link.style.bottom = "0px";
+    link.style.right = "0px";
+    link.style.width = "640px";
+    link.style.height = "480px";
+    link.style.zIndex = 99999999;
+    link.style.cursor = "pointer";
+    link.style.border = "none";
   };
 
   (function maybeInitBookmarklet() {
     var script = document.querySelector("script.collusion-bookmarklet");
     
     if (script) {
-      console.log('YAY');
       var src = script.getAttribute("src");
       var baseURI = src.match(/(.*)bookmarklet\.js$/)[1];
       if (window.console && window.console.log)

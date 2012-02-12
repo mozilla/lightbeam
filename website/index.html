@@ -99,11 +99,18 @@ function getQueryVariable(variable) {
   }
 }
 
+function updateGraphViaPostMessage(graph, target) {
+  target.postMessage("ready", "*");
+  $(window).one("message", function(event) {
+    graph.update(JSON.parse(event.originalEvent.data));
+  });
+}
+
 $(window).ready(function() {
   var addon = CollusionAddon;
   var graphUrl = getQueryVariable("graph_url");
 
-  if (addon.isInstalled())
+  if (addon.isInstalled() || graphUrl == "parent")
     $(".exposition").hide();
 
   // get list of known trackers from trackers.json file hosted on website:
@@ -138,15 +145,14 @@ $(window).ready(function() {
 
     if (graphUrl) {
       if (graphUrl == "opener") {
-        window.opener.postMessage("ready", "*");
-        $(window).one("message", function(event) {
-          graph.update(JSON.parse(event.originalEvent.data));
+        updateGraphViaPostMessage(graph, window.opener);
+      } else if (graphUrl == "parent") {
+        
+        updateGraphViaPostMessage(graph, window.parent);
+      } else
+        jQuery.getJSON(graphUrl, function(data) {
+          graph.update(data);
         });
-        return;
-      }
-      jQuery.getJSON(graphUrl, function(data) {
-        graph.update(data);
-      });
       return;
     }
 
