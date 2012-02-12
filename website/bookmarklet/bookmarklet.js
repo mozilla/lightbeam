@@ -1,6 +1,22 @@
 var CollusionGraphBookmarklet = (function() {
   var exports = {};
 
+  exports.getBookmarkletURL = function(baseURI) {
+    function getBaseURI() {
+      // We would use document.baseURI, but it's not supported on IE9.
+      var a = document.createElement("a");
+      a.setAttribute("href", "./");
+      return a.href;
+    }
+    
+    baseURI = baseURI || getBaseURI();
+
+    var baseCode = "(function(){var script=document.createElement('script');script.src='http://localhost:8000/bookmarklet.js';script.className='collusion-bookmarklet';document.body.appendChild(script);})();";
+    var code = baseCode.replace('http://localhost:8000/', baseURI);
+    
+    return 'javascript:' + code;
+  };
+  
   exports.getTLD = function(domain) {
     // TODO: This isn't the same as an *effective* TLD.
     // See https://wiki.mozilla.org/Public_Suffix_List for more info.
@@ -59,15 +75,13 @@ var CollusionGraphBookmarklet = (function() {
     return graph;
   };
   
-  exports.makeLinkToGraph = function() {
-    var link = document.createElement('a');
+  exports.makeLinkToGraph = function(baseURI) {
+    var link = document.createElement('div');
     var graph = exports.makeGraphJSON();
 
     document.documentElement.appendChild(link);
 
     link.textContent = "Click here for a collusion graph of this page.";
-    link.href = "data:application/json," + JSON.stringify(graph);
-    link.target = "_blank";
     link.style.position = "fixed";
     link.style.bottom = "0px";
     link.style.left = "0px";
@@ -78,11 +92,29 @@ var CollusionGraphBookmarklet = (function() {
     link.style.fontFamily = "sans-serif";
     link.style.fontSize = "large";
     link.style.zIndex = 99999999;
+    link.style.cursor = "pointer";
+    link.onclick = function() {
+      var collusion = window.open(baseURI + "../index.html?graph_url=opener");
+      window.addEventListener("message", function(event) {
+        if (event.source == collusion) {
+          collusion.postMessage(JSON.stringify(graph), "*");
+        }
+      });
+    };
   };
 
-  if (window.console && window.console.log)
-    window.console.log("Colluders:", exports.getColluders().join(", "));
-  exports.makeLinkToGraph();
+  (function maybeInitBookmarklet() {
+    var script = document.querySelector("script.collusion-bookmarklet");
+    
+    if (script) {
+      console.log('YAY');
+      var src = script.getAttribute("src");
+      var baseURI = src.match(/(.*)bookmarklet\.js$/)[1];
+      if (window.console && window.console.log)
+        window.console.log("Colluders:", exports.getColluders().join(", "));
+      exports.makeLinkToGraph(baseURI);
+    }
+  })();
 
   return exports;
 })();

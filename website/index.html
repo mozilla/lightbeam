@@ -137,6 +137,13 @@ $(window).ready(function() {
     $("#page").width(runner.width);
 
     if (graphUrl) {
+      if (graphUrl == "opener") {
+        window.opener.postMessage("ready", "*");
+        $(window).one("message", function(event) {
+          graph.update(JSON.parse(event.originalEvent.data));
+        });
+        return;
+      }
       jQuery.getJSON(graphUrl, function(data) {
         graph.update(data);
       });
