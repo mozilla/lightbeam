@@ -118,7 +118,7 @@ var GraphRunner = (function(jQuery, d3) {
       var referrees = info.find(".referrees");
       domains = [];
       vis.selectAll("line.from-" + d.index).each(function(e) {
-        domains.push(e.target.name);
+        domains.push(e.target);
       });
       if (domains.length) {
         var list = referrees.find("ul");
@@ -368,12 +368,12 @@ var GraphRunner = (function(jQuery, d3) {
           this.data = json;
           console.log("New data in graphrunner: " + JSON.stringify(this.data));
           drawing.force.stop();
-          
+
           function playSfx (sound) {
 				var snd = new Audio(sound);
 				snd.play();
 				}
-          
+
          function rasaCheck(obj){
          	var nodeCounter = 0;
            for (var site in obj) {
@@ -383,7 +383,7 @@ var GraphRunner = (function(jQuery, d3) {
              }
             return nodeCounter;
            }
-       
+
          if (rasaCheck(json) >0) {
 			playSfx("Holga_shuttersound.ogg");
 			}
