@@ -22,12 +22,15 @@
     <p>Hover your mouse over the dots to learn more about them.</p>
     <div class="settings-menu">
       <ul>
-        <li id="reset-graph">Reset Graph (Current Session Only)</li>
+        <li id="reset-graph">Reset Graph</li>
         <li id="export-graph">Export Graph</li>
         <li id="hide-ui">Hide UI</li>
-        <li id="save-graph">Save Your Graph</li>
+        <!-- These buttons should just work if uncommented. clear-graph-history is effectively the same
+             as reset-graph because both clear out the graph on screen and the saved graph in storage.
+             See index-content-script.js for a description of why. -->
+        <!-- <li id="save-graph">Save Your Graph</li>
         <li id="clear-graph-history">Clear Graph History</li>
-        <li id="load-graph">Load Saved Graph</li>
+        <li id="load-graph">Load Saved Graph</li> -->
       </ul>
     </div>
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect sites you visit solely to show you how they're connected. We don't keep them and don't give away the information to anyone except you.</p>
@@ -191,16 +194,11 @@ $(window).ready(function() {
         addon.getSavedGraph();
       });
       $("#clear-graph-history").click(function() {
-        var to_import = "{'localhost':{'referrers':{},'visited':true}}"
-        addon.importGraph(to_import);
-        var data = JSON.stringify(graph.data);
-        addon.saveGraph(data);
+        var to_save = "{}"
+        addon.saveGraph(to_save);
         addon.resetGraph();
         window.location.reload();
       });
-      /*$("#restore-graph").click(function() {
-        addon.getSavedGraph();
-      });*/
     } else {
       Demo.show(graph);
       setInterval(function displayMessageIfAddonIsInstalled() {
