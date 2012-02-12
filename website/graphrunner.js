@@ -343,11 +343,28 @@ var GraphRunner = (function(jQuery, d3) {
           this.data = json;
           console.log("New data in graphrunner: " + JSON.stringify(this.data));
           drawing.force.stop();
-
+          
+          function playSfx (sound) {
+				var snd = new Audio(sound);
+				snd.play();
+				}
+          
+         function rasaCheck(obj){
+         	var nodeCounter = 0;
+           for (var site in obj) {
+           	 if (JSON.stringify(obj[site].referrers) != "{}") {
+           	 	nodeCounter +=1;
+           	 	}
+             }
+            return nodeCounter;
+           }
+       
+         if (rasaCheck(json) >0) {
+			playSfx("Holga_shuttersound.ogg");
+			}
           for (var domain in json)
             for (var referrer in json[domain].referrers)
               addLink({from: referrer, to: domain});
-
           for (var n = 0; n < nodes.length; n++) {
             if (json[nodes[n].name]) {
               nodes[n].wasVisited = json[nodes[n].name].visited;
