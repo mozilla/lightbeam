@@ -172,14 +172,12 @@ $(window).ready(function() {
       $("#save-graph").click(function() {
         var data = JSON.stringify(graph.data);
         addon.saveGraph(data);
-        alert("Woo hoo! Graph Saved!");
       });
       $("#clear-graph-history").click(function() {
         var data = "{}";
         addon.saveGraph(data);
         addon.resetGraph();
         window.location.reload();
-        alert("Graph History Nuked!");  
       });
       $("#restore-graph").click(function() {
         addon.getSavedGraph();       
