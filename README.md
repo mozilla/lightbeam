@@ -4,7 +4,7 @@ This is an add-on and website for visualizing the entities that track your
 behavior across the web in real time.
 
 The website also contains a "demo" with sample data that can be viewed without
-the add-on.
+the add-on. 
 
 ## Prerequisites
 
