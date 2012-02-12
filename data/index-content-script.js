@@ -18,7 +18,7 @@ unsafeWindow.saveGraph = function saveGraph(data) {
 };
 
 unsafeWindow.getSavedGraph = function getSavedGraph() {
-  self.port.emit('getSavedGraph')
+  self.port.emit('getSavedGraph');
 };
 
 self.port.on("log", function(log) {
@@ -28,13 +28,13 @@ self.port.on("log", function(log) {
     graphCallback(log);
 });
 
-self.port.on("getSavedGraph", function(log) {
-  if (log != null) {
-      log = JSON.parse(log);
-  } else {
-      log = {};
-  }
-  if (graphCallback) {
-    graphCallback(log);
-  }
+self.port.on("getSavedGraph", function(saved_graph) {
+  /*if (graph != null) {
+      graph = JSON.parse(graph);
+      if (graphCallback) {
+        graphCallback(graph);
+      }
+  }*/
+  alert(saved_graph);
+  //window.location.reload();
 });
