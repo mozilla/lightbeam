@@ -185,11 +185,10 @@ $(window).ready(function() {
       $("#save-graph").click(function() {
         var data = JSON.stringify(graph.data);
         addon.saveGraph(data);
+        alert("Graph Saved!");
       });
       $("#load-graph").click(function() {
-        var saved = addon.getSavedGraph();
-        alert(saved);
-        //window.location.reload();
+        addon.getSavedGraph();
       });
       $("#clear-graph-history").click(function() {
         var to_import = "{'localhost':{'referrers':{},'visited':true}}"
