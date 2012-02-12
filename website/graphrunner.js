@@ -343,25 +343,6 @@ var GraphRunner = (function(jQuery, d3) {
           this.data = json;
           console.log("New data in graphrunner: " + JSON.stringify(this.data));
           drawing.force.stop();
-          
-          function playSfx (sound) {
-				var snd = new Audio(sound);
-				snd.play();
-				}
-          
-         function rasaCheck(obj){
-         	var nodeCounter = 0;
-           for (var site in obj) {
-           	 if (JSON.stringify(obj[site].referrers) != "{}") {
-           	 	nodeCounter +=1;
-           	 	}
-             }
-            return nodeCounter;
-           }
-       
-         if (rasaCheck(json) >0) {
-			playSfx("Holga_shuttersound.ogg");
-			}
           for (var domain in json)
             for (var referrer in json[domain].referrers)
               addLink({from: referrer, to: domain});
@@ -371,6 +352,7 @@ var GraphRunner = (function(jQuery, d3) {
             } else {
               nodes[n].wasVisited = false;
             }
+            
             /* For nodes that don't already have a position, initialize them near the center.
              * This way the graph will start from center. If it already has a position, leave it.
              * Note that initializing them all exactly at center causes there to be zero distance,
