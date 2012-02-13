@@ -26,7 +26,6 @@ unsafeWindow.getSavedGraph = function getSavedGraph() {
 };
 
 self.port.on("log", function(log) {
-  console.log("In index-content-script function log: " + log);
   log = JSON.parse(log);
   if (graphCallback) {
     self.port.emit('save', JSON.stringify(log));
