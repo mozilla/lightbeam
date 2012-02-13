@@ -173,7 +173,10 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("x", d.x).attr("y", d.y - 4)
           .attr("width", d.name.length * 7 + 16)
           .attr("class", "round-border " + getClassForSite(d));
-        d3.select("#domain-label-text").attr("x", d.x + 16).attr("y", d.y + 7).text(d.name);
+        d3.select("#domain-label-text").classed("hidden", false)
+          .attr("x", d.x + 16)
+          .attr("y", d.y + 7)
+          .text(d.name);
         /* TODO label width and text offset determined by trial-and-error
          * and will not necessarily be correct with different font sizes.*/
       }
@@ -226,6 +229,7 @@ var GraphRunner = (function(jQuery, d3) {
             selectArcs(d).attr("marker-end", null).classed("bold", false);
             d3.selectAll("g.node").classed("unrelated-domain", false);
             d3.select("#domain-label").classed("hidden", true);
+            d3.select("#domain-label-text").classed("hidden", true);
           })
         .call(force.drag);
 
