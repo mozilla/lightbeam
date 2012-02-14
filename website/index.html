@@ -11,10 +11,15 @@
 <div id="sidebar">
   <h1>Collusion</h1>
   <div class="byline">By <a href="http://twitter.com/toolness">@toolness</a></div>
+
+  <div id="sidebar-content">
+  <a id="about-tab-link">about</a> |
+  <a id="site-tab-link">site info</a>
+  <hr/>
   <div class="exposition">
     <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
     <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
-  </div>
+  </div> <!-- end of exposition -->
   <div class="live-data" style="display: none;">
     <p>Keep browsing the web. As you do so, a graph on this page will change. Each dot represents a website.</p>
     <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but may still track you.</p>
@@ -32,9 +37,9 @@
         <li id="clear-graph-history">Clear Graph History</li>
         <li id="load-graph">Load Saved Graph</li> -->
       </ul>
-    </div>
+    </div> <!-- end of settingsmenu -->
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
-  </div>
+  </div> <!-- end of live-data -->
   <div class="demo" style="display: none;">
     <div class="step 0">
       <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a> installed, we'll show you a demo of the software.</p>
@@ -65,10 +70,11 @@
       <p>If you want to block companies from tracking you on the internet, you can install <a href="http://www.privacychoice.org/trackerblock/firefox">TrackerBlock</a> for Firefox and Internet Explorer.</p>
       <p>For more information about the making of this demo, check out the <a href="http://www.toolness.com/wp/2011/07/collusion/">blog post</a> and <a href="https://github.com/toolness/collusion">code repository</a>. Feel free to tweet at <a href="http://twitter.com/toolness">toolness</a> if you have any feedback!</p>
     </div>
-  </div>
-</div>
-<div id="chart"></div>
-<div id="domain-infos"></div>
+  </div> <!-- End of .demo -->
+  <div id="domain-infos">Mouse over any circle to see how that site is involved in tracking.</div> <!-- Templates are copied into here -->
+  </div> <!-- End of #sidebar-content -->
+</div> <!-- End of #sidebar -->
+<div id="chart"></div><!-- The d3 layout graph will go inside this div -->
 </div>
 <div id="deployment-info">
   This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
@@ -119,6 +125,8 @@ function updateGraphViaPostMessage(graph, target) {
 $(window).ready(function() {
   var addon = CollusionAddon;
   var graphUrl = getQueryVariable("graph_url");
+
+  $("#domain-infos").hide();
 
   if (addon.isInstalled() || graphUrl == "parent")
     $(".exposition").hide();
@@ -198,6 +206,14 @@ $(window).ready(function() {
         addon.saveGraph(to_save);
         addon.resetGraph();
         window.location.reload();
+      });
+      $("#about-tab-link").click(function() {
+        $(".live-data").slideDown();
+        $("#domain-infos").slideUp();
+      });
+      $("#site-tab-link").click(function() {
+        $(".live-data").slideUp();
+        $("#domain-infos").slideDown();
       });
     } else {
       Demo.show(graph);

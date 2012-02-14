@@ -66,15 +66,6 @@ a {
   pointer-events: none;
 }
 
-div.info {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 200px;
-  padding: 20px;
-  pointer-events: none;
-}
-
 #sidebar a, .info a, span.next {
   pointer-events: auto;
 }
@@ -120,7 +111,7 @@ h2.domain img.tracker {
   margin-top: -10px;
 }
 
-.live-data {
+#sidebar-content {
   background-color: rgba(255, 255, 255, 0.1);
   padding: 5px;
   margin-top: 15px;
