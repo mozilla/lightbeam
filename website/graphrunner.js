@@ -241,7 +241,7 @@ var GraphRunner = (function(jQuery, d3) {
       gs.append("svg:circle")
         .attr("cx", "0")
         .attr("cy", "0")
-        .attr("r", "40")
+        .attr("r", "30")
         .attr("fill", "url(#glow-gradient)")
         .classed("hidden", function(d) {
                 return !d.wasVisited;
