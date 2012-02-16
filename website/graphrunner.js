@@ -255,13 +255,8 @@ var GraphRunner = (function(jQuery, d3) {
                 return "node round-border " + getClassForSite(d);
                 });
 
-      if (hideFavicons) {
+      if (!hideFavicons) {
         // If hiding favicons ("TED mode"), show initial letter of domain instead of favicon
-        gs.append("svg:text")
-          .attr("x", "-4")
-          .attr("y", "4")
-          .text(function(d) {return d.name[0];});
-      } else {
         gs.append("svg:image")
           .attr("class", "node")
           .attr("width", "16")
