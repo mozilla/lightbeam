@@ -97,6 +97,10 @@ h2.domain img.tracker {
   stroke: #7f7f7f;
 }
 
+.visited {
+  stroke: #3388ff;
+}
+
 .demo span.next {
   cursor: pointer;
   font-weight: bold;

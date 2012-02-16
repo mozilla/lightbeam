@@ -14,6 +14,7 @@ var GraphRunner = (function(jQuery, d3) {
     var trackers = options.trackers;
     var SVG_WIDTH = options.width;
     var SVG_HEIGHT = options.height;
+    var hideFavicons = options.hideFavicons;
 
     // Create the SVG element and populate it with some basic definitions
     // LONGTERM TODO: Since this is static markup, move it to index.html?
@@ -160,6 +161,9 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function getClassForSite(d) {
+        if (d.wasVisited) {
+          return "visited";
+        }
         if (d.trackerInfo) {
           return "tracker";
         } else {
@@ -251,13 +255,21 @@ var GraphRunner = (function(jQuery, d3) {
                 return "node round-border " + getClassForSite(d);
                 });
 
-      gs.append("svg:image")
+      if (hideFavicons) {
+        // If hiding favicons ("TED mode"), show initial letter of domain instead of favicon
+        gs.append("svg:text")
+          .attr("x", "-4")
+          .attr("y", "4")
+          .text(function(d) {return d.name[0];});
+      } else {
+        gs.append("svg:image")
           .attr("class", "node")
           .attr("width", "16")
           .attr("height", "16")
           .attr("x", "-8") // offset to make 16x16 favicon appear centered
           .attr("y", "-8")
           .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
+      }
 
       return node;
     }

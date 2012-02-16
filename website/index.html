@@ -30,12 +30,6 @@
         <li id="reset-graph">Reset Graph</li>
         <li id="export-graph">Export Graph</li>
         <li id="hide-ui">Hide UI</li>
-        <!-- These buttons should just work if uncommented. clear-graph-history is effectively the same
-             as reset-graph because both clear out the graph on screen and the saved graph in storage.
-             See index-content-script.js for a description of why. -->
-        <!-- <li id="save-graph">Save Your Graph</li>
-        <li id="clear-graph-history">Clear Graph History</li>
-        <li id="load-graph">Load Saved Graph</li> -->
       </ul>
     </div> <!-- end of settingsmenu -->
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
@@ -136,7 +130,8 @@ $(window).ready(function() {
     var runner = GraphRunner.Runner({
       width: addon.isInstalled() || graphUrl ? $(window).width() : 640,
       height: addon.isInstalled() || graphUrl ? $(window).height() : 480,
-      trackers: trackers
+      trackers: trackers,
+      hideFavicons: true 
     });
     var graph = runner.graph;
 
