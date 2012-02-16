@@ -91,14 +91,17 @@ h2.domain img.tracker {
 
 .tracker {
   stroke: #d62728;
+  fill: #d62728;
 }
 
 .site {
   stroke: #7f7f7f;
+  fill: #7f7f7f;
 }
 
 .visited {
   stroke: #3388ff;
+  fill: #3388ff;
 }
 
 .demo span.next {
