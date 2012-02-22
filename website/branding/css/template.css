@@ -1,0 +1,103 @@
+/*
+Default template CSS - if you change anything here then updating will be a bit more tricky than you might want
+*/
+@font-face {
+    font-family: MetaWebPro-Black;
+    src: url(../fonts/MetaWebPro-Black.woff) format('woff');
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+aside {
+    position: relative;
+}
+.box {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.columns {
+    overflow: hidden;
+    padding-left: 0;
+    margin-top: 0;
+    clear: both;
+}
+.col {
+    list-style-type: none;
+    overflow: hidden;
+}
+.columns {
+    margin-left: -10px;
+}
+.col {
+    float: left;
+    padding: 10px;
+    width: 33%;
+}
+.busta {
+    padding: 0 20px;
+}
+#container {
+    border-top: 2px solid #fff;
+}
+#tabzilla {
+    margin-right: 20px;
+}
+#tabzilla-nav a:hover {
+    background: transparent;
+}
+/* External links */
+.external {
+    background: url(../img/bg_external.png) repeat-x scroll 0 0 #fff;
+    font-family: Georgia;
+    overflow: hidden;
+}
+.external h2 {
+    margin: 0.75em 0;
+    padding-top: 40px;
+    font-family: "MetaWebPro-Black";
+    background: transparent url(../img/icons.png) no-repeat top left;
+    color: #2e2e2d;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: normal;
+}
+.external .tweet h2 {
+    background-position: 0 -140px;
+}
+.external .mozilla h2 {
+    background-position: 0 -290px;
+}
+.external .learn h2 {
+    background-position: 0 -440px;
+}
+.external a {
+    color: #2084ca;
+    text-decoration: none;
+}
+.external a:hover {
+    text-decoration: underline;
+    background: transparent;
+}
+.external p {
+    font-size: 14px;
+    color: #454545;
+}
+.external ul {
+    padding-left: 0;
+    margin-left: 0;
+    padding-bottom: 1em;
+}
+.external li {
+    list-style-type: none;
+    border-top: 1px solid #D8DADC;
+    padding: 0.5em 0;
+    font-size: 14px;
+}
+.external li:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+.external .col:first-child {
+    padding-left: 0;
+}

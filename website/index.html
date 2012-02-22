@@ -1,4 +1,6 @@
 <!DOCTYPE hmtl>
+<html lang="en">
+<header>
 <meta charset="utf-8">
 <meta name="viewport" content="width=640">
 <title>Collusion</title>
@@ -7,6 +9,12 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 <script src="d3.js"></script>
 <link href="index.css" rel="stylesheet" type="text/css"/>
+<link href="branding/css/tabzilla.css" rel="stylesheet" type="text/css" />
+<link href="branding/css/template.css" rel="stylesheet" type="text/css" />
+</header>
+<body>
+<div id="container">
+<a href="http://www.mozilla.org" id="tabzilla">mozilla.org</a>
 <div id="page">
 <div id="sidebar">
   <h1>Collusion</h1>
@@ -70,9 +78,6 @@
 </div> <!-- End of #sidebar -->
 <div id="chart"></div><!-- The d3 layout graph will go inside this div -->
 </div>
-<div id="deployment-info">
-  This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
-</div>
 <div id="addon-installation-detected" style="display: none;">
   Collusion add-on detected! Reload this page to see your graph.
 </div>
@@ -89,6 +94,39 @@
       <ul></ul>
     </div>
   </div>
+</div>
+    <aside>
+        <section class="external">
+            <div class="busta">
+            <div class="col box tweet">
+                <h2>Follow and tweet</h2>
+                <p>For updates on our new initiatives, our on-going projects and for the latest news on Collusion.</p>
+                <a href="https://twitter.com/mozilla" class="twitter-follow-button" data-show-count="false">Follow @mozilla</a>
+                <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
+            </div>
+            <div class="col box learn">
+                <h2>Learn more</h2>
+                <ul>
+                    <li><a href="http://www.toolness.com/wp/2011/07/collusion/">Read more about Collusion</a></li>
+                    <li><a href="https://secure.toolness.com/xpi/collusion.xpi">Install the Firefox add-on</a></li> 
+                    <li><a href="https://github.com/toolness/collusion">Get the code</a></li>
+                </ul>
+            </div>
+            <div class="col box mozilla">
+                <h2>Connect with Mozilla</h2>
+                <ul>
+                    <li><a href="http://www.mozilla.org/about/mission.html">Learn about Mozilla's mission</a></li>
+                    <li><a href="https://donate.mozilla.org/join/">Join Mozilla</a></li>
+                    <li><a href="http://www.facebook.com/mozilladrumbeat/">Like us on Facebook</a></li>
+
+                </ul>
+            </div>
+            </div>
+        </section>
+    </aside>
+<div id="deployment-info">
+  This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
+</div>
 </div>
 <script src="d3.layout.js"></script>
 <script src="d3.geom.js"></script>
@@ -231,3 +269,6 @@ $(window).ready(function addDeploymentInfo() {
   });
 });
 </script>
+<script src="branding/js/tabzilla.js"></script>
+</body>
+</html>

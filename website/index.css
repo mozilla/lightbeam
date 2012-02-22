@@ -173,7 +173,7 @@ div.settings-menu > ul > li:hover {
   bottom: 0px;
   right: 0px;
   background: rgba(0, 0, 0, 0.5);
-  color: white;
+  color: #000;
   padding: 10px;
 }
 
