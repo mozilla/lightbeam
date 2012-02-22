@@ -13,6 +13,9 @@
 <link href="branding/css/template.css" rel="stylesheet" type="text/css" />
 </header>
 <body>
+<script type="text/javascript">
+    document.body.className = ((document.body.className) ? document.body.className + ' js' : 'js');
+</script>
 <div id="container">
 <a href="http://www.mozilla.org" id="tabzilla">mozilla.org</a>
 <div id="page">
@@ -255,6 +258,8 @@ $(window).ready(function() {
           $("#addon-installation-detected").slideDown();
       }, 1000);
     }
+    // Display the footer now the page is rendered
+    $('section.external').fadeIn();
   });
 });
 
