@@ -1,12 +1,25 @@
-g.node {
-  -moz-transition: opacity 0.25s;
-  -webkit-transition: opacity 0.25s;
-  -o-transition: opacity 0.25s;
-  -ms-transition: opacity 0.25s;
+
+g.node.unrelated-domain image {
+  display: none;
 }
 
-g.node.unrelated-domain {
-  opacity: 0.15;
+g.node.unrelated-domain circle.glow {
+  display: none;
+}
+
+g.node.unrelated-domain circle.visited {
+  stroke: #102050;
+  fill: #102050;
+}
+
+g.node.unrelated-domain circle.site {
+  stroke: #202020;
+  fill: #202020;
+}
+
+g.node.unrelated-domain circle.tracker {
+  stroke: #400000;
+  fill: #400000;
 }
 
 .round-border {
@@ -23,10 +36,6 @@ marker {
 line.link {
   stroke: #999;
   stroke-opacity: .6;
-  -moz-transition: stroke-opacity 0.25s;
-  -webkit-transition: stroke-opacity 0.25s;
-  -o-transition: stroke-opacity 0.25s;
-  -ms-transition: stroke-opacity 0.25s;
 }
 
 line.bold {
@@ -35,8 +44,7 @@ line.bold {
 }
 
 .hidden {
-  opacity: 0;
-  stroke-opacity: 0;
+  display: none;
 }
 
 html, body {
