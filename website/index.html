@@ -1,32 +1,50 @@
-<!DOCTYPE hmtl>
-<html lang="en">
-<header>
-<meta charset="utf-8">
-<meta name="viewport" content="width=640">
-<title>Collusion</title>
-<base target="_blank">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<script src="d3.js"></script>
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US" dir="ltr"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Demo | Collusion</title>
+    <base target="_blank">
+    <script src="d3.js"></script>
 <link href="index.css" rel="stylesheet" type="text/css"/>
-<link href="branding/css/tabzilla.css" rel="stylesheet" type="text/css" />
-<link href="branding/css/template.css" rel="stylesheet" type="text/css" />
-</header>
-<body>
-<script type="text/javascript">
-    document.body.className = ((document.body.className) ? document.body.className + ' js' : 'js');
-</script>
-<div id="container">
-<a href="http://www.mozilla.org" id="tabzilla">mozilla.org</a>
+    <link href="branding/css/tabzilla.css" rel="stylesheet">
+    <script src="branding/js/modernizr-2.5.0.min.js"></script>
+        <link rel="stylesheet" media="screen,projection,tv" href="branding/css/common-min.css" />
+      <link rel="stylesheet" media="screen,projection,tv" href="branding/css/template.css" />
+    <link rel="shortcut icon" type="image/png" href="/media/img/favicon.png">
+  </head>
+
+  <body id="collusion" class="html-ltr demo">
+
+    <div id="outer-wrapper">
+    <div id="wrapper">
+
+                            <header id="masthead">
+            <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
+
+              <nav id="nav-main" role="navigation">
+  <ul>
+      <li><a href="/" target="_self">Home</a></li>
+
+      <li><b>Demo</b></li>
+  </ul>
+  </nav>
+                        <h1><img src="branding/img/header-mozilla.png" alt="mozilla"></h1>
+          </header>
+                  
+        
+<h1 id="main-feature" class="large">Collusion</h1>
+
+<section class="container">
 <div id="page">
-<div id="sidebar">
-  <h1>Collusion</h1>
+<div id="sidebar" class="box">
   <div class="byline">By <a href="http://twitter.com/toolness">@toolness</a></div>
 
   <div id="sidebar-content">
   <a id="about-tab-link">about</a> |
   <a id="site-tab-link">site info</a>
-  <hr/>
   <div class="exposition">
     <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
     <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
@@ -98,40 +116,37 @@
     </div>
   </div>
 </div>
-    <aside>
-        <section class="external">
-            <div class="busta">
-            <div class="col box tweet">
-                <h2>Follow and tweet</h2>
-                <p>For updates on our new initiatives, our on-going projects and for the latest news on Collusion.</p>
-                <a href="https://twitter.com/mozilla" class="twitter-follow-button" data-show-count="false">Follow @mozilla</a>
-                <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
-            </div>
-            <div class="col box learn">
-                <h2>Learn more</h2>
-                <ul>
-                    <li><a href="http://www.toolness.com/wp/2011/07/collusion/">Read more about Collusion</a></li>
-                    <li><a href="https://secure.toolness.com/xpi/collusion.xpi">Install the Firefox add-on</a></li> 
-                    <li><a href="https://github.com/toolness/collusion">Get the code</a></li>
-                </ul>
-            </div>
-            <div class="col box mozilla">
-                <h2>Connect with Mozilla</h2>
-                <ul>
-                    <li><a href="http://www.mozilla.org/about/mission.html">Learn about Mozilla's mission</a></li>
-                    <li><a href="https://donate.mozilla.org/join/">Join Mozilla</a></li>
-                    <li><a href="http://www.facebook.com/mozilladrumbeat/">Like us on Facebook</a></li>
-
-                </ul>
-            </div>
-            </div>
-        </section>
-    </aside>
 <div id="deployment-info">
   This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
 </div>
+</section>          
+</div><!-- close #wrapper -->
+
+<footer id="colophon">
+<div class="row">
+
+    <div class="span3">
+
+        <a href="http://www.mozilla.org/" class="footer-logo"><img src="branding/img/footer-mozilla.png" alt="mozilla"></a>
+    </div>
+
+    <div class="span3">
+        <p>Portions of this content are ©1998–2012 by individual mozilla.org contributors. Content available under a <a href="http://www.mozilla.org/foundation/licensing/website-content.html">Creative Commons license</a>.</p>
+    </div>
+    <nav class="span3">
+        <ul>
+
+            <li><a href="http://www.mozilla.org/contact/">Contact Us</a></li>
+            <li><a href="http://www.mozilla.org//about/policies/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="http://www.mozilla.com/en-US/about/legal.html">Legal Notices</a></li>
+            <li><a href="http://www.mozilla.com/en-US/legal/fraud-report/index.html">Report Trademark Abuse</a></li>
+        </ul>
+    </nav>
+
 </div>
-<script src="d3.layout.js"></script>
+</footer>
+  </div><!-- close #outer-wrapper --> 
+  <script src="d3.layout.js"></script>
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
 <script src="collusion-addon.js"></script>
@@ -274,6 +289,6 @@ $(window).ready(function addDeploymentInfo() {
   });
 });
 </script>
-<script src="branding/js/tabzilla.js"></script>
+  <script src="branding/js/tabzilla.js"></script>         
 </body>
 </html>

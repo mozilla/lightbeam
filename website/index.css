@@ -117,7 +117,8 @@ h2.domain img.tracker {
   font-weight: bold;
 }
 
-.demo span.next:hover, a:hover {
+#page .demo span.next:hover, 
+#page a:hover {
   background: yellow;
   color: black;
 }

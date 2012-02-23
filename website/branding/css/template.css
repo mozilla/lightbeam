@@ -31,7 +31,7 @@
 	content:".";
 }
 /* site specific CSS */
-h1#main-feature {
+.home h1#main-feature {
     text-align: center;
 }
 h1#main-feature .large {
@@ -69,9 +69,6 @@ h1#main-feature .large {
 	font-size: 14px;
 }
 #updates .button {
-
--moz-linear-gradient(center top , #F1D472 0pt, #E9AE4E 50%, #E59E2F 50%, #DE742B 100%) repeat scroll 0 0 transparent
-
 	background-color: #DE742B; 
 	/* IE10 */ 
 	background-image: -ms-linear-gradient(top, #E9AE4E 0%, #DE742B 100%);
@@ -91,4 +88,24 @@ h1#main-feature .large {
 	-webkit-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12 px 24px 2px rgba(241,212,114,1);
 	-moz-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 2px rgba(241,212,114,1);
 	box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 2px rgba(241,212,114,1); 
+}
+
+/* demo page */
+#page {
+	font-size: 12px;
+	min-height: 650px;
+}
+#page p,
+#page blockquote {
+	margin-bottom: 12px;
+}
+#sidebar-content {
+	margin-top: 0;
+	padding-top: 0;
+}
+#sidebar-content blockquote {
+	padding: 0 12px;
+}
+.demo .box {
+	background: rgba(255, 255, 255, 0.6);
 }
