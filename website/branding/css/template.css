@@ -11,7 +11,8 @@
 h1 img:first-child {
     margin-right: 24px;
 }
-.box{
+.box,
+#addon-installation-detected {
 	-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
 	-moz-box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
 	box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
@@ -35,6 +36,14 @@ h1 img:first-child {
 }
 h1#main-feature .large {
     display: inline-block;
+}
+#addon-installation-detected {
+    color: #AF3232;
+    font-weight: bold;
+    position: static;
+    width: auto;
+    margin-bottom: 48px;
+    width: 896px;
 }
 #primary {
 	padding-top:48px;
