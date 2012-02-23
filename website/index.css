@@ -117,12 +117,6 @@ h2.domain img.tracker {
   font-weight: bold;
 }
 
-#page .demo span.next:hover, 
-#page a:hover {
-  background: yellow;
-  color: black;
-}
-
 .byline {
   margin-top: -10px;
 }

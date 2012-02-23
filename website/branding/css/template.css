@@ -8,10 +8,6 @@
     background-position: 50% 0;
     background-repeat: no-repeat;
 }
-/* Due to all the JS the footer jumped around all over the place on initial page render - trying to stop that */
-.js .external {
-    display: none;
-}
 .box{
 	-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
 	-moz-box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
@@ -50,6 +46,9 @@ h1#main-feature .large {
 }
 #primary p {
 	margin-right:40%;
+}
+#primary a[href="demo/"] {
+    margin-bottom: 24px;
 }
 #updates {
 	padding: 24px;
@@ -101,10 +100,18 @@ h1#main-feature .large {
 }
 #sidebar-content {
 	margin-top: 0;
-	padding-top: 0;
+	padding: 0;
 }
 #sidebar-content blockquote {
 	padding: 0 12px;
+}
+#sidebar-content .download {
+    line-height: 30px;
+    height: 90px;
+    margin-bottom: 12px;
+}
+#sidebar-content .button:hover {
+    text-decoration: none;
 }
 .demo .box {
 	background: rgba(255, 255, 255, 0.6);
