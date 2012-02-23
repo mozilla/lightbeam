@@ -53,10 +53,11 @@ var GraphRunner = (function(jQuery, d3) {
       .attr("style", "stop-color:rgb(0,0,0);stop-opacity:0");
 
     vis.append("svg:g").attr("class", "links");
-    vis.append("svg:rect").attr("rx", 8)
-      .attr("width", 64).attr("height", 16).attr("id", "domain-label");
-    vis.append("svg:text").attr("id", "domain-label-text");
     vis.append("svg:g").attr("class", "nodes");
+
+    // label goes on the top above the links and nodes
+    vis.append("svg:path").attr("id", "domain-label");
+    vis.append("svg:text").attr("id", "domain-label-text");
 
     function setDomainLink(target, d) {
       target.removeClass("tracker").removeClass("site");
@@ -172,11 +173,19 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function showPopupLabel(d) {
-        // Show popup label to display domain:
+        /* Show popup label to display domain name next to the circle.
+         * The popup label is defined as a path so that it can be shaped not to overlap its circle
+         * Cutout circle on left end, rounded right end, length dependent on length of text.
+         * Get ready for some crazy math and string composition! */
+        var r = 12; // radius of circles
+        var pathStartX = d.x + r;
+        var pathStartY = d.y - 4;
+        var labelWidth = d.name.length * 7;
+        var reverseWidth = 0 - labelWidth - r;
         d3.select("#domain-label").classed("hidden", false)
-          .attr("x", d.x).attr("y", d.y - 4)
-          .attr("width", d.name.length * 7 + 16)
-          .attr("class", "round-border " + getClassForSite(d));
+        .attr("d", "M " + pathStartX + " " + pathStartY + " l " + labelWidth + " 0 "
+              + "a 8 8 0 0 1 0 16 l " + reverseWidth + " 0 a 12 12 0 0 0 12 -12")
+        .attr("class", getClassForSite(d));
         d3.select("#domain-label-text").classed("hidden", false)
           .attr("x", d.x + 16)
           .attr("y", d.y + 7)
@@ -237,11 +246,13 @@ var GraphRunner = (function(jQuery, d3) {
           })
         .call(force.drag);
 
+
       // glow if site is visited
       gs.append("svg:circle")
         .attr("cx", "0")
         .attr("cy", "0")
         .attr("r", "30")
+        .attr("class", "glow")
         .attr("fill", "url(#glow-gradient)")
         .classed("hidden", function(d) {
                 return !d.wasVisited;
