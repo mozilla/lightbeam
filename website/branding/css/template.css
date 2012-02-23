@@ -1,107 +1,94 @@
-/*
-Default template CSS - if you change anything here then updating will be a bit more tricky than you might want
-*/
-@font-face {
-    font-family: MetaWebPro-Black;
-    src: url(../fonts/MetaWebPro-Black.woff) format('woff');
+/* making sure the CSS works */
+#wrapper {
+    background-image: url(../img/css/background-gradient.png);
 }
-body {
-    font-family: Arial, Helvetica, sans-serif;
-}
-aside {
-    position: relative;
-}
-.box {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.columns {
-    overflow: hidden;
-    padding-left: 0;
-    margin-top: 0;
-    clear: both;
-}
-.col {
-    list-style-type: none;
-    overflow: hidden;
-}
-.columns {
-    margin-left: -10px;
-}
-.col {
-    float: left;
-    padding: 10px;
-    width: 33%;
-}
-.busta {
-    padding: 0 20px;
-}
-#container {
-    border-top: 2px solid #fff;
-}
-#tabzilla {
-    margin-right: 20px;
-}
-#tabzilla-nav a:hover {
-    background: transparent;
-}
-/* External links */
-.external {
-    background: url(../img/bg_external.png) repeat-x scroll 0 0 #fff;
-    font-family: Georgia;
-    overflow: hidden;
+#masthead nav ul li b, 
+#masthead nav ul li .current {
+    background-image: url("../img/css/menu-current.png");
+    background-position: 50% 0;
+    background-repeat: no-repeat;
 }
 /* Due to all the JS the footer jumped around all over the place on initial page render - trying to stop that */
 .js .external {
     display: none;
 }
-.external h2 {
-    margin: 0.75em 0;
-    padding-top: 40px;
-    font-family: "MetaWebPro-Black";
-    background: transparent url(../img/icons.png) no-repeat top left;
-    color: #2e2e2d;
-    text-transform: uppercase;
-    font-size: 18px;
-    font-weight: normal;
+.box{
+	-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
+	-moz-box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
+	box-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 0 1px #fff;
+	background:#fff;
+	background-image:-moz-radial-gradient(center 45px,ellipse farthest-corner,#f5f1e8 0,#fff 100%);
+	background-image:-webkit-radial-gradient(center 45px,ellipse farthest-corner,#f5f1e8 0,#fff 100%);
+	background-image:-o-radial-gradient(center 45px,ellipse farthest-corner,#f5f1e8 0,#fff 100%);
+	background-image:radial-gradient(center 45px,ellipse farthest-corner,#f5f1e8 0,#fff 100%);
+	zoom:1;
 }
-.external .tweet h2 {
-    background-position: 0 -140px;
+.box:after{
+	display:block;
+	visibility:hidden;
+	height:0;
+	clear:both;
+	content:".";
 }
-.external .mozilla h2 {
-    background-position: 0 -290px;
+/* site specific CSS */
+h1#main-feature {
+    text-align: center;
 }
-.external .learn h2 {
-    background-position: 0 -440px;
+h1#main-feature .large {
+    display: inline-block;
 }
-.external a {
-    color: #2084ca;
-    text-decoration: none;
+#primary {
+	padding-top:48px;
+	padding-bottom:48px;
+	height:15em;
+	margin-bottom:72px;
 }
-.external a:hover {
-    text-decoration: underline;
-    background: transparent;
+#primary img{
+	float:right;
+	margin-top:-72px;
+	max-width:50%;
 }
-.external p {
-    font-size: 14px;
-    color: #454545;
+#primary p {
+	margin-right:40%;
 }
-.external ul {
-    padding-left: 0;
-    margin-left: 0;
-    padding-bottom: 1em;
+#updates {
+	padding: 24px;
+	margin-bottom: 24px;
 }
-.external li {
-    list-style-type: none;
-    border-top: 1px solid #D8DADC;
-    padding: 0.5em 0;
-    font-size: 14px;
+#updates p,
+#updates input {
+	margin: 12px 0;
 }
-.external li:first-child {
-    border-top: none;
-    padding-top: 0;
+#updates p {
+	margin-bottom: 0;
 }
-.external .col:first-child {
-    padding-left: 0;
+#updates p:first-child {
+	margin-top: 0;
+}
+#updates .title {
+	font-size: 14px;
+}
+#updates .button {
+
+-moz-linear-gradient(center top , #F1D472 0pt, #E9AE4E 50%, #E59E2F 50%, #DE742B 100%) repeat scroll 0 0 transparent
+
+	background-color: #DE742B; 
+	/* IE10 */ 
+	background-image: -ms-linear-gradient(top, #E9AE4E 0%, #DE742B 100%);
+	/* Mozilla Firefox */ 
+	background-image: -moz-linear-gradient(top, #E9AE4E 0%, #DE742B 100%);
+	/* Opera */ 
+	background-image: -o-linear-gradient(top, #E9AE4E 0%, #DE742B 100%);
+	/* Webkit (Safari/Chrome 10) */ 
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #E9AE4E), color-stop(1, #DE742B));
+	/* Webkit (Chrome 11+) */ 
+	background-image: -webkit-linear-gradient(top, #E9AE4E 0%, #DE742B 100%);
+	/* Proposed W3C Markup */ 
+	background-image: linear-gradient(top, #E9AE4E 0%, #DE742B 100%);
+}
+#updates .button:hover {
+	cursor: pointer;
+	-webkit-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12 px 24px 2px rgba(241,212,114,1);
+	-moz-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 2px rgba(241,212,114,1);
+	box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 2px rgba(241,212,114,1); 
 }
