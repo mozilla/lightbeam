@@ -36,9 +36,6 @@
                   
         
 <h1 id="main-feature" class="large">Collusion</h1>
-<div class="container" id="addon-installation-detected" style="display: none;">
-  Collusion add-on detected! Reload this page to see your graph.
-</div>
 
 <section class="container">
 <div id="page">
@@ -46,8 +43,6 @@
   <div class="byline">By <a href="http://twitter.com/toolness">@toolness</a></div>
 
   <div id="sidebar-content">
-  <a id="about-tab-link">about</a> |
-  <a id="site-tab-link">site info</a>
   <div class="exposition">
     <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
     <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
@@ -117,9 +112,6 @@
     </div>
   </div>
 </div>
-<div id="deployment-info">
-  This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
-</div>
 </section>          
 </div><!-- close #wrapper -->
 
@@ -179,9 +171,6 @@ $(window).ready(function() {
 
   $("#domain-infos").hide();
 
-  if (addon.isInstalled() || graphUrl == "parent")
-    $(".exposition").hide();
-
   // get list of known trackers from trackers.json file hosted on website:
   jQuery.getJSON("trackers.json", function(trackers) {
     var runner = GraphRunner.Runner({
@@ -226,67 +215,11 @@ $(window).ready(function() {
       return;
     }
 
-    if (addon.isInstalled()) {
-      $(".live-data").fadeIn();
-      addon.onGraph(runner.updateGraph);
-      $("#reset-graph").click(function() {
-        if (addon.resetGraph) {
-          addon.resetGraph();
-          window.location.reload();
-        } else
-          alert("You need to update your add-on to use this feature.");
-      });
-      $("#export-graph").click(function() {
-        var data = JSON.stringify(graph.data);
-        window.open("data:application/json," + data);
-      });
-      $("#hide-ui").click(function() {
-        $("#sidebar").slideUp();
-        $("#domain-infos").slideUp();
-        $("#deployment-info").slideUp();
-      });
-      $("#save-graph").click(function() {
-        var data = JSON.stringify(graph.data);
-        addon.saveGraph(data);
-        alert("Graph Saved!");
-      });
-      $("#load-graph").click(function() {
-        addon.getSavedGraph();
-      });
-      $("#clear-graph-history").click(function() {
-        var to_save = "{}"
-        addon.saveGraph(to_save);
-        addon.resetGraph();
-        window.location.reload();
-      });
-      $("#about-tab-link").click(function() {
-        $(".live-data").slideDown();
-        $("#domain-infos").slideUp();
-      });
-      $("#site-tab-link").click(function() {
-        $(".live-data").slideUp();
-        $("#domain-infos").slideDown();
-      });
-    } else {
-      Demo.show(graph);
-      setInterval(function displayMessageIfAddonIsInstalled() {
-        if (addon.isInstalled())
-          $("#addon-installation-detected").slideDown();
-      }, 1000);
-    }
+    
+    Demo.show(graph);
+
     // Display the footer now the page is rendered
     $('section.external').fadeIn();
-  });
-});
-
-$(window).ready(function addDeploymentInfo() {
-  var BASE_COMMIT = "https://github.com/toolness/collusion/commit/";
-  jQuery.getJSON("deployment.json", function(info) {
-    $(".xpi-download").attr("href", info.xpi_url + "collusion.html");
-    $(document.documentElement).addClass("deployment-" + info.name);
-    $(".deployment-name").text(info.name);
-    $(".deployment-commit").text(info.commit.slice(0, 10));
-    $("a.deployment-commit").attr("href", BASE_COMMIT + info.commit);
   });
 });
 </script>
