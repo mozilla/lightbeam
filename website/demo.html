@@ -9,6 +9,7 @@
     <base target="_blank">
     <script src="d3.js"></script>
 <link href="index.css" rel="stylesheet" type="text/css"/>
+<link href="demo.css" rel="stylesheet" type="text/css"/>
     <link href="branding/css/tabzilla.css" rel="stylesheet">
     <script src="branding/js/modernizr-2.5.0.min.js"></script>
         <link rel="stylesheet" media="screen,projection,tv" href="branding/css/common-min.css" />
@@ -40,12 +41,12 @@
 <section class="container">
 <div id="page">
 <div id="sidebar" class="box">
-  <div class="byline">By <a href="http://twitter.com/toolness">@toolness</a></div>
+  <div class="byline"></a></div>
 
   <div id="sidebar-content">
   <div class="exposition">
     <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
-    <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
+    <p>Collusion provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
   </div> <!-- end of exposition -->
   <div class="live-data" style="display: none;">
     <p>Keep browsing the web. As you do so, a graph on this page will change. Each dot represents a website.</p>
@@ -63,8 +64,7 @@
   </div> <!-- end of live-data -->
   <div class="demo" style="display: none;">
     <div class="step 0">
-    <a href="https://secure.toolness.com/xpi/collusion.xpi" class="button download">Download the Collusion add-on for Firefox</a>
-      <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a> installed, we'll show you a demo of the software.</p>
+      <p>This page will show you a demo of what you might see if you were surfing the web with Collusion.</p>
       <p><span class="next">Click here</span> to see what happens when you start your browser and visit the Internet Movie Database at imdb.com.</p>
     </div>
     <div class="step 1">
@@ -79,7 +79,7 @@
       <p>When you're ready, <span class="next">click here</span> to visit our next stop, the Huffington Post.</p>
     </div>
     <div class="step 3">
-      <p>Some companies are already using their knowledge about you to determine what you see on the sites they're affiliated with&mdash;not just the ads you see, but the actual content you read. Eli Pariser examines what this could mean for society at large in his book <a href="http://www.amazon.com/Filter-Bubble-Internet-Hiding-Pariser/dp/067092038X/ref=tmm_pap_title_0">The Filter Bubble</a>.</p>
+      <p>Some companies are already using their knowledge about you to determine what you see on the sites they're affiliated with&mdash;not just the ads you see, but the actual content you read. Eli Pariser examines what this could mean for society at large in his book <b>The Filter Bubble</b>. Watch Eli's TED talk on the Filter Bubble <a href="http://www.ted.com/talks/eli_pariser_beware_online_filter_bubbles.html">here</a>.</p>
       <p>By the way, if the graph is starting to look a bit confusing, try dragging the dots around with your mouse to get a better view.</p>
       <p>Then, <span class="next">click here</span> to go to our next stop, gamespot.com.</p>
     </div>
@@ -90,9 +90,12 @@
     <div class="step 5">
       <p>Thanks for trying out this demo. If you'd like to see this graph change in real time based on the sites you visit in your own browser, feel free to try the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a>. Even visiting the sites mentioned in the demo will probably give you different visualizations, because some services you may be logged into&mdash;like Facebook&mdash;can also track you across sites.</p>
       <p>If you want to block companies from tracking you on the internet, you can install <a href="http://www.privacychoice.org/trackerblock/firefox">TrackerBlock</a> for Firefox and Internet Explorer.</p>
-      <p>For more information about the making of this demo, check out the <a href="http://www.toolness.com/wp/2011/07/collusion/">blog post</a> and <a href="https://github.com/toolness/collusion">code repository</a>. Feel free to tweet at <a href="http://twitter.com/toolness">toolness</a> if you have any feedback!</p>
+      <p>Collusion was created as a prototype by Atul Varma. For more information about the making of this demo, check out the <a href="http://www.toolness.com/wp/2011/07/collusion/">blog post</a> and <a href="https://github.com/toolness/collusion">code repository</a>.</p>
     </div>
   </div> <!-- End of .demo -->
+
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/collusion/" class="button download">Download the Collusion add-on for Firefox</a>
+
   <div id="domain-infos">Mouse over any circle to see how that site is involved in tracking.</div> <!-- Templates are copied into here -->
   </div> <!-- End of #sidebar-content -->
 </div> <!-- End of #sidebar -->
