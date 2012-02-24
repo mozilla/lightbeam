@@ -115,11 +115,6 @@ h2.domain img.tracker {
   font-weight: bold;
 }
 
-.demo span.next:hover, a:hover {
-  background: yellow;
-  color: black;
-}
-
 .byline {
   margin-top: -10px;
 }
@@ -179,7 +174,7 @@ div.settings-menu > ul > li:hover {
   bottom: 0px;
   right: 0px;
   background: rgba(0, 0, 0, 0.5);
-  color: white;
+  color: #000;
   padding: 10px;
 }
 
