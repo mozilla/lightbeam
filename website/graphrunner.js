@@ -185,7 +185,7 @@ var GraphRunner = (function(jQuery, d3) {
         d3.select("#domain-label").classed("hidden", false)
         .attr("d", "M " + pathStartX + " " + pathStartY + " l " + labelWidth + " 0 "
               + "a 8 8 0 0 1 0 16 l " + reverseWidth + " 0 a 12 12 0 0 0 12 -12")
-        .attr("class", getClassForSite(d));
+        .attr("class", "round-border " + getClassForSite(d));
         d3.select("#domain-label-text").classed("hidden", false)
           .attr("x", d.x + 16)
           .attr("y", d.y + 7)
