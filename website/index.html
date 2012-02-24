@@ -1,21 +1,53 @@
-<!DOCTYPE hmtl>
-<meta charset="utf-8">
-<meta name="viewport" content="width=640">
-<title>Collusion</title>
-<base target="_blank">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<script src="d3.js"></script>
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US" dir="ltr"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Demo | Collusion</title>
+    <base target="_blank">
+    <script src="d3.js"></script>
 <link href="index.css" rel="stylesheet" type="text/css"/>
+    <link href="branding/css/tabzilla.css" rel="stylesheet">
+    <script src="branding/js/modernizr-2.5.0.min.js"></script>
+        <link rel="stylesheet" media="screen,projection,tv" href="branding/css/common-min.css" />
+      <link rel="stylesheet" media="screen,projection,tv" href="branding/css/template.css" />
+    <link rel="shortcut icon" type="image/png" href="/media/img/favicon.png">
+  </head>
+
+  <body id="collusion" class="html-ltr demo">
+
+    <div id="outer-wrapper">
+    <div id="wrapper">
+
+                            <header id="masthead">
+            <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
+
+              <nav id="nav-main" role="navigation">
+  <ul>
+      <li><a href="../" target="_self">Home</a></li>
+
+      <li><b>Demo</b></li>
+  </ul>
+  </nav>
+                        <h1><img src="branding/img/header-mozilla.png" alt="mozilla"><img src="branding/img/ford_foundation.gif" alt="Ford Foundation" /></h1>
+          </header>
+                  
+        
+<h1 id="main-feature" class="large">Collusion</h1>
+<div class="container" id="addon-installation-detected" style="display: none;">
+  Collusion add-on detected! Reload this page to see your graph.
+</div>
+
+<section class="container">
 <div id="page">
-<div id="sidebar">
-  <h1>Collusion</h1>
+<div id="sidebar" class="box">
   <div class="byline">By <a href="http://twitter.com/toolness">@toolness</a></div>
 
   <div id="sidebar-content">
   <a id="about-tab-link">about</a> |
   <a id="site-tab-link">site info</a>
-  <hr/>
   <div class="exposition">
     <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
     <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
@@ -36,6 +68,7 @@
   </div> <!-- end of live-data -->
   <div class="demo" style="display: none;">
     <div class="step 0">
+    <a href="https://secure.toolness.com/xpi/collusion.xpi" class="button download">Download the Collusion add-on for Firefox</a>
       <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a> installed, we'll show you a demo of the software.</p>
       <p><span class="next">Click here</span> to see what happens when you start your browser and visit the Internet Movie Database at imdb.com.</p>
     </div>
@@ -70,12 +103,6 @@
 </div> <!-- End of #sidebar -->
 <div id="chart"></div><!-- The d3 layout graph will go inside this div -->
 </div>
-<div id="deployment-info">
-  This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
-</div>
-<div id="addon-installation-detected" style="display: none;">
-  Collusion add-on detected! Reload this page to see your graph.
-</div>
 <div id="templates">
   <div class="info" style="display: none;">
     <h2 class="domain"></h2>
@@ -90,7 +117,37 @@
     </div>
   </div>
 </div>
-<script src="d3.layout.js"></script>
+<div id="deployment-info">
+  This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
+</div>
+</section>          
+</div><!-- close #wrapper -->
+
+<footer id="colophon">
+<div class="row">
+
+    <div class="span3">
+
+        <a href="http://www.mozilla.org/" class="footer-logo"><img src="branding/img/footer-mozilla.png" alt="mozilla"></a>
+    </div>
+
+    <div class="span3">
+        <p>Portions of this content are ©1998–2012 by individual mozilla.org contributors. Content available under a <a href="http://www.mozilla.org/foundation/licensing/website-content.html">Creative Commons license</a>.</p>
+    </div>
+    <nav class="span3">
+        <ul>
+
+            <li><a href="http://www.mozilla.org/contact/">Contact Us</a></li>
+            <li><a href="http://www.mozilla.org//about/policies/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="http://www.mozilla.com/en-US/about/legal.html">Legal Notices</a></li>
+            <li><a href="http://www.mozilla.com/en-US/legal/fraud-report/index.html">Report Trademark Abuse</a></li>
+        </ul>
+    </nav>
+
+</div>
+</footer>
+  </div><!-- close #outer-wrapper --> 
+  <script src="d3.layout.js"></script>
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
 <script src="collusion-addon.js"></script>
@@ -217,6 +274,8 @@ $(window).ready(function() {
           $("#addon-installation-detected").slideDown();
       }, 1000);
     }
+    // Display the footer now the page is rendered
+    $('section.external').fadeIn();
   });
 });
 
@@ -231,3 +290,6 @@ $(window).ready(function addDeploymentInfo() {
   });
 });
 </script>
+  <script src="branding/js/tabzilla.js"></script>         
+</body>
+</html>
