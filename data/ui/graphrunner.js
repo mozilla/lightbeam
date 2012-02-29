@@ -150,10 +150,11 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function radius(d) {
-        var added = getReferringLinkCount(d) / 3;
-        if (added > 7)
-          added = 7;
-        return 4 + added;
+        var added = getReferringLinkCount(d);
+        //var added = getReferringLinkCount(d) / 3;
+        //if (added > 7)
+          //added = 7;
+        return 12 + added;
       }
 
       function selectArcs(d) {
@@ -167,6 +168,9 @@ var GraphRunner = (function(jQuery, d3) {
         }
         if (d.trackerInfo) {
           return "tracker";
+        }
+        if (d.nocookie) {
+          return "nocookie";
         } else {
           return "site";
         }
@@ -261,7 +265,10 @@ var GraphRunner = (function(jQuery, d3) {
       gs.append("svg:circle")
           .attr("cx", "0")
           .attr("cy", "0")
-          .attr("r", 12) // was radius
+          //.attr("r", 12) // was radius
+          .attr("r", function(d) {
+                return radius(d);
+                })
           .attr("class", function(d) {
                 return "node round-border " + getClassForSite(d);
                 });
@@ -395,8 +402,10 @@ var GraphRunner = (function(jQuery, d3) {
           for (var n = 0; n < nodes.length; n++) {
             if (json[nodes[n].name]) {
               nodes[n].wasVisited = json[nodes[n].name].visited;
+              nodes[n].nocookie = json[nodes[n].name].nocookie;
             } else {
               nodes[n].wasVisited = false;
+              nodes[n].nocookie = false;
             }
 
             /* For nodes that don't already have a position, initialize them near the center.
