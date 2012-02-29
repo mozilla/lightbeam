@@ -19,6 +19,10 @@ g.node.unrelated-domain circle.tracker {
   stroke: #400000;
 }
 
+g.node.unrelated-domain circle.nocookie {
+  stroke: #000040;
+}
+
 g.node.unrelated-domain circle.round-border {
   fill: #151515;
 }
@@ -102,6 +106,10 @@ h2.domain img.tracker {
   stroke: #d62728;
 }
 
+.nocookie {
+  stroke: #0000aa;
+}
+
 .site {
   stroke: #7f7f7f;
 }
@@ -113,6 +121,11 @@ h2.domain img.tracker {
 .demo span.next {
   cursor: pointer;
   font-weight: bold;
+}
+
+.demo span.next:hover, a:hover {
+  background: yellow;
+  color: black;
 }
 
 .byline {
@@ -174,7 +187,7 @@ div.settings-menu > ul > li:hover {
   bottom: 0px;
   right: 0px;
   background: rgba(0, 0, 0, 0.5);
-  color: #000;
+  color: white;
   padding: 10px;
 }
 
