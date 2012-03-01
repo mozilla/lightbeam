@@ -165,11 +165,10 @@ var GraphRunner = (function(jQuery, d3) {
         if (d.wasVisited) {
           return "visited";
         }
-        if (d.trackerInfo) {
-          return "tracker";
-        } else {
-          return "site";
-        }
+        /* Return "tracker" for a red circle;
+         * Temporarily disabling this feature
+         * until we get a more up-to-date data source for it.*/
+        return "site";
       }
 
       function showPopupLabel(d) {

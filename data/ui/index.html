@@ -17,10 +17,10 @@
   <a id="site-tab-link">site info</a>
   <hr/>
   <div class="live-data" style="display: none;">
-    <p>Keep browsing the web. As you do so, a graph on this page will change. Each dot represents a website.</p>
-    <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but may still track you.</p>
-    <p>Sites with a halo are sites that you have visited. Sites without a halo are sites you have not visited.</p>
-    <p>Hover your mouse over the dots to learn more about them.</p>
+    <p>Keep browsing the web. As you do so, the graph on this page will change. Each circle represents a website.</p>
+    <p>Sites with a halo are sites that you have visited. Sites in grey are sites you have not visited. An arrow from one to the other means that the former site has set one or more third-party cookies to inform the latter site about your visit.</p>
+    <p>This add-on is still in development and is not guaranteed to be entirely accurate.</p>
+    <p>Hover your mouse over the circles to learn more about them.</p>
     <div class="settings-menu">
       <ul>
         <li id="reset-graph">Reset Graph</li>
@@ -30,7 +30,7 @@
     </div> <!-- end of settingsmenu -->
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
   </div> <!-- end of live-data -->
-  <div id="domain-infos">Mouse over any circle to see how that site is involved in tracking.</div> <!-- Templates are copied into here -->
+  <div id="domain-infos">Mouse over any circle to see how that site uses third-party cookies.</div> <!-- Templates are copied into here -->
   </div> <!-- End of #sidebar-content -->
 </div> <!-- End of #sidebar -->
 <div id="chart"></div><!-- The d3 layout graph will go inside this div -->
@@ -43,11 +43,11 @@
     <h2 class="domain"></h2>
 
     <div class="referrees">
-      <p>When you visit <a class="domain"></a>, it informs the following websites about your visit.</p>
+      <p>When you visit <a class="domain"></a>, it informs the following websites about you.</p>
       <ul></ul>
     </div>
     <div class="referrers">
-      <p>The site <a class="domain"></a> tracks your behavior across the following websites.</p>
+      <p>The site <a class="domain"></a> is potentially aware of your visits to the following websites.</p>
       <ul></ul>
     </div>
   </div>
