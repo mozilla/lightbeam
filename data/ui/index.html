@@ -70,6 +70,17 @@ function getQueryVariable(variable) {
   }
 }
 
+function switchSidebar(sidebar) {
+  var sidebars = [".live-data", "#domain-infos"];
+  for (var i in sidebars) {
+    if (sidebar == sidebars[i]) {
+      $(sidebars[i]).slideDown();
+    } else {
+      $(sidebars[i]).slideUp();
+    }
+  }
+}
+
 function updateGraphViaPostMessage(graph, target) {
   target.postMessage("ready", "*");
   $(window).one("message", function(event) {
@@ -177,12 +188,10 @@ $(window).ready(function() {
         window.location.reload();
       });
       $("#about-tab-link").click(function() {
-        $(".live-data").slideDown();
-        $("#domain-infos").slideUp();
+        switchSidebar(".live-data");
       });
       $("#site-tab-link").click(function() {
-        $(".live-data").slideUp();
-        $("#domain-infos").slideDown();
+        switchSidebar("#domain-infos");
       });
     }
   });

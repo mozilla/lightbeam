@@ -252,7 +252,10 @@ var GraphRunner = (function(jQuery, d3) {
             d3.select("#domain-label").classed("hidden", true);
             d3.select("#domain-label-text").classed("hidden", true);
           })
-        .call(force.drag);
+          .on("click", function(d) {
+            switchSidebar("#domain-infos");
+          })
+          .call(force.drag);
 
 
       // glow if site is visited
