@@ -59,6 +59,7 @@ html, body {
 
 a {
   color: white;
+  cursor: pointer;
 }
 
 #page {
