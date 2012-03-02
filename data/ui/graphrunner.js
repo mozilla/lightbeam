@@ -78,8 +78,8 @@ var GraphRunner = (function(jQuery, d3) {
 
       $("#domain-infos .info").hide();
 
-      // TODO Why do we clone the div instead of just clearing the one and adding to it?
-      // Oh, I see, we create a clone for each domain and then re-use it if it's already
+      // Instead of just cleraing out the domain info div and puttig in the new info each time,
+      // create a clone of the template for each new domain, and re-use that create a clone for each domain and then re-use it if it's already
       // created. An optimization?
       if (!info.length) {
         info = $("#templates .info").clone();
@@ -91,13 +91,22 @@ var GraphRunner = (function(jQuery, d3) {
           var trackerId = d.trackerInfo.network_id;
           info.find("h2.domain").empty();
           img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
-        } else
+        } else {
           img.attr("src", 'http://' + d.name + '/favicon.ico')
              .addClass("favicon");
+        }
         setDomainLink(info.find("a.domain"), d);
         info.find("h2.domain").prepend(img);
         img.error(function() { img.remove(); });
         $("#domain-infos").append(info);
+
+        // Set up callback functions for the block-this-site link and the whitelist link
+        info.find(".block-link").click(function() {
+          CollusionAddon.blockDomain(d.name);
+        });
+        info.find(".whitelist-link").click(function() {
+          CollusionAddon.whitelistDomain(d.name);
+        });
       }
 
       // List referrers, if any (sites that set cookies read by this site)
@@ -275,6 +284,10 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("y", "-8")
           .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
       }
+
+      // Remove nodes if domain is removed from the data (e.g. user blocked it)
+      node.exit().remove();
+      // TODO: this doesn't seem to work at all. Debug more.
 
       return node;
     }

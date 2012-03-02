@@ -7,8 +7,10 @@ var CollusionAddon = (function() {
     importGraph: window.importGraph,
     resetGraph: window.resetGraph,
     saveGraph: window.saveGraph,
-    getSavedGraph: window.getSavedGraph
+    getSavedGraph: window.getSavedGraph,
+    blockDomain: window.blockDomain,
+    whitelistDomain: window.whitelistDomain
   };
-  
+
   return self;
 })();
