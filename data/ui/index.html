@@ -10,11 +10,11 @@
 <div id="page">
 <div id="sidebar">
   <h1>Collusion</h1>
-  <div class="byline">By <a href="http://twitter.com/toolness">@toolness</a></div>
 
   <div id="sidebar-content">
   <a id="about-tab-link">about</a> |
-  <a id="site-tab-link">site info</a>
+  <a id="site-tab-link">site info</a> |
+  <a id="credits-tab-link">credits</a>
   <hr/>
   <div class="live-data" style="display: none;">
     <p>Keep browsing the web. As you do so, the graph on this page will change. Each circle represents a website.</p>
@@ -30,7 +30,17 @@
     </div> <!-- end of settingsmenu -->
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
   </div> <!-- end of live-data -->
+  
   <div id="domain-infos">Mouse over any circle to see how that site uses third-party cookies.</div> <!-- Templates are copied into here -->
+  
+  <div id="credits" style="display: none;">
+    <ul>
+      <li>Idea and original code by: Atul Varma</li>
+      <li>Additional development by: Jono Xia</li>
+      <li>Visual Design by: Barry Munsterteiger</li>
+      <li>Favicon by: Margaret Hagan</li>
+      <li>Additional code contributions by: Andrew Stiles, Alexandra Moss, and Matt Brubek</li>
+  </div> <!-- End of #credits -->
   </div> <!-- End of #sidebar-content -->
 </div> <!-- End of #sidebar -->
 <div id="chart"></div><!-- The d3 layout graph will go inside this div -->
@@ -71,7 +81,7 @@ function getQueryVariable(variable) {
 }
 
 function switchSidebar(sidebar) {
-  var sidebars = [".live-data", "#domain-infos"];
+  var sidebars = [".live-data", "#domain-infos", "#credits"];
   for (var i in sidebars) {
     if (sidebar == sidebars[i]) {
       $(sidebars[i]).slideDown();
@@ -192,6 +202,9 @@ $(window).ready(function() {
       });
       $("#site-tab-link").click(function() {
         switchSidebar("#domain-infos");
+      });
+      $("#credits-tab-link").click(function() {
+        switchSidebar("#credits");
       });
     }
   });
