@@ -70,6 +70,10 @@ var GraphRunner = (function(jQuery, d3) {
       }
     }
 
+    function faviconURL(d) {
+      return 'http://' + d.name + '/favicon.ico';
+    }
+
     function showDomainInfo(d) {
       var className = d.name.replace(/\./g, '-dot-');
       var info = $("#domain-infos").find("." + className);
@@ -90,7 +94,7 @@ var GraphRunner = (function(jQuery, d3) {
           info.find("h2.domain").empty();
           img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
         } else
-          img.attr("src", 'http://' + d.name + '/favicon.ico')
+          img.attr("src", faviconURL(d))
              .addClass("favicon");
         setDomainLink(info.find("a.domain"), d);
         info.find("h2.domain").prepend(img);
@@ -253,7 +257,7 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("height", "16")
           .attr("x", "-8") // offset to make 16x16 favicon appear centered
           .attr("y", "-8")
-          .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
+          .attr("xlink:href", faviconURL);
 
       return node;
     }
