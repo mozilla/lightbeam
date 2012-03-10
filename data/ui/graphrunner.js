@@ -72,18 +72,14 @@ var GraphRunner = (function(jQuery, d3) {
       }
     }
 
-    function faviconURL(d) {
-      return 'http://' + d.name + '/favicon.ico';
-    }
-
     function showDomainInfo(d) {
       var className = d.name.replace(/\./g, '-dot-');
       var info = $("#domain-infos").find("." + className);
 
       $("#domain-infos .info").hide();
 
-      // TODO Why do we clone the div instead of just clearing the one and adding to it?
-      // Oh, I see, we create a clone for each domain and then re-use it if it's already
+      // Instead of just cleraing out the domain info div and puttig in the new info each time,
+      // create a clone of the template for each new domain, and re-use that create a clone for each domain and then re-use it if it's already
       // created. An optimization?
       if (!info.length) {
         info = $("#templates .info").clone();
@@ -95,13 +91,22 @@ var GraphRunner = (function(jQuery, d3) {
           var trackerId = d.trackerInfo.network_id;
           info.find("h2.domain").empty();
           img.attr("src", TRACKER_LOGO + trackerId + ".jpg").addClass("tracker");
-        } else
-          img.attr("src", faviconURL(d))
+        } else {
+          img.attr("src", 'http://' + d.name + '/favicon.ico')
              .addClass("favicon");
+        }
         setDomainLink(info.find("a.domain"), d);
         info.find("h2.domain").prepend(img);
         img.error(function() { img.remove(); });
         $("#domain-infos").append(info);
+
+        // Set up callback functions for the block-this-site link and the whitelist link
+        info.find(".block-link").click(function() {
+          CollusionAddon.blockDomain(d.name);
+        });
+        info.find(".whitelist-link").click(function() {
+          CollusionAddon.whitelistDomain(d.name);
+        });
       }
 
       // List referrers, if any (sites that set cookies read by this site)
@@ -169,11 +174,10 @@ var GraphRunner = (function(jQuery, d3) {
         if (d.wasVisited) {
           return "visited";
         }
-        if (d.trackerInfo) {
-          return "tracker";
-        } else {
-          return "site";
-        }
+        /* Return "tracker" for a red circle;
+         * Temporarily disabling this feature
+         * until we get a more up-to-date data source for it.*/
+        return "site";
       }
 
       function showPopupLabel(d) {
@@ -248,7 +252,10 @@ var GraphRunner = (function(jQuery, d3) {
             d3.select("#domain-label").classed("hidden", true);
             d3.select("#domain-label-text").classed("hidden", true);
           })
-        .call(force.drag);
+          .on("click", function(d) {
+            switchSidebar("#domain-infos");
+          })
+          .call(force.drag);
 
 
       // glow if site is visited
@@ -278,8 +285,12 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("height", "16")
           .attr("x", "-8") // offset to make 16x16 favicon appear centered
           .attr("y", "-8")
-          .attr("xlink:href", faviconURL);
+          .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
       }
+
+      // Remove nodes if domain is removed from the data (e.g. user blocked it)
+      node.exit().remove();
+      // TODO: this doesn't seem to work at all. Debug more.
 
       return node;
     }

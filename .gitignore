@@ -1,2 +1,3 @@
 fabfile_local.py
 data/deployment.json
+.DS_store

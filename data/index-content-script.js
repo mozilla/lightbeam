@@ -5,6 +5,10 @@ unsafeWindow.onGraph = function onGraph(cb) {
   self.port.emit("init");
 };
 
+/* resetGraph effectively wipes out the graph in storage
+ * because after it is called, an empty graph is passed
+ * to 'self.port.on("log")'.
+ */
 unsafeWindow.resetGraph = function resetGraph() {
   self.port.emit('reset');
 };
@@ -18,23 +22,26 @@ unsafeWindow.saveGraph = function saveGraph(data) {
 };
 
 unsafeWindow.getSavedGraph = function getSavedGraph() {
-  self.port.emit('getSavedGraph')
+  self.port.emit('getSavedGraph');
+};
+
+unsafeWindow.blockDomain = function blockDomain(domain) {
+  self.port.emit('blockDomain', {"domain": domain});
+};
+
+unsafeWindow.whitelistDomain = function whitelistDomain(domain) {
+  self.port.emit('whitelistDomain', {"domain": domain});
 };
 
 self.port.on("log", function(log) {
-  console.log("In index-content-script function log: " + log);
   log = JSON.parse(log);
-  if (graphCallback)
+  if (graphCallback) {
+    self.port.emit('save', JSON.stringify(log));
     graphCallback(log);
+  }
 });
 
-self.port.on("getSavedGraph", function(log) {
-  if (log != null) {
-      log = JSON.parse(log);
-  } else {
-      log = {};
-  }
-  if (graphCallback) {
-    graphCallback(log);
-  }
+self.port.on("getSavedGraph", function(saved_graph) {
+  self.port.emit('import', saved_graph);
+  window.location.reload();
 });

@@ -1,44 +1,75 @@
-<!DOCTYPE hmtl>
-<meta charset="utf-8">
-<meta name="viewport" content="width=640">
-<title>Collusion</title>
-<base target="_blank">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<script src="d3.js"></script>
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US" dir="ltr"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Demo | Collusion</title>
+    <base target="_blank">
+    <script src="d3.js"></script>
 <link href="index.css" rel="stylesheet" type="text/css"/>
+<link href="demo.css" rel="stylesheet" type="text/css"/>
+    <link href="branding/css/tabzilla.css" rel="stylesheet">
+    <script src="branding/js/modernizr-2.5.0.min.js"></script>
+        <link rel="stylesheet" media="screen,projection,tv" href="branding/css/common-min.css" />
+      <link rel="stylesheet" media="screen,projection,tv" href="branding/css/template.css" />
+    <link rel="shortcut icon" type="image/png" href="/media/img/favicon.png">
+  </head>
+
+  <body id="collusion" class="html-ltr demo">
+
+    <div id="outer-wrapper">
+    <div id="wrapper">
+
+                            <header id="masthead">
+            <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
+
+              <nav id="nav-main" role="navigation">
+  <ul>
+      <li><a href="../" target="_self">Home</a></li>
+
+      <li><b>Demo</b></li>
+  </ul>
+  </nav>
+                        <h1><img src="branding/img/header-mozilla.png" alt="mozilla"><img src="branding/img/ford_foundation.gif" alt="Ford Foundation" /></h1>
+          </header>
+                  
+        
+<h1 id="main-feature" class="large">Collusion</h1>
+
+<section class="container">
 <div id="page">
-<div id="sidebar">
-  <h1>Collusion</h1>
-  <div class="byline">By <a href="http://twitter.com/toolness">@toolness</a></div>
+<div id="sidebar" class="box">
+  <div class="byline"></a></div>
+
+  <div id="sidebar-content">
   <div class="exposition">
     <blockquote>If you're not paying for something, you're not the customer; you're the product being sold.</blockquote><span class="attribution">- Andrew Lewis</span>
-    <p>This page provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
-  </div>
+    <p>Collusion provides an interactive, real-time visualization of the entities that track your behavior across the web.</p>
+  </div> <!-- end of exposition -->
   <div class="live-data" style="display: none;">
     <p>Keep browsing the web. As you do so, a graph on this page will change. Each dot represents a website.</p>
-    <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but this doesn't necessarily mean they don't collect data on you.</p>
+    <p>Sites in <span class="tracker">red</span> are confirmed trackers by <a href="http://privacychoice.org">privacychoice.org</a>. Sites in <span class="site">gray</span> are not, but may still track you.</p>
     <p>Sites with a halo are sites that you have visited. Sites without a halo are sites you have not visited.</p>
     <p>Hover your mouse over the dots to learn more about them.</p>
     <div class="settings-menu">
       <ul>
-        <li id="reset-graph">Reset Graph (Current Session Only)</li>
+        <li id="reset-graph">Reset Graph</li>
         <li id="export-graph">Export Graph</li>
         <li id="hide-ui">Hide UI</li>
-        <li id="save-graph">Save Your Graph</li>
-        <li id="clear-graph-history">Clear Graph History</li>
       </ul>
-    </div>
-    <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect sites you visit solely to show you how they're connected. We don't keep them and don't give away the information to anyone except you.</p>
-  </div>
+    </div> <!-- end of settingsmenu -->
+    <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
+  </div> <!-- end of live-data -->
   <div class="demo" style="display: none;">
     <div class="step 0">
-      <p>Since you don't seem to have the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a> installed, we'll show you a demo of the software.</p>
+      <p>This page will show you a demo of what you might see if you were surfing the web with Collusion.</p>
       <p><span class="next">Click here</span> to see what happens when you start your browser and visit the Internet Movie Database at imdb.com.</p>
     </div>
     <div class="step 1">
       <p>Each dot in this graph represents a website. The gray dot in the middle is imdb.com; the red dots near it are advertising sites that have created <a href="http://en.wikipedia.org/wiki/HTTP_cookie">cookies</a> in your browser and are now tracking your behavior on the IMDB.</p>
-      <p>The advertising sites are colored red because <a href="http://privacychoice.org">privacychoice.org</a> has determined that they're behavioral tracking sites. But just because a dot isn't red doesn't necessarily mean it's not tracking you.</p>
+      <p>The advertising sites are colored red because <a href="http://privacychoice.org">privacychoice.org</a> has determined that they're behavioral tracking sites.  Non-red sites may still track you.</p>
       <p>Hover your mouse over any of the sites to learn more about them.</p>
       <p>When you're done, <span class="next">click here</span> to continue your web adventure. Our next stop is the New York Times website.</p>
     </div>
@@ -48,7 +79,7 @@
       <p>When you're ready, <span class="next">click here</span> to visit our next stop, the Huffington Post.</p>
     </div>
     <div class="step 3">
-      <p>Some companies are already using their knowledge about you to determine what you see on the sites they're affiliated with&mdash;not just the ads you see, but the actual content you read. Eli Pariser examines what this could mean for society at large in his book <a href="http://www.amazon.com/Filter-Bubble-Internet-Hiding-Pariser/dp/067092038X/ref=tmm_pap_title_0">The Filter Bubble</a>.</p>
+      <p>Some companies are already using their knowledge about you to determine what you see on the sites they're affiliated with&mdash;not just the ads you see, but the actual content you read. Eli Pariser examines what this could mean for society at large in his book <b>The Filter Bubble</b>. Watch Eli's TED talk on the Filter Bubble <a href="http://www.ted.com/talks/eli_pariser_beware_online_filter_bubbles.html">here</a>.</p>
       <p>By the way, if the graph is starting to look a bit confusing, try dragging the dots around with your mouse to get a better view.</p>
       <p>Then, <span class="next">click here</span> to go to our next stop, gamespot.com.</p>
     </div>
@@ -59,18 +90,16 @@
     <div class="step 5">
       <p>Thanks for trying out this demo. If you'd like to see this graph change in real time based on the sites you visit in your own browser, feel free to try the <a href="https://secure.toolness.com/xpi/collusion.html" class="xpi-download">Collusion Firefox add-on</a>. Even visiting the sites mentioned in the demo will probably give you different visualizations, because some services you may be logged into&mdash;like Facebook&mdash;can also track you across sites.</p>
       <p>If you want to block companies from tracking you on the internet, you can install <a href="http://www.privacychoice.org/trackerblock/firefox">TrackerBlock</a> for Firefox and Internet Explorer.</p>
-      <p>For more information about the making of this demo, check out the <a href="http://www.toolness.com/wp/2011/07/collusion/">blog post</a> and <a href="https://github.com/toolness/collusion">code repository</a>. Feel free to tweet at <a href="http://twitter.com/toolness">toolness</a> if you have any feedback!</p>
+      <p>Collusion was created as a prototype by Atul Varma. For more information about the making of this demo, check out the <a href="http://www.toolness.com/wp/2011/07/collusion/">blog post</a> and <a href="https://github.com/toolness/collusion">code repository</a>.</p>
     </div>
-  </div>
-</div>
-<div id="chart"></div>
-<div id="domain-infos"></div>
-</div>
-<div id="deployment-info">
-  This is a <strong class="deployment-name"></strong> snapshot based on commit <a href="" class="deployment-commit"></a>. [ <a href="" class="xpi-download">XPI</a> ].
-</div>
-<div id="addon-installation-detected" style="display: none;">
-  Collusion add-on detected! Reload this page to see your graph.
+  </div> <!-- End of .demo -->
+
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/collusion/" class="button download">Download the Collusion add-on for Firefox</a>
+
+  <div id="domain-infos">Mouse over any circle to see how that site is involved in tracking.</div> <!-- Templates are copied into here -->
+  </div> <!-- End of #sidebar-content -->
+</div> <!-- End of #sidebar -->
+<div id="chart"></div><!-- The d3 layout graph will go inside this div -->
 </div>
 <div id="templates">
   <div class="info" style="display: none;">
@@ -86,7 +115,34 @@
     </div>
   </div>
 </div>
-<script src="d3.layout.js"></script>
+</section>          
+</div><!-- close #wrapper -->
+
+<footer id="colophon">
+<div class="row">
+
+    <div class="span3">
+
+        <a href="http://www.mozilla.org/" class="footer-logo"><img src="branding/img/footer-mozilla.png" alt="mozilla"></a>
+    </div>
+
+    <div class="span3">
+        <p>Portions of this content are ©1998–2012 by individual mozilla.org contributors. Content available under a <a href="http://www.mozilla.org/foundation/licensing/website-content.html">Creative Commons license</a>.</p>
+    </div>
+    <nav class="span3">
+        <ul>
+
+            <li><a href="http://www.mozilla.org/contact/">Contact Us</a></li>
+            <li><a href="http://www.mozilla.org//about/policies/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="http://www.mozilla.com/en-US/about/legal.html">Legal Notices</a></li>
+            <li><a href="http://www.mozilla.com/en-US/legal/fraud-report/index.html">Report Trademark Abuse</a></li>
+        </ul>
+    </nav>
+
+</div>
+</footer>
+  </div><!-- close #outer-wrapper --> 
+  <script src="d3.layout.js"></script>
 <script src="d3.geom.js"></script>
 <script src="jquery.min.js"></script>
 <script src="collusion-addon.js"></script>
@@ -116,15 +172,15 @@ $(window).ready(function() {
   var addon = CollusionAddon;
   var graphUrl = getQueryVariable("graph_url");
 
-  if (addon.isInstalled() || graphUrl == "parent")
-    $(".exposition").hide();
+  $("#domain-infos").hide();
 
   // get list of known trackers from trackers.json file hosted on website:
   jQuery.getJSON("trackers.json", function(trackers) {
     var runner = GraphRunner.Runner({
       width: addon.isInstalled() || graphUrl ? $(window).width() : 640,
       height: addon.isInstalled() || graphUrl ? $(window).height() : 480,
-      trackers: trackers
+      trackers: trackers,
+      hideFavicons: false 
     });
     var graph = runner.graph;
 
@@ -162,54 +218,14 @@ $(window).ready(function() {
       return;
     }
 
-    if (addon.isInstalled()) {
-      $(".live-data").fadeIn();
-      addon.onGraph(runner.updateGraph);
-      $("#reset-graph").click(function() {
-        if (addon.resetGraph) {
-          addon.resetGraph();
-          window.location.reload();
-        } else
-          alert("You need to update your add-on to use this feature.");
-      });
-      $("#export-graph").click(function() {
-        var data = JSON.stringify(graph.data);
-        window.open("data:application/json," + data);
-      });
-      $("#hide-ui").click(function() {
-        $("#sidebar").slideUp();
-        $("#domain-infos").slideUp();
-        $("#deployment-info").slideUp();
-      });
-      $("#save-graph").click(function() {
-        var data = JSON.stringify(graph.data);
-        addon.saveGraph(data);
-        alert("Woo hoo! Graph Saved!");
-      });
-      $("#clear-graph-history").click(function() {
-        var data = "{}";
-        addon.saveGraph(data);
-        addon.getSavedGraph();
-        alert("Graph History Nuked!");  
-      });
-    } else {
-      Demo.show(graph);
-      setInterval(function displayMessageIfAddonIsInstalled() {
-        if (addon.isInstalled())
-          $("#addon-installation-detected").slideDown();
-      }, 1000);
-    }
-  });
-});
+    
+    Demo.show(graph);
 
-$(window).ready(function addDeploymentInfo() {
-  var BASE_COMMIT = "https://github.com/toolness/collusion/commit/";
-  jQuery.getJSON("deployment.json", function(info) {
-    $(".xpi-download").attr("href", info.xpi_url + "collusion.html");
-    $(document.documentElement).addClass("deployment-" + info.name);
-    $(".deployment-name").text(info.name);
-    $(".deployment-commit").text(info.commit.slice(0, 10));
-    $("a.deployment-commit").attr("href", BASE_COMMIT + info.commit);
+    // Display the footer now the page is rendered
+    $('section.external').fadeIn();
   });
 });
 </script>
+  <script src="branding/js/tabzilla.js"></script>         
+</body>
+</html>
