@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
 <link href="index.css" rel="stylesheet" type="text/css"/>
+<link href="panel.css" rel="stylesheet" type="text/css"/>
 
 <script src="d3.js"></script>
 <script src="d3.layout.js"></script>
@@ -25,27 +26,42 @@ function getJsonNoMatterWhat(url, callback) {
     }});
 }
 
-$(window).ready(function() {
-  console.log("Window ready");
+// This will be called in response to a message from the add-on when the add-on opens the panel
+// addon will calculate the size and tell us what size the panel should be
+function makeGraphSizedToPanel(data) {
   var addon = CollusionAddon;
-  console.log("Addon is " + addon);
-  // get list of known trackers from trackers.json file hosted on website:
+  if (!data.width || !data.height) {
+    return;
+  }
+  $("#panel-message").html(data.message);
+  $("#chart").empty();
   getJsonNoMatterWhat("trackers.json", function(trackers) {
-    console.log("Got trackers json");
+
     var runner = GraphRunner.Runner({
-      width: 500,
-      height: 400,
+      width: data.width,
+      height: data.height,
       trackers: trackers,
       hideFavicons: false 
     });
 
     addon.onGraph(runner.updateGraph);
   });
-});
+
+}
+
+/* OK we have two problems:
+ * 1. querying the window size always gives me 100 pixels regardless of actual panel size.
+ * No matter what size I tell chart to be, it ends up being 100 pixels across too!!
+ * IDE/Theory: when addon opens panel, it sends a panel size message to worker threads; recieve
+ * that message inside the panel and use it to set some variables
+
+ * 2. GraphRunner.Runner is not resizable... make it so.
+ * (Working around this by destroying old one, creating new one - makes graph regenerate)
+ */
 </script>
 
 </head>
 <body>
-<div id="chart" width="500" height="400"></div>
-
+<span id="panel-message">This is Collusion</span>
+<div id="chart" width="100%" height="100%"></div>
 </body> </html>

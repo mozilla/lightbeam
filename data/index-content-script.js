@@ -45,3 +45,9 @@ self.port.on("getSavedGraph", function(saved_graph) {
   self.port.emit('import', saved_graph);
   window.location.reload();
 });
+
+self.port.on("setPanelSize", function(data) {
+  if (unsafeWindow.makeGraphSizedToPanel) {
+    unsafeWindow.makeGraphSizedToPanel(data);
+  }
+});
