@@ -19,6 +19,10 @@ g.node.unrelated-domain circle.tracker {
   stroke: #400000;
 }
 
+g.node.unrelated-domain circle.nocookie {
+  stroke: #000040;
+}
+
 g.node.unrelated-domain circle.round-border {
   fill: #151515;
 }
@@ -100,6 +104,10 @@ h2.domain img.tracker {
 
 .tracker {
   stroke: #d62728;
+}
+
+.nocookie {
+  stroke: #0000aa;
 }
 
 .site {
