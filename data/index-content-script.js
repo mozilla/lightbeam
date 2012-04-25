@@ -33,6 +33,10 @@ unsafeWindow.whitelistDomain = function whitelistDomain(domain) {
   self.port.emit('whitelistDomain', {"domain": domain});
 };
 
+unsafeWindow.shareGraph = function shareGraph() {
+  self.port.emit('uploadGraph');
+};
+
 self.port.on("log", function(log) {
   log = JSON.parse(log);
   if (graphCallback) {

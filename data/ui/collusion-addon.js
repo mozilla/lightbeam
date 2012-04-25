@@ -10,7 +10,8 @@ var CollusionAddon = (function() {
     getSavedGraph: window.getSavedGraph,
     blockDomain: window.blockDomain,
     whitelistDomain: window.whitelistDomain,
-    getPanelDimensions: window.getPanelDimensions
+    getPanelDimensions: window.getPanelDimensions,
+    shareGraph: window.shareGraph
   };
 
   return self;

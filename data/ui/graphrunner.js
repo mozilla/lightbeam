@@ -437,8 +437,10 @@ var GraphRunner = (function(jQuery, d3) {
       var timeoutID = null;
 
       return function(json) {
+        // TODO this comparison sometimes throws:
+        // TypeError: attempt to run compile-and-go script on a cleared scope
         if (timeoutID !== null)
-         clearTimeout(timeoutID);
+          clearTimeout(timeoutID);
         timeoutID = setTimeout(function() {
           timeoutID = null;
 
@@ -447,6 +449,8 @@ var GraphRunner = (function(jQuery, d3) {
 
           graph.update(json);
         }, 250);
+        // TODO the setTimeout call sometimes throws:
+        // Illegal operation on WrappedNative prototype object
       };
     }
 

@@ -25,6 +25,7 @@
       <ul>
         <li id="reset-graph">Reset Graph</li>
         <li id="export-graph">Export Graph</li>
+        <li id="share-graph">Share Graph (with Mozilla, anonymously)</li>
         <li id="hide-ui">Hide UI</li>
       </ul>
     </div> <!-- end of settingsmenu -->
@@ -114,6 +115,7 @@ function getJsonNoMatterWhat(url, callback) {
     }});
 }
 
+
 $(window).ready(function() {
   var addon = CollusionAddon;
   var graphUrl = getQueryVariable("graph_url");
@@ -178,6 +180,12 @@ $(window).ready(function() {
       $("#export-graph").click(function() {
         var data = JSON.stringify(graph.data);
         window.open("data:application/json," + data);
+      });
+      $("#share-graph").click(function() {
+        addon.shareGraph();
+        // Provide acknowledgement message, ignore further clicks:
+        $("#share-graph").html("Thank you! Your graph is being uploaded. (It's OK to close this page.)");
+        $("#share-graph").off("click");
       });
       $("#hide-ui").click(function() {
         $("#sidebar").slideUp();
