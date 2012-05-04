@@ -6,7 +6,8 @@
     "url": "https://github.com/toolness/collusion",
     "fullName": "Collusion", 
     "id": "jid1-F9UJ2thwoAm5gQ",
-    "description": "Visualize who's tracking you in real time. To get started, click on the Collusion icon in the bottom-right corner of your browser. (You may need to show the Add-on Bar to see the icon.)",
+    "description": "Visualize who's tracking you in real time. To get started, choose 'Collusion Graph' from the Tools menu.)",
+    "dependencies": ["menuitems", "addon-kit", "api-utils"],
     "preferences": [
       {
         "name": "collusion.urls",
