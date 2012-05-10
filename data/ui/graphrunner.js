@@ -170,14 +170,33 @@ var GraphRunner = (function(jQuery, d3) {
                              ",line.from-" + d.index);
       }
 
-      function getClassForSite(d) {
+      function getCircleClassForSite(d) {
+        var classString;
         if (d.wasVisited) {
-          return "visited";
+          classString = "visited";
+        } else {
+          classString = "site";
         }
         /* Return "tracker" for a red circle;
          * Temporarily disabling this feature
          * until we get a more up-to-date data source for it.*/
-        return "site";
+
+        return classString;
+      }
+
+      function getGroupClassForSite(d) {
+        /* The g.node that wraps around the cicle, favicon, and glow will get
+         * tagged with "cookie", "noncookie", or both, so we can show/hide the groups
+         * based on filter settings.
+         */
+        var classString = "";
+        if (d.cookie) {
+          classString += " cookie";
+        }
+        if (d.noncookie) {
+          classString += " noncookie";
+        }
+        return classString;
       }
 
       function showPopupLabel(d) {
@@ -193,7 +212,7 @@ var GraphRunner = (function(jQuery, d3) {
         d3.select("#domain-label").classed("hidden", false)
         .attr("d", "M " + pathStartX + " " + pathStartY + " l " + labelWidth + " 0 "
               + "a 8 8 0 0 1 0 16 l " + reverseWidth + " 0 a 12 12 0 0 0 12 -12")
-        .attr("class", "round-border " + getClassForSite(d));
+        .attr("class", "round-border " + getCircleClassForSite(d));
         d3.select("#domain-label-text").classed("hidden", false)
           .attr("x", d.x + 16)
           .attr("y", d.y + 7)
@@ -223,7 +242,7 @@ var GraphRunner = (function(jQuery, d3) {
 
       // For each node, create svg group <g> to hold circle, image, and title
       var gs = node.enter().append("svg:g")
-          .attr("class", "node")
+          .attr("class", function(d) {return "node" + getGroupClassForSite(d);})
           .attr("transform", function(d) {
             // <g> doesn't take x or y attributes but it can be positioned with a transformation
             return "translate(" + d.x + "," + d.y + ")";
@@ -274,7 +293,7 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("cy", "0")
           .attr("r", 12) // was radius
           .attr("class", function(d) {
-                return "node round-border " + getClassForSite(d);
+                return "node round-border " + getCircleClassForSite(d);
                 });
 
       if (!hideFavicons) {
@@ -296,11 +315,22 @@ var GraphRunner = (function(jQuery, d3) {
     }
 
     function createLinks(links) {
+      var getClassForLink = function(d) {
+        var classString = "link from-" + d.source.index + " to-" + d.target.index;
+        /* a link can have both "cookie" and "noncookie" - that would mean that connection happened
+         * at least twice, using cookies one time and noncookie methods the other time. */
+        if (d.cookie) {
+          classString += " cookie";
+        }
+        if (d.noncookie) {
+          classString += " noncookie";
+        }
+        return classString;
+      };
       var link = vis.select("g.links").selectAll("line.link")
           .data(links)
         .enter().append("svg:line")
-          .attr("class", function(d) { return "link from-" + d.source.index +
-                                       " to-" + d.target.index; })
+          .attr("class", getClassForLink)
           .style("stroke-width", 1)
           .attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
@@ -393,7 +423,18 @@ var GraphRunner = (function(jQuery, d3) {
         var toId = getNodeId(options.to);
         var link = vis.select("line.to-" + toId + ".from-" + fromId);
         if (!link[0][0])
-          links.push({source: fromId, target: toId});
+          links.push({source: fromId, target: toId, cookie: options.cookie, noncookie: options.noncookie});
+        /* When building up the graph, mark the nodes and links as cookie-based, non-cookie-based,
+         * or both. (If a link is cookie-based, the nodes at both ends are cookie-based, etc.)
+         * This data will be used to attach appropriate classes to the SVG nodes. */
+        if (options.cookie) {
+          nodes[toId].cookie = true;
+          nodes[fromId].cookie = true;
+        }
+        if (options.noncookie) {
+          nodes[toId].noncookie = true;
+          nodes[fromId].noncookie = true;
+        }
       }
 
       var drawing = draw({nodes: nodes, links: links});
@@ -404,9 +445,13 @@ var GraphRunner = (function(jQuery, d3) {
           this.data = json;
           drawing.force.stop();
 
-          for (var domain in json)
-            for (var referrer in json[domain].referrers)
-              addLink({from: referrer, to: domain});
+          for (var domain in json) {
+            for (var referrer in json[domain].referrers) {
+              var usedCookie = json[domain].referrers[referrer].cookie;
+              var usedNonCookie = json[domain].referrers[referrer].noncookie;
+              addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie});
+            }
+          }
           for (var n = 0; n < nodes.length; n++) {
             if (json[nodes[n].name]) {
               nodes[n].wasVisited = json[nodes[n].name].visited;

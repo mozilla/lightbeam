@@ -76,7 +76,7 @@ a {
   pointer-events: none;
 }
 
-#sidebar a, .info a, span.next {
+#sidebar a, .info a, span.next, input {
   pointer-events: auto;
 }
 

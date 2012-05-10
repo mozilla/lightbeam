@@ -14,6 +14,7 @@
   <div id="sidebar-content">
   <a id="about-tab-link">about</a> |
   <a id="site-tab-link">site info</a> |
+  <a id="filters-link">filters</a> |
   <a id="credits-tab-link">credits</a>
   <hr/>
   <div class="live-data" style="display: none;">
@@ -33,7 +34,14 @@
   </div> <!-- end of live-data -->
   
   <div id="domain-infos">Mouse over any circle to see how that site uses third-party cookies.</div> <!-- Templates are copied into here -->
-  
+
+  <div id="filters" style="display: none;">
+    <form>
+    <input type="checkbox" id="filter-cookie" checked="checked"/>Show Cookie-Based Connections<br/>
+    <input type="checkbox" id="filter-noncookie" checked="checked"/>Show Non-Cookie-Based Connections<br/>
+    </form>
+  </div>
+      
   <div id="credits" style="display: none;">
     <ul>
       <li>Idea and original code by: Atul Varma</li>
@@ -82,7 +90,7 @@ function getQueryVariable(variable) {
 }
 
 function switchSidebar(sidebar) {
-  var sidebars = [".live-data", "#domain-infos", "#credits"];
+  var sidebars = [".live-data", "#domain-infos", "#filters", "#credits"];
   for (var i in sidebars) {
     if (sidebar == sidebars[i]) {
       $(sidebars[i]).slideDown();
@@ -214,6 +222,30 @@ $(window).ready(function() {
       $("#credits-tab-link").click(function() {
         switchSidebar("#credits");
       });
+      $("#filters-link").click(function() {
+        switchSidebar("#filters");
+      });
+
+      var setFilters = function() {
+        var showCookie = $("#filter-cookie").prop("checked");
+        var showNonCookie = $("#filter-noncookie").prop("checked");
+        console.log("Show cookie? " + showCookie + " show noncookie? " + showNonCookie);
+
+        $("g.node").hide();
+        $("line").hide();
+        if ($("#filter-cookie").prop("checked")) {
+          $("g.cookie").show();
+          $("line.cookie").show();
+        }
+        if ($("#filter-noncookie").prop("checked")) {
+          $("g.noncookie").show();
+          $("line.noncookie").show();
+        }
+      };
+      /* Attach onchange listener to #filter-cookie and #filter-noncookie, select all lines and nodes with
+       * appropriate classes, show or hide them.*/
+      $("#filter-cookie").change(setFilters);
+      $("#filter-noncookie").change(setFilters);
     }
   });
 });
