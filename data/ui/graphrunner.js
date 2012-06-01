@@ -1,14 +1,4 @@
 var GraphRunner = (function(jQuery, d3) {
-  /* Keep track of whether we're dragging or not, so we can
-   * ignore mousover/mouseout events when a drag is in progress:*/
-  var isNodeBeingDragged = false;
-  window.addEventListener("mousedown", function(e) {
-    if ($(e.target).closest("g.node").length)
-      isNodeBeingDragged = true;
-  }, true);
-  window.addEventListener("mouseup", function(e) {
-    isNodeBeingDragged = false;
-  }, true);
 
   function Runner(options) {
     var trackers = options.trackers;
@@ -204,6 +194,8 @@ var GraphRunner = (function(jQuery, d3) {
         var fontSize = Math.floor(4 * r / 5);
         var pathStartX = d.x + r;
         var pathStartY = d.y;
+        /* rough heuristic for calculating size of label based on font size and character count
+         * (wish svg had the equivalent to cavnas's measureText!) */
         var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
         var reverseWidth = 0 - labelWidth - r;
         var rightRadius = Math.floor(r/2);
@@ -249,8 +241,6 @@ var GraphRunner = (function(jQuery, d3) {
             return "translate(" + d.x + "," + d.y + ")";
           })
           .on("mouseover", function(d) {
-            if (isNodeBeingDragged)
-              return;
             /* Hide all lines except the ones going in or out of this node;
              * make those ones bold and show the triangles on the ends;*/
             vis.selectAll("line").classed("hidden", true);
@@ -276,8 +266,7 @@ var GraphRunner = (function(jQuery, d3) {
           })
           .on("click", function(d) {
             switchSidebar("#domain-infos");
-          })
-          .call(force.drag);
+          });
 
 
       // glow if site is visited
