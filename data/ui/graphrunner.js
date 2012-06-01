@@ -48,6 +48,7 @@ var GraphRunner = (function(jQuery, d3) {
     // label goes on the top above the links and nodes
     vis.append("svg:path").attr("id", "domain-label");
     vis.append("svg:text").attr("id", "domain-label-text");
+    vis.append("svg:text").attr("id", "domain-label-block-link");
 
     function setDomainLink(target, d) {
       target.removeClass("tracker").removeClass("site");
@@ -89,14 +90,6 @@ var GraphRunner = (function(jQuery, d3) {
         info.find("h2.domain").prepend(img);
         img.error(function() { img.remove(); });
         $("#domain-infos").append(info);
-
-        // Set up callback functions for the block-this-site link and the whitelist link
-        info.find(".block-link").click(function() {
-          CollusionAddon.blockDomain(d.name);
-        });
-        info.find(".whitelist-link").click(function() {
-          CollusionAddon.whitelistDomain(d.name);
-        });
       }
 
       // List referrers, if any (sites that set cookies read by this site)
@@ -142,6 +135,114 @@ var GraphRunner = (function(jQuery, d3) {
       return 12 + linkCount;
     }
 
+    function getCircleClassForSite(d) {
+      var classString;
+      if (d.wasVisited) {
+        classString = "visited";
+      } else {
+        classString = "site";
+      }
+      /* Return "tracker" for a red circle;
+       * Temporarily disabling this feature
+       * until we get a more up-to-date data source for it.*/
+
+      return classString;
+    }
+
+
+    function popupLabel() {
+
+      var menuIsShowing = false;
+
+      function makePath(x, y, r, labelWidth, showBlockingOptions) {
+        var rightRadius = Math.floor(r/2);
+        var reverseWidth = showBlockingOptions? (rightRadius - labelWidth - r) : (0 - labelWidth - r);
+        var extraHeight = showBlockingOptions ? 2*r : 0;
+
+        var path = "M " + x + " " + y  // starting point
+          + " l " + labelWidth + " 0"
+          + " a " + rightRadius + " " + rightRadius + " 0 0 1 " + rightRadius + " " + rightRadius
+          + " l 0 " + extraHeight
+          + " a " + rightRadius + " " + rightRadius + " 0 0 1 -" + rightRadius + " " + rightRadius
+          + " l " + reverseWidth + " 0";
+        if (showBlockingOptions) {
+          path = path +" a " + rightRadius + " " + rightRadius + " 0 0 1 -" + rightRadius + " -" + rightRadius
+            + " l 0 -" + (extraHeight - rightRadius);
+        }
+        path = path + " a " + r + " " + r + " 0 0 0 " + r + " " + (-2 * rightRadius);
+        return path;
+      }
+
+      function showPopupLabel(d, showBlockingOptions) {
+        /* Show popup label to display domain name next to the circle.
+         * The popup label is defined as a path so that it can be shaped not to overlap its circle
+         * Cutout circle on left end, rounded right end, length dependent on length of text.
+         * Get ready for some crazy math and string composition! */
+        // arguments for a are: (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
+        var r = nodeRadius(d);
+        var fontSize = Math.floor(4 * r / 5);
+        var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
+        /* rough heuristic for calculating size of label based on font size and character count
+         * (wish svg had the equivalent to cavnas's measureText!) */
+        d3.select("#domain-label").classed("hidden", false)
+          .attr("d", makePath(d.x + r, d.y, r, labelWidth, showBlockingOptions))
+        .attr("class", "round-border " + getCircleClassForSite(d));
+        d3.select("#domain-label-text").classed("hidden", false)
+          .attr("x", d.x + r + 4)
+          .attr("y", d.y + Math.floor(r/2) + fontSize/4)
+          .style("font-size", fontSize + "px")
+          .text(d.name);
+        if (showBlockingOptions) {
+          // Show the "BLOCK" link, and set up callback for when it is clicked!
+          d3.select("#domain-label-block-link").classed("hidden", false)
+            .attr("x", d.x + r + 4)
+            .attr("y", d.y + Math.floor(r/2) + (fontSize * 1.5))
+            .style("font-size", fontSize + "px")
+            .text("Block")
+            .on("click", function() {
+                CollusionAddon.blockDomain(d.name);
+                menuIsShowing = false;
+             });
+        }
+      }
+
+      return {show: function(d) {
+                if (!menuIsShowing) {
+                  showPopupLabel(d, false);
+                }
+              },
+              hide: function() {
+                if (!menuIsShowing) {
+                  vis.selectAll("line").classed("hidden", false).attr("marker-end", null).classed("bold", false);
+                  d3.selectAll("g.node").classed("unrelated-domain", false);
+                  d3.select("#domain-label").classed("hidden", true);
+                  d3.select("#domain-label-text").classed("hidden", true);
+                  d3.select("#domain-label-block-link").classed("hidden", true);
+                }
+              },
+              showMenu: function(d) {
+                menuIsShowing = true;
+                showPopupLabel(d, true);
+              },
+              clear: function() {
+                menuIsShowing = false;
+                this.hide();
+              },
+              menuIsShowing: function() {
+                return menuIsShowing;
+              }
+             };
+    }
+
+    var thePopupLabel = popupLabel();
+
+    // Clear popup label menu if you click outside of any nodes
+    window.addEventListener("mouseup", function(e) {
+                              console.log("Window got mouseup");
+                              // TODO clicks on nodes/menu are bubbling up to window -- block them!
+                              thePopupLabel.clear();
+    }, true);
+
     function createNodes(nodes, force) {
 
       /* Represent each site as a node consisting of an svg group <g>
@@ -152,20 +253,6 @@ var GraphRunner = (function(jQuery, d3) {
       function selectArcs(d) {
         return vis.selectAll("line.to-" + d.index +
                              ",line.from-" + d.index);
-      }
-
-      function getCircleClassForSite(d) {
-        var classString;
-        if (d.wasVisited) {
-          classString = "visited";
-        } else {
-          classString = "site";
-        }
-        /* Return "tracker" for a red circle;
-         * Temporarily disabling this feature
-         * until we get a more up-to-date data source for it.*/
-
-        return classString;
       }
 
       function getGroupClassForSite(d) {
@@ -181,37 +268,6 @@ var GraphRunner = (function(jQuery, d3) {
           classString += " noncookie";
         }
         return classString;
-      }
-
-      function showPopupLabel(d) {
-        /* Show popup label to display domain name next to the circle.
-         * The popup label is defined as a path so that it can be shaped not to overlap its circle
-         * Cutout circle on left end, rounded right end, length dependent on length of text.
-         * Get ready for some crazy math and string composition! */
-
-        // arguments for a are: (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
-        var r = nodeRadius(d);
-        var fontSize = Math.floor(4 * r / 5);
-        var pathStartX = d.x + r;
-        var pathStartY = d.y;
-        /* rough heuristic for calculating size of label based on font size and character count
-         * (wish svg had the equivalent to cavnas's measureText!) */
-        var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
-        var reverseWidth = 0 - labelWidth - r;
-        var rightRadius = Math.floor(r/2);
-        var path = "M " + pathStartX + " " + pathStartY  // starting point
-          + " l " + labelWidth + " 0"
-          + " a " + rightRadius + " " + rightRadius + " 0 0 1 0 " + 2*rightRadius
-          + " l " + reverseWidth + " 0"
-          + " a " + r + " " + r + " 0 0 0 " + r + " " + (-2 * rightRadius);
-        d3.select("#domain-label").classed("hidden", false)
-        .attr("d", path)
-        .attr("class", "round-border " + getCircleClassForSite(d));
-        d3.select("#domain-label-text").classed("hidden", false)
-          .attr("x", pathStartX + 4)
-          .attr("y", pathStartY + Math.floor(r/2) + fontSize/4)
-          .style("font-size", fontSize + "px")
-          .text(d.name);
       }
 
       function getConnectedDomains(d) {
@@ -237,30 +293,27 @@ var GraphRunner = (function(jQuery, d3) {
             return "translate(" + d.x + "," + d.y + ")";
           })
           .on("mouseover", function(d) {
-            /* Hide all lines except the ones going in or out of this node;
-             * make those ones bold and show the triangles on the ends;*/
-            vis.selectAll("line").classed("hidden", true);
-            selectArcs(d).attr("marker-end", "url(#Triangle)")
-                  .classed("hidden", false).classed("bold", true);
-            showDomainInfo(d);
-            showPopupLabel(d);
-
             // Make directly-connected nodes opaque, the rest translucent:
             var subGraph = getConnectedDomains(d);
-            d3.selectAll("g.node").classed("unrelated-domain", function(d) {
-                return (subGraph.indexOf(d.name) == -1);
-            });
+            thePopupLabel.show(d, false);
+            if (!thePopupLabel.menuIsShowing()) {
+              /* Hide all lines except the ones going in or out of this node;
+               * make those ones bold and show the triangles on the ends;*/
+              vis.selectAll("line").classed("hidden", true);
+              selectArcs(d).attr("marker-end", "url(#Triangle)")
+                .classed("hidden", false).classed("bold", true);
+              showDomainInfo(d);
+              d3.selectAll("g.node").classed("unrelated-domain", function(d) {
+                                               return (subGraph.indexOf(d.name) == -1);
+                                               });
+
+            }
           })
           .on("mouseout", function(d) {
-            // TODO set the endpoints of lines back to the center I guess? or leave it, no biggie, see
-                // what happens.
-            vis.selectAll("line").classed("hidden", false);
-            selectArcs(d).attr("marker-end", null).classed("bold", false);
-            d3.selectAll("g.node").classed("unrelated-domain", false);
-            d3.select("#domain-label").classed("hidden", true);
-            d3.select("#domain-label-text").classed("hidden", true);
+             thePopupLabel.hide();
           })
           .on("click", function(d) {
+            thePopupLabel.showMenu(d);
             switchSidebar("#domain-infos");
           });
 

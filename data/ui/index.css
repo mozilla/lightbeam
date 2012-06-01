@@ -188,4 +188,6 @@ html.deployment-production #deployment-info {
   display: none;
 }
 
-
+#domain-label-block-link {
+  stroke: blue;
+}
