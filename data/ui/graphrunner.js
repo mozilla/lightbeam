@@ -229,10 +229,6 @@ var GraphRunner = (function(jQuery, d3) {
       var node = vis.select("g.nodes").selectAll("g.node")
           .data(nodes);
 
-      node.transition()
-          .duration(1000)
-          .attr("r", nodeRadius);
-
       // For each node, create svg group <g> to hold circle, image, and title
       var gs = node.enter().append("svg:g")
           .attr("class", function(d) {return "node" + getGroupClassForSite(d);})
@@ -352,14 +348,12 @@ var GraphRunner = (function(jQuery, d3) {
 
       force.on("tick", function() {
         vis.selectAll("line.link").each(function(d) {
-          // Line points from center of source circle to edge of target circle. Do some trigonometry
-          // based on radius of target circle to figure out ending coordinates.
+          /* Line points from center of source circle to edge of target circle. Do some trigonometry
+           * based on radius of target circle to figure out ending coordinates. */
           var line = d3.select(this);
-            var len = Math.sqrt( (d.source.x - d.target.x) * (d.source.x - d.target.x) +
-                                 (d.source.y - d.target.y) * (d.source.y - d.target.y) );
-              // TODO this is no good - reimplemenation of radius function, which is out of scope here
-            var r = nodeRadius(d.target);
-
+          var len = Math.sqrt( (d.source.x - d.target.x) * (d.source.x - d.target.x) +
+                               (d.source.y - d.target.y) * (d.source.y - d.target.y) );
+          var r = nodeRadius(d.target);
           line.attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
             .attr("x2", function(d) { return d.target.x + Math.floor((d.source.x - d.target.x) * r / len); })
