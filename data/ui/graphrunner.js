@@ -27,7 +27,7 @@ var GraphRunner = (function(jQuery, d3) {
     defs.append("svg:marker")
         .attr("id", "Triangle")
         .attr("viewBox", "0 0 10 10")
-        .attr("refX", 30)
+        .attr("refX", 10)
         .attr("refY", 5)
         .attr("markerUnits", "strokeWidth")
         .attr("markerWidth", 4*2)
@@ -147,23 +147,17 @@ var GraphRunner = (function(jQuery, d3) {
       info.show();
     }
 
+    function nodeRadius(d) {
+      var linkCount = selectReferringLinks(d)[0].length;
+      return 12 + linkCount;
+    }
+
     function createNodes(nodes, force) {
 
       /* Represent each site as a node consisting of an svg group <g>
        * containing a <circle> and an <image>, where the image shows
        * the favicon; circle size shows number of links, color shows
        * type of site. */
-
-      function getReferringLinkCount(d) {
-        return selectReferringLinks(d)[0].length;
-      }
-
-      function radius(d) {
-        var added = getReferringLinkCount(d) / 3;
-        if (added > 7)
-          added = 7;
-        return 4 + added;
-      }
 
       function selectArcs(d) {
         return vis.selectAll("line.to-" + d.index +
@@ -204,21 +198,28 @@ var GraphRunner = (function(jQuery, d3) {
          * The popup label is defined as a path so that it can be shaped not to overlap its circle
          * Cutout circle on left end, rounded right end, length dependent on length of text.
          * Get ready for some crazy math and string composition! */
-        var r = 12; // radius of circles
+
+        // arguments for a are: (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
+        var r = nodeRadius(d);
+        var fontSize = Math.floor(4 * r / 5);
         var pathStartX = d.x + r;
-        var pathStartY = d.y - 4;
-        var labelWidth = d.name.length * 7;
+        var pathStartY = d.y;
+        var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
         var reverseWidth = 0 - labelWidth - r;
+        var rightRadius = Math.floor(r/2);
+        var path = "M " + pathStartX + " " + pathStartY  // starting point
+          + " l " + labelWidth + " 0"
+          + " a " + rightRadius + " " + rightRadius + " 0 0 1 0 " + 2*rightRadius
+          + " l " + reverseWidth + " 0"
+          + " a " + r + " " + r + " 0 0 0 " + r + " " + (-2 * rightRadius);
         d3.select("#domain-label").classed("hidden", false)
-        .attr("d", "M " + pathStartX + " " + pathStartY + " l " + labelWidth + " 0 "
-              + "a 8 8 0 0 1 0 16 l " + reverseWidth + " 0 a 12 12 0 0 0 12 -16")
+        .attr("d", path)
         .attr("class", "round-border " + getCircleClassForSite(d));
         d3.select("#domain-label-text").classed("hidden", false)
-          .attr("x", d.x + 16)
-          .attr("y", d.y + 7)
+          .attr("x", pathStartX + 4)
+          .attr("y", pathStartY + Math.floor(r/2) + fontSize/4)
+          .style("font-size", fontSize + "px")
           .text(d.name);
-        /* TODO label width and text offset determined by trial-and-error
-         * and will not necessarily be correct with different font sizes.*/
       }
 
       function getConnectedDomains(d) {
@@ -238,7 +239,7 @@ var GraphRunner = (function(jQuery, d3) {
 
       node.transition()
           .duration(1000)
-          .attr("r", radius);
+          .attr("r", nodeRadius);
 
       // For each node, create svg group <g> to hold circle, image, and title
       var gs = node.enter().append("svg:g")
@@ -251,7 +252,7 @@ var GraphRunner = (function(jQuery, d3) {
             if (isNodeBeingDragged)
               return;
             /* Hide all lines except the ones going in or out of this node;
-             * make those ones bold and show the triangles on the ends */
+             * make those ones bold and show the triangles on the ends;*/
             vis.selectAll("line").classed("hidden", true);
             selectArcs(d).attr("marker-end", "url(#Triangle)")
                   .classed("hidden", false).classed("bold", true);
@@ -265,6 +266,8 @@ var GraphRunner = (function(jQuery, d3) {
             });
           })
           .on("mouseout", function(d) {
+            // TODO set the endpoints of lines back to the center I guess? or leave it, no biggie, see
+                // what happens.
             vis.selectAll("line").classed("hidden", false);
             selectArcs(d).attr("marker-end", null).classed("bold", false);
             d3.selectAll("g.node").classed("unrelated-domain", false);
@@ -291,7 +294,7 @@ var GraphRunner = (function(jQuery, d3) {
       gs.append("svg:circle")
           .attr("cx", "0")
           .attr("cy", "0")
-          .attr("r", 12) // was radius
+          .attr("r", nodeRadius)
           .attr("class", function(d) {
                 return "node round-border " + getCircleClassForSite(d);
                 });
@@ -359,10 +362,20 @@ var GraphRunner = (function(jQuery, d3) {
           .style("opacity", 1);
 
       force.on("tick", function() {
-         vis.selectAll("line.link").attr("x1", function(d) { return d.source.x; })
+        vis.selectAll("line.link").each(function(d) {
+          // Line points from center of source circle to edge of target circle. Do some trigonometry
+          // based on radius of target circle to figure out ending coordinates.
+          var line = d3.select(this);
+            var len = Math.sqrt( (d.source.x - d.target.x) * (d.source.x - d.target.x) +
+                                 (d.source.y - d.target.y) * (d.source.y - d.target.y) );
+              // TODO this is no good - reimplemenation of radius function, which is out of scope here
+            var r = nodeRadius(d.target);
+
+          line.attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
+            .attr("x2", function(d) { return d.target.x + Math.floor((d.source.x - d.target.x) * r / len); })
+            .attr("y2", function(d) { return d.target.y + Math.floor((d.source.y - d.target.y) * r / len); });
+        });
 
          vis.selectAll("g.node").attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
