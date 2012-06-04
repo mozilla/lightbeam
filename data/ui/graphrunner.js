@@ -13,6 +13,7 @@ var GraphRunner = (function(jQuery, d3) {
         .attr("width", SVG_WIDTH)
         .attr("height", SVG_HEIGHT);
 
+    // This triangle marker can be added to the end of a line to make an arrow.
     var defs = vis.append("svg:defs");
     defs.append("svg:marker")
         .attr("id", "Triangle")
@@ -26,6 +27,7 @@ var GraphRunner = (function(jQuery, d3) {
         .append("svg:path")
           .attr("d", "M 0 0 L 10 5 L 0 10 z");
 
+    // This defines the "glow" gradient that appears around visited sites.
     var gradient = defs.append("svg:radialGradient")
       .attr("id", "glow-gradient")
       .attr("cx", "50%")
@@ -45,7 +47,10 @@ var GraphRunner = (function(jQuery, d3) {
     vis.append("svg:g").attr("class", "links");
     vis.append("svg:g").attr("class", "nodes");
 
-    // label goes on the top above the links and nodes
+    /* Labels need to go on the top above the links and nodes, so we add them last.
+     * SVG does not support z-indexing so it's the order of the child elements in the
+     * document that determines how they stack visually.
+     */
     vis.append("svg:path").attr("id", "domain-label");
     vis.append("svg:text").attr("id", "domain-label-text");
     vis.append("svg:text").attr("id", "domain-label-block-link");
@@ -155,10 +160,14 @@ var GraphRunner = (function(jQuery, d3) {
       var menuIsShowing = false;
 
       function makePath(x, y, r, labelWidth, showBlockingOptions) {
+        /* The popup label is defined as a path so that it can be shaped not to overlap its circle
+         * Cutout circle on left end, rounded right end, length dependent on length of text.
+         * Get ready for some crazy math and string composition! */
         var rightRadius = Math.floor(r/2);
         var reverseWidth = showBlockingOptions? (rightRadius - labelWidth - r) : (0 - labelWidth - r);
         var extraHeight = showBlockingOptions ? 2*r : 0;
 
+        // arguments for a are: (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
         var path = "M " + x + " " + y  // starting point
           + " l " + labelWidth + " 0"
           + " a " + rightRadius + " " + rightRadius + " 0 0 1 " + rightRadius + " " + rightRadius
@@ -174,11 +183,9 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function showPopupLabel(d, showBlockingOptions) {
-        /* Show popup label to display domain name next to the circle.
-         * The popup label is defined as a path so that it can be shaped not to overlap its circle
-         * Cutout circle on left end, rounded right end, length dependent on length of text.
-         * Get ready for some crazy math and string composition! */
-        // arguments for a are: (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
+        /* Show popup label to display domain name next to the circle. If
+         * showBlockingOptions is true, expand the label into a menu and show a
+         * "Block" links.*/
         var r = nodeRadius(d);
         var fontSize = Math.floor(4 * r / 5);
         var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
@@ -308,7 +315,6 @@ var GraphRunner = (function(jQuery, d3) {
               d3.selectAll("g.node").classed("unrelated-domain", function(d) {
                                                return (subGraph.indexOf(d.name) == -1);
                                                });
-
             }
           })
           .on("mouseout", function(d) {
