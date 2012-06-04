@@ -282,8 +282,10 @@ var GraphRunner = (function(jQuery, d3) {
         return connectedDomains;
       }
 
+      // Use d3 to bind node array to svg - each node becomes an svg:g with class node.
+      // Use d.name as the "primary key" -- a node with the same name is considered the same node.
       var node = vis.select("g.nodes").selectAll("g.node")
-          .data(nodes);
+        .data(nodes, function(d) { return d.name;});
 
       // For each node, create svg group <g> to hold circle, image, and title
       var gs = node.enter().append("svg:g")
@@ -350,7 +352,6 @@ var GraphRunner = (function(jQuery, d3) {
 
       // Remove nodes if domain is removed from the data (e.g. user blocked it)
       node.exit().remove();
-      // TODO: this doesn't seem to work at all. Debug more.
 
       return node;
     }
@@ -368,15 +369,18 @@ var GraphRunner = (function(jQuery, d3) {
         }
         return classString;
       };
+      // bind links to d3 lines - use source name + target name as 'primary key':
       var link = vis.select("g.links").selectAll("line.link")
-          .data(links)
-        .enter().append("svg:line")
+        .data(links, function(d) { return d.sourceDomain + "-" + d.targetDomain; });
+      link.enter().append("svg:line")
           .attr("class", getClassForLink)
           .style("stroke-width", 1)
           .attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
           .attr("x2", function(d) { return d.target.x; })
           .attr("y2", function(d) { return d.target.y; });
+
+      link.exit().remove();
 
       return link;
     }
@@ -448,31 +452,59 @@ var GraphRunner = (function(jQuery, d3) {
     function CollusionGraph(trackers) {
       var nodes = [];
       var links = [];
-      var domainIds = {};
 
       function getNodeId(domain) {
-        if (!(domain in domainIds)) {
-          domainIds[domain] = nodes.length;
-          var trackerInfo = null;
-          for (var i = 0; i < trackers.length; i++)
-            if (trackers[i].domain == domain) {
-              trackerInfo = trackers[i];
-              break;
-            }
-          nodes.push({
-            name: domain,
-            trackerInfo: trackerInfo
-          });
+        // return index (in nodes array) of matching domain. Will create an entry if it doesn't
+        // exist yet.
+        for (var n = 0; n < nodes.length; n++) {
+          if (nodes[n].name == domain) {
+            return n;
+          }
         }
-        return domainIds[domain];
+        // Not found - no entry yet for this domain - create one:
+
+        var trackerInfo = null;
+        for (var i = 0; i < trackers.length; i++)
+          if (trackers[i].domain == domain) {
+            trackerInfo = trackers[i];
+            break;
+          }
+        console.log("Creating new node " + domain);
+        nodes.push({
+          name: domain,
+          trackerInfo: trackerInfo
+        });
+
+        return (nodes.length - 1); // the index of the
+      }
+
+      // For when we just want the id of an existing node, without side-effects. TODO this
+      // is awkward, refactor and get rid of it.
+      function getNodeIdDontCreate(domain) {
+        for (var n = 0; n < nodes.length; n++) {
+          if (nodes[n].name == domain) {
+            return n;
+          }
+        }
+        return null;
       }
 
       function addLink(options) {
+        // TODO probably refactor this function -- it's doing several different things awkwardly.
         var fromId = getNodeId(options.from);
         var toId = getNodeId(options.to);
-        var link = vis.select("line.to-" + toId + ".from-" + fromId);
+
+        /* See if link exists already (will be an svg line classed with .to-x and .from-y,
+         * where x and y are indices of nodes: */
+        var link = vis.select("line.to-" + toId+ ".from-" + fromId);
+
         if (!link[0][0])
-          links.push({source: fromId, target: toId, cookie: options.cookie, noncookie: options.noncookie});
+          /* If it doesn't exist, create a link. The source and target properties are treated
+           * specially by d3's force-dircted graph: they must match the indices of the link's
+           * source node and target node. */
+          links.push({source: fromId, target: toId,
+                      sourceDomain: options.from, targetDomain: options.to,
+                      cookie: options.cookie, noncookie: options.noncookie});
         /* When building up the graph, mark the nodes and links as cookie-based, non-cookie-based,
          * or both. (If a link is cookie-based, the nodes at both ends are cookie-based, etc.)
          * This data will be used to attach appropriate classes to the SVG nodes. */
@@ -491,9 +523,16 @@ var GraphRunner = (function(jQuery, d3) {
       return {
         data: null,
         update: function(json) {
+          /* This is the function that will be called whenever main.js wants to inform graphrunner
+           * about a change to the data - new links added, or nodes removed, etc. We get passed
+           * json of the full data structure. We'll use it to update a nodes array and a links array
+           * and bind both to d3's force-directed graph.*/
           this.data = json;
           drawing.force.stop();
+          var nodeToRemove = null; // I'm assuming at most one node will be removed per update.
 
+          // Json contains list of domains, each with referrers. Each pair constitutes a link.
+          // For each pair, add a link if it does not already exist.
           for (var domain in json) {
             for (var referrer in json[domain].referrers) {
               var usedCookie = json[domain].referrers[referrer].cookie;
@@ -501,11 +540,13 @@ var GraphRunner = (function(jQuery, d3) {
               addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie});
             }
           }
+          // addLink() has the side-effect of creating any nodes that didn't already exist
           for (var n = 0; n < nodes.length; n++) {
             if (json[nodes[n].name]) {
               nodes[n].wasVisited = json[nodes[n].name].visited;
             } else {
-              nodes[n].wasVisited = false;
+              // This node no longer has an entry
+              nodeToRemove = n;
             }
 
             /* For nodes that don't already have a position, initialize them near the center.
@@ -518,6 +559,30 @@ var GraphRunner = (function(jQuery, d3) {
             }
           }
 
+          if (nodeToRemove != null) {
+            // A node must be removed! Start by splicing it out of the list:
+            var badName = nodes[nodeToRemove].name;
+            nodes.splice(nodeToRemove, 1);
+
+            // Now we have to remove the links that point into or out of that node:
+            var newLinks = [];
+            for (var l = 0; l < links.length; l++) {
+              if (links[l].sourceDomain == badName || links[l].targetDomain == badName) {
+                continue; // leave it out
+              } else {
+                // But that's not all --
+                // removing it might have caused the indices of other nodes to change, so all other links
+                // have to be updated as well.
+                links[l].source = getNodeIdDontCreate(links[l].sourceDomain);
+                links[l].target = getNodeIdDontCreate(links[l].targetDomain);
+                newLinks.push(links[l]);
+              }
+            }
+            links = newLinks;
+          }
+
+          // Bind the links and nodes arrays to force-directed graph, which will create and animate all
+          // the SVG elements.
           drawing.force.nodes(nodes);
           drawing.force.links(links);
           drawing.force.start();
