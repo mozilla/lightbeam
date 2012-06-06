@@ -28,6 +28,7 @@
         <li id="export-graph">Export Graph</li>
         <li id="share-graph">Share Graph (with Mozilla, anonymously)</li>
         <li id="hide-ui">Hide UI</li>
+        <li><a id="zoom-in-link">Zoom In</a> | <a id="zoom-out-link">Zoom Out</a></li>
       </ul>
     </div> <!-- end of settingsmenu -->
     <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
@@ -213,6 +214,12 @@ $(window).ready(function() {
         addon.saveGraph(to_save);
         addon.resetGraph();
         window.location.reload();
+      });
+      $("#zoom-in-link").click(function() {
+        runner.zoomIn();
+      });
+      $("#zoom-out-link").click(function() {
+        runner.zoomOut();
       });
       $("#about-tab-link").click(function() {
         switchSidebar(".live-data");

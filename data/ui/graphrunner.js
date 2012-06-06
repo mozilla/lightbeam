@@ -13,6 +13,11 @@ var GraphRunner = (function(jQuery, d3) {
         .attr("width", SVG_WIDTH)
         .attr("height", SVG_HEIGHT);
 
+    // Create a group inside the SVG element to apply scaling transforms
+    // to enable zooming in and out
+    var scaleGroup = vis.append("svg:g")
+      .attr("id", "scale-group");
+
     // This triangle marker can be added to the end of a line to make an arrow.
     var defs = vis.append("svg:defs");
     defs.append("svg:marker")
@@ -44,16 +49,16 @@ var GraphRunner = (function(jQuery, d3) {
       .attr("offset", "100%")
       .attr("style", "stop-color:rgb(0,0,0);stop-opacity:0");
 
-    vis.append("svg:g").attr("class", "links");
-    vis.append("svg:g").attr("class", "nodes");
+    scaleGroup.append("svg:g").attr("class", "links");
+    scaleGroup.append("svg:g").attr("class", "nodes");
 
     /* Labels need to go on the top above the links and nodes, so we add them last.
      * SVG does not support z-indexing so it's the order of the child elements in the
      * document that determines how they stack visually.
      */
-    vis.append("svg:path").attr("id", "domain-label");
-    vis.append("svg:text").attr("id", "domain-label-text");
-    vis.append("svg:text").attr("id", "domain-label-block-link");
+    scaleGroup.append("svg:path").attr("id", "domain-label");
+    scaleGroup.append("svg:text").attr("id", "domain-label-text");
+    scaleGroup.append("svg:text").attr("id", "domain-label-block-link");
 
     function setDomainLink(target, d) {
       target.removeClass("tracker").removeClass("site");
@@ -621,11 +626,26 @@ var GraphRunner = (function(jQuery, d3) {
 
     var graph = CollusionGraph(trackers);
 
+    var scale = 1.0;
+    function rescaleSvg() {
+      var transX = (1 - scale) * (SVG_WIDTH/ 2);
+      var transY = (1 - scale) * (SVG_HEIGHT/ 2);
+      $("#scale-group").attr("transform", "translate(" + transX + "," + transY +") scale(" + scale + "," + scale +")");
+    }
+
     var self = {
       graph: graph,
       width: SVG_WIDTH,
       height: SVG_HEIGHT,
-      updateGraph: makeBufferedGraphUpdate(graph)
+      updateGraph: makeBufferedGraphUpdate(graph),
+      zoomIn:function() {
+        scale += 0.2;
+        rescaleSvg();
+      },
+      zoomOut: function() {
+        scale -= 0.2;
+        rescaleSvg();
+      }
     };
 
     return self;
