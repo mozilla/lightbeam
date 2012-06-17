@@ -248,12 +248,36 @@ var GraphRunner = (function(jQuery, d3) {
 
     var thePopupLabel = popupLabel();
 
+    var draggingBackground = false; // TODO Too many globals - refactor into some kind of
+      // ui controller
+    var dragStartX = null;
+    var dragStartY = null;
+    var transX = 0;
+    var transY = 0;
     // Clear popup label menu if you click outside of any nodes
     window.addEventListener("mouseup", function(e) {
+                              if (draggingBackground) {
+                                draggingBackground = false;
+                                transX += (e.pageX - dragStartX);
+                                transY += (e.pageY - dragStartY);
+                                rescaleSvg();
+                              }
                               console.log("Window got mouseup");
                               // TODO clicks on nodes/menu are bubbling up to window -- block them!
                               thePopupLabel.clear();
     }, true);
+    // Add drag handler on the background for panning:
+    window.addEventListener("mousedown", function(e) {
+                              draggingBackground = true;
+                              dragStartX = e.pageX;
+                              dragStartY = e.pageY;
+                            }, true);
+    window.addEventListener("mousemove", function(e) {
+                              if (draggingBackground) {
+                                console.log("Dragged to " + e.pageX + ", " + e.pageY);
+                              }
+                            }, true);
+
 
     function createNodes(nodes, force) {
 
@@ -628,8 +652,8 @@ var GraphRunner = (function(jQuery, d3) {
 
     var scale = 1.0;
     function rescaleSvg() {
-      var transX = (1 - scale) * (SVG_WIDTH/ 2);
-      var transY = (1 - scale) * (SVG_HEIGHT/ 2);
+      var moreTransX = transX + (1 - scale) * (SVG_WIDTH/ 2);
+      var moreTransY = transY + (1 - scale) * (SVG_HEIGHT/ 2);
       $("#scale-group").attr("transform", "translate(" + transX + "," + transY +") scale(" + scale + "," + scale +")");
     }
 
@@ -643,7 +667,9 @@ var GraphRunner = (function(jQuery, d3) {
         rescaleSvg();
       },
       zoomOut: function() {
-        scale -= 0.2;
+        if (scale > 0.2) {
+          scale -= 0.2; // Put a minimum on it - otherwise you can zoom to nothing
+        }
         rescaleSvg();
       }
     };
