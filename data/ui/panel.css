@@ -1,0 +1,9 @@
+#panel-message {
+    color: white;
+    font-size: large;
+}
+
+body {
+    margin: 15px 15px;
+    overflow: hidden;
+}
