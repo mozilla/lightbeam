@@ -1,3 +1,9 @@
 fabfile_local.py
 data/deployment.json
 .DS_store
+*.js~
+*.html~
+*.css~
+._*
+collusion.xpi
+exported_graphs
