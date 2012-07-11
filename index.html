@@ -7,7 +7,7 @@
   	
     <title>Collusion</title>
     <meta charset="utf-8">
-
+	<!-- scripts are at the end of the file; this is how it should always be :)) --> 
     <link href="website/branding/css/tabzilla.css" rel="stylesheet">
     <link rel="stylesheet" media="screen,projection,tv" href="website/branding/css/common-min.css" />
     <link rel="stylesheet" media="screen,projection,tv" href="website/branding/css/template.css" />
@@ -42,7 +42,7 @@
 
 	<section id="secondary" class="container">
 		<div class="row">  
-		<div class="span5">
+		<div class="span5"> <!-- This is only left container -->
         	<h2>Take control of your data</h2>
 			<p>We recognize the importance of transparency and our mission is all about empowering users — both with tools and with information. The Ford Foundation and Mozilla have teamed up to develop Collusion into a fully functioning feature for Firefox - that will enable users to not only see who is tracking them across the Web, but also to turn that tracking off when they want to.</p>
 			<h2>Telling the global tracking story</h2>
@@ -51,15 +51,15 @@
 			<p>Through our work with the Ford Foundation, we’ll be building outreach campaigns to help people understand online data tracking — both the benefits and the issues — so they can make their own choices about how they want to be tracked (or choose not to be tracked at all).</p>
 			<h2>Collusion is about choice</h2>
 			<p>Not all tracking is bad. Many services rely on user data to provide relevant content and enhance your online experience. But most tracking happens without user’s consent and without their knowledge. That’s not okay. It should be you who decides when, how and if you want to be tracked. Collusion will be a powerful tool to help you do that.</p>
-      	</div>
+  		</div>  <!-- Finish of LEFT container -->
       	
-      <div class="span5">
-	    <form action="https://donate.mozilla.org/page/s/sign-up-for-mozilla" method="post" class="box" id="updates">
-        <h3>Want to hear more?</h3>
-        <p class="intro">Get Mozilla updates:</p>
+      	<div class="span5"> <!-- This is only the right container -->
+	   		 <form action="https://donate.mozilla.org/page/s/sign-up-for-mozilla" method="post" class="box" id="updates">
+       		 <h3>Want to hear more?</h3>
+       		 <p class="intro">Get Mozilla updates:</p>
 
         <div class="field" id="email-field">
-          <span id="email-wrapper"><input name="email" type="email" id="email" value="" placeholder="Your Email Address" required></span>
+        	 <span id="email-wrapper"><input name="email" type="email" id="email" value="" placeholder="Your Email Address" required></span>
         </div>
 
         <div class="field" id="country-field">
@@ -340,7 +340,7 @@
         </div>
 
         <div class="field" id="submit-field">
-          <button type="submit" class="submit button">Sign me up!</button>
+        	<button type="submit" class="submit button">Sign me up!</button>
         </div>
 
         <input type="hidden" name="submit" value="submit">
@@ -349,11 +349,11 @@
 
       <h2>Supported by</h2>
         <img src="website/branding/img/ford_foundation.gif" alt="Ford Foundation" />
-  </div>
- </div>       
-</div><!-- close #wrapper -->
+  </div> <!--  Finish of RIGHT container -->
+ </div> <!--  Finish of both containers -->      
+</div> <!-- close #wrapper -->
 
-	<footer id="colophon">
+	<footer id="colophon"> <!-- footer -->
 		<div class="row">
 			<div class="span3"> 
         		<a href="http://www.mozilla.org/" class="footer-logo"><img src="website/branding/img/footer-mozilla.png" alt="mozilla"></a>
