@@ -196,6 +196,9 @@ var GraphRunner = (function(jQuery, d3) {
         var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
         /* rough heuristic for calculating size of label based on font size and character count
          * (wish svg had the equivalent to cavnas's measureText!) */
+         /* [dethe]: it does: getComputedTextLength()
+          * http://www.w3.org/TR/SVG/text.html#__svg__SVGTextContentElement__getComputedTextLength
+          */
         d3.select("#domain-label").classed("hidden", false)
           .attr("d", makePath(d.x + r, d.y, r, labelWidth, showBlockingOptions))
         .attr("class", "round-border " + getCircleClassForSite(d));
