@@ -12,16 +12,16 @@ var GraphRunner = (function(jQuery, d3) {
 
   function Runner(options) {
     var trackers = options.trackers;
-    var SVG_WIDTH = options.width;
-    var SVG_HEIGHT = options.height;
+    this.width = options.width;
+    this.height = options.height;
     var hideFavicons = options.hideFavicons;
 
     // Create the SVG element and populate it with some basic definitions
     // LONGTERM TODO: Since this is static markup, move it to index.html?
     var vis = d3.select("#chart")
       .append("svg:svg")
-        .attr("width", SVG_WIDTH)
-        .attr("height", SVG_HEIGHT);
+        .attr("width", this.width)
+        .attr("height", this.height);
 
     var defs = vis.append("svg:defs");
     defs.append("svg:marker")
@@ -306,7 +306,7 @@ var GraphRunner = (function(jQuery, d3) {
           .friction(0)
           .nodes(json.nodes)
           .links(json.links)
-          .size([SVG_WIDTH, SVG_HEIGHT])
+          .size([this.width, this.height])
           .start();
 
       createLinks(json.links);
@@ -408,8 +408,8 @@ var GraphRunner = (function(jQuery, d3) {
              * Note that initializing them all exactly at center causes there to be zero distance,
              * which makes the repulsive force explode!! So add some random factor. */
             if (typeof nodes[n].x == "undefined") {
-              nodes[n].x = nodes[n].px = SVG_WIDTH / 2 + Math.floor( Math.random() * 50 ) ;
-              nodes[n].y = nodes[n].py = SVG_HEIGHT / 2 + Math.floor( Math.random() * 50 );
+              nodes[n].x = nodes[n].px = this.width / 2 + Math.floor( Math.random() * 50 ) ;
+              nodes[n].y = nodes[n].py = this.height / 2 + Math.floor( Math.random() * 50 );
             }
           }
 
@@ -443,8 +443,8 @@ var GraphRunner = (function(jQuery, d3) {
 
     var self = {
       graph: graph,
-      width: SVG_WIDTH,
-      height: SVG_HEIGHT,
+      width: this.width,
+      height: this.height,
       updateGraph: makeBufferedGraphUpdate(graph)
     };
 

@@ -2,16 +2,19 @@ var GraphRunner = (function(jQuery, d3) {
 
   function Runner(options) {
     var trackers = options.trackers;
-    var SVG_WIDTH = options.width;
-    var SVG_HEIGHT = options.height;
+	// FIXME: Make this.width / this.height properties on the runner and add an accessor to allow them to be updated when the window resizes
+	console.log('set original width/height: %s/%s', options.width, options.height);
+    this.width = options.width;
+    this.height = options.height;
+	var runner  = this;
     var hideFavicons = options.hideFavicons;
 
     // Create the SVG element and populate it with some basic definitions
     // LONGTERM TODO: Since this is static markup, move it to index.html?
     var vis = d3.select("#chart")
       .append("svg:svg")
-        .attr("width", SVG_WIDTH)
-        .attr("height", SVG_HEIGHT);
+        .attr("width", options.width)
+        .attr("height", options.height);
 
     // Create a group inside the SVG element to apply scaling transforms
     // to enable zooming in and out
@@ -430,7 +433,7 @@ var GraphRunner = (function(jQuery, d3) {
           .friction(0)
           .nodes(json.nodes)
           .links(json.links)
-          .size([SVG_WIDTH, SVG_HEIGHT])
+          .size([runner.width, runner.height])
           .start();
 
       createLinks(json.links);
@@ -592,8 +595,8 @@ var GraphRunner = (function(jQuery, d3) {
              * Note that initializing them all exactly at center causes there to be zero distance,
              * which makes the repulsive force explode!! So add some random factor. */
             if (typeof nodes[n].x == "undefined") {
-              nodes[n].x = nodes[n].px = SVG_WIDTH / 2 + Math.floor( Math.random() * 50 ) ;
-              nodes[n].y = nodes[n].py = SVG_HEIGHT / 2 + Math.floor( Math.random() * 50 );
+              nodes[n].x = nodes[n].px = runner.width / 2 + Math.floor( Math.random() * 50 ) ;
+              nodes[n].y = nodes[n].py = runner.height / 2 + Math.floor( Math.random() * 50 );
             }
           }
 
@@ -655,15 +658,15 @@ var GraphRunner = (function(jQuery, d3) {
 
     var scale = 1.0;
     function rescaleSvg() {
-      var moreTransX = transX + (1 - scale) * (SVG_WIDTH/ 2);
-      var moreTransY = transY + (1 - scale) * (SVG_HEIGHT/ 2);
+      var moreTransX = transX + (1 - scale) * (runner.width/ 2);
+      var moreTransY = transY + (1 - scale) * (runner.height/ 2);
       $("#scale-group").attr("transform", "translate(" + transX + "," + transY +") scale(" + scale + "," + scale +")");
     }
 
     var self = {
       graph: graph,
-      width: SVG_WIDTH,
-      height: SVG_HEIGHT,
+      width: runner.width,
+      height: runner.height,
       updateGraph: makeBufferedGraphUpdate(graph),
       zoomIn:function() {
         scale += 0.2;
