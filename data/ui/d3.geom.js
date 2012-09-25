@@ -1,3 +1,4 @@
+/* D3 v1.24.0 d3js.org | http://opensource.org/licenses/BSD-3-Clause */
 (function(){d3.geom = {};
 /**
  * Computes a contour for a given input grid function using the <a

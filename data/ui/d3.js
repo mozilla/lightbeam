@@ -1,3 +1,4 @@
+/* D3 v1.24.0 d3js.org | http://opensource.org/licenses/BSD-3-Clause */
 (function(){d3 = {version: "1.24.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;

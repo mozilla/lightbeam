@@ -1,3 +1,4 @@
+/* D3 v1.24.0 d3js.org | http://opensource.org/licenses/BSD-3-Clause */
 (function(){d3.layout = {};
 // Implements hierarchical edge bundling using Holten's algorithm. For each
 // input link, a path is computed that travels through the tree, up the parent
