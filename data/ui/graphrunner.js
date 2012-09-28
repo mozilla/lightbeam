@@ -191,6 +191,7 @@ var GraphRunner = (function(jQuery, d3) {
       }
 
       function showPopupLabel(d, showBlockingOptions) {
+		  showBlockingOptions = false;
         /* Show popup label to display domain name next to the circle. If
          * showBlockingOptions is true, expand the label into a menu and show a
          * "Block" links.*/
