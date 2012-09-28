@@ -25,7 +25,7 @@ In the addons-sdk/packages directory, you will need to install the menuitems pac
 
 Then, check out the Collusion repository and enter it:
 
-    git clone git://github.com/toolness/collusion.git
+    git clone git://github.com/mozilla/collusion.git
     cd collusion
 
 Finally, run:

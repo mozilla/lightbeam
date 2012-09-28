@@ -3,7 +3,7 @@
     "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
     "author": "Atul Varma", 
     "version": "0.19", 
-    "url": "https://github.com/toolness/collusion",
+    "url": "https://github.com/mozilla/collusion",
     "fullName": "Collusion", 
     "id": "jid1-F9UJ2thwoAm5gQ",
     "description": "Visualize who's tracking you in real time. To get started, choose 'Collusion Graph' from the Tools menu.)",

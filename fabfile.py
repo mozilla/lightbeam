@@ -92,7 +92,7 @@ HTML_TEMPLATE = """
   <div class="desc">{config[description]}</div>
 </div>
 <div class="details">
-  <div class="version">Version {config[version]} &mdash; commit <a href="https://github.com/toolness/collusion/commit/{info[cfg][commit]}">{short_commit}</a></div>
+  <div class="version">Version {config[version]} &mdash; commit <a href="https://github.com/mozilla/collusion/commit/{info[cfg][commit]}">{short_commit}</a></div>
   <div class="author">By {config[author]}</div>
   <div class="pubdate">Published on {pubdate}</div>
 </div>
