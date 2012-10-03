@@ -13,7 +13,7 @@
         "name": "collusion.urls",
         "title": "Trusted front-ends (comma-separated list)",
         "type": "string",
-        "value": ""
+        "value": "http://mozillalabs.com/,https://mozillalabs.com/"
       },
       {
         "name": "CollusionSound",
