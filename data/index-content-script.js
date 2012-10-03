@@ -25,10 +25,6 @@ unsafeWindow.getSavedGraph = function getSavedGraph() {
   self.port.emit('getSavedGraph');
 };
 
-unsafeWindow.blockDomain = function blockDomain(domain) {
-  self.port.emit('blockDomain', {"domain": domain});
-};
-
 unsafeWindow.whitelistDomain = function whitelistDomain(domain) {
   self.port.emit('whitelistDomain', {"domain": domain});
 };

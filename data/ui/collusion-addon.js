@@ -8,7 +8,6 @@ var CollusionAddon = (function() {
     resetGraph: window.resetGraph,
     saveGraph: window.saveGraph,
     getSavedGraph: window.getSavedGraph,
-    blockDomain: window.blockDomain,
     whitelistDomain: window.whitelistDomain,
     getPanelDimensions: window.getPanelDimensions,
     shareGraph: window.shareGraph

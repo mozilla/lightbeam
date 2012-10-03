@@ -167,7 +167,7 @@ var GraphRunner = (function(jQuery, d3) {
 
       var menuIsShowing = false;
 
-      function makePath(x, y, r, labelWidth, showBlockingOptions) {
+      function makePath(x, y, r, labelWidth) {
         /* The popup label is defined as a path so that it can be shaped not to overlap its circle
          * Cutout circle on left end, rounded right end, length dependent on length of text.
          * Get ready for some crazy math and string composition! */
@@ -182,10 +182,6 @@ var GraphRunner = (function(jQuery, d3) {
           + " l 0 " + extraHeight
           + " a " + rightRadius + " " + rightRadius + " 0 0 1 -" + rightRadius + " " + rightRadius
           + " l " + reverseWidth + " 0";
-        if (showBlockingOptions) {
-          path = path +" a " + rightRadius + " " + rightRadius + " 0 0 1 -" + rightRadius + " -" + rightRadius
-            + " l 0 -" + (extraHeight - rightRadius);
-        }
         path = path + " a " + r + " " + r + " 0 0 0 " + r + " " + (-2 * rightRadius);
         return path;
       }
@@ -204,25 +200,13 @@ var GraphRunner = (function(jQuery, d3) {
           * http://www.w3.org/TR/SVG/text.html#__svg__SVGTextContentElement__getComputedTextLength
           */
         d3.select("#domain-label").classed("hidden", false)
-          .attr("d", makePath(d.x + r, d.y, r, labelWidth, showBlockingOptions))
+          .attr("d", makePath(d.x + r, d.y, r, labelWidth))
         .attr("class", "round-border " + getCircleClassForSite(d));
         d3.select("#domain-label-text").classed("hidden", false)
           .attr("x", d.x + r + 4)
           .attr("y", d.y + Math.floor(r/2) + fontSize/4)
           .style("font-size", fontSize + "px")
           .text(d.name);
-        if (showBlockingOptions) {
-          // Show the "BLOCK" link, and set up callback for when it is clicked!
-          d3.select("#domain-label-block-link").classed("hidden", false)
-            .attr("x", d.x + r + 4)
-            .attr("y", d.y + Math.floor(r/2) + (fontSize * 1.5))
-            .style("font-size", fontSize + "px")
-            .text("Block")
-            .on("click", function() {
-                CollusionAddon.blockDomain(d.name);
-                menuIsShowing = false;
-             });
-        }
       }
 
       return {show: function(d) {
