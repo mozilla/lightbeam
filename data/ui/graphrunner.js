@@ -172,8 +172,8 @@ var GraphRunner = (function(jQuery, d3) {
          * Cutout circle on left end, rounded right end, length dependent on length of text.
          * Get ready for some crazy math and string composition! */
         var rightRadius = Math.floor(r/2);
-        var reverseWidth = showBlockingOptions? (rightRadius - labelWidth - r) : (0 - labelWidth - r);
-        var extraHeight = showBlockingOptions ? 2*r : 0;
+        var reverseWidth = 0 - labelWidth - r;
+        var extraHeight = 0;
 
         // arguments for a are: (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
         var path = "M " + x + " " + y  // starting point
@@ -186,11 +186,8 @@ var GraphRunner = (function(jQuery, d3) {
         return path;
       }
 
-      function showPopupLabel(d, showBlockingOptions) {
-		  showBlockingOptions = false;
-        /* Show popup label to display domain name next to the circle. If
-         * showBlockingOptions is true, expand the label into a menu and show a
-         * "Block" links.*/
+      function showPopupLabel(d) {
+        /* Show popup label to display domain name next to the circle. */
         var r = nodeRadius(d);
         var fontSize = Math.floor(4 * r / 5);
         var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
