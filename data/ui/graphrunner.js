@@ -569,7 +569,7 @@ var GraphRunner = (function(jQuery, d3) {
           // addLink() has the side-effect of creating any nodes that didn't already exist
           for (var n = 0; n < nodes.length; n++) {
             if (json[nodes[n].name]) {
-              nodes[n].wasVisited = json[nodes[n].name].visited;
+              nodes[n].wasVisited = (json[nodes[n].name].visits > 0);
             } else {
               // This node no longer has an entry
               nodeToRemove = n;
