@@ -558,9 +558,12 @@ var GraphRunner = (function(jQuery, d3) {
           // For each pair, add a link if it does not already exist.
           for (var domain in json) {
             for (var referrer in json[domain].referrers) {
-              var usedCookie = json[domain].referrers[referrer].cookie;
-              var usedNonCookie = json[domain].referrers[referrer].noncookie;
-              addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie});
+              // Don't add link if the connection was based on a user navigation event:
+              if (json[domain].referrers[referrer].datatypes.indexOf("user_navigation") == -1) {
+                var usedCookie = json[domain].referrers[referrer].cookie;
+                var usedNonCookie = json[domain].referrers[referrer].noncookie;
+                addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie});
+              }
             }
           }
           // addLink() has the side-effect of creating any nodes that didn't already exist
