@@ -373,6 +373,17 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
       }
 
+      /* Properties to apply to all nodes, not just the ones entering.
+       * Dynamic properties (i.e. those that can change even after a node is added to the graph)
+       * should be set here. */
+      node.selectAll("circle.glow").classed("hidden", function(d) {
+	      return !d.wasVisited;
+	  });
+	  // d.selectAll is not a function
+      node.selectAll("circle.node").attr("class", function(d) {
+              return "node round-border " + getCircleClassForSite(d);
+	  });
+
       // Remove nodes if domain is removed from the data (e.g. user blocked it)
       node.exit().remove();
 
