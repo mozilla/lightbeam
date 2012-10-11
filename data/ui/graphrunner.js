@@ -596,6 +596,15 @@ var GraphRunner = (function(jQuery, d3) {
                 // Don't add links if they were user-navigated:
                 addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie,
                          userNavigated: userNavigated});
+              } else {
+                /* If we find out about a user-navigated connection, remove any link that
+                 * already exists from that referrer to that domain: */
+                for (var l = 0; l < links.length; l++) {
+	          if (referrer == links[l].sourceDomain && domain == links[l].targetDomain) {
+                    links.splice(l, 1);
+                    break;
+                  }
+                }
               }
             }
           }
