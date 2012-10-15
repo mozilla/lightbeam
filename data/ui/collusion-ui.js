@@ -156,10 +156,10 @@ $(window).ready(function() {
         switchSidebar("#filters");
       });
 	  $(window).resize(function(){
-		  runner.width = $(window).width();
-		  runner.height = $(window).height();
-		  $('svg').width($(window).width());
-		  $('svg').width($(window).width());
+		  runner.width = $(document).width();
+		  runner.height = $(document).height();
+		  $('svg').width($(document).width());
+		  $('svg').height($(document).height());
 	  });
 	  
 	  function keys(obj){
