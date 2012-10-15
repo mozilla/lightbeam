@@ -161,6 +161,14 @@ $(window).ready(function() {
 		  $('svg').width($(window).width());
 		  $('svg').width($(window).width());
 	  });
+	  
+	  function keys(obj){
+	  	  var k = [];
+		  for (var key in obj){
+		      k.push(key);
+		  }
+		  return k;
+	  }
 
       var setFilters = function() {
         var showCookie = $("#filter-cookie").prop("checked");
@@ -182,6 +190,19 @@ $(window).ready(function() {
        * appropriate classes, show or hide them.*/
       $("#filter-cookie").change(setFilters);
       $("#filter-noncookie").change(setFilters);
+	  
+	  function filterRecent(time){
+		  // Time is one of the strings: 'launch', 'week', 'day', 'hour';
+	  }
+	  
+	  
+	  var setRecentFilter = function(evt){
+		  console.log('show recent filter %s', keys(evt));
+		  console.log('selected: ', $(evt.target).parent().text());
+		  var time = $(evt.target).parent().text().split(/\s+/).pop(); // "launch|week|day|hour"
+		  filterRecent(time);
+	  }
+	  $('#filters input[name=show_recent]').change(setRecentFilter);
     }
   });
 });
