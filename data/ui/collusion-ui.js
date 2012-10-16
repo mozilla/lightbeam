@@ -16,9 +16,9 @@ function switchSidebar(sidebar) {
   var sidebars = [".live-data", "#domain-infos", "#filters", "#credits"];
   for (var i in sidebars) {
     if (sidebar == sidebars[i]) {
-      $(sidebars[i]).slideDown();
+      $(sidebars[i]).slideDown(150);
     } else {
-      $(sidebars[i]).slideUp();
+      $(sidebars[i]).slideUp(150);
     }
   }
 }
@@ -102,6 +102,10 @@ $(window).ready(function() {
       // You should only ever see this page if the addon is installed, anyway
       $(".live-data").fadeIn();
       addon.onGraph(runner.updateGraph);
+      $(".main-tabs a").click(function() {
+        $(".main-tabs .active").removeClass("active");
+        $(this).addClass("active");
+      });
       $("#reset-graph").click(function() {
         if (addon.resetGraph) {
           addon.resetGraph();
@@ -120,8 +124,19 @@ $(window).ready(function() {
         $("#share-graph").off("click");
       });
       $("#hide-ui").click(function() {
-        $("#sidebar").slideUp();
+        $(".live-data").addClass("collapsed");
         $("#domain-infos").slideUp();
+      });
+      $("#show-hide-ui").click(function() {
+        var $this = $(this),
+            $mainContainer = $("#sidebar-inner");
+        if($this.hasClass("collapsed")) {
+          $mainContainer.slideDown();
+          $this.removeClass("collapsed");
+        } else {
+          $mainContainer.slideUp();
+          $this.addClass("collapsed");
+        }
       });
       $("#save-graph").click(function() {
         var data = JSON.stringify(graph.data);
@@ -155,6 +170,7 @@ $(window).ready(function() {
       $("#filters-link").click(function() {
         switchSidebar("#filters");
       });
+
 	  $(window).resize(function(){
 		  runner.width = $(document).width();
 		  runner.height = $(document).height();

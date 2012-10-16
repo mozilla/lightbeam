@@ -376,6 +376,17 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("xlink:href", function(d) {return 'http://' + d.name + '/favicon.ico'; } );
       }
 
+      /* Properties to apply to all nodes, not just the ones entering.
+       * Dynamic properties (i.e. those that can change even after a node is added to the graph)
+       * should be set here. */
+      node.selectAll("circle.glow").classed("hidden", function(d) {
+	      return !d.wasVisited;
+	  });
+	  // d.selectAll is not a function
+      node.selectAll("circle.node").attr("class", function(d) {
+              return "node round-border " + getCircleClassForSite(d);
+	  });
+
       // Remove nodes if domain is removed from the data (e.g. user blocked it)
       node.exit().remove();
 
@@ -393,6 +404,9 @@ var GraphRunner = (function(jQuery, d3) {
         if (d.noncookie) {
           classString += " noncookie";
         }
+        if (d.userNavigated) {
+          classString += " user-navigated";
+        }
         return classString;
       };
       // bind links to d3 lines - use source name + target name as 'primary key':
@@ -405,6 +419,9 @@ var GraphRunner = (function(jQuery, d3) {
           .attr("y1", function(d) { return d.source.y; })
           .attr("x2", function(d) { return d.target.x; })
           .attr("y2", function(d) { return d.target.y; });
+
+      // update class on all links - it might have changed for existing links:
+      link.attr("class", getClassForLink);
 
       link.exit().remove();
 
@@ -553,20 +570,34 @@ var GraphRunner = (function(jQuery, d3) {
 
       function addLink(options) {
         // TODO probably refactor this function -- it's doing several different things awkwardly.
+
+	// Note that getNode has side effect of creating the node if it doesn't exist.
+        // This is how nodes get created!
         var fromId = getNodeId(options.from);
         var toId = getNodeId(options.to);
 
-        /* See if link exists already (will be an svg line classed with .to-x and .from-y,
-         * where x and y are indices of nodes: */
-        var link = vis.select("line.to-" + toId+ ".from-" + fromId);
-
-        if (!link[0][0])
+        var linkExists = false;
+        // See if a link already exists between these nodes:
+        for (var x = 0; x < links.length; x++) {
+	  if (options.from == links[x].sourceDomain && options.to == links[x].targetDomain) {
+            linkExists = true;
+            // We've found an existing link -- update its properties:
+            links[x].userNavigated = options.userNavigated;
+            links.cookie = options.cookie;
+            links.noncookie = options.noncookie;
+            break;
+          }
+        }
+        if (!linkExists) {
           /* If it doesn't exist, create a link. The source and target properties are treated
            * specially by d3's force-dircted graph: they must match the indices of the link's
            * source node and target node. */
           links.push({source: fromId, target: toId,
                       sourceDomain: options.from, targetDomain: options.to,
-                      cookie: options.cookie, noncookie: options.noncookie});
+                      cookie: options.cookie, noncookie: options.noncookie,
+                      userNavigated: options.userNavigated});
+        }
+
         /* When building up the graph, mark the nodes and links as cookie-based, non-cookie-based,
          * or both. (If a link is cookie-based, the nodes at both ends are cookie-based, etc.)
          * This data will be used to attach appropriate classes to the SVG nodes. */
@@ -579,8 +610,6 @@ var GraphRunner = (function(jQuery, d3) {
           nodes[fromId].noncookie = true;
         }
       }
-	  
-
       var drawing = draw({nodes: nodes, links: links});
 
       return {
@@ -598,14 +627,26 @@ var GraphRunner = (function(jQuery, d3) {
           // For each pair, add a link if it does not already exist.
           for (var domain in json) {
             for (var referrer in json[domain].referrers) {
-              // Don't add link if the connection was based on a user navigation event:
-              if (json[domain].referrers[referrer].datatypes.indexOf("user_navigation") == -1) {
-                var usedCookie = json[domain].referrers[referrer].cookie;
-                var usedNonCookie = json[domain].referrers[referrer].noncookie;
-                addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie});
+              var usedCookie = json[domain].referrers[referrer].cookie;
+              var usedNonCookie = json[domain].referrers[referrer].noncookie;
+              var userNavigated = (json[domain].referrers[referrer].datatypes.indexOf("user_navigation") > -1);
+              if (!userNavigated) {
+                // Don't add links if they were user-navigated:
+                addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie,
+                         userNavigated: userNavigated});
+              } else {
+                /* If we find out about a user-navigated connection, remove any link that
+                 * already exists from that referrer to that domain: */
+                for (var l = 0; l < links.length; l++) {
+	          if (referrer == links[l].sourceDomain && domain == links[l].targetDomain) {
+                    links.splice(l, 1);
+                    break;
+                  }
+                }
               }
             }
           }
+
           // addLink() has the side-effect of creating any nodes that didn't already exist
           for (var n = 0; n < nodes.length; n++) {
             if (json[nodes[n].name]) {
