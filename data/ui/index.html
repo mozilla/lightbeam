@@ -16,45 +16,91 @@
   <h1>Collusion</h1>
 
   <div id="sidebar-content">
-  <a id="about-tab-link">about</a> |
-  <a id="site-tab-link">site info</a> |
-  <a id="filters-link">filters</a> |
-  <a id="credits-tab-link">credits</a>
-  <hr/>
-  <div class="live-data" style="display: none;">
-    <p>Keep browsing the web. As you do so, the graph on this page will change. Each circle represents a website.</p>
-    <p>Sites with a halo are sites that you have visited. Sites in grey are sites you have not visited. An arrow from one to the other means that the former site has set one or more third-party cookies to inform the latter site about your visit.</p>
-    <p>This add-on is still in development and is not guaranteed to be entirely accurate.</p>
-    <p>Hover your mouse over the circles to learn more about them.</p>
+    <div class="main-tabs">
+      <a class="active" id="about-tab-link">about</a>
+      <a id="site-tab-link">site info</a>
+      <a id="filters-link">filters</a>
+      <a id="credits-tab-link">credits</a>
+    </div>
     <div class="settings-menu">
       <ul>
-        <li id="reset-graph">Reset Graph</li>
-        <li id="export-graph">Export Graph</li>
+        <li><a id="reset-graph"><span class="icon icon-refresh"></span>Reset</a></li>
+        <li><a id="export-graph"><span class="icon icon-share-alt"></span>Export</a></li>
         <!--li id="share-graph">Share Graph (with Mozilla, anonymously)</li-->
-        <li id="hide-ui">Hide UI</li>
-        <li><a id="zoom-in-link">Zoom In</a> | <a id="zoom-out-link">Zoom Out</a></li>
-      </ul>
+        <li><a id="zoom-in-link"><span class="icon icon-zoom-in"></span>Zoom In</a> <a id="zoom-out-link"> <span class="icon icon-zoom-in"></span>
+          Zoom Out</a></li>
+        <li><a id="show-hide-ui"><span class="icon icon-eye-close"></span>Panel</a></li>
+    </ul>
     </div> <!-- end of settingsmenu -->
-    <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
-  </div> <!-- end of live-data -->
-  
-  <div id="domain-infos">Mouse over any circle to see how that site uses third-party cookies.</div> <!-- Templates are copied into here -->
+    <div id="sidebar-inner">
+      <div class="live-data" style="display: none;">
+        <p>Keep browsing the web. As you do so, the graph on this page will change. Each circle represents a website.</p>
+        <p>Hover your mouse over the circles to learn more about them.</p>
+        <h4>Legend</h4>
+        <div class="legend cf">
+          <div class="row">
+            <svg>
+              <g class="node noncookie" transform="translate(20, 25)">
+                <circle fill="url(#glow-gradient)" class="glow" r="25" cy="0" cx="0"></circle>
+                <circle class="node round-border visited" r="12" cy="0" cx="0"></circle>
+              </g>
+            </svg>
+            <span>Site you have visited</span>
+          </div><!-- row -->
+          <div class="row">
+            <svg>
+              <g transform="translate(20, 25)" class="node noncookie">
+                <circle fill="url(#glow-gradient)" class="glow hidden" r="25" cy="0" cx="0"></circle>
+                <circle class="node round-border site" r="12" cy="0" cx="0"></circle>
+              </g>
+            </svg>
+            <span>Site you have not visited</span>
+          </div><!-- row -->
+          <div id="a-to-b" class="row">
+            <svg>
+            <defs>
+              <marker id="TriangleEg" viewBox="0 0 10 10" refX="10" refY="5" 
+                markerUnits="strokeWidth" orient="auto"
+                markerWidth="8" markerHeight="6">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="white">
+            </marker>
+            </defs>
+              <g transform="translate(14, 15)" class="node noncookie">
+                <circle fill="url(#glow-gradient)" class="glow hidden" r="30" cy="0" cx="0"></circle>
+                <circle class="node round-border visited" r="6" cy="0" cx="0"></circle>
+              </g>
+              <g transform="translate(44, 15)" class="node noncookie">
+                <circle fill="url(#glow-gradient)" class="glow hidden" r="30" cy="0" cx="0"></circle>
+                <circle class="node round-border site" r="6" cy="0" cx="0"></circle>
+              </g>
+              <line y2="15" x2="35" y1="15" x1="10" style="stroke-width: 1;" class="link from-0 to-1 noncookie bold" marker-end="url(#TriangleEg)">
+              </line>
+            </svg>
+            <span><strong>a</strong> has sent data about you to <em>b</em></span>
+          </div>
+        </div>
+        <p>This add-on is still in development and is not guaranteed to be entirely accurate.</p>
+        <p class="privacy-policy"><strong>Privacy Policy</strong> When you're using the add-on, we collect information from sites you visit solely to show you how they're connected. This information is stored locally on your computer and you can delete it by resetting the graph. We don't give away this information to anyone except you.</p>
+      </div> <!-- end of live-data -->
 
-  <div id="filters" style="display: none;">
-    <form>
-    <input type="checkbox" id="filter-cookie" checked="checked"/>Show Cookie-Based Connections<br/>
-    <input type="checkbox" id="filter-noncookie" checked="checked"/>Show Non-Cookie-Based Connections<br/>
-    </form>
-  </div>
-      
-  <div id="credits" style="display: none;">
-    <ul>
-      <li>Idea and original code by: Atul Varma</li>
-      <li>Additional development by: Jono Xia</li>
-      <li>Visual Design by: Barry Munsterteiger</li>
-      <li>Favicon by: Margaret Hagan</li>
-      <li>Additional code contributions by: Andrew Stiles, Alexandra Moss, and Matt Brubek</li>
-  </div> <!-- End of #credits -->
+      <div id="domain-infos">Mouse over any circle to see how that site uses third-party cookies.</div> <!-- Templates are copied into here -->
+
+      <div id="filters" style="display: none;">
+        <form>
+        <input type="checkbox" id="filter-cookie" checked="checked"/>Show Cookie-Based Connections<br/>
+        <input type="checkbox" id="filter-noncookie" checked="checked"/>Show Non-Cookie-Based Connections<br/>
+        </form>
+      </div>
+
+      <div id="credits" style="display: none;">
+        <ul>
+          <li>Idea and original code by: Atul Varma</li>
+          <li>Additional development by: Jono Xia</li>
+          <li>Visual Design by: Barry Munsterteiger</li>
+          <li>Favicon by: Margaret Hagan</li>
+          <li>Additional code contributions by: Andrew Stiles, Alexandra Moss, and Matt Brubek</li>
+      </div> <!-- End of #credits -->
+    </div><!-- End of #sidebar-inner -->
   </div> <!-- End of #sidebar-content -->
 </div> <!-- End of #sidebar -->
 <div id="chart"></div><!-- The d3 layout graph will go inside this div -->
