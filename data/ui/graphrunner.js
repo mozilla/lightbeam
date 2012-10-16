@@ -1,9 +1,11 @@
 var GraphRunner = (function(jQuery, d3) {
+	
+	
+	
 
   function Runner(options) {
     var trackers = options.trackers;
 	// FIXME: Make this.width / this.height properties on the runner and add an accessor to allow them to be updated when the window resizes
-	console.log('set original width/height: %s/%s', options.width, options.height);
     this.width = options.width;
     this.height = options.height;
 	var runner  = this;
@@ -269,6 +271,7 @@ var GraphRunner = (function(jQuery, d3) {
 
     function createNodes(nodes, force) {
 
+
       /* Represent each site as a node consisting of an svg group <g>
        * containing a <circle> and an <image>, where the image shows
        * the favicon; circle size shows number of links, color shows
@@ -407,6 +410,39 @@ var GraphRunner = (function(jQuery, d3) {
 
       return link;
     }
+	
+   // Resolves collisions between d and all other circles.
+   // Taken from http://bl.ocks.org/1748247
+   function collide(alpha, nodes) {
+     var quadtree = d3.geom.quadtree(nodes);
+     return function(d) {
+       var r = d.radius + radius.domain()[1] + padding,
+           nx1 = d.x - r,
+           nx2 = d.x + r,
+           ny1 = d.y - r,
+           ny2 = d.y + r;
+       quadtree.visit(function(quad, x1, y1, x2, y2) {
+         if (quad.point && (quad.point !== d)) {
+           var x = d.x - quad.point.x,
+               y = d.y - quad.point.y,
+               l = Math.sqrt(x * x + y * y),
+               r = d.radius + quad.point.radius + (d.color !== quad.point.color) * padding;
+           if (l < r) {
+             l = (l - r) / l * alpha;
+             d.x -= x *= l;
+             d.y -= y *= l;
+             quad.point.x += x;
+             quad.point.y += y;
+           }
+         }
+         return x1 > nx2
+             || x2 < nx1
+             || y1 > ny2
+             || y2 < ny1;
+       });
+     };
+   }
+	
 
     function draw(json) {
       var force = d3.layout.force()
@@ -417,6 +453,7 @@ var GraphRunner = (function(jQuery, d3) {
           .links(json.links)
           .size([runner.width, runner.height])
           .start();
+      $('svg').data('layout', force); // save for later interactive use
 
       createLinks(json.links);
       createNodes(json.nodes, force);
@@ -442,7 +479,9 @@ var GraphRunner = (function(jQuery, d3) {
 
          vis.selectAll("g.node").attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
-         });
+         })
+		 // .each(collide(0.5, json.nodes))
+		 // .attr('translate', function(d){return 'translate(' + d.x + ',' + d.y + ')';})
       });
 
       return {
@@ -540,6 +579,7 @@ var GraphRunner = (function(jQuery, d3) {
           nodes[fromId].noncookie = true;
         }
       }
+	  
 
       var drawing = draw({nodes: nodes, links: links});
 
