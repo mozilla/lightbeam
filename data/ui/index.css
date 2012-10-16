@@ -1,3 +1,4 @@
+@import "icons.css";
 
 g.node.unrelated-domain image {
   display: none;
@@ -76,6 +77,117 @@ a {
   pointer-events: none;
 }
 
+#sidebar-content {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  margin-top: 15px;
+  padding-top: 30px;
+  -moz-transition: opacity 0.4s ease;
+  transition: opacity 0.4s ease;
+}
+
+#sidebar-inner {
+  margin-top: 12px;
+}
+
+#sidebar-content.collapsed .live-data {
+  opacity: 0;
+}
+
+#show-hide-ui > span {
+  float: left;
+}
+#show-hide-ui:before {
+  content: "Hide ";
+}
+#show-hide-ui.collapsed > span {
+  background-position: -96px -120px;
+}
+#show-hide-ui.collapsed:before {
+  content: "Show ";
+}
+
+/*  Tab titles: about  site  info  etc. */
+.main-tabs{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 25px;
+  line-height: 25px;
+  background: #000;
+}
+.main-tabs a {
+  display: block;
+  float: left;
+  height: 100%;
+  padding: 0 6px;
+  color: #CCC;
+}
+
+.main-tabs a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #FFF;
+}
+.main-tabs .active,
+.main-tabs .active:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  opacity: 1;
+  color: #FFF;
+}
+
+/* Legend */
+.legend {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+}
+
+h4 {
+  margin-bottom: 5px;
+}
+
+.legend .row:after,
+.legend .row:before{
+  content: " ";
+  display: table;
+}
+.legend .row:after {
+  clear: both;
+}
+
+.legend .row > span {
+  width: 100px;
+  float: left;
+  margin-top: 10px;
+}
+.legend svg {
+  height: 50px;
+  width: 60px !important;
+  float: left;
+  margin-right: 10px;
+}
+#a-to-b strong,
+#a-to-b em {
+  display: inline-block;
+  background: white;
+  height: 14px;
+  width: 14px;
+  text-align: center;
+  border-radius: 14px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 11px;
+}
+#a-to-b strong {
+  color: #3388FF;
+  border: 1px solid #3388FF;
+}
+#a-to-b em {
+  color: #888;
+  border: 1px solid #888;
+}
+
 #sidebar a, .info a, span.next, input {
   pointer-events: auto;
 }
@@ -125,12 +237,6 @@ h2.domain img.tracker {
   margin-top: -10px;
 }
 
-#sidebar-content {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 5px;
-  margin-top: 15px;
-}
-
 #addon-installation-detected {
   position: fixed;
   top: 0px;
@@ -146,33 +252,35 @@ h2.domain img.tracker {
   font-size: 8pt;
 }
 
-div.settings-menu {
-  padding: 5px;
+.settings-menu {
   pointer-events: auto;
   color: white;
 }
 
-div.settings-menu > ul {
+.settings-menu > ul {
   list-style-type: none;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   font-size: 8pt;
+  border-right: 1px solid #222;
 }
 
-div.settings-menu > ul > li {
+.settings-menu > ul > li > a {
   cursor: pointer;
+  display: block;
   padding: 5px;
-  margin-top: 5px;
+  border-bottom: 1px solid #222;
+  border-left: 1px solid #222;
   background: rgba(0, 0, 0, 0.75);
 }
 
-div.settings-menu > ul > li:first-child {
-  margin-top: 0px;
+.settings-menu > ul > li a:first-child {
+  margin-top: 0;
 }
 
-div.settings-menu > ul > li:hover {
-  background: white;
-  color: black;
+.settings-menu > ul > li > a:hover {
+  color: #FFF;
+  background: rgba( 255, 255, 255, 0.1 );
 }
 
 #deployment-info {
@@ -191,3 +299,17 @@ html.deployment-production #deployment-info {
 #domain-label-block-link {
   stroke: blue;
 }
+
+/* Helpers */
+
+/* Clearfix */
+.cf:before,
+.cf:after {
+  content: " ";
+  display: table;
+}
+
+.cf:after {
+  clear: both;
+}
+
