@@ -1,10 +1,7 @@
 # Collusion README
 
-This is an add-on and website for visualizing the entities that track your
-behavior across the web in real time.
+This is an add-on for Firefox that helps to visualize sites that may be tracking you around the internet. The add-on is available from https://addons.mozilla.org/en-US/firefox/addon/collusion/.
 
-The website also contains a "demo" with sample data that can be viewed without
-the add-on. 
 
 ## Prerequisites
 
@@ -18,23 +15,26 @@ If you only want to see the demo, you don't need any of these; all you need is a
 
 First, [install][] the Mozilla Add-on SDK if you haven't already, and activate it in a command line terminal.
 
+    cd addon-sdk
+    source bin/activate
+
 In the addons-sdk/packages directory, you will need to install the menuitems package and its dependency, the vold-utils package:
 
     git clone https://github.com/voldsoftware/vold-utils-jplib.git
     git clone https://github.com/voldsoftware/menuitems-jplib.git
 
-Then, check out the Collusion repository and enter it:
+Then, check out the Collusion repository and enter it (do this where you want the Collusion directory, not in the addon-sdk directory):
 
     git clone git://github.com/mozilla/collusion.git
     cd collusion
 
 Finally, run:
 
-    python develop.py
+    cfx run
 
-This will set up the web front-end for Collusion on port 8888 and start Firefox with a temporary profile that has Collusion installed. Just click on the Collusion icon at the bottom-right of the browser window to open the web front-end.
+This will start Firefox with a temporary profile that has Collusion installed. Just click on the Collusion icon at the bottom-right of the browser window to open the web front-end.
 
-At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `python develop.py` again.
+At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `cfx run` again.
 
   [install]: https://addons.mozilla.org/en-US/developers/docs/sdk/latest/dev-guide/addon-development/installation.html
 
