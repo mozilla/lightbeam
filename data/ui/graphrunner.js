@@ -1,11 +1,7 @@
-var GraphRunner = (function(jQuery, d3) {
-	
-	
-	
+var GraphRunner = (function(jQuery, d3) {	
 
   function Runner(options) {
     var trackers = options.trackers;
-	// FIXME: Make this.width / this.height properties on the runner and add an accessor to allow them to be updated when the window resizes
     this.width = options.width;
     this.height = options.height;
 	var runner  = this;
@@ -84,7 +80,7 @@ var GraphRunner = (function(jQuery, d3) {
 
       $("#domain-infos .info").hide();
 
-      // Instead of just cleraing out the domain info div and puttig in the new info each time,
+      // Instead of just clearing out the domain info div and puttig in the new info each time,
       // create a clone of the template for each new domain, and re-use that create a clone for each domain and then re-use it if it's already
       // created. An optimization?
       if (!info.length) {
@@ -194,7 +190,7 @@ var GraphRunner = (function(jQuery, d3) {
         var fontSize = Math.floor(4 * r / 5);
         var labelWidth = Math.floor( d.name.length * fontSize / 2  ) + 4;
         /* rough heuristic for calculating size of label based on font size and character count
-         * (wish svg had the equivalent to cavnas's measureText!) */
+         * (wish svg had the equivalent to canvas' measureText!) */
          /* [dethe]: it does: getComputedTextLength()
           * http://www.w3.org/TR/SVG/text.html#__svg__SVGTextContentElement__getComputedTextLength
           */
@@ -412,7 +408,7 @@ var GraphRunner = (function(jQuery, d3) {
       // bind links to d3 lines - use source name + target name as 'primary key':
       var link = vis.select("g.links").selectAll("line.link")
         .data(links, function(d) { return d.sourceDomain + "-" + d.targetDomain; });
-      link.enter().append("svg:line")
+      link.enter().insert("svg:line", ':first-child')
           .attr("class", getClassForLink)
           .style("stroke-width", 1)
           .attr("x1", function(d) { return d.source.x; })
@@ -488,10 +484,10 @@ var GraphRunner = (function(jQuery, d3) {
           var len = Math.sqrt( (d.source.x - d.target.x) * (d.source.x - d.target.x) +
                                (d.source.y - d.target.y) * (d.source.y - d.target.y) );
           var r = nodeRadius(d.target);
-          line.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x + Math.floor((d.source.x - d.target.x) * r / len); })
-            .attr("y2", function(d) { return d.target.y + Math.floor((d.source.y - d.target.y) * r / len); });
+          line.attr("x1", d.source.x)
+            .attr("y1", d.source.y)
+            .attr("x2", d.target.x)
+            .attr("y2", d.target.y);
         });
 
          vis.selectAll("g.node").attr("transform", function(d) {
@@ -625,25 +621,30 @@ var GraphRunner = (function(jQuery, d3) {
 
           // Json contains list of domains, each with referrers. Each pair constitutes a link.
           // For each pair, add a link if it does not already exist.
-          for (var domain in json) {
-            for (var referrer in json[domain].referrers) {
-              var usedCookie = json[domain].referrers[referrer].cookie;
-              var usedNonCookie = json[domain].referrers[referrer].noncookie;
-              var userNavigated = (json[domain].referrers[referrer].datatypes.indexOf("user_navigation") > -1);
-              if (!userNavigated) {
-                // Don't add links if they were user-navigated:
-                addLink({from: referrer, to: domain, cookie: usedCookie, noncookie: usedNonCookie,
-                         userNavigated: userNavigated});
-              } else {
-                /* If we find out about a user-navigated connection, remove any link that
-                 * already exists from that referrer to that domain: */
-                for (var l = 0; l < links.length; l++) {
-	          if (referrer == links[l].sourceDomain && domain == links[l].targetDomain) {
-                    links.splice(l, 1);
-                    break;
-                  }
+          for (var domainName in json) {
+            var domain = json[domainName];
+            for (var referrerName in domain.referrers) {
+                var referrer = domain.referrers[referrerName];
+                var usedCookie = referrer.cookie;
+                var usedNonCookie = referrer.noncookie;
+                if (!referrer.datatypes){
+                    referrer.datatypes = [];
                 }
-              }
+                var userNavigated = referrer.datatypes.indexOf("user_navigation") > -1;
+                if (!userNavigated) {
+                    // Don't add links if they were user-navigated:
+                    addLink({from: referrerName, to: domainName, cookie: usedCookie, noncookie: usedNonCookie,
+                         userNavigated: userNavigated});
+                }else{
+                    /* If we find out about a user-navigated connection, remove any link that
+                     * already exists from that referrer to that domain: */
+                    for (var l = 0; l < links.length; l++) {
+        	            if (referrerName === links[l].sourceDomain && domainName === links[l].targetDomain) {
+                            links.splice(l, 1);
+                            break;
+                        }
+                    }
+                }
             }
           }
 
@@ -661,8 +662,8 @@ var GraphRunner = (function(jQuery, d3) {
              * Note that initializing them all exactly at center causes there to be zero distance,
              * which makes the repulsive force explode!! So add some random factor. */
             if (typeof nodes[n].x == "undefined") {
-              nodes[n].x = nodes[n].px = runner.width / 2 + Math.floor( Math.random() * 50 ) ;
-              nodes[n].y = nodes[n].py = runner.height / 2 + Math.floor( Math.random() * 50 );
+              nodes[n].x = nodes[n].px = runner.width / 2 + Math.floor( Math.random() * 100 ) - 50;
+              nodes[n].y = nodes[n].py = runner.height / 2 + Math.floor( Math.random() * 100 ) - 50;
             }
           }
 
@@ -705,15 +706,12 @@ var GraphRunner = (function(jQuery, d3) {
       return function(json) {
         // TODO this comparison sometimes throws:
         // TypeError: attempt to run compile-and-go script on a cleared scope
-        if (timeoutID !== null)
-          clearTimeout(timeoutID);
+        if (timeoutID !== null){
+            clearTimeout(timeoutID);
+            timeoutID = null;
+        }
         timeoutID = setTimeout(function() {
-          timeoutID = null;
-
-          // This is for debugging purposes only!
-          self.lastJSON = json;
-
-          graph.update(json);
+            graph.update(json);
         }, 250);
         // TODO the setTimeout call sometimes throws:
         // Illegal operation on WrappedNative prototype object
@@ -745,7 +743,6 @@ var GraphRunner = (function(jQuery, d3) {
         rescaleSvg();
       }
     };
-
     return self;
   }
 
