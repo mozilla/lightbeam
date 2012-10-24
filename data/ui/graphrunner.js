@@ -232,37 +232,6 @@ var GraphRunner = (function(jQuery, d3) {
              };
     }
 
-    var thePopupLabel = popupLabel();
-
-    var draggingBackground = false; // TODO Too many globals - refactor into some kind of
-      // ui controller
-    var dragStartX = null;
-    var dragStartY = null;
-    var transX = 0;
-    var transY = 0;
-    // Clear popup label menu if you click outside of any nodes
-    window.addEventListener("mouseup", function(e) {
-                              if (draggingBackground) {
-                                draggingBackground = false;
-                                transX += (e.pageX - dragStartX);
-                                transY += (e.pageY - dragStartY);
-                                rescaleSvg();
-                              }
-                              console.log("Window got mouseup");
-                              // TODO clicks on nodes/menu are bubbling up to window -- block them!
-                              thePopupLabel.clear();
-    }, true);
-    // Add drag handler on the background for panning:
-    window.addEventListener("mousedown", function(e) {
-                              draggingBackground = true;
-                              dragStartX = e.pageX;
-                              dragStartY = e.pageY;
-                            }, true);
-    window.addEventListener("mousemove", function(e) {
-                              if (draggingBackground) {
-                                console.log("Dragged to " + e.pageX + ", " + e.pageY);
-                              }
-                            }, true);
 
 
     function createNodes(nodes, force) {
@@ -426,6 +395,7 @@ var GraphRunner = (function(jQuery, d3) {
 	
    // Resolves collisions between d and all other circles.
    // Taken from http://bl.ocks.org/1748247
+   var padding = 30;
    function collide(alpha, nodes) {
      var quadtree = d3.geom.quadtree(nodes);
      return function(d) {
@@ -493,7 +463,7 @@ var GraphRunner = (function(jQuery, d3) {
          vis.selectAll("g.node").attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
          })
-		 // .each(collide(0.5, json.nodes))
+         // .each(collide(0.5, json.nodes))
 		 // .attr('translate', function(d){return 'translate(' + d.x + ',' + d.y + ')';})
       });
 
@@ -712,7 +682,7 @@ var GraphRunner = (function(jQuery, d3) {
         }
         timeoutID = setTimeout(function() {
             graph.update(json);
-        }, 250);
+        }, 30);
         // TODO the setTimeout call sometimes throws:
         // Illegal operation on WrappedNative prototype object
       };
@@ -720,11 +690,51 @@ var GraphRunner = (function(jQuery, d3) {
 
     var graph = CollusionGraph(trackers);
 
+    // TODO: Move these to collusion-ui:
     var scale = 1.0;
-    function rescaleSvg() {
+    var draggingBackground = false; // TODO Too many globals - refactor into some kind of
+      // ui controller
+    var lastDragX = null;
+    var lastDragY = null;
+    var transX = 0;
+    var transY = 0;
+    
+    // End drag
+    window.addEventListener("mouseup", function(e) {
+                              draggingBackground = false;
+    }, true);
+    
+    // Start drag
+    // Add drag handler on the background for panning:
+    window.addEventListener("mousedown", function(e) {
+        console.log('window mousedown seen, start dragging');
+        draggingBackground = true;
+        lastDragX = e.pageX;
+        lastDragY = e.pageY;
+    }, true);
+    
+    // Dragging
+    window.addEventListener("mousemove", function(e) {
+      if (draggingBackground) {
+            var dX = e.pageX - lastDragX;
+            var dY = e.pageY - lastDragY;
+            lastDragX = e.pageX;
+            lastDragY = e.pageY;
+            transformSvg(1.0, dX, dY);
+      }
+    }, true);
+
+    
+    function transformSvg(factor, dX, dY) {
+        // factor is multiplier to existing scale
+        // dX is translation in X to accumulate
+        // dY is translation in Y to accumulate
+        scale *= factor;
+        transX += dX;
+        transY += dY;
       var moreTransX = transX + (1 - scale) * (runner.width/ 2);
       var moreTransY = transY + (1 - scale) * (runner.height/ 2);
-      $("#scale-group").attr("transform", "translate(" + transX + "," + transY +") scale(" + scale + "," + scale +")");
+      $("#scale-group").attr("transform", "translate(" + moreTransX + "," + moreTransY +") scale(" + scale + "," + scale +")");
     }
 
     var self = {
@@ -733,14 +743,10 @@ var GraphRunner = (function(jQuery, d3) {
       height: runner.height,
       updateGraph: makeBufferedGraphUpdate(graph),
       zoomIn:function() {
-        scale += 0.2;
-        rescaleSvg();
+        transformSvg(1.2, 0, 0);
       },
       zoomOut: function() {
-        if (scale > 0.2) {
-          scale -= 0.2; // Put a minimum on it - otherwise you can zoom to nothing
-        }
-        rescaleSvg();
+        transformSvg(0.8, 0, 0);
       }
     };
     return self;
