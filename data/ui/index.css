@@ -75,6 +75,7 @@ a {
   width: 200px;
   padding: 20px;
   pointer-events: none;
+  z-index: 1;
 }
 
 #sidebar-content {

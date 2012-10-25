@@ -80,7 +80,7 @@ var GraphRunner = (function(jQuery, d3) {
 
       $("#domain-infos .info").hide();
 
-      // Instead of just clearing out the domain info div and puttig in the new info each time,
+      // Instead of just clearing out the domain info div and putting in the new info each time,
       // create a clone of the template for each new domain, and re-use that create a clone for each domain and then re-use it if it's already
       // created. An optimization?
       if (!info.length) {
@@ -140,6 +140,7 @@ var GraphRunner = (function(jQuery, d3) {
 
       info.show();
     }
+    // End of showDomainInfo()
 
     function nodeRadius(d) {
       var linkCount = selectReferringLinks(d)[0].length;
@@ -232,7 +233,7 @@ var GraphRunner = (function(jQuery, d3) {
              };
     }
 
-
+    var thePopupLabel = popupLabel();
 
     function createNodes(nodes, force) {
 
@@ -297,17 +298,17 @@ var GraphRunner = (function(jQuery, d3) {
               selectArcs(d).attr("marker-end", "url(#Triangle)")
                 .classed("hidden", false).classed("bold", true);
               showDomainInfo(d);
-              d3.selectAll("g.node").classed("unrelated-domain", function(d) {
-                                               return (subGraph.indexOf(d.name) == -1);
-                                               });
+              // d3.selectAll("g.node").classed("unrelated-domain", function(d) {
+              //     // FIXME: Why is d undefined here? Is this a change in d3 v2?
+              //     return (subGraph.indexOf(d.name) === -1);
+              // });
             }
           })
           .on("mouseout", function(d) {
              thePopupLabel.hide();
           })
           .on("click", function(d) {
-            thePopupLabel.showMenu(d);
-            switchSidebar("#domain-infos");
+            Collusion.switchSidebar("#domain-infos");
           });
 
 
@@ -430,8 +431,11 @@ var GraphRunner = (function(jQuery, d3) {
     function draw(json) {
       var force = d3.layout.force()
           .charge(-500)
-          .distance(120)
-          .friction(0)
+          .distance(function(d){
+              console.log('d: %s', Object.keys(d).join(', '));
+              return 120;
+          })
+          // .drag()
           .nodes(json.nodes)
           .links(json.links)
           .size([runner.width, runner.height])
@@ -448,12 +452,8 @@ var GraphRunner = (function(jQuery, d3) {
 
       force.on("tick", function() {
         vis.selectAll("line.link").each(function(d) {
-          /* Line points from center of source circle to edge of target circle. Do some trigonometry
-           * based on radius of target circle to figure out ending coordinates. */
+            /* We used to do trig here to find edge of target circle, now we just make sure the lines are drawn first, draw them to the center of the circles, then draw the circles over them. This may hide the arrows, though */
           var line = d3.select(this);
-          var len = Math.sqrt( (d.source.x - d.target.x) * (d.source.x - d.target.x) +
-                               (d.source.y - d.target.y) * (d.source.y - d.target.y) );
-          var r = nodeRadius(d.target);
           line.attr("x1", d.source.x)
             .attr("y1", d.source.y)
             .attr("x2", d.target.x)
@@ -514,13 +514,13 @@ var GraphRunner = (function(jQuery, d3) {
             trackerInfo = trackers[i];
             break;
           }
-        console.log("Creating new node " + domain);
+        // console.log("Creating new node " + domain);
         nodes.push({
           name: domain,
           trackerInfo: trackerInfo
         });
 
-        return (nodes.length - 1); // the index of the
+        return (nodes.length - 1); // the index of the new node
       }
 
       // For when we just want the id of an existing node, without side-effects. TODO this
@@ -559,9 +559,9 @@ var GraphRunner = (function(jQuery, d3) {
            * specially by d3's force-dircted graph: they must match the indices of the link's
            * source node and target node. */
           links.push({source: fromId, target: toId,
-                      sourceDomain: options.from, targetDomain: options.to,
-                      cookie: options.cookie, noncookie: options.noncookie,
-                      userNavigated: options.userNavigated});
+              sourceDomain: options.from, targetDomain: options.to,
+              cookie: options.cookie, noncookie: options.noncookie,
+              userNavigated: options.userNavigated});
         }
 
         /* When building up the graph, mark the nodes and links as cookie-based, non-cookie-based,
@@ -707,7 +707,7 @@ var GraphRunner = (function(jQuery, d3) {
     // Start drag
     // Add drag handler on the background for panning:
     window.addEventListener("mousedown", function(e) {
-        console.log('window mousedown seen, start dragging');
+        //console.log('window mousedown seen, start dragging: ', e.target.className);
         draggingBackground = true;
         lastDragX = e.pageX;
         lastDragY = e.pageY;

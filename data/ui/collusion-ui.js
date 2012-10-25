@@ -1,4 +1,6 @@
 (function(){
+    
+    window.Collusion = {};
 
 // taken from http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
 function getQueryVariable(variable) {
@@ -22,6 +24,8 @@ function switchSidebar(sidebar) {
     }
   }
 }
+
+Collusion.switchSidebar = switchSidebar;
 
 function updateGraphViaPostMessage(graph, target) {
   target.postMessage("ready", "*");
