@@ -35,7 +35,9 @@ window.addEventListener('resize', function(){
 });
 
 // Load some data from the dummy directory, this kicks off the whole thing
-d3.json('../dummy/days_worth_of_data.json', dynamicForceVisualization);
+//d3.json('../dummy/days_worth_of_data.json', dynamicForceVisualization);
+// line above requires a web server, here we don't have that problem:
+dynamicForceVisualization(data_large);
 
 function dynamicForceVisualization(trackers){
     
