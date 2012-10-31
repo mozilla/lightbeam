@@ -1,0 +1,23 @@
+#svg{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+line{
+    stroke: #CCE;
+    stroke-width: 1px;
+}
+
+circle.tracker{
+    stroke: #CEC;
+    stroke-width: 2px;
+    fill: #EDF;
+}
+
+circle.site{
+    stroke: #66F;
+    stroke-width: 4px;
+    fill: #FED;
+}
+
