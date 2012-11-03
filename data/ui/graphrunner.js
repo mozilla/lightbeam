@@ -1,5 +1,17 @@
 var GraphRunner = (function(jQuery, d3) {	
 
+    /* Keep track of whether we're dragging or not, so we can
+     * ignore mousover/mouseout events when a drag is in progress:*/
+    var isNodeBeingDragged = false;
+    window.addEventListener("mousedown", function(e) {
+        if ($(e.target).closest("g.node").length)
+            isNodeBeingDragged = true;
+        }, true);
+        window.addEventListener("mouseup", function(e) {
+        isNodeBeingDragged = false;
+    }, true);
+
+
   function Runner(options) {
     var trackers = options.trackers;
     this.width = options.width;
@@ -288,6 +300,9 @@ var GraphRunner = (function(jQuery, d3) {
             return "translate(" + d.x + "," + d.y + ")";
           })
           .on("mouseover", function(d) {
+             if (isNodeBeingDragged){
+                 return;
+             }
             // Make directly-connected nodes opaque, the rest translucent:
             var subGraph = getConnectedDomains(d);
             thePopupLabel.show(d, false);
@@ -309,7 +324,8 @@ var GraphRunner = (function(jQuery, d3) {
           })
           .on("click", function(d) {
             Collusion.switchSidebar("#domain-infos");
-          });
+          })
+          .call(force.drag);
 
 
       // glow if site is visited
@@ -707,7 +723,9 @@ var GraphRunner = (function(jQuery, d3) {
     // Start drag
     // Add drag handler on the background for panning:
     window.addEventListener("mousedown", function(e) {
-        //console.log('window mousedown seen, start dragging: ', e.target.className);
+        if (isNodeBeingDragged){
+            return false;
+        }
         draggingBackground = true;
         lastDragX = e.pageX;
         lastDragY = e.pageY;
