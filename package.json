@@ -14,36 +14,6 @@
         "title": "Trusted front-ends (comma-separated list)",
         "type": "string",
         "value": "http://mozillalabs.com/,https://mozillalabs.com/"
-      },
-      {
-        "name": "CollusionSound",
-    	"title": "Check to hear sounds when cookies are set",
-    	"type": "bool",
-    	"value": false
-      },
-      {
-        "name": "collusion.popup",
-        "title": "Always show graph in popup panel when new sites are added",
-        "type": "bool",
-        "value": false
-      },
-      {
-        "name": "collusion.popup.size",
-        "title": "Size of popup panel (as fraction of size of window)",
-        "type": "string",
-        "value": "0.5"
-      },
-      {
-        "name": "collusion.popup.message",
-        "title": "Message in popup panel",
-        "type": "string",
-        "value": "These sites are using third-party cookies to share data about your web activity."
-      },
-      {
-        "name": "collusion.reset.timer",
-        "title": "Time between automatic resets (milliseconds) - 0 for no reset",
-        "type": "integer",
-        "value": 0
       }
     ]
 }
