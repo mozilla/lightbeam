@@ -1,5 +1,9 @@
 var graphCallback = null;
 
+unsafeWindow.setCollusionSounds = function(flag){
+    self.port.emit('setCollusionSounds', flag);
+}
+
 unsafeWindow.onGraph = function onGraph(cb) {
   graphCallback = cb;
   self.port.emit("init");
