@@ -104,8 +104,13 @@ $(window).ready(function() {
 
     if (addon.isInstalled()) {
       // You should only ever see this page if the addon is installed, anyway
+      
       $(".live-data").fadeIn();
       addon.onGraph(runner.updateGraph);
+      // init preferences
+      $('#play-sounds').on('change', function(evt){
+          setCollusionSounds($(evt.target).prop('checked'));
+      });
       $(".main-tabs a").click(function() {
         $(".main-tabs .active").removeClass("active");
         $(this).addClass("active");
@@ -144,7 +149,7 @@ $(window).ready(function() {
       });
       $("#save-graph").click(function() {
         var data = JSON.stringify(graph.data);
-        addon.saveGraph(data);
+        ssaveGraph(data);
         alert("Graph Saved!");
       });
       $("#load-graph").click(function() {

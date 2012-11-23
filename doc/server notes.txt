@@ -1,0 +1,9 @@
+Notes from meeting with davida and wex
+
+Store tuples: usertoken, source, target, timestamp, datatype, sourceVisited, cookiePresent, protocol, pathDepth, queryDepth, size
+
+Preserve subdomain
+
+Stage on heroku for dev
+
+Set cache headers or Petri will cache inappropriately in production

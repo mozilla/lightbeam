@@ -1,13 +1,23 @@
 var graphCallback = null;
 
-unsafeWindow.setCollusionSounds = function(flag){
-    self.port.emit('setCollusionSounds', flag);
-}
 
 unsafeWindow.onGraph = function onGraph(cb) {
   graphCallback = cb;
   self.port.emit("init");
 };
+
+unsafeWindow.setCollusionSounds = function setCollusionSounds(flag){
+    console.log('set collusion sounds: ', flag);
+    self.port.emit('setCollusionSounds', flag);
+};
+
+/* Called by add-on to set the last value of saved sounds pref to checkbox */
+self.port.on('initSounds', function(flag){
+    console.log('soundsFlag restored: ', flag);
+    unsafeWindow.document.getElementById('play-sounds').checked = !!flag;
+    
+});
+
 
 /* resetGraph effectively wipes out the graph in storage
  * because after it is called, an empty graph is passed
@@ -50,8 +60,3 @@ self.port.on("getSavedGraph", function(saved_graph) {
   window.location.reload();
 });
 
-self.port.on("setPanelSize", function(data) {
-  if (unsafeWindow.makeGraphSizedToPanel) {
-    unsafeWindow.makeGraphSizedToPanel(data);
-  }
-});

@@ -752,7 +752,7 @@ var GraphRunner = (function(jQuery, d3) {
         transY += dY;
       var moreTransX = transX + (1 - scale) * (runner.width/ 2);
       var moreTransY = transY + (1 - scale) * (runner.height/ 2);
-      $("#scale-group").attr("transform", "translate(" + moreTransX + "," + moreTransY +") scale(" + scale + "," + scale +")");
+      document.getElementById("scale-group").setAttribute("transform", "translate(" + moreTransX + "," + moreTransY +") scale(" + scale + "," + scale +")");
     }
 
     var self = {
