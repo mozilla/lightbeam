@@ -182,6 +182,8 @@ var GraphRunner = (function(jQuery, d3) {
         /* The popup label is defined as a path so that it can be shaped not to overlap its circle
          * Cutout circle on left end, rounded right end, length dependent on length of text.
          * Get ready for some crazy math and string composition! */
+		/* Note [Dethe]: this is largely unnecessary. Just put the label in the group before the 
+		 circle and it will have the same effect */
         var rightRadius = Math.floor(r/2);
         var reverseWidth = 0 - labelWidth - r;
         var extraHeight = 0;
