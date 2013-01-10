@@ -1,4 +1,6 @@
-[{
+(function(exports){
+
+exports.trackers = [{
     "network_id": "20",
     "domain": "bkrtx.com",
     "block_cookies": "*"
@@ -2578,4 +2580,6 @@
     "network_id": "451",
     "domain": "crispmedia.com",
     "block_cookies": "*"
-}]
+}];
+
+})(CollusionPlugin);
