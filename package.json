@@ -2,12 +2,12 @@
     "name": "collusion", 
     "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
     "author": "Atul Varma", 
-    "version": "0.24",
+    "version": "0.25",
     "url": "https://github.com/mozilla/collusion",
     "fullName": "Collusion", 
     "id": "jid1-F9UJ2thwoAm5gQ",
     "description": "Visualize who's tracking you in real time. To get started, choose 'Collusion Graph' from the Tools menu.)",
-    "dependencies": ["menuitems", "addon-kit", "api-utils"],
+    "dependencies": [],
     "preferences": [
       {
         "name": "collusion.urls",
