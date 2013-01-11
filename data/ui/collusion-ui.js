@@ -38,16 +38,7 @@ function getJsonNoMatterWhat(url, callback) {
   /* jQuery.getJSON fails silently when trying to get a local json file. jQuery.ajax
    * gets the data but then throws a mysterious error. However, the data is there and
    * perfectly parseable. Not sure why jQuery behaves this way but here's a workaround. */
-  jQuery.ajax(
-    {url: url,
-    dataType: "json",
-    error: function(xhr, errText, err) {
-      var trackers = JSON.parse(xhr.responseText);
-      callback(trackers);
-    },
-    success: function(text) {
-      callback(trackers);
-    }});
+   callback(CollusionAddon.trackers);
 }
 
 $(window).ready(function() {

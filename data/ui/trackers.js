@@ -2582,4 +2582,4 @@ exports.trackers = [{
     "block_cookies": "*"
 }];
 
-})(CollusionPlugin);
+})(CollusionAddon);
