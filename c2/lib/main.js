@@ -1,9 +1,7 @@
 (function(global) {
     let obSvc = require('observer-service');
     let Connection = require('connection').Connection;
-    let tabs = require('tabs');
-    let { Cc, Ci, Cr } = require('chrome');
-    let winutils = require('api-utils/window/utils');
+    let chrometab = require('chrometab');
     // var prefs = require('simple-prefs').prefs;
     // var url = require('url');
     // var data = require("self").data;
@@ -22,45 +20,15 @@
         }
     });
 
-    tabs.on('activate', function(jptab){
-        var tabinfo = getTabInfo(jptab);
-        var tab = tabinfo.tab;
+    chrometab.on('activate', function(tabinfo){
         var items = currentConnectionsForTab(tabinfo);
         // visualize items
         console.log('this tab matched ' + items.length + ' items');
     });
 
-    // Tab Listener Component
-    // Iterate through all windows to set tab listeners, then listen for new window
-    var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
-    function getTabInfo(jpTab){
-        // Yeah, this seems to be working! Now I just need to save data sets by tab, and get the load time for the tab
-        var chromeWindow = wm.getMostRecentWindow('navigator:browser');
-        var gBrowser = chromeWindow.gBrowser;
-        var window = gBrowser.contentWindow.wrappedJSObject;
-        return {
-            gBrowser: gBrowser,
-            tab: gBrowser.selectedTab,
-            document: gBrowser.contentDocument,
-            window: window,
-            title: gBrowser.contentTitle, // nsIPrincipal
-            principal: gBrowser.contentPrincipal, // security context
-            uri: gBrowser.contentURI, // nsURI .spec to get string representation
-            loadTime: window.performance.timing.responseStart // milliseconds at which page load was initiated
-        };
-    }
-
-
-    function matchesTab(connection){
-        return connection._sourceTab === this;
-    }
 
     function matchesCurrentTab(connection){
         return (connection._sourceTab === this.tab) && (connection.timestamp > this.loadTime);
-    }
-
-    function connectionsForTab(tab){
-        return allConnections.filter(matchesTab, tab);
     }
 
     function currentConnectionsForTab(tabinfo){

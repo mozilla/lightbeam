@@ -9,7 +9,7 @@ var {
 var eTLDSvc = Cc["@mozilla.org/network/effective-tld-service;1"].
                 getService(Ci.nsIEffectiveTLDService);
 
-var getTabForChannel = require('gettab').getTabForChannel;
+var getTabForChannel = require('chrometab').getTabForChannel;
 
 exports.Connection = Connection;
 
@@ -21,7 +21,7 @@ function objstr(obj) {
 		return '{Object: [' + Object.keys(obj).join(', ') + ']}';
 	}
 }
-	
+
 function getDomain(host) {
   try {
     return eTLDSvc.getBaseDomainFromHost(host);
@@ -31,7 +31,7 @@ function getDomain(host) {
     return host;
   }
 }
-	
+
 function isThirdParty(source, target) {
 	return getDomain(source) !== getDomain(target);
 }
@@ -81,19 +81,19 @@ function Connection(subject) {
     this._sourceTab = getTabForChannel(channel); // Never logged, only for associating data with current tab
 	this.sourceVisited = (this._sourceTab.linkedBrowser.currentURI.spec === channel.referrer.spec);
 }
-	
+
 Connection.prototype.toLog = function(){
 	if (!this.valid){
 		throw new Exception('Do not log invalid connections: ' + this);
 	}
 	return [this.source, this.target, this.timestamp, this.contentType, this.cookie, this.sourceVisited, this.secure, this.sourcePathDepth, this.sourceQueryDepth, this.sourceTab];
 };
-	
+
 Connection.prototype.toString = function(){
 	if (!this.valid){
 		return 'Invalid Connection: ' + this.message;
 	}
-	return '[source: ' + this.source + 
+	return '[source: ' + this.source +
 	       ', target: ' + this.target +
 		   ', timestamp: ' + this.timestamp +
 		   ', contentType: ' + this.contentType +

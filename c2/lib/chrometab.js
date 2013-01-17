@@ -1,14 +1,43 @@
-// GetTab
+// ChromeTab
 //
 // This is a module for getting the tab a channel is loaded in, from the channel
 
 exports.getTabForChannel = getTabForChannel;
+exports.on = onTab;
+
+
+let tabs = require('tabs');
+let { Cc, Ci, Cr } = require('chrome');
+let winutils = require('api-utils/window/utils');
+
+var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
+
+// return a variety of info on the tab
+function getTabInfo(jpTab){
+    var chromeWindow = wm.getMostRecentWindow('navigator:browser');
+    var gBrowser = chromeWindow.gBrowser;
+    var window = gBrowser.contentWindow.wrappedJSObject;
+    return {
+        gBrowser: gBrowser,
+        tab: gBrowser.selectedTab,
+        document: gBrowser.contentDocument,
+        window: window,
+        title: gBrowser.contentTitle, // nsIPrincipal
+        principal: gBrowser.contentPrincipal, // security context
+        uri: gBrowser.contentURI, // nsURI .spec to get string representation
+        loadTime: window.performance.timing.responseStart // milliseconds at which page load was initiated
+    };
+}
+
+function onTab(eventname, fn){
+    tabs.on(eventname, function(jptab){
+        var tabinfo = getTabInfo(jptab);
+        fn(tabinfo);
+    });
+}
+
 
 // Below code is based on adhacker, taken from http://forums.mozillazine.org/viewtopic.php?f=19&p=6335275
-
-var {
-    Cc, Ci, Cr
-} = require('chrome');
 
 function getTabForChannel(aHttpChannel) {
     var loadContext = getLoadContext(aHttpChannel);
