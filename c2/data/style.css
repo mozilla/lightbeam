@@ -1,0 +1,80 @@
+/*
+  Visualization colour scheme:
+  trackers: #E73547
+  visited: #6CB4F9
+  connections: #434242
+
+  background: #2E2B2B
+  text: #EAEAEA
+  dropdown buttons: #363636
+  sidebar "link" buttons: #939393
+*/
+
+html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #232B2B;
+    color: #EAEAEA;
+    overflow: visible;
+}
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
+    margin: 0;
+    padding: 0;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.main{
+    position: relative;
+    height: calc(100% - 80px);
+}
+
+.mainhead{
+    height: 80px;
+}
+
+.controls{
+    width: 200px;
+    padding: 15px 30px;
+    float: left;
+    border: 1px dashed red;
+    z-index: 5;
+    height: 100%;
+}
+
+.controls select, .controls button{
+    width: 100%;
+    height: 30px;
+    border-radius: 5px;
+    background-color: #363636;
+    color: #EAEAEA;
+}
+
+#content{
+    position: relative;
+    margin-left: 200px;
+    border: 1px dashed blue;
+    z-index: 0;
+    height: 100%;
+}
+
+.info{
+    width: 0px;
+    height: 100%;
+    float: right;
+    -moz-transition: width 0.5s ease 0;
+    border: 1px dashed yellow;
+}
+
+.showinfo .info{
+    width: 300px;
+}
+
+.stage{
+    height: 100%;
+    margin-right: 300px;
+    border: 1px dashed orange;
+}
+
