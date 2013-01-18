@@ -103,3 +103,18 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     margin-right: 300px;
 }
 
+/* SVG STYLES */
+
+text {
+    fill: #777;
+    font-family: Helvetica;
+    font-size: 9px;
+    font-variant: small-caps;
+    text-anchor: middle;
+}
+
+.tracker{
+    fill: #777;
+    stroke: none;
+}
+
