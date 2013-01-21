@@ -6,8 +6,7 @@ This is an add-on for Firefox that helps to visualize sites that may be tracking
 ## Prerequisites
 
 * [Mozilla Add-on SDK][ASDK]
-* [menuitems package for addons][menuitems]
-* [Firefox 5][] or higher.
+* [Firefox 18][] or higher.
 
 If you only want to see the demo, you don't need any of these; all you need is a modern browser.
 
@@ -17,11 +16,6 @@ First, [install][] the Mozilla Add-on SDK if you haven't already, and activate i
 
     cd addon-sdk
     source bin/activate
-
-In the addons-sdk/packages directory, you will need to install the menuitems package and its dependency, the vold-utils package:
-
-    git clone https://github.com/voldsoftware/vold-utils-jplib.git
-    git clone https://github.com/voldsoftware/menuitems-jplib.git
 
 Then, check out the Collusion repository and enter it (do this where you want the Collusion directory, not in the addon-sdk directory):
 
@@ -50,11 +44,10 @@ The following software is bundled with the repository and doesn't need to be man
 Contained within the repository is a JSON file listing all public trackers on the internet. It came with the [TrackerBlock][] add-on.
 
   [ASDK]: https://addons.mozilla.org/en-US/developers/builder
-  [menuitems]: https://github.com/voldsoftware/menuitems-jplib
   [D3]: http://mbostock.github.com/d3/
   [jQuery]: https://github.com/jquery/jquery
   [TrackerBlock]: http://www.privacychoice.org/trackerblock/firefox
-  [Firefox 5]: http://www.mozilla.com/en-US/firefox/fx/
+  [Firefox 18]: http://www.mozilla.com/en-US/firefox/fx/
 
 ## LICENSE
 
