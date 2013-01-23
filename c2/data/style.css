@@ -24,7 +24,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     padding: 0;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans";
 }
 
 .main{
@@ -72,6 +72,14 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     border-bottom: 2px solid #363636;
 }
 
+.controls a{
+    color: #939393;
+}
+
+.controls a:hover{
+    color: white;
+}
+
 #content{
     position: relative;
     margin-left: 200px;
@@ -107,6 +115,10 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .showinfo .info{
     width: 300px;
+}
+
+.status {
+    color: #007fff;
 }
 
 .stage{
