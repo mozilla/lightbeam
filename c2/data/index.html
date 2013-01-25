@@ -5,6 +5,7 @@
     <title>Collusion</title>
     <link rel="stylesheet" type="text/css" href="OpenSans.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="ui.js"></script>
 </head>
 <body>
     <header class="mainhead">
@@ -12,17 +13,35 @@
     </header>
     <div class="main">
         <aside class="controls">
-            <select>
-                <option>Today</option>
-            </select>
-            <select>
-                <option>Visualization</option>
-            </select>
-            <ul>
+            <div class="btn_group">
+                <div data-view class="dropdown_button">
+                    <a class="selected_time">Today</a>
+                    <div class="downarrow">v</div>
+                </div>
+                <ul data-list class="dropdown_options collapsed">
+                    <li data-selected data-value="Today">Today</a></li>
+                    <li data-value="BBB">BBB</li>
+                    <li data-value="CCC">CCC</li>
+                    <li data-value="DDD">DDD</li>
+                </ul>
+            </div>
+            
+            <div class="btn_group">
+                <div data-view class="dropdown_button">
+                    <a class="selected_visualization">Visualization</a>
+                    <div class="downarrow">v</div>
+                </div>
+                <ul class="dropdown_options collapsed">
+                    <li data-selected data-value="visualization">Visualization</li>
+                    <li data-value="bbb">bbb</li>
+                    <li data-value="ccc">ccc</li>
+                </ul>
+            </div>
+            
+            <ul class="controls_options">
                 <li class="settings"><a>Settings</a></li>
                 <li class="security"><a>Security</a></li>
                 <li class="download"><a>Download data</a></li>
-                <li><a>(temp) Info Panel</a></li>
             </ul>
         </aside>
         <div id="content" class="showinfo">

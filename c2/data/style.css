@@ -49,6 +49,74 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     border-right: 2px solid #363636;
     z-index: 5;
     height: 100%;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.controls .btn_group > *{
+    background: #363636;
+}
+
+.controls .btn_group{
+    width: 100%;
+    margin-bottom: 7px;
+    position: relative;
+}
+
+.controls .btn_group .dropdown_button{
+    height: 30px;
+    line-height: 28px;
+    border: 1px solid #939393;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.controls .btn_group a.selected_time, .controls .btn_group a.selected_visualization{
+    color: #EAEAEA;
+}
+
+.controls .btn_group .downarrow{
+    float: right;
+    border-left: 1px solid #939393;
+    padding: 0px 10px;
+}
+
+.collapsed {
+    /* display: none; */
+    display: none;
+}
+
+.overlayed{
+    z-index: 100;
+}
+
+.controls .btn_group .dropdown_options{  /* === need specification === */
+    border-radius: 5px;
+    border-color: #363636;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    line-height: 28px;
+    position: absolute;
+    width: 100%;
+}
+
+.controls .btn_group ul.dropdown_options li{
+    margin: 0;
+    width: 100%;
+    padding-left: 10px;
+    border-color: #939393;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    line-height: 28px;
+}
+
+.controls .btn_group ul.dropdown_options li[data-selected]{
+    display: none;
+}
+
+.controls .btn_group ul.dropdown_options li:hover{
+    background: #000000;
+    color: #939393;
 }
 
 .controls select{
@@ -59,9 +127,6 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     color: #EAEAEA;
 }
 
-.controls select, .controls ul li{
-    margin-bottom: 7px;
-}
 
 .controls ul{
     list-style-type: none;
@@ -70,9 +135,11 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 .controls ul li{
     height: 30px;
     border-bottom: 2px solid #363636;
+    line-height: 28px;
+    padding-left: 10px;
 }
 
-.controls a{
+.controls .controls_options a{
     color: #939393;
 }
 
