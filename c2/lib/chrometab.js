@@ -14,19 +14,26 @@ var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMe
 
 // return a variety of info on the tab
 function getTabInfo(jpTab){
-    var chromeWindow = wm.getMostRecentWindow('navigator:browser');
-    var gBrowser = chromeWindow.gBrowser;
-    var window = gBrowser.contentWindow.wrappedJSObject;
-    return {
-        gBrowser: gBrowser,
-        tab: gBrowser.selectedTab,
-        document: gBrowser.contentDocument,
-        window: window,
-        title: gBrowser.contentTitle, // nsIPrincipal
-        principal: gBrowser.contentPrincipal, // security context
-        uri: gBrowser.contentURI, // nsURI .spec to get string representation
-        loadTime: window.performance.timing.responseStart // milliseconds at which page load was initiated
-    };
+    // Some windows don't have performance initialized (because they haven't been reloaded since the plugin was initialized?
+    try{
+        var chromeWindow = wm.getMostRecentWindow('navigator:browser');
+        var gBrowser = chromeWindow.gBrowser;
+        var window = gBrowser.contentWindow.wrappedJSObject;
+        console.log('content window performance: ', gBrowser.contentWindow.performance);
+        console.log('wrapped window performance: ', gBrowser.contentWindow.wrappedJSObject.performance);
+        return {
+            gBrowser: gBrowser,
+            tab: gBrowser.selectedTab,
+            document: gBrowser.contentDocument,
+            window: window,
+            title: gBrowser.contentTitle, // nsIPrincipal
+            principal: gBrowser.contentPrincipal, // security context
+            uri: gBrowser.contentURI, // nsURI .spec to get string representation
+            loadTime: window.performance.timing.responseStart // milliseconds at which page load was initiated
+        };
+    }catch(e){
+        return null;
+    }
 }
 
 function onTab(eventname, fn){

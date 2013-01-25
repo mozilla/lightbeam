@@ -1,5 +1,6 @@
 // Visualization of tracking data over 24 hours
 (function(){
+"use strict";
 const CX = 300;
 const CY = 500;
 const CENTRE = CX + ',' + CY;
@@ -60,7 +61,7 @@ function drawTimes(){
             y: TIME_Y,
             transform: 'rotate(' + (7.5 * idx) + ' ' + CENTRE + ') ' + TIME_TRANS
         }, time)
-    )});
+    );});
     times.slice(12).reverse().forEach(function(time, idx){
         visualization.appendChild(svg('text', {
             x: TIME_X2,
