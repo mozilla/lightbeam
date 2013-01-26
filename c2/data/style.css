@@ -69,6 +69,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     border: 1px solid #939393;
     border-radius: 5px;
     padding-left: 10px;
+    cursor: pointer;
 }
 
 .controls .btn_group a.selected_time, .controls .btn_group a.selected_visualization{
@@ -210,5 +211,11 @@ text {
 .tracker{
     fill: #777;
     stroke: none;
+}
+
+#timerhand{
+    fill: #4F8154;
+    stroke: #4F8154;
+    strokewidth: 3px;
 }
 
