@@ -5,6 +5,7 @@ const CX = 300;
 const CY = 500;
 const CENTRE = CX + ',' + CY;
 const DOT_TRANS = 'translate(640, 495)';
+const HAND_TRANS = 'translate(505, 495)';
 const TIME_TRANS = 'translate(0, 4)';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const TIME_X1 = 35;
@@ -53,6 +54,10 @@ function addTracker(tracker){
     var count = timeslots[time][offset].length;
 }
 
+function timeToAngle(date){
+    return (date.getHours() * 4 + Math.floor(date.getMinutes() / 15)) * 1.875;
+}
+
 function drawTimes(){
     var text;
     times.slice(0,12).forEach(function(time, idx){
@@ -98,11 +103,24 @@ function drawTrackerDots(){
     });
 }
 
+function drawTimerHand(time){
+    if (!time) time = new Date();
+    var hand = document.getElementById('timerhand');
+    if (!hand){
+        var hand = svg('g', {id: 'timerhand'});
+        hand.appendChild(svg('line', {x1: 0, y1: 0, x2: 400, y2: 0}));
+        hand.appendChild(svg('path', {d: 'M47,-8 L47,8 73,5 73,-5 Z'}));
+        visualization.appendChild(hand);
+    }
+    hand.setAttribute('transform', 'rotate(' + (timeToAngle(time) - 180) + ' ' + CENTRE + ') ' + HAND_TRANS);
+    console.log('hand: %o', hand);
+}
+
 function update(){
     // draw clock dial
     drawTimes();
     drawTrackerDots();
-    // draw timer hand
+    drawTimerHand();
     // draw text info
 }
 
