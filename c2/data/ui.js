@@ -21,7 +21,6 @@ window.addEventListener("DOMContentLoaded", function(){
             var selected = el.querySelector("[data-selected]");
             var targetValue = e.target.getAttribute("data-value");
             el.querySelector(".dropdown_options").classList.toggle("collapsed");
-            el.querySelector(".dropdown_options").classList.toggle("overlayed");
             if ( targetValue ){
                 view.querySelector("a").innerHTML = e.target.innerHTML;
                 selected.removeAttribute("data-selected");

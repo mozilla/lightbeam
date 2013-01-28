@@ -83,15 +83,10 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 }
 
 .collapsed {
-    /* display: none; */
     display: none;
 }
 
-.overlayed{
-    z-index: 100;
-}
-
-.controls .btn_group .dropdown_options{  /* === need specification === */
+.controls .btn_group .dropdown_options{
     border-radius: 5px;
     border-color: #363636;
     border-width: 0px 1px 1px 1px;
@@ -99,6 +94,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     line-height: 28px;
     position: absolute;
     width: 100%;
+    z-index: 100;
 }
 
 .controls .btn_group ul.dropdown_options li{
