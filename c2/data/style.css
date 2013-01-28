@@ -61,15 +61,15 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     width: 100%;
     margin-bottom: 7px;
     position: relative;
+    cursor: pointer;
 }
 
 .controls .btn_group .dropdown_button{
     height: 30px;
     line-height: 28px;
     border: 1px solid #939393;
-    border-radius: 5px;
+    border-radius: 2px;
     padding-left: 10px;
-    cursor: pointer;
 }
 
 .controls .btn_group a.selected_time, .controls .btn_group a.selected_visualization{
@@ -86,8 +86,12 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     display: none;
 }
 
+.invi_focus:focus{
+    outline: none;
+}
+
 .controls .btn_group .dropdown_options{
-    border-radius: 5px;
+    border-radius: 2px;
     border-color: #363636;
     border-width: 0px 1px 1px 1px;
     border-style: solid;
@@ -97,9 +101,9 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     z-index: 100;
 }
 
-.controls .btn_group ul.dropdown_options li{
+.controls .btn_group div.dropdown_options a{
     margin: 0;
-    width: 100%;
+    display: block;
     padding-left: 10px;
     border-color: #939393;
     border-width: 0px 1px 1px 1px;
@@ -107,11 +111,11 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     line-height: 28px;
 }
 
-.controls .btn_group ul.dropdown_options li[data-selected]{
+.controls .btn_group div.dropdown_options a[data-selected]{
     display: none;
 }
 
-.controls .btn_group ul.dropdown_options li:hover{
+.controls .btn_group div.dropdown_options a:hover{
     background: #000000;
     color: #939393;
 }
