@@ -39,6 +39,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .mainhead h1{
     margin-left: 30px;
+    font-size: 20px;
 }
 
 .controls{
@@ -53,21 +54,27 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     font-weight: bold;
 }
 
+.controls i:not(.icon-sort-down){
+    margin-right: 5px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
 .controls .btn_group > *{
     background: #363636;
 }
 
 .controls .btn_group{
     width: 100%;
-    margin-bottom: 7px;
     position: relative;
     cursor: pointer;
+    font-size: 11px;
 }
 
 .controls .btn_group .dropdown_button{
-    height: 30px;
-    line-height: 28px;
-    border: 1px solid #939393;
+    height: 32px;
+    line-height: 30px;
+    border: 1px solid #555555;
     border-radius: 2px;
     padding-left: 10px;
 }
@@ -78,7 +85,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .controls .btn_group .downarrow{
     float: right;
-    border-left: 1px solid #939393;
+    border-left: 1px solid #555555;
     padding: 0px 10px;
 }
 
@@ -120,24 +127,15 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     color: #939393;
 }
 
-.controls select{
-    width: 100%;
-    height: 30px;
-    border-radius: 5px;
-    background-color: #363636;
-    color: #EAEAEA;
-}
-
-
 .controls ul{
     list-style-type: none;
 }
 
 .controls ul li{
-    height: 30px;
-    border-bottom: 2px solid #363636;
-    line-height: 28px;
-    padding-left: 10px;
+    height: 40px;
+    border-bottom: 1px solid #3E3D3D;
+    line-height: 38px;
+    padding-left: 6px;
 }
 
 .controls .controls_options a{
@@ -156,6 +154,10 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     border-top: 2px solid #363636;
 }
 
+#content span, #content p{
+    font-size: 12px;
+}
+
 .info{
     width: 0px;
     height: 100%;
@@ -167,7 +169,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 .map{
     width: 240px;
     height: 200px;
-    background-color: #000060;
+    background-color: #555555;
     margin-bottom: 10px;
 }
 
@@ -181,12 +183,17 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     padding: 10px 0px;
 }
 
+.info .holder span{
+    display: block;
+    line-height:
+}
+
 .showinfo .info{
     width: 300px;
 }
 
 .status {
-    color: #007fff;
+    color: #667efc;
 }
 
 .stage{

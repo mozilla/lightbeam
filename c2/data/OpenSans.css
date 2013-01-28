@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'Open Sans';
-  font-style: normal;
+  font-style: bold;
   font-weight: 700;
   src: url('font/opensans-bold-webfont.woff') format('woff'),
   url('font/opensans-bold-webfont.ttf') format('truetype');
