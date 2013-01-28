@@ -68,7 +68,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     width: 100%;
     position: relative;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .controls .btn_group .dropdown_button{
@@ -98,10 +98,6 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 }
 
 .controls .btn_group .dropdown_options{
-    border-radius: 2px;
-    border-color: #363636;
-    border-width: 0px 1px 1px 1px;
-    border-style: solid;
     line-height: 28px;
     position: absolute;
     width: 100%;
@@ -112,7 +108,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     margin: 0;
     display: block;
     padding-left: 10px;
-    border-color: #939393;
+    border-color: #555555;
     border-width: 0px 1px 1px 1px;
     border-style: solid;
     line-height: 28px;
