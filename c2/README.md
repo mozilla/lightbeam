@@ -2,6 +2,14 @@
 
 Refactoring to have a suite of reusable components.
 
+The README.md should answer common questions like:
+
+* What does your software do? Is it an application? A library?
+* Links through to important sections of the wiki. Like installation instructions
+* How do I contribute code? Link to contributors file
+* Where is the community around this software? List IRC channels, mailing lists, issue trackers, code repositories, etc.
+
+
 ## Components of Collusion
 
 * [x] Connection Listener: get each connection for logging
