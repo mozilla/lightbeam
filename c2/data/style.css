@@ -16,7 +16,7 @@ html, body{
     height: 100%;
     background-color: #2E2B2B;
     color: #EAEAEA;
-    overflow: visible;
+    overflow: hidden;
 }
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td,select {
@@ -35,22 +35,32 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 .mainhead{
     height: 80px;
     line-height: 80px;
+    background: #333131;
 }
 
 .mainhead h1{
     margin-left: 30px;
+    font-size: 20px;
 }
 
 .controls{
     width: 200px;
     padding: 15px 30px;
     float: left;
-    border-top: 2px solid #363636;
-    border-right: 2px solid #363636;
+    border-top: 1px solid #555555;
+    border-right: 1px solid #555555;
     z-index: 5;
     height: 100%;
     font-size: 12px;
     font-weight: bold;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.controls i:not(.icon-sort-down){
+    margin-right: 5px;
+    font-size: 14px;
+    vertical-align: middle;
 }
 
 .controls .btn_group > *{
@@ -59,17 +69,17 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .controls .btn_group{
     width: 100%;
-    margin-bottom: 7px;
     position: relative;
+    cursor: pointer;
+    font-size: 12px;
 }
 
 .controls .btn_group .dropdown_button{
-    height: 30px;
-    line-height: 28px;
-    border: 1px solid #939393;
-    border-radius: 5px;
+    height: 32px;
+    line-height: 30px;
+    border: 1px solid #555555;
+    border-radius: 2px;
     padding-left: 10px;
-    cursor: pointer;
 }
 
 .controls .btn_group a.selected_time, .controls .btn_group a.selected_visualization{
@@ -78,66 +88,48 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .controls .btn_group .downarrow{
     float: right;
-    border-left: 1px solid #939393;
+    border-left: 1px solid #555555;
     padding: 0px 10px;
 }
 
 .collapsed {
-    /* display: none; */
     display: none;
 }
 
-.overlayed{
-    z-index: 100;
+.invi_focus:focus{
+    outline: none;
 }
 
-.controls .btn_group .dropdown_options{  /* === need specification === */
-    border-radius: 5px;
-    border-color: #363636;
-    border-width: 0px 1px 1px 1px;
-    border-style: solid;
+.controls .btn_group .dropdown_options{
     line-height: 28px;
     position: absolute;
     width: 100%;
+    z-index: 100;
 }
 
-.controls .btn_group ul.dropdown_options li{
+.controls .btn_group div.dropdown_options a{
     margin: 0;
-    width: 100%;
+    display: block;
     padding-left: 10px;
-    border-color: #939393;
+    border-color: #555555;
     border-width: 0px 1px 1px 1px;
     border-style: solid;
     line-height: 28px;
 }
 
-.controls .btn_group ul.dropdown_options li[data-selected]{
+.controls .btn_group div.dropdown_options a[data-selected]{
     display: none;
 }
-
-.controls .btn_group ul.dropdown_options li:hover{
-    background: #000000;
-    color: #939393;
-}
-
-.controls select{
-    width: 100%;
-    height: 30px;
-    border-radius: 5px;
-    background-color: #363636;
-    color: #EAEAEA;
-}
-
 
 .controls ul{
     list-style-type: none;
 }
 
 .controls ul li{
-    height: 30px;
-    border-bottom: 2px solid #363636;
-    line-height: 28px;
-    padding-left: 10px;
+    height: 40px;
+    border-bottom: 1px solid #3E3D3D;
+    line-height: 38px;
+    padding-left: 6px;
 }
 
 .controls .controls_options a{
@@ -153,21 +145,27 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     margin-left: 200px;
     z-index: 0;
     height: 100%;
-    border-top: 2px solid #363636;
+    border-top: 1px solid #555555;
+}
+
+#content span, #content p{
+    font-size: 12px;
 }
 
 .info{
     width: 0px;
     height: 100%;
     float: right;
-    border-left: 2px solid #363636;
+    border-left: none;
     transition: width 0.5s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .map{
     width: 240px;
     height: 200px;
-    background-color: #000060;
+    background-color: #555555;
     margin-bottom: 10px;
 }
 
@@ -181,17 +179,22 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     padding: 10px 0px;
 }
 
+.info .holder span{
+    display: block;
+}
+
 .showinfo .info{
     width: 300px;
+    border-left: 1px solid #555555;
 }
 
 .status {
-    color: #007fff;
+    color: #667efc;
 }
 
 .stage{
     height: 100%;
-    margin-right: 0;
+    margin-right: 0px;
     transition: margin-right 0.5s ease;
 }
 .showinfo .stage{

@@ -22,7 +22,7 @@
  */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('fontawesome-webfont.woff?v=3.0.1') format('woff');
+  src: url('font/fontawesome-webfont.woff?') format('woff');
   font-weight: normal;
   font-style: normal;
 }

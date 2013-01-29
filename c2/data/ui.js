@@ -11,44 +11,63 @@
 window.addEventListener("DOMContentLoaded", function(){
     var sampleDropdown = document.querySelector(".btn_group");
     
-    function dropDownGroup(el, callback ){
-        var view = el.querySelector("[data-view]");
-        var list = el.querySelector("[data-list]");
+    /* dropdown lists on the side bar */
+    function dropDownGroup(btnGroup, callback){
+        var view = btnGroup.querySelector("[data-view]");
+        var list = btnGroup.querySelector("[data-list]");
     
         callback = callback || function(){};
     
-        el.addEventListener("click", function(e){
-            var selected = el.querySelector("[data-selected]");
+        btnGroup.addEventListener("click", function(e){
+            var selected = btnGroup.querySelector("[data-selected]");
             var targetValue = e.target.getAttribute("data-value");
-            el.querySelector(".dropdown_options").classList.toggle("collapsed");
-            el.querySelector(".dropdown_options").classList.toggle("overlayed");
+            var activeDropdown = document.querySelector(".active_dropdown");
+            
+            // allows only one open dropdown list at a time
+            if( activeDropdown && !btnGroup.classList.contains("active_dropdown") ){
+                activeDropdown.querySelector(".dropdown_options").classList.add("collapsed");
+                activeDropdown.classList.remove("active_dropdown");
+            }
+            
+            // opens up the current selected dropdown list
+            btnGroup.querySelector(".dropdown_options").classList.toggle("collapsed");
+            btnGroup.classList.toggle("active_dropdown");
+            
+            // when user selects an option from the dropdown list
             if ( targetValue ){
-                view.querySelector("a").innerHTML = e.target.innerHTML;
+                view.querySelector("a:not(.invi_focus)").innerHTML = e.target.innerHTML;
                 selected.removeAttribute("data-selected");
                 e.target.setAttribute("data-selected", true);
                 callback(targetValue);
-            }                 
+            }
+            
         }, false);
-    
     }
     
-    // bind actions to each of the btn_group elements
+    
+    /* bind actions to each of the btn_group elements */
     [].forEach.call(
         document.querySelectorAll(".btn_group"),
-        function(el){
-            dropDownGroup(el, function(val){
+        function(btnGroup){
+            dropDownGroup(btnGroup, function(val){
                 //console.log("selected val=" + val);
             });
         }
     )
                         
 
+    /* Toggle Info Panel */
+    document.querySelector(".temp_showinfo").addEventListener("click", function(){
+        document.querySelector("#content").classList.toggle("showinfo");
+    });
+
+
 });
 
 
 
 
-// skip empty text nodes and find the next sibling node
+/* skip empty text nodes and find the next sibling node */
 function getNextSibling(current_node){
     next_node = current_node.nextSibling;
     while (next_node.nodeType != 1){
