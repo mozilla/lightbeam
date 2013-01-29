@@ -16,7 +16,7 @@ html, body{
     height: 100%;
     background-color: #2E2B2B;
     color: #EAEAEA;
-    overflow: visible;
+    overflow: hidden;
 }
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td,select {
@@ -53,6 +53,8 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     height: 100%;
     font-size: 12px;
     font-weight: bold;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .controls i:not(.icon-sort-down){
@@ -154,8 +156,10 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     width: 0px;
     height: 100%;
     float: right;
-    border-left: 1px solid #555555;
+    border-left: none;
     transition: width 0.5s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .map{
@@ -181,6 +185,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .showinfo .info{
     width: 300px;
+    border-left: 1px solid #555555;
 }
 
 .status {
@@ -189,7 +194,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .stage{
     height: 100%;
-    margin-right: 1px;
+    margin-right: 0px;
     transition: margin-right 0.5s ease;
 }
 .showinfo .stage{
