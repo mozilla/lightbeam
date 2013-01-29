@@ -45,15 +45,13 @@ window.addEventListener("DOMContentLoaded", function(){
     }
     
     
-    /* bind actions to each of the btn_group elements */
-    [].forEach.call(
-        document.querySelectorAll(".btn_group"),
-        function(btnGroup){
-            dropDownGroup(btnGroup, function(val){
+    /* Bind click event listener to each of the btn_group memebers */
+    var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
+    btnGroupArray.forEach(function(btnGroup){
+        dropDownGroup(btnGroup, function(val){
                 //console.log("selected val=" + val);
-            });
-        }
-    )
+        });
+    });
                         
 
     /* Toggle Info Panel */
@@ -61,18 +59,11 @@ window.addEventListener("DOMContentLoaded", function(){
         document.querySelector("#content").classList.toggle("showinfo");
     });
 
-
 });
 
 
 
-
-/* skip empty text nodes and find the next sibling node */
-function getNextSibling(current_node){
-    next_node = current_node.nextSibling;
-    while (next_node.nodeType != 1){
-        next_node = next_node.nextSibling;
-    }
-    return next_node;
+/* Convert a NodeList to Array */
+function toArray(nl){
+    return Array.prototype.slice.call(nl, 0);
 }
-

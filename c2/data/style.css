@@ -63,18 +63,18 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     vertical-align: middle;
 }
 
-.controls .btn_group > *{
+.btn_group > *{
     background: #363636;
 }
 
-.controls .btn_group{
+.btn_group{
     width: 100%;
     position: relative;
     cursor: pointer;
     font-size: 12px;
 }
 
-.controls .btn_group .dropdown_button{
+.btn_group .dropdown_button{
     height: 32px;
     line-height: 30px;
     border: 1px solid #555555;
@@ -82,14 +82,15 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     padding-left: 10px;
 }
 
-.controls .btn_group a.selected_time, .controls .btn_group a.selected_visualization{
+.btn_group a.selected_time,
+.btn_group a.selected_visualization{
     color: #EAEAEA;
 }
 
-.controls .btn_group .downarrow{
+.btn_group .downarrow{
     float: right;
     border-left: 1px solid #555555;
-    padding: 0px 10px;
+    padding: 0 10px;
 }
 
 .collapsed {
@@ -112,7 +113,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     display: block;
     padding-left: 10px;
     border-color: #555555;
-    border-width: 0px 1px 1px 1px;
+    border-width: 0 1px 1px 1px;
     border-style: solid;
     line-height: 28px;
 }
@@ -148,12 +149,13 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     border-top: 1px solid #555555;
 }
 
-#content span, #content p{
+#content span,
+#content p{
     font-size: 12px;
 }
 
 .info{
-    width: 0px;
+    width: 0;
     height: 100%;
     float: right;
     border-left: none;
@@ -176,7 +178,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 }
 
 .info .holder .subhead {
-    padding: 10px 0px;
+    padding: 10px 0;
 }
 
 .info .holder span{
@@ -194,7 +196,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .stage{
     height: 100%;
-    margin-right: 0px;
+    margin-right: 0;
     transition: margin-right 0.5s ease;
 }
 .showinfo .stage{
