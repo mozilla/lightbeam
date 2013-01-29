@@ -11,7 +11,8 @@
 window.addEventListener("DOMContentLoaded", function(){
     var sampleDropdown = document.querySelector(".btn_group");
     
-    function dropDownGroup(btnGroup, callback ){
+    /* dropdown lists on the side bar */
+    function dropDownGroup(btnGroup, callback){
         var view = btnGroup.querySelector("[data-view]");
         var list = btnGroup.querySelector("[data-list]");
     
@@ -41,10 +42,10 @@ window.addEventListener("DOMContentLoaded", function(){
             }
             
         }, false);
-    
     }
     
-    // bind actions to each of the btn_group elements
+    
+    /* bind actions to each of the btn_group elements */
     [].forEach.call(
         document.querySelectorAll(".btn_group"),
         function(btnGroup){
@@ -55,12 +56,18 @@ window.addEventListener("DOMContentLoaded", function(){
     )
                         
 
+    /* Toggle Info Panel */
+    document.querySelector(".temp_showinfo").addEventListener("click", function(){
+        document.querySelector("#content").classList.toggle("showinfo");
+    });
+
+
 });
 
 
 
 
-// skip empty text nodes and find the next sibling node
+/* skip empty text nodes and find the next sibling node */
 function getNextSibling(current_node){
     next_node = current_node.nextSibling;
     while (next_node.nodeType != 1){
