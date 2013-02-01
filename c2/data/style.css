@@ -196,7 +196,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 
 .stage{
     height: 100%;
-    margin-right: 0;
+    margin-right: 1px;
     transition: margin-right 0.5s ease;
 }
 .showinfo .stage{
