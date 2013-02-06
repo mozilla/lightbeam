@@ -86,18 +86,22 @@ function drawTimes(){
     )});
 }
 
-clock.timeslots = new Array(24);
+clock.timeslots = new Array(96);
 
-// TODO: Use real timestamps for test data
+function timeToBucket(timestamp){
+    return timestamp.getHours() * 4 + Math.floor(timestamp.getMinutes() / 15);
+}
+
 // TODO: implement timeToBucket
 
-clock.on('connection', function(connection){
+clock.on('connection', onConnection);
+
+function onConnection(connection){
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
-    console.log('clock connection');
-    var bucketIdx = timeToBucket(connection.timestamp, 96);
+    var bucketIdx = timeToBucket(connection.timestamp);
     if (! clock.timeslots[bucketIdx]){
-        var angle = -180 + (bucketidx * 1.875); // in degrees
+        var angle = -180 + (bucketIdx * 1.875); // in degrees
         clock.timeslots[bucketIdx] = {
             group: svg('g', {
                 transform: 'rotate(' + angle + ' ' + CENTRE + ') ' + DOT_TRANS
@@ -108,14 +112,14 @@ clock.on('connection', function(connection){
     }
     var bucket = clock.timeslots[bucketIdx];
     var connectionIdx = bucket.connections.length;
-    connections.push(connection);
+    bucket.connections.push(connection);
     bucket.group.appendChild(svg('circle', {
         cx: connectionIdx * 10,
         cy: 0,
         r: 3,
         'class': 'tracker'
     }));
-});
+}
 
 function drawTimerHand(time){
     if (!time) time = new Date();
@@ -135,9 +139,10 @@ clock.on('init', function(connections){
     // draw clock dial
     drawTimes();
     drawTimerHand();
-    console.log('clock init');
+    connections.forEach(function(connection){
+        onConnection(connection);
+    });
 });
 
 })(visualizations);
 
-console.log('clock visualization initialized');
