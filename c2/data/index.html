@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" href="OpenSans.css" />
     <link rel="stylesheet" type="text/css" href="font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script type="text/javascript" src="ui.js"></script>
 </head>
 <body>
     <header class="mainhead">
@@ -35,11 +34,10 @@
                 </div>
                 <div data-list class="dropdown_options collapsed">
                     <a data-selected data-value="visualization">Visualization</a>
-                    <a data-value="222">222</a>
-                    <a data-value="333">333</a>
-                    <a data-value="444">444</a>
-                    <a data-value="555">555</a>
-                    <a data-value="666">666</a>
+                    <a data-value="Graph">Graph</a>
+                    <a data-value="Clock">Clock</a>
+                    <a data-value="Data Mine">Data Mine</a>
+                    <a data-value="Badges">Badges</a>
                 </div>
             </div>
             <ul class="controls_options">
@@ -49,7 +47,7 @@
                 <li class="temp_showinfo"><a>Toggle Info Panel</a></li>
             </ul>
         </aside>
-        
+
         <div id="content" class="showinfo">
             <aside class="info">
                 <div class="holder">
@@ -67,7 +65,7 @@
                 </div>
             </aside>
             <div class="stage">
-                <svg class="visualization" width="100%" height="100%">
+                <svg class="vizcanvas" width="100%" height="100%">
                     <defs>
                     </defs>
                     <path stroke="#999" fill="none" stroke-width="90" d="M50,500 A180,180 0 0,1 550,500" />
@@ -76,6 +74,10 @@
             </div>
         </div>
     </div>
-    <script src="daily.js"></script>
+    <script src="events.js"></script>
+    <script src="collusion.js"></script>
+    <script src="ui.js"></script>
+    <!-- Visualizations -->
+    <script src="clock.js"></script>
 </body>
 </html>
