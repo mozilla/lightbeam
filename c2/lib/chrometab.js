@@ -19,8 +19,6 @@ function getTabInfo(jpTab){
         var chromeWindow = wm.getMostRecentWindow('navigator:browser');
         var gBrowser = chromeWindow.gBrowser;
         var window = gBrowser.contentWindow.wrappedJSObject;
-        console.log('content window performance: ', gBrowser.contentWindow.performance);
-        console.log('wrapped window performance: ', gBrowser.contentWindow.wrappedJSObject.performance);
         return {
             gBrowser: gBrowser,
             tab: gBrowser.selectedTab,
