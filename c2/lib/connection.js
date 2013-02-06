@@ -86,8 +86,23 @@ Connection.prototype.toLog = function(){
 	if (!this.valid){
 		throw new Exception('Do not log invalid connections: ' + this);
 	}
-	return [this.source, this.target, this.timestamp, this.contentType, this.cookie, this.sourceVisited, this.secure, this.sourcePathDepth, this.sourceQueryDepth, this.sourceTab];
+	return [this.source, this.target, this.timestamp, this.contentType, this.cookie, this.sourceVisited, this.secure, this.sourcePathDepth, this.sourceQueryDepth];
 };
+
+Connection.prototype.toJSON = function(){
+    return {
+        source: this.source,
+        target: this.target,
+        timestamp: this.timestamp,
+        contentType: this.contentType,
+        cookie: this.cookie,
+        sourceVisited: this.sourceVisited,
+        secure: this.secure,
+        sourcePathDepth: this.sourcePathDepth,
+        sourceQueryDepth: this.sourceQueryDepth
+    };
+};
+
 
 Connection.prototype.toString = function(){
 	if (!this.valid){
@@ -104,7 +119,6 @@ Connection.prototype.toString = function(){
 		   ', sourceQueryDepth: ' + this.sourceQueryDepth +
 		   ', sourceTab: ' + this._sourceTab +
 	']';
-	return '[source: ' + this.source + ', target: ' + this.target + ',  timestamp: ' + this.timestamp + ', contentType: ' + this.contentType + ', cookie: ' + this.cookie + ', sourceVisited: ' + this.sourceVisited + ', secure: ' + this.secure + ', sourcePathDepth: ' + this.sourcePathDepth + ', sourceQueryDepth: ' + this.sourceQueryDepth + ', sourceTab: ' + objstr(this.sourceTab) + ']';
 };
 
 
