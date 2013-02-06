@@ -217,8 +217,8 @@ text {
 }
 
 #timerhand{
-    fill: #4F8154;
-    stroke: #4F8154;
+    fill: rgba(79, 129, 85, .6);
+    stroke: rgba(79, 129, 85, .6);
     strokewidth: 3px;
 }
 
