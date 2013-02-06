@@ -12,24 +12,30 @@
     // var windowUtils = require("window-utils");
     // var addontab = require('addon-page');
     var allConnections = [];
+    var connectionFilter = function(connection){ return true; };
     obSvc.add("http-on-examine-response", function(subject) {
         var connection = new Connection(subject);
         if (connection.valid){
-            // console.log(connection);
             allConnections.push(connection);
+            // FIXME: Save less frequently
+            saveConnections();
+            if (uiworker && connectionFilter(connection)){
+                uiworker.port.emit('connection', connection);
+            }
         }
     });
 
     chrometab.on('activate', function(tabinfo){
         var items = currentConnectionsForTab(tabinfo);
         // visualize items
-        console.log('this tab matched ' + items.length + ' items');
     });
 
 
     function matchesCurrentTab(connection){
         // this is a tabinfo object
         var tabinfo = this;
+        if (!tabinfo) return false;
+        if (!tabinfo.uri) return false;
         if (tabinfo.uri.spec === mainPage){ return false; }
         return (connection._sourceTab === tabinfo.tab) && (connection.timestamp > tabinfo.loadTime);
     }
@@ -37,6 +43,27 @@
     function currentConnectionsForTab(tabinfo){
         return allConnections.filter(matchesCurrentTab, tabinfo);
     }
+
+    // START SERIALIZATION
+    var storage = require("simple-storage").storage;
+    if (storage.connections){
+        allConnections = JSON.parse(storage.connections).map(function(connection){
+            connection.__proto__ = Connection.prototype;
+            connection.valid = true;
+            connection.timestamp = new Date(connection.timestamp);
+            return connection;
+        });
+    }
+    if (!storage.collusionToken){
+        storage.collusionToken = require('sdk/util/uuid').uuid().toString();
+    }
+    var collusionToken = storage.collusionToken;
+
+
+    function saveConnections(){
+        storage.connections = JSON.stringify(allConnections);
+    }
+    // END SERIALIZATION
 
     // Handle Private Browsing
 
@@ -65,21 +92,16 @@
     let tabs = require('tabs');
     let data = require("self").data;
     let mainPage = data.url("index.html");
-    let workers = [];
+    let uiworker = null;
 
     function attachToCollusionPage(worker) {
       /* Set up channel of communication between this add-on and the script (content-script.js)
        * that we attached to the web page running the Collusion UI. */
         // FIXME, this is drawn directly from old Collusion
-        workers.push(worker);
-        if (workers.length > 1){
-            console.log('WARNING: We should not have more than one worker here');
-        }
-        worker.on("detach", function() {
-            workers.splice(workers.indexOf(worker), 1);
-        });
-        worker.port.on("init", function() {
-            worker.port.emit("updateAllConnections", JSON.stringify(allConnections));
+        uiworker = worker;
+        // worker.port.emit('log', 'attaching worker');
+        worker.port.on("detach", function() {
+            uiworker = null;
         });
         worker.port.on("reset", function() {
             allConnections = [];
@@ -90,18 +112,44 @@
                 storage.allConnections = allConnections;
             }
         });
+        worker.port.on('uiready', function(){
+            // worker.port.emit('log', 'addon received uiready: "' + JSON.stringify(allConnections) + '"');
+            worker.port.emit('init', allConnections || []); // FIXME, should used filtered connections
+        });
+
+        worker.port.on('debug', function(){
+            worker.port.emit('log', 'There are ' + allConnections.length + ' connections stored');
+        });
+
+        worker.port.on('export', function(){
+            worker.port.emit('log', 'exporting data from addon');
+            worker.port.emit('export-data', exportWrap(allConnections));
+        });
+    }
+
+    function exportWrap(connections){
+        return JSON.stringify({
+            format: 'Collusion Save File',
+            version: '1.0',
+            token: collusionToken,
+            connections: connections.map(function(connection){
+                if (connection && connection.toLog){
+                    return connection.toLog();
+                }else{
+                    console.log('Could not convert ' + JSON.stringify(connection) + ' to log format');
+                }
+            })
+        });
     }
 
 
-    function attachToExistingCollusionPages() {
-        var tab = getCollusionTab();
-        if (tab){
-            var worker = tab.attach({
-                contentScriptFile: data.url('content-script.js')
-            });
-            attachToCollusionPage(worker);
-        }
-    }
+
+    require("page-mod").PageMod({
+        include: mainPage,
+        contentScriptWhen: 'start',
+        contentScriptFile: data.url('content-script.js'),
+        onAttach: attachToCollusionPage
+    });
 
     function getCollusionTab(){
         for(var i = 0; i < tabs.length; i++){
@@ -124,22 +172,52 @@
         image: data.url("favicon.ico")
     });
 
+    function collusionTabOpened(tab){
+        console.log('collusionTabOpened: ', tab);
+    }
+
+    function collusionTabClosed(tab){
+        console.log('collusionTabClosed: ', tab);
+        // Stop all Collusion processes, close worker(s)
+    }
+
+    function collusionTabReady(tab){
+        console.log('collusionTabReady: ', tab);
+        // add-on page should be ready to go, attach scripts
+        var worker = attachToExistingCollusionPages(tab);
+        // worker.port.emit('log', 'collusionTabReady');
+        worker.port.emit('init', allConnections || []); // FIXME: Send appropriate data
+    }
+
+    function collusionTabActivate(tab){
+        console.log('collusionTabActivate: ', tab);
+        // restart any paused processing, send data through that has changed since pause
+    }
+
+    function collusionTabDeactivate(tab){
+        console.log('collusionTabDeactivate: ', tab);
+        // pause processing, queue data to be processed on reactivate
+    }
+
     function openOrSwitchToOrClose(url){
         // is there a tab open for Collusion?
-        console.log('Collusion is trying to open ' + url);
         var tab = getCollusionTab();
         // if not, open one
         if (!tab){
-            console.log('Collusion did not find an open Collusion tab');
-            return tabs.open({url: url});
+            return tabs.open({
+                url: url,
+                onOpen: collusionTabOpened,
+                onClose: collusionTabClosed,
+                onReady: collusionTabReady,
+                onActivate: collusionTabActivate,
+                onDeactivate: collusionTabDeactivate
+            });
         }
         // if we're on the collusion tab, close it
         if (tab === tabs.activeTab){
-            console.log('Collusion is closing the open tab');
             tab.close();
         }else{
             // otherwise, switch to this tab
-            console.log('Collusion is switching to the open tab');
             tab.activate();
         }
     }
@@ -154,6 +232,6 @@
         }
     });
 
-
+    // attachToExistingCollusionPages();
 
 })(this);
