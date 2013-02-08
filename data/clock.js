@@ -4,15 +4,15 @@
 
 (function(visualizations){
 "use strict";
-const CX = 300;
-const CY = 500;
+const CX = 0;
+const CY = 0;
 const CENTRE = CX + ',' + CY;
-const DOT_TRANS = 'translate(640, 495)';
-const HAND_TRANS = 'translate(505, 495)';
-const TIME_TRANS = 'translate(0, 4)';
+const DOT_TRANS = 'translate(305, 5)';
+const HAND_TRANS = 'translate(205, 5)';
+const TIME_TRANS = 'translate(0, 5)';
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const TIME_X1 = 35;
-const TIME_X2 = 600 - TIME_X1;
+const TIME_X1 = -275;
+const TIME_X2 = 270 ;
 const TIME_Y = CY - 5;
 
 
@@ -43,6 +43,14 @@ times.slice(1).forEach(function(time){
     timeslots[time] = {':00': [], ':15': [], ':30': [], ':45': [] };
 });
 
+var resetCanvas(){
+    // You will still need to remove timer events
+    var parent = vizcanvas.parentNode;
+    var newcanvas = vizcanvas.cloneNode(false);
+    parent.replaceChild(newcanvas, vizcanvas);
+    viscanvas = newcanvas;
+}
+
 function addTracker(tracker){
     var timestamp = new Date(tracker.timestamp);
     var hour = timestamp.getHours();
@@ -70,14 +78,28 @@ function timeToAngle(date){
 
 function drawTimes(){
     var text;
-    times.slice(0,12).forEach(function(time, idx){
+    // Draw arcs
+    vizcanvas.appendChild(svg('path', {
+        stroke: '#999', // move to CSS
+        fill: 'none',
+        'stroke-width': 90,
+        d: 'M-250,5 A185,185 0 0,1 250,5'
+    }));
+    vizcanvas.appendChild(svg('path', {
+        stroke: '#CCC', // move to CSS
+        fill: 'none',
+        'stroke-width': 35,
+        d: 'M-275,5 A205,205 0 0,1 275,5'
+    }));
+    // Draw all the :00 time increment titles
+    times.slice(0,13).forEach(function(time, idx){
         vizcanvas.appendChild(svg('text', {
             x: TIME_X1,
             y: TIME_Y,
             transform: 'rotate(' + (7.5 * idx) + ' ' + CENTRE + ') ' + TIME_TRANS
         }, time)
     );});
-    times.slice(12).reverse().forEach(function(time, idx){
+    times.slice(13).reverse().forEach(function(time, idx){
         vizcanvas.appendChild(svg('text', {
             x: TIME_X2,
             y: TIME_Y,
@@ -121,6 +143,7 @@ function onConnection(connection){
     }));
 }
 
+var handTimer = null;
 function drawTimerHand(time){
     if (!time) time = new Date();
     var hand = document.getElementById('timerhand');
@@ -131,17 +154,24 @@ function drawTimerHand(time){
         vizcanvas.appendChild(hand);
     }
     hand.setAttribute('transform', 'rotate(' + (timeToAngle(time) - 180) + ' ' + CENTRE + ') ' + HAND_TRANS);
-    setTimeout(drawTimerHand, 1000);
+    handTimer = setTimeout(drawTimerHand, 1000);
 }
 
 
 clock.on('init', function(connections){
     // draw clock dial
+    vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
+    vizcanvas.
     drawTimes();
     drawTimerHand();
     connections.forEach(function(connection){
         onConnection(connection);
     });
+});
+
+clock.on('remove', function(connections){
+    clearTimeout(handTimer);
+    resetCanvas();
 });
 
 })(visualizations);
