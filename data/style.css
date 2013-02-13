@@ -218,6 +218,21 @@ text {
     stroke: none;
 }
 
+.tracker text{
+    font-size: 6px;
+    text-anchor: right;
+    stroke: #FFF;
+    visibility: hidden;
+}
+
+.tracker rect{
+    visibility: hidden;
+}
+
+.tracker:hover text, .tracker:hover rect{
+    visibility: visible;
+}
+
 #timerhand{
     fill: rgba(79, 129, 85, .6);
     stroke: rgba(79, 129, 85, .6);

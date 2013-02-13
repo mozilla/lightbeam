@@ -43,7 +43,7 @@ times.slice(1).forEach(function(time){
     timeslots[time] = {':00': [], ':15': [], ':30': [], ':45': [] };
 });
 
-var resetCanvas(){
+function resetCanvas(){
     // You will still need to remove timer events
     var parent = vizcanvas.parentNode;
     var newcanvas = vizcanvas.cloneNode(false);
@@ -135,12 +135,32 @@ function onConnection(connection){
     var bucket = clock.timeslots[bucketIdx];
     var connectionIdx = bucket.connections.length;
     bucket.connections.push(connection);
-    bucket.group.appendChild(svg('circle', {
-        cx: connectionIdx * 10,
-        cy: 0,
+    var g = svg('g', {
+        // transform: 'rotate(90)',
+        'class': 'tracker'
+    });
+    var x = connectionIdx * 10;
+    var y = 0;
+    g.appendChild(svg('circle', {
+        cx: x,
+        cy: y,
         r: 3,
         'class': 'tracker'
     }));
+    var text = svg('text', {
+        x: x + 8,
+        y: y - 2
+    }, connection.target);
+    g.appendChild(text);
+    g.insertBefore(svg('rect', {
+        x: x,
+        y: y-3,
+        width: text.getComputedTextLength() + 14,
+        height: 6,
+        rx: 3,
+        ry: 3
+    }), text);
+    bucket.group.appendChild(g);
 }
 
 var handTimer = null;
@@ -161,7 +181,6 @@ function drawTimerHand(time){
 clock.on('init', function(connections){
     // draw clock dial
     vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
-    vizcanvas.
     drawTimes();
     drawTimerHand();
     connections.forEach(function(connection){
