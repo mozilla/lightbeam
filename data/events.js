@@ -11,9 +11,18 @@ Emitter.prototype.on = function on(eventName, listener){
     this._listeners[eventName].push(listener);
 };
 
+Emitter.prototype.once = function once(eventName, listener){
+    var self = this;
+    var wrapped = function wrapped(msg1, msg2, msg3){
+        listener(msg1, msg2, msg3);
+        self.removeListener(eventName, wrapped);
+    };
+    this.on(eventName, wrapped);
+};
+
 Emitter.prototype.removeListener = function removeListener(eventName, listener){
     if (!this._listeners[eventName]) return;
-    var listenerIndex = this._listeners.indexOf(listener);
+    var listenerIndex = this._listeners[eventName].indexOf(listener);
     if (listenerIndex < 0) return;
     this._listeners[eventName].splice(listenerIndex, 1);
 };
