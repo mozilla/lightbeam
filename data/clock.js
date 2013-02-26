@@ -159,8 +159,8 @@ function onConnection(connection){
         'data-content-type': connection.contentType,
         'data-how-many': 1
     });
-    g.onmouseenter = showTooltip;
-    g.onmouseleave = hideTooltip;
+    g.onmouseenter = tooltip.show;
+    g.onmouseleave = tooltip.hide;
     var x = connectionIdx * 10;
     var y = 0;
     g.appendChild(svg('circle', {
