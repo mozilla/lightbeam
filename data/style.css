@@ -213,6 +213,26 @@ text {
     text-anchor: middle;
 }
 
+#tooltip{
+    display: none;
+    position: absolute;
+    background-color: #CCC;
+    color: #000;
+    padding: 10px;
+}
+#tooltip:after{
+    content: '';
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top: 10px solid #CCC;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -10px;
+}
+
+
 .tracker{
     fill: #777;
     stroke: none;
