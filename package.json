@@ -1,19 +1,9 @@
 {
-    "name": "collusion", 
-    "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
-    "author": "Atul Varma", 
-    "version": "0.25",
-    "url": "https://github.com/mozilla/collusion",
-    "fullName": "Collusion", 
-    "id": "jid1-F9UJ2thwoAm5gQ",
-    "description": "Visualize who's tracking you in real time. To get started, choose 'Collusion Graph' from the Tools menu.)",
-    "dependencies": [],
-    "preferences": [
-      {
-        "name": "collusion.urls",
-        "title": "Trusted front-ends (comma-separated list)",
-        "type": "string",
-        "value": "http://mozillalabs.com/,https://mozillalabs.com/"
-      }
-    ]
+  "name": "c2",
+  "fullName": "Collusion v2",
+  "description": "Testing a clean rewrite of Collusion",
+  "author": "Dethe Elza",
+  "license": "MPL 2.0",
+  "version": "0.27",
+  "id": "jid1-7OBiDHPW1YAPaQ"
 }

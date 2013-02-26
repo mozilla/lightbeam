@@ -4,15 +4,15 @@
 
 (function(visualizations){
 "use strict";
-const CX = 300;
-const CY = 500;
+const CX = 0;
+const CY = 0;
 const CENTRE = CX + ',' + CY;
-const DOT_TRANS = 'translate(640, 495)';
-const HAND_TRANS = 'translate(505, 495)';
-const TIME_TRANS = 'translate(0, 4)';
+const DOT_TRANS = 'translate(305, 5)';
+const HAND_TRANS = 'translate(205, 5)';
+const TIME_TRANS = 'translate(0, 5)';
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const TIME_X1 = 35;
-const TIME_X2 = 600 - TIME_X1;
+const TIME_X1 = -275;
+const TIME_X2 = 270 ;
 const TIME_Y = CY - 5;
 
 
@@ -43,6 +43,14 @@ times.slice(1).forEach(function(time){
     timeslots[time] = {':00': [], ':15': [], ':30': [], ':45': [] };
 });
 
+function resetCanvas(){
+    // You will still need to remove timer events
+    var parent = vizcanvas.parentNode;
+    var newcanvas = vizcanvas.cloneNode(false);
+    parent.replaceChild(newcanvas, vizcanvas);
+    viscanvas = newcanvas;
+}
+
 function addTracker(tracker){
     var timestamp = new Date(tracker.timestamp);
     var hour = timestamp.getHours();
@@ -70,14 +78,28 @@ function timeToAngle(date){
 
 function drawTimes(){
     var text;
-    times.slice(0,12).forEach(function(time, idx){
+    // Draw arcs
+    vizcanvas.appendChild(svg('path', {
+        stroke: '#999', // move to CSS
+        fill: 'none',
+        'stroke-width': 90,
+        d: 'M-250,5 A185,185 0 0,1 250,5'
+    }));
+    vizcanvas.appendChild(svg('path', {
+        stroke: '#CCC', // move to CSS
+        fill: 'none',
+        'stroke-width': 35,
+        d: 'M-275,5 A205,205 0 0,1 275,5'
+    }));
+    // Draw all the :00 time increment titles
+    times.slice(0,13).forEach(function(time, idx){
         vizcanvas.appendChild(svg('text', {
             x: TIME_X1,
             y: TIME_Y,
             transform: 'rotate(' + (7.5 * idx) + ' ' + CENTRE + ') ' + TIME_TRANS
         }, time)
     );});
-    times.slice(12).reverse().forEach(function(time, idx){
+    times.slice(13).reverse().forEach(function(time, idx){
         vizcanvas.appendChild(svg('text', {
             x: TIME_X2,
             y: TIME_Y,
@@ -92,7 +114,6 @@ function timeToBucket(timestamp){
     return timestamp.getHours() * 4 + Math.floor(timestamp.getMinutes() / 15);
 }
 
-// TODO: implement timeToBucket
 
 clock.on('connection', onConnection);
 
@@ -112,15 +133,47 @@ function onConnection(connection){
     }
     var bucket = clock.timeslots[bucketIdx];
     var connectionIdx = bucket.connections.length;
-    bucket.connections.push(connection);
-    bucket.group.appendChild(svg('circle', {
-        cx: connectionIdx * 10,
-        cy: 0,
+    // see if we've already added this source-target pair to the visualization
+    var existing = bucket.connections.filter(function(oldConnection){
+        return connection.source === oldConnection.source && connection.target === oldConnection.target;
+    });
+    if (existing.length){
+        if (existing.length > 1){
+            throw new Error('There can be only one!');
+        }
+        existing[0].howMany += 1;
+        existing[0].view.setAttribute('data-how-many', parseInt(existing[0].view.getAttribute('data-how-many'), 10) + 1);
+        return; // bail early if we've already added to visualization
+    }else{
+        connection.howMany = 1;
+        bucket.connections.push(connection);
+    }
+    var g = svg('g', {
+        // transform: 'rotate(90)',
+        'class': 'tracker',
+        'data-target': connection.target,
+        'data-timestamp': connection.timestamp.toISOString(),
+        'data-source': connection.source,
+        'data-cookie': connection.cookie,
+        'data-source-visited': connection.sourceVisited,
+        'data-content-type': connection.contentType,
+        'data-how-many': 1
+    });
+    g.onmouseenter = tooltip.show;
+    g.onmouseleave = tooltip.hide;
+    var x = connectionIdx * 10;
+    var y = 0;
+    g.appendChild(svg('circle', {
+        cx: x,
+        cy: y,
         r: 3,
         'class': 'tracker'
     }));
+    connection.view = g;
+    bucket.group.appendChild(g);
 }
 
+var handTimer = null;
 function drawTimerHand(time){
     if (!time) time = new Date();
     var hand = document.getElementById('timerhand');
@@ -131,17 +184,23 @@ function drawTimerHand(time){
         vizcanvas.appendChild(hand);
     }
     hand.setAttribute('transform', 'rotate(' + (timeToAngle(time) - 180) + ' ' + CENTRE + ') ' + HAND_TRANS);
-    setTimeout(drawTimerHand, 1000);
+    handTimer = setTimeout(drawTimerHand, 1000);
 }
 
 
 clock.on('init', function(connections){
     // draw clock dial
+    vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
     drawTimes();
     drawTimerHand();
     connections.forEach(function(connection){
         onConnection(connection);
     });
+});
+
+clock.on('remove', function(connections){
+    clearTimeout(handTimer);
+    resetCanvas();
 });
 
 })(visualizations);
