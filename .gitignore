@@ -5,5 +5,5 @@ data/deployment.json
 *.html~
 *.css~
 ._*
-collusion.xpi
+*.xpi
 exported_graphs
