@@ -7,13 +7,22 @@ function showTooltip(event){
     var tooltip = document.getElementById('tooltip');
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
-    tooltip.innerHTML = event.target.getAttribute('data-target');
+    var d = svgdataset(event.target);
+    console.error(event, event.target, event.target.dataset);
+    tooltip.innerHTML = d.source + ' -> ' + d.target + '<br />' + d.timestamp + ' (&times;' + d.howMany + ')';
     var rect = event.target.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
+    // console.log('rect: %o, width: %s', rect, tooltipWidth);
     tooltip.style.top = (rect.top - 60) + 'px';
     tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
+    // PLACEHOLDER (FOR DEBUGGING)
+    // placeholder.style.left = rect.left + 'px';
+    // placeholder.style.top = rect.top + 'px';
+    // placeholder.style.border = '1px solid red';
     return false;
 }
+
+
 
 function setTooltipTimeout(){
     if (tooltipTimer){
