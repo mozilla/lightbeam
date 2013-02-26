@@ -114,7 +114,6 @@ function timeToBucket(timestamp){
     return timestamp.getHours() * 4 + Math.floor(timestamp.getMinutes() / 15);
 }
 
-// TODO: implement timeToBucket
 
 clock.on('connection', onConnection);
 
