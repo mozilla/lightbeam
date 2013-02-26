@@ -133,11 +133,34 @@ function onConnection(connection){
     }
     var bucket = clock.timeslots[bucketIdx];
     var connectionIdx = bucket.connections.length;
-    bucket.connections.push(connection);
+    // see if we've already added this source-target pair to the visualization
+    var existing = bucket.connections.filter(function(oldConnection){
+        return connection.source === oldConnection.source && connection.target === oldConnection.target;
+    });
+    if (existing.length){
+        if (existing.length > 1){
+            throw new Error('There can be only one!');
+        }
+        existing[0].howMany += 1;
+        existing[0].view.setAttribute('data-how-many', parseInt(existing[0].view.getAttribute('data-how-many'), 10) + 1);
+        return; // bail early if we've already added to visualization
+    }else{
+        connection.howMany = 1;
+        bucket.connections.push(connection);
+    }
     var g = svg('g', {
         // transform: 'rotate(90)',
-        'class': 'tracker'
+        'class': 'tracker',
+        'data-target': connection.target,
+        'data-timestamp': connection.timestamp.toISOString(),
+        'data-source': connection.source,
+        'data-cookie': connection.cookie,
+        'data-source-visited': connection.sourceVisited,
+        'data-content-type': connection.contentType,
+        'data-how-many': 1
     });
+    g.onmouseenter = showTooltip;
+    g.onmouseleave = hideTooltip;
     var x = connectionIdx * 10;
     var y = 0;
     g.appendChild(svg('circle', {
@@ -146,19 +169,7 @@ function onConnection(connection){
         r: 3,
         'class': 'tracker'
     }));
-    var text = svg('text', {
-        x: x + 8,
-        y: y - 2
-    }, connection.target);
-    g.appendChild(text);
-    g.insertBefore(svg('rect', {
-        x: x,
-        y: y-3,
-        width: text.getComputedTextLength() + 14,
-        height: 6,
-        rx: 3,
-        ry: 3
-    }), text);
+    connection.view = g;
     bucket.group.appendChild(g);
 }
 
