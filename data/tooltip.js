@@ -8,7 +8,7 @@ function showTooltip(event){
     tooltip.style.display = 'inline-block';
     var d = svgdataset(event.target);
     console.error(event, event.target, event.target.dataset);
-    tooltip.innerHTML = d.source + ' -> ' + d.target + '<br />' + d.timestamp + ' (&times;' + d.howMany + ')';
+    tooltip.innerHTML = d.source + ' -> ' + d.target + '<span class="howMany">(&times;' + d.howMany + ')</span>';
     var rect = event.target.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
     tooltip.style.top = (rect.top - 60) + 'px';
