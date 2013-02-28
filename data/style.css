@@ -217,7 +217,7 @@ text {
     display: none;
     position: absolute;
     background-color: #CCC;
-    color: #000;
+    color: #010203;
     padding: 10px;
 }
 #tooltip:after{
@@ -232,6 +232,10 @@ text {
     margin-left: -10px;
 }
 
+.howMany{
+    font-size: 0.8em;
+    color: #343533;
+}
 
 .tracker{
     fill: #777;
