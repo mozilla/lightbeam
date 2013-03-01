@@ -1,9 +1,12 @@
 (function(global){
 
 var tooltipTimer;
+var tooltip;
 
 function showTooltip(event){
-    var tooltip = document.getElementById('tooltip');
+    if (!tooltip){
+        tooltip = document.getElementById('tooltip');
+    }
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
     var d = svgdataset(event.target);

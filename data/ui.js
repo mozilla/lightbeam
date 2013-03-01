@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
 
     /* Toggle Info Panel */
-    document.querySelector(".temp_showinfo").addEventListener("click", function(){
+    document.querySelector(".showinfo").addEventListener("click", function(){
         document.querySelector("#content").classList.toggle("showinfo");
     });
 
@@ -66,6 +66,15 @@ document.querySelector(".download").addEventListener('click', function() {
         window.open('data:application/json,' + connections);
     });
     addon.emit('export');
+});
+
+document.querySelector('.reset-data').addEventListener('click', function(){
+    addon.emit('reset');
+    // FIXME: empty the data from current view too
+});
+
+document.querySelector('.upload').addEventListener('click', function(){
+    addon.emit('upload');
 });
 
 

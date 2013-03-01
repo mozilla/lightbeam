@@ -18,7 +18,12 @@ function svgdataset(elem){
     var ds = function(key, value){
         if (value === undefined){
             // act as getter
-            return JSON.parse(elem.getAttribute(dataKeyToAttr(key)));
+            value = elem.getAttribute(dataKeyToAttr(key));
+            try{get
+                return JSON.parse(value);
+            }catche(e){
+                return value;
+            }
         }else{
             elem.setAttribute(dataKeyToAttr(key), JSON.stringify(value));
         }
@@ -30,7 +35,6 @@ function svgdataset(elem){
                 ds[dataAttrToKey(attr.name)] = JSON.parse(attr.value);
             }catch(e){
                 ds[dataAttrToKey(attr.name)] = attr.value;
-                console.error('unable to parse %s', attr.value);
             }
         }
     });
