@@ -13,7 +13,7 @@
     </header>
     <div class="main">
         <aside class="controls">
-            <div class="btn_group" style="margin-bottom: 10px">
+            <div class="btn_group filter" style="margin-bottom: 10px">
                 <div data-view class="dropdown_button">
                     <a class="invi_focus" href="#"></a>
                     <a class="selected_time"><i class="icon-time"></i>Today</a>
@@ -26,7 +26,7 @@
                     <a data-value="DDD">DDD</a>
                 </div>
             </div>
-            <div class="btn_group">
+            <div class="btn_group visualization">
                 <div data-view class="dropdown_button">
                     <a class="invi_focus" href="#"></a>
                     <a class="selected_visualization">Visualization</a>
@@ -41,6 +41,14 @@
                 </div>
             </div>
             <ul class="controls_options">
+                <li class="zooming">
+                    <a class="move-up"><i class="icon-circle-arrow-up"></i></a>
+                    <a class="move-left"><i class="icon-circle-arrow-left"></i></a>
+                    <a class="zoom-out"><i class="icon-minus-sign"></i></a>
+                    <a class="zoom-in"><i class="icon-plus-sign"></i></a>
+                    <a class="move-right"><i class="icon-circle-arrow-right"></i></a>
+                    <a class="move-down"><i class="icon-circle-arrow-down"></i></a>
+                </li>
                 <li class="settings"><a><i class="icon-cog"></i>Settings</a></li>
                 <li class="upload"><a><i class="icon-arrow-up"></i>Share Data</a></li>
                 <li class="download"><a><i class="icon-arrow-down"></i>Download data</a></li>
@@ -74,6 +82,7 @@
         </div>
     </div>
     <div id="tooltip"></div>
+    <script src="d3.v2.js"></script>
     <script src="events.js"></script>
     <script src="collusion.js"></script>
     <script src="svgdataset.js"></script>
@@ -81,5 +90,6 @@
     <script src="ui.js"></script>
     <!-- Visualizations -->
     <script src="clock.js"></script>
+    <script src="graph.js"></script>
 </body>
 </html>

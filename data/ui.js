@@ -77,7 +77,74 @@ document.querySelector('.upload').addEventListener('click', function(){
     addon.emit('upload');
 });
 
+function getZoom(){
+    var box = document.querySelector('.vizcanvas')
+        .getAttribute('viewBox')
+        .split(/\s/)
+        .map(function(i){ return parseInt(i, 10); });
+    return {x: box[0], y: box[1], w: box[2], h: box[3]};
+}
 
+function setZoom(box){
+    document.querySelector('.vizcanvas')
+        .setAttribute('viewBox', [box.x, box.y, box.w, box.h].join(' '));
+}
+
+document.querySelector('.move-up').addEventListener('click', function(){
+    var box = getZoom();
+    var dY = Math.floor(box.h / 10);
+    box.y += dY;
+    setZoom(box);
+    return false;
+});
+
+document.querySelector('.move-down').addEventListener('click', function(){
+    var box = getZoom();
+    var dY = Math.floor(box.h / 10);
+    box.y -= dY;
+    setZoom(box);
+    return false;
+});
+
+document.querySelector('.move-left').addEventListener('click', function(){
+    var box = getZoom();
+    var dX = Math.floor(box.w / 10);
+    box.x += dX;
+    setZoom(box);
+    return false;
+});
+
+document.querySelector('.move-right').addEventListener('click', function(){
+    var box = getZoom();
+    var dX = Math.floor(box.w / 10);
+    box.x -= dX;
+    setZoom(box);
+    return false;
+});
+
+document.querySelector('.zoom-in').addEventListener('click', function(){
+    var box = getZoom();
+    var dX = Math.floor(box.w / 5);
+    var dY = Math.floor(box.h / 5);
+    box.x -= dX;
+    box.h -= dY;
+    box.w *= 1.1;
+    box.h += 1.1;
+    setZoom(box);
+    return false;
+});
+
+document.querySelector('.zoom-out').addEventListener('click', function(){
+    var box = getZoom();
+    var dX = Math.floor(box.w / 5);
+    var dY = Math.floor(box.h / 5);
+    box.x += dX;
+    box.h += dY;
+    box.w /= 1.1;
+    box.h /= 1.1;
+    setZoom(box);
+    return false;
+});
 
 
 
