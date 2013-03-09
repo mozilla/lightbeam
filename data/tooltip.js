@@ -10,7 +10,7 @@ function showTooltip(event){
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
     var d = svgdataset(event.target);
-    console.error(event, event.target, event.target.dataset);
+    // console.error(event, event.target, event.target.dataset);
     tooltip.innerHTML = d.source + ' -> ' + d.target + '<span class="howMany">(&times;' + d.howMany + ')</span>';
     var rect = event.target.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
@@ -38,10 +38,17 @@ function hideTooltip(event){
     return false;
 }
 
-global.tooltip = {
-    show: showTooltip,
-    hide: hideTooltip
-};
+document.addEventListener('mouseenter', function(event){
+    if (target.mozMatchesSelector('.node')){
+        showTooltip(event);
+    }
+});
+
+document.addEventListener('mouseleave', function(){
+    if (target.mozMatchesSelector('.node')){
+        hideTooltip(event);
+    }
+});
 
 })(this);
 

@@ -150,7 +150,7 @@ function onConnection(connection){
     }
     var g = svg('g', {
         // transform: 'rotate(90)',
-        'class': 'tracker',
+        'class': 'tracker node',
         'data-target': connection.target,
         'data-timestamp': connection.timestamp.toISOString(),
         'data-source': connection.source,
@@ -159,8 +159,6 @@ function onConnection(connection){
         'data-content-type': connection.contentType,
         'data-how-many': 1
     });
-    g.onmouseenter = tooltip.show;
-    g.onmouseleave = tooltip.hide;
     var x = connectionIdx * 10;
     var y = 0;
     g.appendChild(svg('circle', {
@@ -190,6 +188,7 @@ function drawTimerHand(time){
 
 clock.on('init', function(connections){
     // draw clock dial
+    console.log('initializing clock');
     vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
     drawTimes();
     drawTimerHand();

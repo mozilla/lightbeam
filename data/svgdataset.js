@@ -21,7 +21,7 @@ function svgdataset(elem){
             value = elem.getAttribute(dataKeyToAttr(key));
             try{get
                 return JSON.parse(value);
-            }catche(e){
+            }catch(e){
                 return value;
             }
         }else{
