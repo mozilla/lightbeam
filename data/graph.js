@@ -8,8 +8,8 @@
 
 var graph = new Emitter();
 visualizations.graph = graph;
-var vizcanvas = document.querySelector('.vizcanvas');
-var vis = d3.select('.vizcanvas');
+var vizcanvas;
+var vis;
 var width = 1000, height = 1000;
 var force;
 
@@ -21,6 +21,8 @@ var edges = [];
 
 graph.on('connection', onConnection);
 graph.on('init', function(connections){
+    vizcanvas = document.querySelector('.vizcanvas');
+    vis = d3.select('.vizcanvas')
     // draw any background
     // massage data for visualization
     // initialize layout
@@ -87,7 +89,14 @@ function initGraph(){
                 .classed('cookieYes', function(d){ return d.cookie && !d.notCookie; })
                 .classed('cookieNo', function(d){ return !d.cookie && d.notCookie; })
                 .classed('cookieBoth', function(d){ return d.cookie && d.notCookie; })
-                .attr('data-timestamp', function(d){ return d.lastAccess.toISOString(); });
+                .attr('data-timestamp', function(d){
+                    try{
+                        return d.lastAccess.toISOString();
+                    }catch(e){
+                        console.log('Failed to read lastAccess from %o', d);
+                        return new Date().toISOString();
+                    }
+                });
         });
         // Expose globally for debugging
         window.force = force;
@@ -225,7 +234,7 @@ function resetCanvas(){
     var parent = vizcanvas.parentNode;
     var newcanvas = vizcanvas.cloneNode(false);
     parent.replaceChild(newcanvas, vizcanvas);
-    viscanvas = newcanvas;
+    vizcanvas = newcanvas;
 }
 
 
