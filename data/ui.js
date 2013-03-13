@@ -37,7 +37,14 @@ window.addEventListener("DOMContentLoaded", function(){
     var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
     btnGroupArray.forEach(function(btnGroup){
         dropdownGroup(btnGroup, function(val){
-                console.log("selected val=" + val);
+            switch(val.toLowerCase()){
+                case 'clock':
+                case 'graph':
+                    switchVisualization(val);
+                    break;
+                default:
+                    console.log("selected val=" + val);
+            }
         });
     });
 

@@ -5,3 +5,10 @@ window.addEventListener('load', function(evt){
     addon.emit('uiready');
 //    document.defaultView.postMessage('pageloaded', '*');
 });
+
+function switchVisualization(name){
+    if (currentVisualization === visualizations[name]) return;
+    currentVisualization.emit('remove');
+    currentVisualization = visualizations[name];
+    addon.emit('uiready');
+}

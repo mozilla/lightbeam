@@ -1,43 +1,6 @@
 # File Formats in Collusion
 
-Collusion has an existing file format for saved files, but is migrating to a new format that captures multiple site visits and changes over time better. Both formats will be documented, along with heuristics for determining which is which when opening a saved file, and rules for converting from the old format to the new one.
-
-## Format 0
-
-This format takes the following structure:
-
-A root object whose keys are third-party URLs (potential trackers). These URLs are reduced to the simple domain, with all protocol, subdomain, query, path, and fragment components stripped off. Each key's value is an object containing the keys "referrers" and (optionally) visited. If a site has been the target of a user's browsing (i.e., the user intentionally loaded the site), it should be marked "visited": true. Lack of a "visited" key is the same as "visited": false. The value of the "referrers" key is an object whose keys are the referrers which included this potential tracker in their page(s). The "referrer" keys are also domain names, URLs stripped of all other information.
-
-Each referrer value is an object containing the keys `timestamp`, `datatypes`, [optional] `cookie` and [optional] `noncoookie`. Some save files also include the key `uploaded` which was left in by mistake from an earlier experiment and is not used. 
-
-The `timestamp` value is an integer representation of time, in milliseconds since Collusion was last started or cleared (yes, this makes the timestamp only useful for basic ordering, and when data is reloaded from a save file or browser restart, we even lose ordering). 
-
-The `datatypes` value is a list of zero or more datatypes, which may contain null values. The list is the collection of unique values which have been reported by the site in the `Content-Type` response header, i.e., a list of all the types of content that have been loaded *by that referrer* from the potential tracker. 
-
-The `cookie` value is a boolean flag set if any request by that referrer to the potential tracker contained a cookie, with an absent "cookie" key being the same as a `cookie` value of `false`. 
-
-The `noncookie` value is a boolean flag set if any request by that referrer to the potential tracker does *not* contain a cookie, with an absent `noncookie` key being the same as a `noncookie` value of `false`. It is possible for a referrer to have both `cookie` and `noncookie` flags set if different requests to the potential tracker had different headers (some with cookies, some without).
-
-Example:
-
-``` json
-{
-    "google.com": {
-        "referrers": {
-            "google.ca": {
-                "timestamp": 35974,
-                "datatypes": [
-                    "image/jpeg",
-                    "image/png",
-                    "image/jpeg;charset=UTF-8"
-                ],
-                "uploaded": false,
-                "cookie": true
-            }
-        }
-    }
-}
-```
+Collusion had an ad-hoc file format for saved files, but has migrated to a new format that captures multiple site visits and changes over time better. This is the 1.0 version, which may be superceded by newer versions as we get more experience with what data is required for visualizations and tracker detection.
 
 ## Format 1.0
 
@@ -80,9 +43,3 @@ The `sourceQueryDepth` is a metric of how many items there were in the query str
 1. Should we be tracking the HTTP Method (GET, POST, etc.) of each connection?
 2. Is 10 minutes the right granularity to obfuscate the timestamps to? Should there be a random component?
 3. (Not a question, more of an implementation note) We also want to keep track of the tab a connection is loaded in, internally. This is used both to determine the `sourceVisited` value and for per-tab visualizations.
-
-
-## Converting from Format 0 to Format 1.0
-
-Because so much information is thrown away in Format 0 (subdomains, absolute timestamps, protocol, multiple connections, protocol, path and query depths), there is not a lot that can be restored. At best we could create a starting point for moving forward, listing a single connection for each referrer in each potential tracker, with timestamps synthesized from, say, the previous day's Date() + the Format 0 "timestamp". Given that the point of Format 1.0 is to track data over time, and the Format 0 does not have much in the way of time data, I'm not actually sure how much value there is in this.
-
