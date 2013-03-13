@@ -8,10 +8,8 @@
 
 var graph = new Emitter();
 visualizations.graph = graph;
-var vizcanvas = document.querySelector('.vizcanvas');
-var vis = d3.select('.vizcanvas');
 var width = 1000, height = 1000;
-var force;
+var force, vizcanvas, vis;
 
 // Should we separate source nodes and target nodes?
 var nodemap = {};
@@ -24,6 +22,8 @@ graph.on('init', function(connections){
     // draw any background
     // massage data for visualization
     // initialize layout
+    vizcanvas = document.querySelector('.vizcanvas');
+    vis = d3.select('.vizcanvas');
     console.log('visualizing %s connections from the last 24 hours', connections.length);
     connections.forEach(function(connection){
         onConnection(connection, false);
