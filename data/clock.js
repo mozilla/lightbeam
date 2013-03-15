@@ -15,11 +15,94 @@ const TIME_X1 = -275;
 const TIME_X2 = 270 ;
 const TIME_Y = CY - 5;
 
+var vizcanvas, times, timeslots, offsets;
 
 // TODO: Make visualization an event emitter, so I can call on('connection', fn) and emit('connection', connection)
 
 var clock = new Emitter();
 visualizations.clock = clock;
+
+clock.on('init', onInit);
+clock.on('connection', onConnection);
+clock.on('remove', onRemove);
+
+function onInit(connections){
+    // draw clock dial
+    console.log('initializing clock from %s connections', connections.length);
+    vizcanvas = document.querySelector('.vizcanvas');
+    times = ['12 am', '1 am', '2 am', '3 am', '4 am', '5 am', '6 am', '7 am', '8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm', '6 pm', '7 pm', '8 pm', '9 pm', '10 pm', '11 pm', '12 am'];
+    timeslots = {};
+    offsets = [':00', ':15', ':30', ':45'];
+    times.slice(1).forEach(function(time){
+        timeslots[time] = {':00': [], ':15': [], ':30': [], ':45': [] };
+    });
+    vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
+    drawTimes();
+    drawTimerHand();
+    connections.forEach(function(connection){
+        onConnection(connection);
+    });
+};
+
+function onConnection(connection){
+    // A connection has the following keys:
+    // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
+    var bucketIdx = timeToBucket(connection.timestamp);
+    if (! clock.timeslots[bucketIdx]){
+        var angle = -180 + (bucketIdx * 1.875); // in degrees
+        clock.timeslots[bucketIdx] = {
+            group: svg('g', {
+                transform: 'rotate(' + angle + ' ' + CENTRE + ') ' + DOT_TRANS
+            }),
+            connections: []
+        }
+        vizcanvas.appendChild(clock.timeslots[bucketIdx].group);
+    }
+    var bucket = clock.timeslots[bucketIdx];
+    var connectionIdx = bucket.connections.length;
+    // see if we've already added this source-target pair to the visualization
+    var existing = bucket.connections.filter(function(oldConnection){
+        return connection.source === oldConnection.source && connection.target === oldConnection.target;
+    });
+    if (existing.length){
+        if (existing.length > 1){
+            throw new Error('There can be only one!');
+        }
+        existing[0].howMany += 1;
+        existing[0].view.setAttribute('data-how-many', parseInt(existing[0].view.getAttribute('data-how-many'), 10) + 1);
+        return; // bail early if we've already added to visualization
+    }else{
+        connection.howMany = 1;
+        bucket.connections.push(connection);
+    }
+    var g = svg('g', {
+        // transform: 'rotate(90)',
+        'class': 'tracker node',
+        'data-target': connection.target,
+        'data-timestamp': connection.timestamp.toISOString(),
+        'data-source': connection.source,
+        'data-cookie': connection.cookie,
+        'data-source-visited': connection.sourceVisited,
+        'data-content-type': connection.contentType,
+        'data-how-many': 1
+    });
+    var x = connectionIdx * 10;
+    var y = 0;
+    g.appendChild(svg('circle', {
+        cx: x,
+        cy: y,
+        r: 3,
+        'class': 'tracker'
+    }));
+    connection.view = g;
+    bucket.group.appendChild(g);
+}
+
+function onRemove(){
+    clearTimeout(handTimer);
+    resetCanvas();
+};
+
 
 
 function svg(name, attrs, text){
@@ -35,20 +118,13 @@ function svg(name, attrs, text){
     return node;
 }
 
-var vizcanvas = document.querySelector('.vizcanvas');
-var times = ['12 am', '1 am', '2 am', '3 am', '4 am', '5 am', '6 am', '7 am', '8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm', '6 pm', '7 pm', '8 pm', '9 pm', '10 pm', '11 pm', '12 am'];
-var timeslots = {};
-var offsets = [':00', ':15', ':30', ':45'];
-times.slice(1).forEach(function(time){
-    timeslots[time] = {':00': [], ':15': [], ':30': [], ':45': [] };
-});
 
 function resetCanvas(){
     // You will still need to remove timer events
     var parent = vizcanvas.parentNode;
     var newcanvas = vizcanvas.cloneNode(false);
     parent.replaceChild(newcanvas, vizcanvas);
-    viscanvas = newcanvas;
+    vizcanvas = newcanvas;
 }
 
 function addTracker(tracker){
@@ -115,61 +191,6 @@ function timeToBucket(timestamp){
 }
 
 
-clock.on('connection', onConnection);
-
-function onConnection(connection){
-    // A connection has the following keys:
-    // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
-    var bucketIdx = timeToBucket(connection.timestamp);
-    if (! clock.timeslots[bucketIdx]){
-        var angle = -180 + (bucketIdx * 1.875); // in degrees
-        clock.timeslots[bucketIdx] = {
-            group: svg('g', {
-                transform: 'rotate(' + angle + ' ' + CENTRE + ') ' + DOT_TRANS
-            }),
-            connections: []
-        }
-        vizcanvas.appendChild(clock.timeslots[bucketIdx].group);
-    }
-    var bucket = clock.timeslots[bucketIdx];
-    var connectionIdx = bucket.connections.length;
-    // see if we've already added this source-target pair to the visualization
-    var existing = bucket.connections.filter(function(oldConnection){
-        return connection.source === oldConnection.source && connection.target === oldConnection.target;
-    });
-    if (existing.length){
-        if (existing.length > 1){
-            throw new Error('There can be only one!');
-        }
-        existing[0].howMany += 1;
-        existing[0].view.setAttribute('data-how-many', parseInt(existing[0].view.getAttribute('data-how-many'), 10) + 1);
-        return; // bail early if we've already added to visualization
-    }else{
-        connection.howMany = 1;
-        bucket.connections.push(connection);
-    }
-    var g = svg('g', {
-        // transform: 'rotate(90)',
-        'class': 'tracker node',
-        'data-target': connection.target,
-        'data-timestamp': connection.timestamp.toISOString(),
-        'data-source': connection.source,
-        'data-cookie': connection.cookie,
-        'data-source-visited': connection.sourceVisited,
-        'data-content-type': connection.contentType,
-        'data-how-many': 1
-    });
-    var x = connectionIdx * 10;
-    var y = 0;
-    g.appendChild(svg('circle', {
-        cx: x,
-        cy: y,
-        r: 3,
-        'class': 'tracker'
-    }));
-    connection.view = g;
-    bucket.group.appendChild(g);
-}
 
 var handTimer = null;
 function drawTimerHand(time){
@@ -186,21 +207,6 @@ function drawTimerHand(time){
 }
 
 
-clock.on('init', function(connections){
-    // draw clock dial
-    console.log('initializing clock');
-    vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
-    drawTimes();
-    drawTimerHand();
-    connections.forEach(function(connection){
-        onConnection(connection);
-    });
-});
-
-clock.on('remove', function(connections){
-    clearTimeout(handTimer);
-    resetCanvas();
-});
 
 })(visualizations);
 

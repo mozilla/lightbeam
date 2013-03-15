@@ -37,7 +37,8 @@ window.addEventListener("DOMContentLoaded", function(){
     var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
     btnGroupArray.forEach(function(btnGroup){
         dropdownGroup(btnGroup, function(val){
-            switch(val.toLowerCase()){
+            val = val.toLowerCase();
+            switch(val){
                 case 'clock':
                 case 'graph':
                     switchVisualization(val);
