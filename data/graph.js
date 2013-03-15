@@ -77,11 +77,8 @@ function onConnection(connection, reheat){
         edgemap[edge.name] = edge;
         edges.push(edge);
     }
-    if (reheat !== false){
-        console.log('connection: %o', connection);
-        console.log('source: %o', sourcenode);
-        console.log('target: %o', targetnode);
-        force.resume();
+    if (reheat !== false){ // reheat is default, pass false in to turn it off
+        force.start();
     }
 }
 
@@ -108,7 +105,7 @@ function initGraph(){
 
         // Data binding for links
         var lines = vis.selectAll('.edge')
-            .data(edges, function(d){ return d.name; });
+            .data(edges, function(edge){ return edge.name; });
 
         lines.enter()
             .insert('line', ':first-child')
@@ -119,37 +116,37 @@ function initGraph(){
 
         var circles = vis.selectAll('.node')
             .call(force.drag)
-            .data(nodes, function(d){ return d.name; });
+            .data(nodes, function(node){ return node.name; });
 
         circles.enter()
             .append('circle')
             .classed('node', true)
-            .attr('data-name', function(d){ return d.name; });
+            .attr('data-name', function(node){ return node.name; });
         circles.exit()
             .remove();
 
         // update method
         force.on('tick', function(){
             lines
-                .attr('x1', function(d){ return d.source.x; })
-                .attr('y1', function(d){ return d.source.y; })
-                .attr('x2', function(d){ return d.target.x; })
-                .attr('y2', function(d){ return d.target.y; });
+                .attr('x1', function(edge){ return edge.source.x; })
+                .attr('y1', function(edge){ return edge.source.y; })
+                .attr('x2', function(edge){ return edge.target.x; })
+                .attr('y2', function(edge){ return edge.target.y; });
 
             circles
-                .attr('cx', function(d){ return d.x; })
-                .attr('cy', function(d){ return d.y; })
-                .attr('r', function(d){ return d.linkedTo.length + d.linkedFrom.length + 12; })
-                .classed('visitedYes', function(d){ return d.visited && !d.notVisited; })
-                .classed('visitedNo', function(d){ return !d.visited && d.notVisited; })
-                .classed('visitedBoth', function(d){ return d.visited && d.notVisited; })
-                .classed('secureYes', function(d){ return d.secure && !d.notSecure; })
-                .classed('secureNo', function(d){ return !d.secure && d.notSecure; })
-                .classed('secureBoth', function(d){ return d.secure && d.notSecure; })
-                .classed('cookieYes', function(d){ return d.cookie && !d.notCookie; })
-                .classed('cookieNo', function(d){ return !d.cookie && d.notCookie; })
-                .classed('cookieBoth', function(d){ return d.cookie && d.notCookie; })
-                .attr('data-timestamp', function(d){ return d.lastAccess.toISOString(); });
+                .attr('cx', function(node){ return node.x; })
+                .attr('cy', function(node){ return node.y; })
+                .attr('r', function(node){ return node.linkedTo.length + node.linkedFrom.length + 12; })
+                .classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
+                .classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
+                .classed('visitedBoth', function(node){ return node.visited && node.notVisited; })
+                .classed('secureYes', function(node){ return node.secure && !node.notSecure; })
+                .classed('secureNo', function(node){ return !node.secure && node.notSecure; })
+                .classed('secureBoth', function(node){ return node.secure && node.notSecure; })
+                .classed('cookieYes', function(node){ return node.cookie && !node.notCookie; })
+                .classed('cookieNo', function(node){ return !node.cookie && node.notCookie; })
+                .classed('cookieBoth', function(node){ return node.cookie && node.notCookie; })
+                .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); });
         });
 }
 
@@ -187,8 +184,6 @@ function GraphNode(connection, isSource){
     this.notVisited = false;
     this.secure = false;
     this.notSecure = false;
-    this.px = this.x = (Math.random() - .5) * 10 + width/2;
-    this.y = this.y = (Math.random() - .5) * 10 + height/2;
     this.howMany = 0;
     if (connection){
         this.update(connection, isSource);
@@ -242,6 +237,7 @@ document.querySelector('#content').addEventListener('click', function(event){
 });
 
 function updateInfo(node){
+	// FIXME: Update text here
     console.log(node);
 }
 
