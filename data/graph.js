@@ -12,11 +12,14 @@ var width = 1000, height = 1000;
 var force, vizcanvas, vis;
 
 // Should we separate source nodes and target nodes?
-var nodemap, nodes, edgemap, edges;
+var nodemap, allnodes, sitenodes, thirdnodes, bothnodes, edgemap, edges;
 
 function resetData(){
+    allnodes = [];
     nodemap = {};
-    nodes = [];
+    sitenodes = [];
+    thirdnodes = [];
+    bothnodes = [];
     edgemap = {};
     edges = [];
 }
@@ -34,11 +37,10 @@ function onInit(connections){
     console.log('initializing graph from %s connections', connections.length);
     vizcanvas = document.querySelector('.vizcanvas');
     vis = d3.select('.vizcanvas');
-
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     connections.forEach(function(connection){
         // This does our data shaping and is also used by visualization.on('connect')
-        onConnection(connection, false);
+        onConnection(connection);
     });
     // This binds our data to the D3 visualization and sets up the callbacks
     initGraph();
@@ -46,29 +48,45 @@ function onInit(connections){
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
 };
 
-function onConnection(connection, reheat){
+function onConnection(connection){
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
     // We want to shape the collection of connections that represent points in time into
     // aggregate data for graphing. Each connection has two endpoints represented by GraphNode objects
     // and one edge represented by a GraphEdge object, but we want to re-use these when connections
     // map to the same endpoints or edges.
-    var sourcenode, targetnode, edge;
+    var sourcenode, targetnode, edge, nodelist, reheat = false;
     if (nodemap[connection.source]){
         sourcenode = nodemap[connection.source];
+        var oldNodeType = sourcenode.nodeType;
         sourcenode.update(connection, true);
+        if (oldNodeType !== sourcenode.nodeType){
+            moveNode(sourcenode, oldNodeType);
+            reheat = true;
+	}
     }else{
         sourcenode = new GraphNode(connection, true);
         nodemap[connection.source] = sourcenode;
-        nodes.push(sourcenode);
+        nodelist = getNodeList(sourcenode.nodeType);
+        nodelist.push(sourcenode);
+	allnodes.push(sourcenode);
+        reheat = true;
     }
     if (nodemap[connection.target]){
         targetnode = nodemap[connection.target];
+        var oldNodeType = targetnode.nodeType;
         targetnode.update(connection, false);
+        if (oldNodeType !== targetnode.nodeType){
+            moveNode(targetnode, oldNodeType);
+            reheat = true;
+	}
     }else{
         targetnode = new GraphNode(connection, false);
         nodemap[connection.target] = targetnode;
-        nodes.push(targetnode);
+        nodelist = getNodeList(targetnode.nodeType);
+        nodelist.push(targetnode);
+        allnodes.push(targetnode); // all nodes
+        reheat = true
     }
     if (edgemap[connection.source + '->' + connection.target]){
         edge = edgemap[connection.source + '->' + connection.target];
@@ -76,14 +94,31 @@ function onConnection(connection, reheat){
         edge = new GraphEdge(sourcenode, targetnode);
         edgemap[edge.name] = edge;
         edges.push(edge);
+        reheat = true;
     }
-    if (reheat !== false){ // reheat is default, pass false in to turn it off
+    if (force && reheat){ // reheat is default, pass false in to turn it off
         force.start();
     }
 }
 
+function getNodeList(nodeType){
+    switch(nodeType){
+        case 'site': return sitenodes;
+        case 'thirdparty': return thirdnodes;
+        case 'both': return bothnodes;
+        default: throw new Error('It has to be one of the choices above');
+    }
+}
 
-function onRemove(connections){
+function moveNode(node, oldNodeType){
+    var oldlist = getNodeList(oldNodeType);
+    var newlist = getNodeList(node.nodeType);
+    oldlist.splice(oldlist.indexOf(node), 1);
+    newlist.push(node);
+}
+
+
+function onRemove(){
     console.log('removing graph');
     if (force){
         force.stop();
@@ -93,11 +128,29 @@ function onRemove(connections){
     resetCanvas();
 };
 
+function point(angle, size){
+	return [Math.round(Math.cos(angle) * size), -Math.round(Math.sin(angle) * size)];
+}
+
+function polygon(points, size, debug){
+    var increment = Math.PI * 2 / points;
+    var angles = [], i;
+    for (i = 0; i < points; i++){
+        angles.push(i * increment + Math.PI/2); // add 90 degrees so first point is up
+    }
+    return angles.map(function(angle){ return point(angle, size); });
+}
+
+function polygonAsString(points, size){
+    var poly = polygon(points, size);
+    return poly.map(function(pair){return pair.join(',');}).join(' ');
+}
+
 
 function initGraph(){
     // Initialize D3 layout and bind data
     force = d3.layout.force()
-        .nodes(nodes)
+        .nodes(allnodes)
         .links(edges)
         .charge(-500)
         .size([width,height])
@@ -114,16 +167,47 @@ function initGraph(){
         lines.exit()
             .remove();
 
-        var circles = vis.selectAll('.node')
-            .call(force.drag)
-            .data(nodes, function(node){ return node.name; });
+        var nodes = vis.selectAll('.node')
+	    .data(allnodes, function(node){ return node.name; })
+            .attr('data-name', function(node){ return node.name; })
+            .call(force.drag);
+	
+	nodes.enter();
 
-        circles.enter()
-            .append('circle')
-            .classed('node', true)
-            .attr('data-name', function(node){ return node.name; });
-        circles.exit()
+        nodes.exit()
             .remove();
+
+        var sites = vis.selectAll('.site')
+            .data(sitenodes, function(node){ return node.name; });
+
+        sites.enter()
+            .append('circle')
+	    .attr('cx', 0)
+	    .attr('cy', 0)
+	    .attr('r', 12)
+            .classed('node', true)
+            .classed('site', true);
+
+        var thirdparties = vis.selectAll('.thirdparty')
+            .data(thirdnodes, function(node){ return node.name; });
+
+        thirdparties.enter()
+            .append('polygon')
+	    .attr('points', polygonAsString(3, 20))
+            .classed('node', true)
+            .classed('thirdparty', true);
+
+        var boths = vis.selectAll('.both')
+            .data(bothnodes, function(node){ return node.name; });
+
+        boths.enter()
+	    .append('rect')
+	    .attr('x', -9)
+	    .attr('y', -9)
+	    .attr('width', 18)
+	    .attr('height', 18)
+	    .classed('node', true)
+	    .classed('both', true);
 
         // update method
         force.on('tick', function(){
@@ -132,22 +216,25 @@ function initGraph(){
                 .attr('y1', function(edge){ return edge.source.y; })
                 .attr('x2', function(edge){ return edge.target.x; })
                 .attr('y2', function(edge){ return edge.target.y; });
-
-            circles
-                .attr('cx', function(node){ return node.x; })
-                .attr('cy', function(node){ return node.y; })
-                .attr('r', function(node){ return node.linkedTo.length + node.linkedFrom.length + 12; })
-                .classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
-                .classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
-                .classed('visitedBoth', function(node){ return node.visited && node.notVisited; })
-                .classed('secureYes', function(node){ return node.secure && !node.notSecure; })
-                .classed('secureNo', function(node){ return !node.secure && node.notSecure; })
-                .classed('secureBoth', function(node){ return node.secure && node.notSecure; })
-                .classed('cookieYes', function(node){ return node.cookie && !node.notCookie; })
-                .classed('cookieNo', function(node){ return !node.cookie && node.notCookie; })
-                .classed('cookieBoth', function(node){ return node.cookie && node.notCookie; })
-                .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); });
+	    updateNodes(sites);
+	    updateNodes(thirdparties);
+	    updateNodes(boths);
         });
+}
+
+function updateNodes(thenodes){
+    thenodes 
+	.attr('transform', function(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .03 * node.weight) + ')'; })
+	.classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
+	.classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
+	.classed('visitedBoth', function(node){ return node.visited && node.notVisited; })
+	.classed('secureYes', function(node){ return node.secure && !node.notSecure; })
+	.classed('secureNo', function(node){ return !node.secure && node.notSecure; })
+	.classed('secureBoth', function(node){ return node.secure && node.notSecure; })
+	.classed('cookieYes', function(node){ return node.cookie && !node.notCookie; })
+	.classed('cookieNo', function(node){ return !node.cookie && node.notCookie; })
+	.classed('cookieBoth', function(node){ return node.cookie && node.notCookie; })
+	.attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); });
 }
 
 
@@ -212,6 +299,13 @@ GraphNode.prototype.update = function(connection, isSource){
     this.notCookie = this.notCookie || (!connection.cookie);
     this.visited = this.visited || connection.sourceVisited;
     this.notVisited = this.notVisited || (!connection.sourceVisited);
+    if (this.visited && this.notVisited){
+        this.nodeType = 'both';
+    }else if (this.visited){
+        this.nodeType = 'site';
+    }else{
+	this.nodeType = 'thirdparty';
+    }
     this.secure = this.secure || connection.secure;
     this.notSecure = this.secure || (!connection.visited);
     this.howMany++;
