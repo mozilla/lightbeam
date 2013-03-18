@@ -326,14 +326,51 @@ function resetCanvas(){
 // update info
 document.querySelector('#content').addEventListener('click', function(event){
     if (event.target.mozMatchesSelector('.node')){
+        var preHighlight = toArray(document.querySelectorAll(".highlight-country"));
+        preHighlight.forEach(function(element){
+            element.classList.remove("highlight-country");
+        });
+        console.log(event.target.hasAttribute('data-name'));
         updateInfo(nodemap[event.target.getAttribute('data-name')]);
     }
 });
 
+/* Updates info on the right info bar */
 function updateInfo(node){
-	// FIXME: Update text here
     console.log(node);
+    var nodeName = node.name;
+    document.querySelector(".holder .title").innerHTML = nodeName;
+    document.querySelector(".holder .url").innerHTML = nodeName;
+    /* uses Steven Levithan's parseUri 1.2.2 */
+    var info = parseUri(nodeName);
+    var jsonURL = "http://freegeoip.net/json/" + info.host;
+    function getServerInfo(theUrl){
+        var xmlHttp = null;
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", theUrl, false );
+        xmlHttp.send( null );
+        return JSON.parse(xmlHttp.responseText);
+    }
+    var data = getServerInfo(jsonURL);
+    var countryName = data.country_name;
+    var countryCode = data.country_code;
+    var countryPathOnMap = document.querySelectorAll("svg #" + countryCode.toLowerCase() + " > *");
+    if ( countryPathOnMap ){
+        document.querySelector("#country").innerHTML = "Country: " + countryName;
+        toArray(countryPathOnMap).forEach(function(path){
+            path.classList.add("highlight-country");
+        });
+    }
+    
+    var connections = new Array();
+    var htmlList = "";
+    connections = connections.concat(node.linkedFrom, node.linkedTo);
+    connections.forEach(function(conn){
+        htmlList = htmlList + "<li>" + conn + "</li>"; 
+    });
+    document.querySelector(".connections-list ul").innerHTML = htmlList;
+    
+    
 }
 
 })(visualizations);
-

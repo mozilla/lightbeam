@@ -27,6 +27,11 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     font-family: "Open Sans";
 }
 
+h3 {
+    color: #EBE9E9;
+    font-size: 18px;
+}
+
 .main{
     position: relative;
     height: calc(100% - 80px);
@@ -208,11 +213,19 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     overflow-y: auto;
 }
 
+.map-section{
+    margin-bottom: 10px;
+    font-size: 10px;
+}
+
 .map{
+    background-color: #555555;
     width: 240px;
     height: 200px;
-    background-color: #555555;
-    margin-bottom: 10px;
+}
+
+.highlight-country{
+    fill: #3D50B3 !important;
 }
 
 .info .holder{
@@ -234,8 +247,23 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     border-left: 1px solid #555555;
 }
 
-.status {
-    color: #667efc;
+.info .blue-text {
+    color: #5A50F0;
+    font-size: 10px;
+}
+
+.connections-list ul{
+    font-size: 12px;
+    line-height: 15px;
+    list-style-type: none;
+    cursor: pointer;
+    height: 80px;
+    overflow-y: auto;
+}
+
+.connections-list ul li:hover{
+    color: #2E2B2B;
+    background-color: #EBE9E9;
 }
 
 .stage{
