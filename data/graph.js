@@ -352,15 +352,16 @@ function updateInfo(node){
         xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", theUrl, false );
         xmlHttp.send( null );
-        console.log(xmlHttp);
         return (xmlHttp.status == 200) ? JSON.parse(xmlHttp.responseText) : false;
     }
 
-    var preHighlight = document.querySelectorAll(".highlight-country");
-    if (preHighlight){
-        toArray(preHighlight).forEach(function(element){
-            element.classList.remove("highlight-country");
-        });
+    function clearPreHighlight(){
+        var preHighlight = document.querySelectorAll(".highlight-country");
+        if (preHighlight){
+            toArray(preHighlight).forEach(function(element){
+                element.classList.remove("highlight-country");
+            });
+        }
     }
 
     var nodeName = node.name;
@@ -371,14 +372,19 @@ function updateInfo(node){
     var data = getServerInfo(jsonURL);
 
     if ( data == false ){
-        document.querySelector("#country").innerHTML = "Cannot find server location";
+        document.querySelector("#country").innerHTML = "(Cannot find server location)";
+        clearPreHighlight();
     }else{
-        document.querySelector("#country").innerHTML = "Country: " + data.country_name;
-        var countryOnMap = document.querySelectorAll("svg #" + data.country_code.toLowerCase() + " > *");
-        if ( countryOnMap ){
-            toArray(countryOnMap).forEach(function(path){
-                path.classList.add("highlight-country");
-            });
+        // update country info only when it is different from the current one
+        if ( data.country_name !==  document.querySelector("#country").innerHTML ){
+            clearPreHighlight();
+            document.querySelector("#country").innerHTML = data.country_name;
+            var countryOnMap = document.querySelectorAll("svg #" + data.country_code.toLowerCase() + " > *");
+            if ( countryOnMap ){
+                toArray(countryOnMap).forEach(function(path){
+                    path.classList.add("highlight-country");
+                });
+            }
         }
     }
 
