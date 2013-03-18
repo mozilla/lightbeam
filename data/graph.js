@@ -169,9 +169,8 @@ function initGraph(){
 
         var nodes = vis.selectAll('.node')
 	    .data(allnodes, function(node){ return node.name; })
-            .attr('data-name', function(node){ return node.name; })
-            .call(force.drag);
-	
+        .call(force.drag);
+
 	nodes.enter();
 
         nodes.exit()
@@ -182,9 +181,10 @@ function initGraph(){
 
         sites.enter()
             .append('circle')
-	    .attr('cx', 0)
-	    .attr('cy', 0)
-	    .attr('r', 12)
+	        .attr('cx', 0)
+	        .attr('cy', 0)
+	        .attr('r', 12)
+            .attr('data-name', function(node){ return node.name; })
             .classed('node', true)
             .classed('site', true);
 
@@ -193,7 +193,8 @@ function initGraph(){
 
         thirdparties.enter()
             .append('polygon')
-	    .attr('points', polygonAsString(3, 20))
+    	    .attr('points', polygonAsString(3, 20))
+            .attr('data-name', function(node){ return node.name; })
             .classed('node', true)
             .classed('thirdparty', true);
 
@@ -201,13 +202,14 @@ function initGraph(){
             .data(bothnodes, function(node){ return node.name; });
 
         boths.enter()
-	    .append('rect')
-	    .attr('x', -9)
-	    .attr('y', -9)
-	    .attr('width', 18)
-	    .attr('height', 18)
-	    .classed('node', true)
-	    .classed('both', true);
+    	    .append('rect')
+    	    .attr('x', -9)
+    	    .attr('y', -9)
+    	    .attr('width', 18)
+    	    .attr('height', 18)
+            .attr('data-name', function(node){ return node.name; })
+    	    .classed('node', true)
+    	    .classed('both', true);
 
         // update method
         force.on('tick', function(){
@@ -216,14 +218,14 @@ function initGraph(){
                 .attr('y1', function(edge){ return edge.source.y; })
                 .attr('x2', function(edge){ return edge.target.x; })
                 .attr('y2', function(edge){ return edge.target.y; });
-	    updateNodes(sites);
-	    updateNodes(thirdparties);
-	    updateNodes(boths);
+    	    updateNodes(sites);
+    	    updateNodes(thirdparties);
+    	    updateNodes(boths);
         });
 }
 
 function updateNodes(thenodes){
-    thenodes 
+    thenodes
 	.attr('transform', function(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .03 * node.weight) + ')'; })
 	.classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
 	.classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
@@ -330,14 +332,12 @@ document.querySelector('#content').addEventListener('click', function(event){
         preHighlight.forEach(function(element){
             element.classList.remove("highlight-country");
         });
-        console.log(event.target.hasAttribute('data-name'));
         updateInfo(nodemap[event.target.getAttribute('data-name')]);
     }
 });
 
 /* Updates info on the right info bar */
 function updateInfo(node){
-    console.log(node);
     var nodeName = node.name;
     document.querySelector(".holder .title").innerHTML = nodeName;
     document.querySelector(".holder .url").innerHTML = nodeName;
@@ -361,16 +361,16 @@ function updateInfo(node){
             path.classList.add("highlight-country");
         });
     }
-    
+
     var connections = new Array();
     var htmlList = "";
     connections = connections.concat(node.linkedFrom, node.linkedTo);
     connections.forEach(function(conn){
-        htmlList = htmlList + "<li>" + conn + "</li>"; 
+        htmlList = htmlList + "<li>" + conn + "</li>";
     });
     document.querySelector(".connections-list ul").innerHTML = htmlList;
-    
-    
+
+
 }
 
 })(visualizations);
