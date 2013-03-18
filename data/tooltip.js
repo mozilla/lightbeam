@@ -19,6 +19,22 @@ function showTooltip(event){
     return false;
 }
 
+function d3ShowTooltip(node, idx){
+    if (!tooltip){
+        tooltip = document.getElementById('tooltip');
+    }
+    tooltip.style.left = '-1000px';
+    tooltip.style.display = 'inline-block';
+    // console.error(event, event.target, event.target.dataset);
+    tooltip.innerHTML = node.name + '<span class="howMany">(&times;' + node.howMany + ')</span>';
+    var rect = this.getClientRects()[0];
+    var tooltipWidth = tooltip.offsetWidth;
+    tooltip.style.top = (rect.top - 60) + 'px';
+    tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
+    return false;
+}
+
+
 
 
 function setTooltipTimeout(){
@@ -33,22 +49,28 @@ function timeoutTooltip(){
     tooltip.timer = null;
 }
 
-function hideTooltip(event){
+function hideTooltip(){
     setTooltipTimeout();
     return false;
 }
 
-document.addEventListener('mouseenter', function(event){
-    if (target.mozMatchesSelector('.node')){
-        showTooltip(event);
-    }
-});
+function add(node){
+    node.addEventListener('mouseenter', showTooltip, false);
+    node.addEventListener('mouseleave', hideTooltip, false);
+}
 
-document.addEventListener('mouseleave', function(){
-    if (target.mozMatchesSelector('.node')){
-        hideTooltip(event);
-    }
-});
+function remove(node){
+    node.removeEventListener('mouseenter', showTooltip);
+    node.removeEventListener('mouseleave', hideTooltip);
+}
+
+
+global.tooltip = {
+    add: add,
+    remove: remove,
+    show: d3ShowTooltip,
+    hide: hideTooltip
+};
 
 })(this);
 

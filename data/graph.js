@@ -185,6 +185,8 @@ function initGraph(){
 	        .attr('cy', 0)
 	        .attr('r', 12)
             .attr('data-name', function(node){ return node.name; })
+            .on('mouseenter', tooltip.show)
+            .on('mouseleave', tooltip.hide)
             .classed('node', true)
             .classed('site', true);
 
@@ -195,6 +197,8 @@ function initGraph(){
             .append('polygon')
     	    .attr('points', polygonAsString(3, 20))
             .attr('data-name', function(node){ return node.name; })
+            .on('mouseenter', tooltip.show)
+            .on('mouseleave', tooltip.hide)
             .classed('node', true)
             .classed('thirdparty', true);
 
@@ -208,6 +212,8 @@ function initGraph(){
     	    .attr('width', 18)
     	    .attr('height', 18)
             .attr('data-name', function(node){ return node.name; })
+            .on('mouseenter', tooltip.show)
+            .on('mouseleave', tooltip.hide)
     	    .classed('node', true)
     	    .classed('both', true);
 
@@ -334,7 +340,7 @@ document.querySelector('#content').addEventListener('click', function(event){
 //                 element.classList.remove("highlight-country");
 //             });
 //         }
-        
+
         updateInfo(nodemap[event.target.getAttribute('data-name')]);
     }
 });
@@ -356,14 +362,14 @@ function updateInfo(node){
             element.classList.remove("highlight-country");
         });
     }
-        
+
     var nodeName = node.name;
     document.querySelector(".holder .title").innerHTML = nodeName;
-    document.querySelector(".holder .url").innerHTML = nodeName;  
+    document.querySelector(".holder .url").innerHTML = nodeName;
     var info = parseUri(nodeName); // uses Steven Levithan's parseUri 1.2.2
     var jsonURL = "http://freegeoip.net/json/" + info.host;
     var data = getServerInfo(jsonURL);
-    
+
     if ( data == false ){
         document.querySelector("#country").innerHTML = "Cannot find server location";
     }else{
@@ -375,7 +381,7 @@ function updateInfo(node){
             });
         }
     }
-    
+
     var connections = new Array();
     var htmlList = "";
     connections = connections.concat(node.linkedFrom, node.linkedTo);
