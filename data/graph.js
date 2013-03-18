@@ -328,40 +328,54 @@ function resetCanvas(){
 // update info
 document.querySelector('#content').addEventListener('click', function(event){
     if (event.target.mozMatchesSelector('.node')){
-        var preHighlight = toArray(document.querySelectorAll(".highlight-country"));
-        preHighlight.forEach(function(element){
-            element.classList.remove("highlight-country");
-        });
+        // var preHighlight = document.querySelectorAll(".highlight-country");
+//         if (preHighlight){
+//             toArray(preHighlight).forEach(function(element){
+//                 element.classList.remove("highlight-country");
+//             });
+//         }
+        
         updateInfo(nodemap[event.target.getAttribute('data-name')]);
     }
 });
 
 /* Updates info on the right info bar */
 function updateInfo(node){
-    var nodeName = node.name;
-    document.querySelector(".holder .title").innerHTML = nodeName;
-    document.querySelector(".holder .url").innerHTML = nodeName;
-    /* uses Steven Levithan's parseUri 1.2.2 */
-    var info = parseUri(nodeName);
-    var jsonURL = "http://freegeoip.net/json/" + info.host;
     function getServerInfo(theUrl){
         var xmlHttp = null;
         xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", theUrl, false );
         xmlHttp.send( null );
-        return JSON.parse(xmlHttp.responseText);
-    }
-    var data = getServerInfo(jsonURL);
-    var countryName = data.country_name;
-    var countryCode = data.country_code;
-    var countryPathOnMap = document.querySelectorAll("svg #" + countryCode.toLowerCase() + " > *");
-    if ( countryPathOnMap ){
-        document.querySelector("#country").innerHTML = "Country: " + countryName;
-        toArray(countryPathOnMap).forEach(function(path){
-            path.classList.add("highlight-country");
-        });
+        console.log(xmlHttp);
+        return (xmlHttp.status == 200) ? JSON.parse(xmlHttp.responseText) : false;
     }
 
+    var preHighlight = document.querySelectorAll(".highlight-country");
+    if (preHighlight){
+        toArray(preHighlight).forEach(function(element){
+            element.classList.remove("highlight-country");
+        });
+    }
+        
+    var nodeName = node.name;
+    document.querySelector(".holder .title").innerHTML = nodeName;
+    document.querySelector(".holder .url").innerHTML = nodeName;  
+    var info = parseUri(nodeName); // uses Steven Levithan's parseUri 1.2.2
+    var jsonURL = "http://freegeoip.net/json/" + info.host;
+    var data = getServerInfo(jsonURL);
+    
+    if ( data == false ){
+        document.querySelector("#country").innerHTML = "Cannot find server location";
+    }else{
+        document.querySelector("#country").innerHTML = "Country: " + data.country_name;
+        var countryOnMap = document.querySelectorAll("svg #" + data.country_code.toLowerCase() + " > *");
+        if ( countryOnMap ){
+            toArray(countryOnMap).forEach(function(path){
+                path.classList.add("highlight-country");
+            });
+        }
+    }
+    
     var connections = new Array();
     var htmlList = "";
     connections = connections.concat(node.linkedFrom, node.linkedTo);
