@@ -185,6 +185,8 @@ function initGraph(){
 	        .attr('cy', 0)
 	        .attr('r', 12)
             .attr('data-name', function(node){ return node.name; })
+            .on('mouseenter', tooltip.show)
+            .on('mouseleave', tooltip.hide)
             .classed('node', true)
             .classed('site', true);
 
@@ -195,6 +197,8 @@ function initGraph(){
             .append('polygon')
     	    .attr('points', polygonAsString(3, 20))
             .attr('data-name', function(node){ return node.name; })
+            .on('mouseenter', tooltip.show)
+            .on('mouseleave', tooltip.hide)
             .classed('node', true)
             .classed('thirdparty', true);
 
@@ -208,6 +212,8 @@ function initGraph(){
     	    .attr('width', 18)
     	    .attr('height', 18)
             .attr('data-name', function(node){ return node.name; })
+            .on('mouseenter', tooltip.show)
+            .on('mouseleave', tooltip.hide)
     	    .classed('node', true)
     	    .classed('both', true);
 
@@ -328,6 +334,13 @@ function resetCanvas(){
 // update info
 document.querySelector('#content').addEventListener('click', function(event){
     if (event.target.mozMatchesSelector('.node')){
+        // var preHighlight = document.querySelectorAll(".highlight-country");
+//         if (preHighlight){
+//             toArray(preHighlight).forEach(function(element){
+//                 element.classList.remove("highlight-country");
+//             });
+//         }
+
         updateInfo(nodemap[event.target.getAttribute('data-name')]);
     }
 });
@@ -341,7 +354,7 @@ function updateInfo(node){
         xmlHttp.send( null );
         return (xmlHttp.status == 200) ? JSON.parse(xmlHttp.responseText) : false;
     }
-    
+ 
     function resetMap(){
         var preHighlight = document.querySelectorAll(".highlight-country");
         if (preHighlight){
@@ -351,15 +364,14 @@ function updateInfo(node){
         }
         document.querySelector("#mapcanvas").setAttribute("viewBox", [0,81.5,2711.3,1196.7].join(" "));
     }
-        
+
     var nodeName = node.name;
     document.querySelector(".holder .title").innerHTML = nodeName;
     document.querySelector(".holder .url").innerHTML = nodeName;  
-    
     var info = parseUri(nodeName); // uses Steven Levithan's parseUri 1.2.2
     var jsonURL = "http://freegeoip.net/json/" + info.host;
     var data = getServerInfo(jsonURL);
-    
+
     if ( data == false ){
         document.querySelector("#country").innerHTML = "(Cannot find server location)";
         resetMap();
@@ -397,7 +409,7 @@ function updateInfo(node){
                             .join(" ")); 
         }
     }
- 
+
     // update the connections list
     var connections = new Array();
     var htmlList = "";

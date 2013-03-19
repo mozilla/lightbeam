@@ -95,6 +95,7 @@ function onConnection(connection){
         'class': 'tracker'
     }));
     connection.view = g;
+    tooltip.add(g);
     bucket.group.appendChild(g);
 }
 
@@ -202,6 +203,7 @@ function drawTimerHand(time){
         hand.appendChild(svg('path', {d: 'M47,-8 L47,8 73,5 73,-5 Z'}));
         vizcanvas.appendChild(hand);
     }
+    vizcanvas.appendChild(hand);
     hand.setAttribute('transform', 'rotate(' + (timeToAngle(time) - 180) + ' ' + CENTRE + ') ' + HAND_TRANS);
     handTimer = setTimeout(drawTimerHand, 1000);
 }
