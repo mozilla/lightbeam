@@ -157,6 +157,7 @@ h3 {
 .zooming a{
     padding: 0;
     margin: 0;
+    cursor: pointer;
 }
 
 .zooming .move-up{
@@ -218,6 +219,17 @@ h3 {
     font-size: 10px;
 }
 
+.map-control i:hover{
+    color: #fff;
+}
+
+.map-control i{
+    font-size: 12px;
+    margin: 0 5px;
+    color: #939393;
+}
+
+
 .map{
     background-color: #555555;
     width: 240px;
@@ -236,6 +248,8 @@ h3 {
 
 .info .holder .subhead {
     padding: 10px 0;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .info .holder span{
@@ -257,7 +271,7 @@ h3 {
     line-height: 15px;
     list-style-type: none;
     cursor: pointer;
-    height: 80px;
+    height: 75px;
     overflow-y: auto;
 }
 
