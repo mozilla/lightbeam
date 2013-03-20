@@ -51,7 +51,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
 
     /* Toggle Info Panel */
-    document.querySelector(".showinfo").addEventListener("click", function(){
+    document.querySelector(".show-info-button").addEventListener("click", function(){
         document.querySelector("#content").classList.toggle("showinfo");
     });
 
