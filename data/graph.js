@@ -190,7 +190,7 @@ function resetCanvas(){
 // update info
 document.querySelector('#content').addEventListener('click', function(event){
     if (event.target.mozMatchesSelector('.node')){
-        updateInfo(nodemap[event.target.getAttribute('data-name')]);
+        updateInfo(aggregate.nodeForKey(event.target.getAttribute('data-name')));
     }
 });
 
@@ -204,7 +204,7 @@ function updateInfo(node){
         xmlHttp.send( null );
         callback( (xmlHttp.status == 200) ? JSON.parse(xmlHttp.responseText) : false );
     }
- 
+
     function resetMap(){
         var preHighlight = document.querySelectorAll(".highlight-country");
         if (preHighlight){
@@ -214,17 +214,17 @@ function updateInfo(node){
         }
         document.querySelector("#mapcanvas").setAttribute("viewBox", [0,0,2711.3,1196.7].join(" "));
     }
- 
+
     function updateMap(newCountry, countryCode){
         toArray(newCountry).forEach(function(land){
                     land.classList.add("highlight-country");
                 });
- 
+
                 // position the highlighted country in center
                 var svgViewBox = document.querySelector("#mapcanvas").getAttribute("viewBox").split(" ");
                 var worldDimen = document.querySelector("#mapcanvas").getClientRects()[0];
                 var countryDimen = document.querySelector("#"+countryCode).getClientRects()[0];
-     
+
                 var ratio = svgViewBox[2] / worldDimen.width;
                 var worldCenter = {
                     x: 0.5*worldDimen.width + worldDimen.left,
@@ -247,12 +247,12 @@ function updateInfo(node){
 
     var info = parseUri(node.name); // uses Steven Levithan's parseUri 1.2.2
     var jsonURL = "http://freegeoip.net/json/" + info.host;
- 
+
     // update content in the side bar when you have the server info ==========
     getServerInfo(jsonURL, function(data){
         document.querySelector(".holder .title").innerHTML = node.name;
-        document.querySelector(".holder .url").innerHTML = node.name;  
-        
+        document.querySelector(".holder .url").innerHTML = node.name;
+
         if ( data == false ){
             document.querySelector("#country").innerHTML = "(Cannot find server location)";
             resetMap();
@@ -275,7 +275,7 @@ function updateInfo(node){
         });
         document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = connections.length + " connections from current site";
         document.querySelector(".connections-list ul").innerHTML = htmlList;
-     
+
         document.querySelector("#content").classList.add("showinfo");
     });
 
