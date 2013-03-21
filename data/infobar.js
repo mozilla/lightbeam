@@ -30,33 +30,31 @@ function updateInfo(node){
 
     function updateMap(newCountry, countryCode){
         toArray(newCountry).forEach(function(land){
-                    land.classList.add("highlight-country");
-                });
+            land.classList.add("highlight-country");
+        });
+ 
+        // position the highlighted country in center
+        var svgViewBox = document.querySelector("#mapcanvas").getAttribute("viewBox").split(" ");
+        var worldDimen = document.querySelector("#mapcanvas").getClientRects()[0];
+        var countryDimen = document.querySelector("#"+countryCode).getClientRects()[0];
 
-                // position the highlighted country in center
-                var svgViewBox = document.querySelector("#mapcanvas").getAttribute("viewBox").split(" ");
-                var worldDimen = document.querySelector("#mapcanvas").getClientRects()[0];
-                var countryDimen = document.querySelector("#"+countryCode).getClientRects()[0];
+        var ratio = svgViewBox[2] / worldDimen.width;
+        var worldCenter = {
+            x: 0.5*worldDimen.width + worldDimen.left,
+            y: 0.5*worldDimen.height + worldDimen.top
+        };
+        var countryCenter = {
+            x: 0.5*countryDimen.width + countryDimen.left,
+            y: 0.5*countryDimen.height + countryDimen.top
+        };
 
-                var ratio = svgViewBox[2] / worldDimen.width;
-                var worldCenter = {
-                    x: 0.5*worldDimen.width + worldDimen.left,
-                    y: 0.5*worldDimen.height + worldDimen.top
-                };
-                var countryCenter = {
-                    x: 0.5*countryDimen.width + countryDimen.left,
-                    y: 0.5*countryDimen.height + countryDimen.top
-                };
-
-                var newViewBox = {
-                    x: -(worldCenter.x-countryCenter.x) * ratio,
-                    y: -(worldCenter.y-countryCenter.y) * ratio,
-                    w: svgViewBox[2],
-                    h: svgViewBox[3]
-                };
-                console.log("countryCenter = " + JSON.stringify(countryCenter));
-                console.log("newViewBox = " + JSON.stringify(newViewBox));
-                setZoom(newViewBox,'mapcanvas');
+        var newViewBox = {
+            x: -(worldCenter.x-countryCenter.x) * ratio,
+            y: -(worldCenter.y-countryCenter.y) * ratio,
+            w: svgViewBox[2],
+            h: svgViewBox[3]
+        };
+        setZoom(newViewBox,'mapcanvas');
     }
 
     var info = parseUri(node.name); // uses Steven Levithan's parseUri 1.2.2
