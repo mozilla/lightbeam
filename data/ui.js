@@ -78,6 +78,7 @@ document.querySelector(".download").addEventListener('click', function() {
 
 document.querySelector('.reset-data').addEventListener('click', function(){
     addon.emit('reset');
+    aggregate.emit('reset');
     // FIXME: empty the data from current view too
 });
 
@@ -119,7 +120,7 @@ function setZoom(box,canvas){
                 document.querySelector('#mapcanvas')
                     .setAttribute('viewBox', [box.x, box.y, box.w, box.h].join(' '));
                 break;
-                
+
         }
         default: throw new Error('It has to be one of the choices above');
     }
@@ -233,6 +234,4 @@ document.querySelector('.map-control .zoom-out').addEventListener('click', funct
     setZoom(box,'mapcanvas');
     return false;
 });
-
-
 
