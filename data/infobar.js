@@ -1,5 +1,7 @@
 (function(global){
 
+const oriMapViewBox = document.querySelector('#mapcanvas').getAttribute('viewBox');
+
 // update info
 document.querySelector('#content').addEventListener('click', function(event){
     if (event.target.mozMatchesSelector('.node')){
@@ -27,8 +29,7 @@ function resetMap(){
             element.classList.remove("highlight-country");
         });
     }
-    document.querySelector("#mapcanvas").setAttribute("viewBox", [0,0,2711.3,1196.7].join(" "));
-    d3.selectAll("#mapcanvas > *").attr("transform","translate(0,0)  scale(1.0)");
+    document.querySelector("#mapcanvas").setAttribute("viewBox", oriMapViewBox);
 }
 
 // update map 
@@ -70,7 +71,7 @@ function updateInfo(node){
     getServerInfo(node, function(data){
         document.querySelector(".holder .title").innerHTML = node.name;
         document.querySelector(".holder .url").innerHTML = node.name;
-
+        
         if ( data == false || data.country_name === "Reserved" ){
             document.querySelector("#country").innerHTML = "(Unable to find server location)";
             resetMap();
