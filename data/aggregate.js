@@ -10,14 +10,20 @@ var nodemap, edgemap;
 var aggregate = new Emitter();
 global.aggregate = aggregate;
 
+aggregate.allnodes = [];
+aggregate.sitenodes = [];
+aggregate.thirdnodes = [];
+aggregate.bothnodes = [];
+aggregate.edges = [];
+
 function resetData(){
-    aggregate.allnodes = [];
+    aggregate.allnodes.length = 0;
     nodemap = {};
-    aggregate.sitenodes = [];
-    aggregate.thirdnodes = [];
-    aggregate.bothnodes = [];
+    aggregate.sitenodes.length = 0;
+    aggregate.thirdnodes.length = 0;
+    aggregate.bothnodes.length = 0;
     edgemap = {};
-    aggregate.edges = [];
+    aggregate.edges.length = 0;
 }
 resetData();
 aggregate.on('reset', resetData);
