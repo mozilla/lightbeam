@@ -100,7 +100,9 @@ function updateInfo(node){
 
 }
 
-
+/*
+// FIX THIS!!! applying translation causes the map to fracture
+// the svg map uses Robinson projection
 d3.select("#mapcanvas").attr("cursor","-moz-grab").call(
     d3.behavior.zoom()
         .translate ([0, 0])
@@ -108,10 +110,11 @@ d3.select("#mapcanvas").attr("cursor","-moz-grab").call(
         .scaleExtent([1.0, 4.0])
         .on("zoom", function(){
             d3.selectAll("#mapcanvas > *")
-                .attr("transform","translate(" + d3.event.translate[0] + "," +  d3.event.translate[1] + ")" +
+                .attr("transform","translate(" + d3.event.translate.join(",") + ")" +
                       " scale(" +  d3.event.scale + ")");
         })
 );
+*/
 
 
 })(this);

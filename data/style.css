@@ -390,3 +390,39 @@ line{
 .cookieBoth{
     fill: #EA5E15;
 }
+
+
+/* List Visualization */
+.stage.list{
+    overflow-y: auto;
+}
+
+.list-table{
+    width: calc(100%-500px);
+    border-collapse: collapse;
+    margin-left: 50px;
+    font-size: 12px;
+}
+
+.list-table th,
+.list-table td{
+    border-bottom: 1px solid #555;
+    line-height: 35px;
+    margin: 0;
+}
+
+.list-table th{
+    text-align: left;
+}
+
+.list-table td{
+    padding-right: 50px;
+}
+
+.list-table .visited-row td{
+    color: #6178FA;
+}
+
+.list-table .third-row td{
+    color: #FF617B;
+}

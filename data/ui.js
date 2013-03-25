@@ -39,8 +39,11 @@ window.addEventListener("DOMContentLoaded", function(){
         dropdownGroup(btnGroup, function(val){
             val = val.toLowerCase();
             switch(val){
-                case 'clock': console.log("===clock");
-                case 'graph': console.log("===nodes");
+                case 'clock': 
+                case 'graph':
+                    switchVisualization(val);
+                    break;
+                case 'list':
                     switchVisualization(val);
                     break;
                 default:
