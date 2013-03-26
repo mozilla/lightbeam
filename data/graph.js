@@ -94,6 +94,7 @@ function initGraph(){
         lines.exit()
             .remove();
 
+    window.force = force; // expose for debugging
  //        var nodes = vis.selectAll('.node')
 	//     .data(aggregate.allnodes, function(node){ return node.name; })
  //        .call(force.drag);

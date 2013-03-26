@@ -166,8 +166,10 @@ GraphNode.prototype.update = function(connection, isSource){
     }
     this.cookie = this.cookie || connection.cookie;
     this.notCookie = this.notCookie || (!connection.cookie);
-    this.visited = this.visited || connection.sourceVisited;
-    this.notVisited = this.notVisited || (!connection.sourceVisited);
+    if (isSource){
+        this.visited = this.visited || connection.sourceVisited;
+        this.notVisited = this.notVisited || (!connection.sourceVisited);
+    }
     if (this.visited && this.notVisited){
         this.nodeType = 'both';
     }else if (this.visited){
