@@ -447,6 +447,15 @@ line{
     cursor: pointer;
 }
 
+.list-table .visited-row .source-data:hover{
+    color: #2D4CFA;
+}
+
+.list-table .third-row .source-data:hover{
+    color: #E83C59;
+}
+
+
 .list-table .visited-row td{
     color: #6178FA;
 }
