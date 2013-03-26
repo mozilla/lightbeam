@@ -8,8 +8,7 @@
 
 var list = new Emitter();
 visualizations.list = list;
-var width = 1000, height = 1000;
-var vizcanvas, vis;
+var vizcanvas;
 
 list.on("init", OnInit);
 list.on("conneciton", onConnection);
@@ -18,16 +17,12 @@ list.on("remove", onRemove);
 function OnInit(connections){
     console.log('initializing graph from %s connections', connections.length);
     vizcanvas = document.querySelector('.vizcanvas');
-    vis = d3.select('.vizcanvas');
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
     initGraph();
-    aggregate.on('updated', function(){
-    });
-    // Differenct visualizations may have different viewBoxes, so make sure we use the right one
-    vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
-    console.log("width: %s, height: %s", width, height);
+    //aggregate.on('updated', function(){ });
+    vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
 }
 
 function onConnection(){
@@ -42,7 +37,6 @@ function onRemove(){
 
 
 function initGraph(){
-    vis.attr("width", 0).attr("height", 0); // hide .vizcanvas
  
     var columns = ["Type","Source", "First Access", "Last Access"];
  
@@ -92,14 +86,9 @@ function initGraph(){
     appendData(aggregate.thirdnodes, "third");    
 }
 
-function resetCanvas(){
-    // You will still need to remove timer events
-    var parent = vizcanvas.parentNode;
-    var newcanvas = vizcanvas.cloneNode(false);
-    parent.replaceChild(newcanvas, vizcanvas);
-    vizcanvas = newcanvas;
- 
-    vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
+function resetCanvas(){ 
+    document.querySelector(".stage").removeChild( document.querySelector(".stage .list-table") );
+    vizcanvas.classList.remove("hide");
 }
 
 })(visualizations);

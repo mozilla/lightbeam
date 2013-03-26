@@ -393,6 +393,12 @@ line{
 
 
 /* List Visualization */
+.hide {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
 .stage.list{
     overflow-y: auto;
 }
