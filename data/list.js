@@ -112,20 +112,20 @@ function setBreadcrumb(nav){
         .classed("piece", true)
         .html(function(d) { return d; })
         .on("click", function(d,i){
-                            document.querySelector(".list").removeChild( document.querySelector(".list .list-table") );
-                            initGraph();
-                            d3.select(".list-breadcrumb div").classed("hide", true);
-                        });
+            document.querySelector(".list").removeChild( document.querySelector(".list .list-table") );
+            initGraph();
+            d3.select(".list-breadcrumb div").classed("hide", true);
+        });
 }
 
 
 function filterNodes(nodes, filter){
     var filtered = new Array();
-        nodes.forEach(function(node){
-            if ( node.name == filter || node.linkedFrom == filter || node.linkedTo == filter ){
-                    filtered.push(node);
-            }
-        });
+    nodes.forEach(function(node){
+        if ( node.name == filter || node.linkedFrom.indexOf(filter) != -1 || node.linkedTo.indexOf(filter) != -1 ){
+            filtered.push(node);
+        }
+    });
     return filtered;
 }
 

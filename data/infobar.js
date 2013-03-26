@@ -2,12 +2,20 @@
 
 const oriMapViewBox = document.querySelector('#mapcanvas').getAttribute('viewBox');
 
-// update info
+// update info when clicking on a node in the graph visualization
 document.querySelector('#content').addEventListener('click', function(event){
     if (event.target.mozMatchesSelector('.node')){
         updateInfo(aggregate.nodeForKey(event.target.getAttribute('data-name')));
     }
 },false);
+
+//document.querySelector('.stage').addEventListener('click', function(event){
+//        console.log("list table clicked");
+//        if (event.target.mozMatchesSelector('.source-data')){
+//            console.log("hahahha");
+//            updateInfo(aggregate.nodeForKey(event.target.getAttribute('filter-url')));
+//        }
+//},false);
 
 
 // get server info from http://freegeoip.net
