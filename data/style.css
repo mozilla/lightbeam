@@ -403,6 +403,23 @@ line{
     overflow-y: auto;
 }
 
+.list-breadcrumb {
+    height: 20px;
+    margin-bottom: 5px;
+}
+
+.list-breadcrumb .piece{
+    color: rgba(130,130,130,0.7);
+    font-size: 15px;
+    line-height: 20px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.list-breadcrumb .piece:hover{
+    color: rgba(130,130,130,1);
+}
+
 .list-table{
     width: calc(100%-500px);
     border-collapse: collapse;
@@ -412,6 +429,7 @@ line{
 
 .list-table th,
 .list-table td{
+    min-width: 120px;
     border-bottom: 1px solid #555;
     line-height: 35px;
     margin: 0;
@@ -422,7 +440,11 @@ line{
 }
 
 .list-table td{
-    padding-right: 50px;
+    padding-right: 30px;
+}
+
+.list-table .source-data{
+    cursor: pointer;
 }
 
 .list-table .visited-row td{
