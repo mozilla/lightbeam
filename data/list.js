@@ -9,8 +9,10 @@
 var list = new Emitter();
 visualizations.list = list;
 var vizcanvas;
-var stage = d3.select(".stage").classed("list", true);
-var breadcrumb = stage.append("div").classed("list-breadcrumb", true);
+document.querySelector(".stage").classList.add("list");
+var breadcrumb = document.createElement("div");
+breadcrumb.classList.add("list-breadcrumb");
+document.querySelector(".stage").appendChild(breadcrumb);
 var columns = ["Type","Site", "First Access", "Last Access"];
 
 list.on("init", OnInit);
@@ -43,103 +45,130 @@ function onRemove(){
 
 
 function initGraph(){
-    stage.append("div").attr("style", "clear:both");
-    var table = stage.append("table").classed("list-table", true);
-    var thead = table.append("thead");
-    var tbody = table.append("tbody");
-
-    // append the header row
-    thead.append("tr")
-        .selectAll("th")
-        .data(columns)
-        .enter()
-        .append("th")
-            .text(function(column) { return column; });
+    var table = document.createElement("table");
+    table.classList.add("list-table");
+    document.querySelector(".stage.list").appendChild(table);
  
-    appendData(aggregate.sitenodes, "visited", columns);
-    appendData(aggregate.thirdnodes, "third", columns);
-}
-
-
-// append data rows to table
-function appendData(nodes, type, columns, filter){
-    var tbody = d3.select(".list-table tbody");
-
-    var data = new Array();
-    if ( nodes ){
-        nodes.forEach(function(node){
-                data.push( [ "", node.name, node.firstAccess.toString().substring(0,24), node.lastAccess.toString().substring(0,24)  ] ); // strip out the timezone info 
-        });
-        if (data[0]) data[0][0] = (type=="visited") ? "Visited" : "Third-Party";
-        //data.push([" "," "," ","&nbsp;"]);
-    }
-
-    // create a row for each object in the data
-    var rows = tbody.selectAll("tr")
-        .data(data, function(d){ return d; })
-        .enter()
-        .append("tr")
-        .classed(type + "-row", true);
-
-    // create a cell in each row for each column
-    var cells = rows.selectAll("td")
-        .data(function(row) {
-            return columns.map(function(column, i) {
-                var value = row[i];
-                if (column==columns[1]) value = "<span class='source-data' filter-url='"+ value +"'>" + value + "</span>";
-                return {column: column, value: value};
-            });
-        })
-        .enter()
-        .append("td")
-            .html(function(d) { return d.value; });
-
-    var source = d3.selectAll(".source-data")
-                        .on("click", function(d,i){
-                            showFilteredList(this.getAttribute("filter-url"));
-                        });
-}
-
-
-function setBreadcrumb(nav){
-    d3.select(".list-breadcrumb div").classed("hide", false);
-    //if ( !nav )
-        nav = ["<<< List All"];
-    
-    breadcrumb
-        .selectAll("div")
-        .data(nav, function(d){ return d; })
-        .enter()
-        .append("div")
-        .classed("piece", true)
-        .html(function(d) { return d; })
-        .on("click", function(d,i){
-            document.querySelector(".list").removeChild( document.querySelector(".list .list-table") );
-            initGraph();
-            d3.select(".list-breadcrumb div").classed("hide", true);
-        });
-}
-
-
-function filterNodes(nodes, filter){
-    var filtered = new Array();
-    nodes.forEach(function(node){
-        if ( node.name == filter || node.linkedFrom.indexOf(filter) != -1 || node.linkedTo.indexOf(filter) != -1 ){
-            filtered.push(node);
+    var thead = document.createElement("thead");
+    table.appendChild(thead);
+    thead.appendChild(createRow(columns));
+ 
+    showFilteredTable(); // showing all data so no filter param is passed here
+ 
+    document.querySelector('.list-table').addEventListener('click', function(event){
+        if (event.target.mozMatchesSelector('td')){
+            showFilteredTable(event.target.parentNode.getAttribute('site-url'));
         }
-    });
+    },false);
+}
+
+
+function setBreadcrumb(filter){
+    if ( !breadcrumb.firstChild ){ // initialize
+        var link = document.createElement("a");
+        link.setAttribute("filter-by", "All");
+        var text = document.createTextNode("All");
+        link.appendChild(text);
+        breadcrumb.appendChild(link);
+        link.addEventListener('click', function(event){
+            showFilteredTable();
+        },false);
+    }else{
+        if ( !breadcrumb.lastChild.hasAttribute("filter-by") ){
+            breadcrumb.removeChild(breadcrumb.lastChild);
+            breadcrumb.removeChild(breadcrumb.lastChild);
+        }
+        if( filter ){
+            breadcrumb.appendChild(document.createTextNode(" > "));
+            var link = document.createElement("a");
+            var text = document.createTextNode(filter);
+            link.appendChild(text);
+            breadcrumb.appendChild(link);
+        }
+    }
+}
+
+
+function showFilteredTable(filter){
+    // remove existinb table tbodys, if any
+    var table = document.querySelector("table.list-table");
+    while ( document.querySelectorAll("table tbody").length > 0 ){
+        table.removeChild(document.querySelector("table tbody"));
+    }
+ 
+    table.appendChild(createBody("visited",filter));
+    table.appendChild(createBody("third-party",filter));
+
+    setBreadcrumb(filter);
+}
+
+
+function getNodes(filter){
+    var filtered = {};
+    filtered.sitenodes = new Array();
+    filtered.thirdnodes = new Array();
+    if (filter){
+        var nodePicked = aggregate.nodeForKey(filter);
+        if ( nodePicked.nodeType == "site" ) filtered.sitenodes.push(nodePicked);
+        if ( nodePicked.nodeType == "thirdparty" ) filtered.thirdnodes.push(nodePicked);
+ 
+        nodePicked.linkedFrom.forEach(function(key){
+            var node = aggregate.nodeForKey(key);
+            if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
+            if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
+        });
+
+        nodePicked.linkedTo.forEach(function(key){
+            var node = aggregate.nodeForKey(key);
+            if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
+            if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
+        });
+    }else{ // show all
+        filtered.sitenodes = aggregate.sitenodes.concat(aggregate.bothnodes);
+        filtered.thirdnodes = aggregate.thirdnodes.concat(aggregate.bothnodes);
+    }
+    
     return filtered;
 }
 
 
-function showFilteredList(filter){
-    document.querySelector(".list-table").removeChild( document.querySelector(".list-table tbody") );
-    d3.select(".list-table").append("tbody");
-    var siteNodes = aggregate.sitenodes.concat(aggregate.bothnodes);
-    var thirdNodes = aggregate.thirdnodes.concat(aggregate.bothnodes);
-    appendData(filterNodes(siteNodes,filter), "visited", columns);
-    appendData(filterNodes(thirdNodes,filter), "third", columns);
-    setBreadcrumb(filter);
+function createBody(type, filter){
+    var tbody = document.createElement("tbody");
+    if (type == "visited"){
+        var sitenodes = getNodes(filter).sitenodes;
+        sitenodes.forEach(function(node){
+            var data = [ "Visited", node.name, node.firstAccess.toString().substring(0,24), node.lastAccess.toString().substring(0,24) ];
+            tbody.appendChild(createRow(data,"visited-row"));
+        });
+    }else{ // type == "third-party"
+        var thirdnodes = getNodes(filter).thirdnodes;
+        thirdnodes.forEach(function(node){
+            var data = [ "Third-Party", node.name, node.firstAccess.toString().substring(0,24), node.lastAccess.toString().substring(0,24) ];
+            tbody.appendChild(createRow(data,"third-row"));
+        });
+    }
+    return tbody;
+}
+
+
+function createRow(dataArray, type){
+    var row = document.createElement("tr");
+    dataArray.forEach(function(data){
+        var cell = createCell(data);
+        row.appendChild(cell);
+    });
+    row.classList.add(type);
+    row.setAttribute("site-url", dataArray[1]);
+
+    return row;
+}
+
+
+function createCell(data){
+    var cell = document.createElement("td");
+    var text = document.createTextNode(data);
+    cell.appendChild(text);
+    return cell;
 }
 
 
