@@ -11,7 +11,7 @@ visualizations.list = list;
 var vizcanvas;
 var stage = d3.select(".stage").classed("list", true);
 var breadcrumb = stage.append("div").classed("list-breadcrumb", true);
-var columns = ["Type","Source", "First Access", "Last Access"];
+var columns = ["Type","Site", "First Access", "Last Access"];
 
 list.on("init", OnInit);
 list.on("conneciton", onConnection);
