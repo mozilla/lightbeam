@@ -104,6 +104,16 @@ function showFilteredTable(filter){
 
 
 function getNodes(filter){
+    function addToList(myNode){
+        if ( myNode.nodeType == "both" ){
+            filtered.sitenodes.push(myNode);
+            filtered.thirdnodes.push(myNode);
+        }else{
+            if ( myNode.nodeType == "site" ) filtered.sitenodes.push(myNode);
+            if ( myNode.nodeType == "thirdparty" ) filtered.thirdnodes.push(myNode);
+        }
+    }
+
     var filtered = {};
     filtered.sitenodes = new Array();
     filtered.thirdnodes = new Array();
@@ -113,34 +123,16 @@ function getNodes(filter){
     }else{
         // the selected node itself
         var nodePicked = aggregate.nodeForKey(filter);
-        if ( nodePicked.nodeType == "both" ){
-                filtered.sitenodes.push(nodePicked);
-                filtered.thirdnodes.push(nodePicked);
-        }else{
-            if ( nodePicked.nodeType == "site" ) filtered.sitenodes.push(nodePicked);
-            if ( nodePicked.nodeType == "thirdparty" ) filtered.thirdnodes.push(nodePicked);
-        }
+        addToList(nodePicked);
         // check what's in the selected node's linkdedFrom array
         nodePicked.linkedFrom.forEach(function(key){
             var node = aggregate.nodeForKey(key);
-            if ( node.nodeType == "both" ){
-                filtered.sitenodes.push(node);
-                filtered.thirdnodes.push(node);
-            }else{
-                if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
-                if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
-            }            
+            addToList(node);          
         });
         // check what's in the selected node's linkdedTo array
         nodePicked.linkedTo.forEach(function(key){
             var node = aggregate.nodeForKey(key);
-            if ( node.nodeType == "both" ){
-                filtered.sitenodes.push(node);
-                filtered.thirdnodes.push(node);
-            }else{
-                if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
-                if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
-            }
+            addToList(node);  
         });
     }
     
