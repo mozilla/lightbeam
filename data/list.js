@@ -107,25 +107,41 @@ function getNodes(filter){
     var filtered = {};
     filtered.sitenodes = new Array();
     filtered.thirdnodes = new Array();
-    if (filter){
-        var nodePicked = aggregate.nodeForKey(filter);
-        if ( nodePicked.nodeType == "site" ) filtered.sitenodes.push(nodePicked);
-        if ( nodePicked.nodeType == "thirdparty" ) filtered.thirdnodes.push(nodePicked);
- 
-        nodePicked.linkedFrom.forEach(function(key){
-            var node = aggregate.nodeForKey(key);
-            if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
-            if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
-        });
-
-        nodePicked.linkedTo.forEach(function(key){
-            var node = aggregate.nodeForKey(key);
-            if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
-            if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
-        });
-    }else{ // show all
+    if( !filter ){ // if no filter, show all
         filtered.sitenodes = aggregate.sitenodes.concat(aggregate.bothnodes);
         filtered.thirdnodes = aggregate.thirdnodes.concat(aggregate.bothnodes);
+    }else{
+        // the selected node itself
+        var nodePicked = aggregate.nodeForKey(filter);
+        if ( nodePicked.nodeType == "both" ){
+                filtered.sitenodes.push(nodePicked);
+                filtered.thirdnodes.push(nodePicked);
+        }else{
+            if ( nodePicked.nodeType == "site" ) filtered.sitenodes.push(nodePicked);
+            if ( nodePicked.nodeType == "thirdparty" ) filtered.thirdnodes.push(nodePicked);
+        }
+        // check what's in the selected node's linkdedFrom array
+        nodePicked.linkedFrom.forEach(function(key){
+            var node = aggregate.nodeForKey(key);
+            if ( node.nodeType == "both" ){
+                filtered.sitenodes.push(node);
+                filtered.thirdnodes.push(node);
+            }else{
+                if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
+                if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
+            }            
+        });
+        // check what's in the selected node's linkdedTo array
+        nodePicked.linkedTo.forEach(function(key){
+            var node = aggregate.nodeForKey(key);
+            if ( node.nodeType == "both" ){
+                filtered.sitenodes.push(node);
+                filtered.thirdnodes.push(node);
+            }else{
+                if ( node.nodeType == "site" ) filtered.sitenodes.push(node);
+                if ( node.nodeType == "thirdparty" ) filtered.thirdnodes.push(node);
+            }
+        });
     }
     
     return filtered;
