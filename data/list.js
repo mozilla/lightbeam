@@ -103,7 +103,9 @@ function appendData(nodes, type, columns, filter){
 
 function setBreadcrumb(nav){
     d3.select(".list-breadcrumb div").classed("hide", false);
-    if ( !nav ) nav = ["<<< List All"];
+    //if ( !nav )
+        nav = ["<<< List All"];
+    
     breadcrumb
         .selectAll("div")
         .data(nav, function(d){ return d; })
@@ -133,9 +135,11 @@ function filterNodes(nodes, filter){
 function showFilteredList(filter){
     document.querySelector(".list-table").removeChild( document.querySelector(".list-table tbody") );
     d3.select(".list-table").append("tbody");
-    appendData(filterNodes(aggregate.sitenodes,filter), "visited", columns);
-    appendData(filterNodes(aggregate.thirdnodes,filter), "third", columns);
-    setBreadcrumb();
+    var siteNodes = aggregate.sitenodes.concat(aggregate.bothnodes);
+    var thirdNodes = aggregate.thirdnodes.concat(aggregate.bothnodes);
+    appendData(filterNodes(siteNodes,filter), "visited", columns);
+    appendData(filterNodes(thirdNodes,filter), "third", columns);
+    setBreadcrumb(filter);
 }
 
 
