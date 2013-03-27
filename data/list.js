@@ -86,7 +86,7 @@ function appendData(nodes, type, columns, filter){
         .data(function(row) {
             return columns.map(function(column, i) {
                 var value = row[i];
-                if (column==columns[1]) {value = "<span class='source-data' filter-url='"+ value +"'>" + value + "</span>";
+                if (column==columns[1]) value = "<span class='source-data' filter-url='"+ value +"'>" + value + "</span>";
                 return {column: column, value: value};
             });
         })
