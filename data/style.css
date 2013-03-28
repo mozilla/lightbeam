@@ -408,16 +408,19 @@ line{
     margin-bottom: 5px;
 }
 
-.list-breadcrumb .piece{
+.list-breadcrumb a{
     color: rgba(130,130,130,0.7);
     font-size: 15px;
     line-height: 20px;
     padding: 10px;
+}
+
+.list-breadcrumb a[filter-by]{
     cursor: pointer;
 }
 
-.list-breadcrumb .piece:hover{
-    color: rgba(130,130,130,1);
+.list-breadcrumb a[filter-by]:hover{
+    color: rgba(180,180,180,1);
 }
 
 .list-table{
@@ -443,18 +446,13 @@ line{
     padding-right: 30px;
 }
 
-.list-table .source-data{
+.list-table tr[site-url]{
     cursor: pointer;
 }
 
-.list-table .visited-row .source-data:hover{
-    color: #2D4CFA;
+.list-table tbody tr:hover{
+    background: rgba(0,0,0,0.2);
 }
-
-.list-table .third-row .source-data:hover{
-    color: #E83C59;
-}
-
 
 .list-table .visited-row td{
     color: #6178FA;
