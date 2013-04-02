@@ -18,6 +18,7 @@ var force, vizcanvas, vis;
 graph.on('init', onInit);
 graph.on('connection', onConnection);
 graph.on('remove', onRemove);
+graph.on('reset', onReset);
 
 function onInit(connections){
     console.log('initializing graph from %s connections', connections.length);
@@ -39,20 +40,27 @@ function onInit(connections){
 
 function onConnection(connection){
     aggregate.emit('connection', connection);
+    updateGraph();
+    if (force){
+        force.start();
+    }
 }
 
 function onRemove(){
-    console.log('removing graph');
+    aggregate.emit('reset');
     if (force){
         force.stop();
         force = null;
     }
-    aggregate.emit('reset');
     resetCanvas();
 };
 
+function onReset(){
+    updateGraph();
+}
 
-// UTILITIES
+
+// UTILITIES FOR CREATING POLYGONS
 
 function point(angle, size){
 	return [Math.round(Math.cos(angle) * size), -Math.round(Math.sin(angle) * size)];
@@ -82,84 +90,89 @@ function initGraph(){
         .charge(-500)
         .size([width,height])
         .start();
+    updateGraph();
+
+    // update method
+    force.on('tick', function(){
+        vis.selectAll('.edge')
+            .attr('x1', function(edge){ return edge.source.x; })
+            .attr('y1', function(edge){ return edge.source.y; })
+            .attr('x2', function(edge){ return edge.target.x; })
+            .attr('y2', function(edge){ return edge.target.y; });
+        vis.selectAll('.node'). call(updateNodes);
+    });
+
+}
+
+function updateGraph(){
 
         // Data binding for links
-        var lines = vis.selectAll('.edge')
-            .data(aggregate.edges, function(edge){ return edge.name; });
+    var lines = vis.selectAll('.edge')
+        .data(aggregate.edges, function(edge){ return edge.name; });
 
-        lines.enter()
-            .insert('line', ':first-child')
-            .classed('edge', true);
+    lines.enter().insert('line', ':first-child')
+        .classed('edge', true);
 
-        lines.exit()
-            .remove();
+    lines.exit()
+        .remove();
 
-    window.force = force; // expose for debugging
- //        var nodes = vis.selectAll('.node')
-	//     .data(aggregate.allnodes, function(node){ return node.name; })
- //        .call(force.drag);
+    var nodes = vis.selectAll('.node')
+	    .data(aggregate.allnodes, function(node){ return node.name; });
 
-	// nodes.enter();
+    nodes.call(force.drag);
 
- //        nodes.exit()
- //            .remove();
+	nodes.enter().append('g')
+        .call(function(selection){console.log('enter called with %s nodes (%s)', selection[0].length, selection.length);})
+        .classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
+        .classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
+        .classed('visitedBoth', function(node){ return node.visited && node.notVisited; })
+        .call(addShape)
+        .attr('data-name', function(node){ return node.name; })
+        .on('mouseenter', tooltip.show)
+        .on('mouseleave', tooltip.hide)
+        .classed('node', true);
 
-        var sites = vis.selectAll('.site')
-            .data(aggregate.sitenodes, function(node){ return node.name; })
-            .call(force.drag);
 
-        sites.enter()
-            .append('circle')
-	        .attr('cx', 0)
-	        .attr('cy', 0)
-	        .attr('r', 12)
-            .attr('data-name', function(node){ return node.name; })
-            .on('mouseenter', tooltip.show)
-            .on('mouseleave', tooltip.hide)
-            .classed('node', true)
-            .classed('site', true);
 
-        var thirdparties = vis.selectAll('.thirdparty')
-            .data(aggregate.thirdnodes, function(node){ return node.name; })
-            .call(force.drag);
+    nodes.exit()
+        .call(function(selection){console.log('exit called with %s nodes (%s)', selection[0].length, selection.length);})
+        .remove();
 
-        thirdparties.enter()
-            .append('polygon')
-    	    .attr('points', polygonAsString(3, 20))
-            .attr('data-name', function(node){ return node.name; })
-            .on('mouseenter', tooltip.show)
-            .on('mouseleave', tooltip.hide)
-            .classed('node', true)
-            .classed('thirdparty', true);
-
-        var boths = vis.selectAll('.both')
-            .data(aggregate.bothnodes, function(node){ return node.name; })
-            .call(force.drag);
-
-        boths.enter()
-    	    .append('rect')
-    	    .attr('x', -9)
-    	    .attr('y', -9)
-    	    .attr('width', 18)
-    	    .attr('height', 18)
-            .attr('data-name', function(node){ return node.name; })
-            .on('mouseenter', tooltip.show)
-            .on('mouseleave', tooltip.hide)
-    	    .classed('node', true)
-    	    .classed('both', true);
-
-        // update method
-        force.on('tick', function(){
-            lines
-                .attr('x1', function(edge){ return edge.source.x; })
-                .attr('y1', function(edge){ return edge.source.y; })
-                .attr('x2', function(edge){ return edge.target.x; })
-                .attr('y2', function(edge){ return edge.target.y; });
-    	    updateNodes(sites);
-    	    updateNodes(thirdparties);
-    	    updateNodes(boths);
-        });
 }
+
+window.updategGraph = updateGraph;
+
+function addCircle(selection){
+    selection
+        .append('circle')
+        .attr('cx', 0)
+        .attr('cy', 0)
+        .attr('r', 12)
+        .classed('site', true);
+}
+
+function addShape(selection){
+    selection.filter('.visitedYes').call(addCircle);
+    selection.filter('.visitedNo').call(addTriangle);
+    selection.filter('.visitedBoth').call(addSquare);
+}
+
+function addTriangle(selection){
+    selection
+        .append('polygon')
+	    .attr('points', polygonAsString(3, 20))
+        .attr('data-name', function(node){ return node.name; });
+}
+
+function addSquare(selection){
+    selection
+	    .append('rect')
+	    .attr('x', -9)
+	    .attr('y', -9)
+	    .attr('width', 18)
+	    .attr('height', 18);
+}
+
 
 function updateNodes(thenodes){
     thenodes
@@ -174,9 +187,8 @@ function updateNodes(thenodes){
 	.classed('cookieNo', function(node){ return !node.cookie && node.notCookie; })
 	.classed('cookieBoth', function(node){ return node.cookie && node.notCookie; })
 	.attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); });
+    // change shape if needed
 }
-
-
 
 // FIXME: Move this out of visualization so multiple visualizations can use it.
 function resetCanvas(){

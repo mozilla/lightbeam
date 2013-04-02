@@ -39,7 +39,7 @@ window.addEventListener("DOMContentLoaded", function(){
         dropdownGroup(btnGroup, function(val){
             val = val.toLowerCase();
             switch(val){
-                case 'clock': 
+                case 'clock':
                 case 'graph':
                     switchVisualization(val);
                     break;
@@ -82,6 +82,7 @@ document.querySelector(".download").addEventListener('click', function() {
 document.querySelector('.reset-data').addEventListener('click', function(){
     addon.emit('reset');
     aggregate.emit('reset');
+    currentVisualization.emit('reset');
     // FIXME: empty the data from current view too
 });
 

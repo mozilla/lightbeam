@@ -111,6 +111,7 @@ function GraphEdge(source, target){
     this.source = source;
     this.target = target;
     this.name = source.name + '->' + target.name;
+    // console.log('edge: %s', this.name);
 }
 GraphEdge.prototype.lastAccess = function(){
     return (this.source.lastAccess > this.target.lastAccess) ? this.source.lastAccess : this.target.lastAccess;
@@ -127,8 +128,6 @@ GraphEdge.prototype.firstAccess = function(){
 // cookie and notCookie being true). We set an initial position randomly to keep the force graph
 // from exploding.
 //
-// FIXME: Other visualizations could use this aggregate structure for reporting. Move it out of
-// the graph visualization into a re-usable library.
 function GraphNode(connection, isSource){
     this.firstAccess = this.lastAccess = connection.timestamp;
     this.linkedFrom = [];
@@ -148,6 +147,7 @@ function GraphNode(connection, isSource){
 GraphNode.prototype.update = function(connection, isSource){
     if (!this.name){
         this.name = isSource ? connection.source : connection.target;
+        // console.log('node: %s', this.name);
     }
     if (connection.timestamp > this.lastAccess){
         this.lastAccess = connection.timestamp;
@@ -169,6 +169,8 @@ GraphNode.prototype.update = function(connection, isSource){
     if (isSource){
         this.visited = this.visited || connection.sourceVisited;
         this.notVisited = this.notVisited || (!connection.sourceVisited);
+    }else{
+        this.notVisited = true;
     }
     if (this.visited && this.notVisited){
         this.nodeType = 'both';
