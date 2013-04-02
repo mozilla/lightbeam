@@ -122,7 +122,6 @@ function updateGraph(){
     nodes.call(force.drag);
 
 	nodes.enter().append('g')
-        .call(function(selection){console.log('enter called with %s nodes (%s)', selection[0].length, selection.length);})
         .classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
         .classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
         .classed('visitedBoth', function(node){ return node.visited && node.notVisited; })
@@ -135,7 +134,6 @@ function updateGraph(){
 
 
     nodes.exit()
-        .call(function(selection){console.log('exit called with %s nodes (%s)', selection[0].length, selection.length);})
         .remove();
 
 }
