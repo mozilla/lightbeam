@@ -16,12 +16,12 @@ The README.md should answer common questions like:
 * [x] Log formatter: Convert a connection to a log item
 * [x] Tab Association: Get the tab each connection was loaded from
 * [x] Tab Listener: Notify collusion which tab is being viewed, for update filtering
-* [ ] Log Persistence
-* [ ] Log Filtering
-* [ ] Tab History
-* [ ] Server Updates
-* [ ] New User Interface
-* [ ] Visualization Data Shaping
-* [ ] Visualization Switcher
-* [ ] Visualization(s)
+* [x] Log Persistence
+* [x] Log Filtering
+* [ ] Tab History (n/a - moved to post 1.0)
+* [x] Server Updates
+* [x] New User Interface
+* [x] Visualization Data Shaping
+* [x] Visualization Switcher
+* [x] Visualization(s)
 
