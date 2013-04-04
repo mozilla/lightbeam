@@ -143,6 +143,13 @@ function GraphNode(connection, isSource){
     if (connection){
         this.update(connection, isSource);
     }
+    // FIXME: Get the width and height from the add-on somehow
+    var width = 1000;
+    var height = 1000;
+    // Set defaults for graph
+    this.x = this.px = (Math.random() - 0.5) * 800 + width/2;
+    this.y = this.py = (Math.random() - 0.5) * 800 + height/2;
+    this.weight = 0;
 }
 GraphNode.prototype.update = function(connection, isSource){
     if (!this.name){

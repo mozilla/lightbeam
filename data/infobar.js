@@ -4,8 +4,13 @@ const oriMapViewBox = document.querySelector('#mapcanvas').getAttribute('viewBox
 
 // update info when clicking on a node in the graph visualization
 document.querySelector('#content').addEventListener('click', function(event){
-    if (event.target.mozMatchesSelector('.node')){
-        updateInfo(aggregate.nodeForKey(event.target.getAttribute('data-name')));
+    // click could happen on .node or an element inside of .node
+    if (event.target.mozMatchesSelector('.node, .node *')){
+        var node = event.target;
+        while(node.mozMatchesSelector('.node *')){
+            node = node.parentElement;
+        }
+        updateInfo(aggregate.nodeForKey(node.getAttribute('data-name')));
     }
 },false);
 
@@ -40,7 +45,7 @@ function resetMap(){
     document.querySelector("#mapcanvas").setAttribute("viewBox", oriMapViewBox);
 }
 
-// update map 
+// update map
 function updateMap(countryCode){
     var countryOnMap = d3.select("#mapcanvas").select("#" + countryCode.toLowerCase());
     countryOnMap.classed("highlight-country", true);
@@ -72,14 +77,14 @@ function updateMap(countryCode){
 
 
 
-// updates info on the right info bar 
+// updates info on the right info bar
 function updateInfo(node){
 
-    // update content in the side bar 
+    // update content in the side bar
     getServerInfo(node, function(data){
         document.querySelector(".holder .title").innerHTML = node.name;
         document.querySelector(".holder .url").innerHTML = node.name;
-        
+
         if ( data == false || data.country_name === "Reserved" ){
             document.querySelector("#country").innerHTML = "(Unable to find server location)";
             resetMap();
