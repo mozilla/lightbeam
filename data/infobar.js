@@ -14,15 +14,6 @@ document.querySelector('#content').addEventListener('click', function(event){
     }
 },false);
 
-//document.querySelector('.stage').addEventListener('click', function(event){
-//        console.log("list table clicked");
-//        if (event.target.mozMatchesSelector('.source-data')){
-//            console.log("hahahha");
-//            updateInfo(aggregate.nodeForKey(event.target.getAttribute('filter-url')));
-//        }
-//},false);
-
-
 // get server info from http://freegeoip.net
 function getServerInfo(node, callback){
     var info = parseUri(node.name); // uses Steven Levithan's parseUri 1.2.2
