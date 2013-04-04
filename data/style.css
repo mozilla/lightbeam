@@ -461,3 +461,20 @@ line{
 .list-table .third-row td{
     color: #FF617B;
 }
+
+/* Help Mode */
+.highlighted-elm{
+    fill: white;
+    stroke: white;
+}
+
+.help-bubble{
+    position: fixed;
+    background: rgba(46,43,43,0.7);
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    padding: 2px 5px;
+    max-width: 160px;
+    font-size: 12px;
+}

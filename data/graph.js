@@ -8,6 +8,7 @@
 
 var graph = new Emitter();
 visualizations.graph = graph;
+graph.name = "graph";
 var width = 1000, height = 1000;
 var force, vizcanvas, vis;
 
@@ -101,7 +102,6 @@ function initGraph(){
             .attr('y2', function(edge){ return edge.target.y; });
         vis.selectAll('.node'). call(updateNodes);
     });
-
 }
 
 function updateGraph(){

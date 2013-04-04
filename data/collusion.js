@@ -10,5 +10,6 @@ function switchVisualization(name){
     if (currentVisualization === visualizations[name]) return;
     currentVisualization.emit('remove');
     currentVisualization = visualizations[name];
+    clearAllBubbles();
     addon.emit('uiready');
 }

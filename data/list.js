@@ -5,9 +5,10 @@
 (function(visualizations){
 "use strict";
 
-
 var list = new Emitter();
 visualizations.list = list;
+list.name = "list";
+
 var vizcanvas;
 document.querySelector(".stage").classList.add("list");
 var breadcrumb = document.createElement("div");

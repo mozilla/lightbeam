@@ -21,6 +21,7 @@ var vizcanvas, times, timeslots, offsets;
 
 var clock = new Emitter();
 visualizations.clock = clock;
+clock.name = "clock";
 
 clock.on('init', onInit);
 clock.on('connection', onConnection);

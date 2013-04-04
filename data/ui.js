@@ -239,3 +239,12 @@ document.querySelector('.map-control .zoom-out').addEventListener('click', funct
     return false;
 });
 
+/* Help Mode ========================= */
+document.querySelector(".help-mode").checked = false;
+document.querySelector(".help-mode").addEventListener("click", function(){
+    if( this.checked ){
+        triggerHelp(document.querySelector("body"), "toggleOnHelp", currentVisualization.name);
+    }else{
+        triggerHelp(document.querySelector("body"), "toggleOffHelp", currentVisualization.name);
+    }
+});
