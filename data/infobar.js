@@ -74,7 +74,7 @@ function updateInfo(node){
     // update content in the side bar
     getServerInfo(node, function(data){
         document.querySelector(".holder .title").innerHTML = node.name;
-        document.querySelector(".holder .url").innerHTML = node.name;
+        //document.querySelector(".holder .url").innerHTML = node.name;
 
         if ( data == false || data.country_name === "Reserved" ){
             document.querySelector("#country").innerHTML = "(Unable to find server location)";
