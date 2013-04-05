@@ -386,27 +386,27 @@ line{
 }
 
 .secureYes{
-    stroke: #1ABE15;
+    /* stroke: #1ABE15; */
 }
 
 .secureNo{
-    stroke: #CE1105;
+    /* stroke: #CE1105; */
 }
 
 .secureBoth{
-    stroke: #00FF00;
+    /* stroke: #00FF00; */
 }
 
 .cookieYes{
-    fill: #1E55EE;
+    /* fill: #1E55EE; */
 }
 
 .cookieNo{
-    fill: #FEEB1E;
+    /* fill: #FEEB1E; */
 }
 
 .cookieBoth{
-    fill: #EA5E15;
+    /* fill: #EA5E15; */
 }
 
 

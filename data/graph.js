@@ -122,9 +122,9 @@ function updateGraph(){
     nodes.call(force.drag);
 
 	nodes.enter().append('g')
-        .classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
-        .classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
-        .classed('visitedBoth', function(node){ return node.visited && node.notVisited; })
+        .classed('visitedYes', function(node){ return node.visitedCount/node.howMany == 1 })
+        .classed('visitedNo', function(node){ return node.visitedCount/node.howMany == 0 })
+        .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
         .call(addShape)
         .attr('data-name', function(node){ return node.name; })
         .on('mouseenter', tooltip.show)
@@ -175,16 +175,29 @@ function addSquare(selection){
 function updateNodes(thenodes){
     thenodes
 	.attr('transform', function(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .03 * node.weight) + ')'; })
-	.classed('visitedYes', function(node){ return node.visited && !node.notVisited; })
-	.classed('visitedNo', function(node){ return !node.visited && node.notVisited; })
-	.classed('visitedBoth', function(node){ return node.visited && node.notVisited; })
-	.classed('secureYes', function(node){ return node.secure && !node.notSecure; })
-	.classed('secureNo', function(node){ return !node.secure && node.notSecure; })
-	.classed('secureBoth', function(node){ return node.secure && node.notSecure; })
-	.classed('cookieYes', function(node){ return node.cookie && !node.notCookie; })
-	.classed('cookieNo', function(node){ return !node.cookie && node.notCookie; })
-	.classed('cookieBoth', function(node){ return node.cookie && node.notCookie; })
-	.attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); });
+    .classed('visitedYes', function(node){ return node.visitedCount/node.howMany == 1 })
+    .classed('visitedNo', function(node){ return node.visitedCount/node.howMany == 0 })
+    .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
+    .classed('secureYes', function(node){ return node.secureCount/node.howMany == 1 })
+    .classed('secureNo', function(node){ return node.secureCount/node.howMany == 0 })
+    .classed('secureBoth', function(node){ return node.secureCount/node.howMany > 0 && node.secureCount/node.howMany < 1 })
+    .classed('cookieYes', function(node){ return node.cookieCount/node.howMany == 1 })
+    .classed('cookieNo', function(node){ return node.cookieCount/node.howMany == 0 })
+    .classed('cookieBoth', function(node){ return node.cookieCount/node.howMany > 0 && node.cookieCount/node.howMany < 1 })
+    .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); })
+    .attr('visited-scale', function(node){ return node.visitedCount/node.howMany; })
+    .attr('secure-scale', function(node){ return node.secureCount/node.howMany; })
+    .attr('cookie-scale', function(node){ return node.cookieCount/node.howMany; })
+    .style('fill', function(node){
+        // sites: #6CB4F9 rgb(108,180,249)
+        // third-party: #E73547 rgb(231,53,71)
+        var visitedRatio = node.visitedCount/node.howMany;
+        var red = parseInt( visitedRatio * (108-231) ) + 231;
+        var green = parseInt( visitedRatio * (180-53) ) + 53;
+        var blue = parseInt( visitedRatio * (249-71) ) + 71;
+        //console.log("rgba(%d,%d,%d,1)", red, green, blue);
+        return "rgba(" + red + "," + green + "," + blue + "," + "1)";
+    });
     // change shape if needed
 }
 

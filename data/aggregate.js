@@ -133,12 +133,12 @@ function GraphNode(connection, isSource){
     this.linkedFrom = [];
     this.linkedTo = [];
     this.contentTypes = [];
-    this.cookie = false;
-    this.notCookie = false;
-    this.visited = false;
-    this.notVisited = false;
-    this.secure = false;
-    this.notSecure = false;
+    this.subdomain = [];
+    this.method = [];
+    this.status = [];
+    this.visitedCount = 0;
+    this.secureCount = 0;
+    this.cookieCount = 0;
     this.howMany = 0;
     if (connection){
         this.update(connection, isSource);
@@ -171,24 +171,33 @@ GraphNode.prototype.update = function(connection, isSource){
     if (this.contentTypes.indexOf(connection.contentType) < 0){
         this.contentTypes.push(connection.contentType);
     }
-    this.cookie = this.cookie || connection.cookie;
-    this.notCookie = this.notCookie || (!connection.cookie);
     if (isSource){
-        this.visited = this.visited || connection.sourceVisited;
-        this.notVisited = this.notVisited || (!connection.sourceVisited);
+        this.visitedCount = connection.sourceVisited ? this.visitedCount+1 : this.visitedCount;
+        if ( this.subdomain.indexOf(connection.sourceSub) < 0 ){
+            this.subdomain.push(connection.sourceSub);
+        }
     }else{
-        this.notVisited = true;
+        if ( this.subdomain.indexOf(connection.targetSub) < 0 ){
+            this.subdomain.push(connection.targetSub);
+        }
     }
-    if (this.visited && this.notVisited){
-        this.nodeType = 'both';
-    }else if (this.visited){
+    this.cookieCount = connection.cookie ? this.cookieCount+1 : this.cookieCount;
+    this.secureCount = connection.secure ? this.secureCount+1 : this.secureCount;
+    if ( this.method.indexOf(connection.method) < 0 ){
+        this.method.push(connection.method);
+    }
+    if ( this.status.indexOf(connection.status) < 0 ){
+        this.status.push(connection.status);
+    }
+    this.howMany++; 
+    if ( this.visitedCount/this.howMany == 1 ){
         this.nodeType = 'site';
+    }else if ( this.visitedCount/this.howMany == 0 ){
+        this.nodeType = 'thirdparty';
     }else{
-    this.nodeType = 'thirdparty';
+        this.nodeType = 'both';
     }
-    this.secure = this.secure || connection.secure;
-    this.notSecure = this.secure || (!connection.visited);
-    this.howMany++;
+ 
     return this;
 };
 
