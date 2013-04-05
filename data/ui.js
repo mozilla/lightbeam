@@ -4,6 +4,7 @@ function toArray(nl){
     return Array.prototype.slice.call(nl, 0);
 }
 
+
 /* DOMContentLoaded event listener */
 window.addEventListener("DOMContentLoaded", function(){
 
@@ -41,8 +42,6 @@ window.addEventListener("DOMContentLoaded", function(){
             switch(val){
                 case 'clock':
                 case 'graph':
-                    switchVisualization(val);
-                    break;
                 case 'list':
                     switchVisualization(val);
                     break;

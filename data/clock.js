@@ -31,6 +31,7 @@ function onInit(connections){
     // draw clock dial
     console.log('initializing clock from %s connections', connections.length);
     vizcanvas = document.querySelector('.vizcanvas');
+    aggregate.emit('init', connections);
     times = ['12 am', '1 am', '2 am', '3 am', '4 am', '5 am', '6 am', '7 am', '8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm', '6 pm', '7 pm', '8 pm', '9 pm', '10 pm', '11 pm', '12 am'];
     timeslots = {};
     offsets = [':00', ':15', ':30', ':45'];
@@ -39,6 +40,7 @@ function onInit(connections){
     });
     vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
     drawTimes();
+    drawText();
     drawTimerHand();
     connections.forEach(function(connection){
         onConnection(connection);
@@ -48,6 +50,7 @@ function onInit(connections){
 function onConnection(connection){
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
+    aggregate.emit('connection', connection);
     var bucketIdx = timeToBucket(connection.timestamp);
     if (! clock.timeslots[bucketIdx]){
         var angle = -180 + (bucketIdx * 1.875); // in degrees
@@ -80,6 +83,7 @@ function onConnection(connection){
         // transform: 'rotate(90)',
         'class': 'tracker node',
         'data-target': connection.target,
+        'data-name': connection.target,
         'data-timestamp': connection.timestamp.toISOString(),
         'data-source': connection.source,
         'data-cookie': connection.cookie,
@@ -102,6 +106,7 @@ function onConnection(connection){
 
 function onRemove(){
     clearTimeout(handTimer);
+    clock.timeslots = {};
     resetCanvas();
 };
 
@@ -185,6 +190,29 @@ function drawTimes(){
         }, time)
     )});
 }
+
+function drawText(){
+    vizcanvas.appendChild(svg('text', {
+        x: 0,
+        y: -80,
+        'class': 'clock-time'
+    }, timeNow()));
+    vizcanvas.appendChild(svg('text', {
+        x: 0,
+        y: -40,
+        'class': 'clock-date'
+    }, dateNow()));
+}
+
+function timeNow(){
+    var d = new Date();
+    return (d.getHours() % 12) + ':' + d.getMinutes() + ['am','pm'][Math.round(d.getHours() / 12)];
+}
+
+function dateNow(){
+    return new Date().toLocaleFormat('%e %B %Y').trim();
+}
+
 
 clock.timeslots = new Array(96);
 
