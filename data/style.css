@@ -338,6 +338,24 @@ text {
     visibility: hidden;
 }
 
+.clock-time{
+    font-size: 24px;
+    font-weight: bold;
+    fill: #CCC;
+    visibility: visible;
+    stroke: none;
+    font-variant: normal;
+}
+
+.clock-date{
+    font-size: 28px;
+    font-weight: lighter;
+    fill: #CCC;
+    visibility: visible;
+    stroke: none;
+    font-variant: normal;
+}
+
 .tracker rect{
     visibility: hidden;
 }
