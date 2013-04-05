@@ -133,6 +133,9 @@ function GraphNode(connection, isSource){
     this.linkedFrom = [];
     this.linkedTo = [];
     this.contentTypes = [];
+    this.subdomain = [];
+    this.method = [];
+    this.status = [];
     this.visitedCount = 0;
     this.secureCount = 0;
     this.cookieCount = 0;
@@ -170,12 +173,23 @@ GraphNode.prototype.update = function(connection, isSource){
     }
     if (isSource){
         this.visitedCount = connection.sourceVisited ? this.visitedCount+1 : this.visitedCount;
+        if ( this.subdomain.indexOf(connection.sourceSub) < 0 ){
+            this.subdomain.push(connection.sourceSub);
+        }
+    }else{
+        if ( this.subdomain.indexOf(connection.targetSub) < 0 ){
+            this.subdomain.push(connection.targetSub);
+        }
     }
-
     this.cookieCount = connection.cookie ? this.cookieCount+1 : this.cookieCount;
     this.secureCount = connection.secure ? this.secureCount+1 : this.secureCount;
-    this.howMany++;
- 
+    if ( this.method.indexOf(connection.method) < 0 ){
+        this.method.push(connection.method);
+    }
+    if ( this.status.indexOf(connection.status) < 0 ){
+        this.status.push(connection.status);
+    }
+    this.howMany++; 
     if ( this.visitedCount/this.howMany == 1 ){
         this.nodeType = 'site';
     }else if ( this.visitedCount/this.howMany == 0 ){
