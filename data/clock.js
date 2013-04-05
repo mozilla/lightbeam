@@ -83,6 +83,7 @@ function onConnection(connection){
         // transform: 'rotate(90)',
         'class': 'tracker node',
         'data-target': connection.target,
+        'data-name': connection.target,
         'data-timestamp': connection.timestamp.toISOString(),
         'data-source': connection.source,
         'data-cookie': connection.cookie,
