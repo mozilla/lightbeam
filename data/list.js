@@ -22,7 +22,7 @@ list.on("remove", onRemove);
 
 
 function OnInit(connections){
-    console.log('initializing graph from %s connections', connections.length);
+    console.log('initializing list from %s connections', connections.length);
     vizcanvas = document.querySelector('.vizcanvas');
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     aggregate.emit('load', connections);
@@ -49,13 +49,13 @@ function initGraph(){
     var table = document.createElement("table");
     table.classList.add("list-table");
     document.querySelector(".stage.list").appendChild(table);
- 
+
     var thead = document.createElement("thead");
     table.appendChild(thead);
     thead.appendChild(createRow(columns));
- 
+
     showFilteredTable(); // showing all data so no filter param is passed here
- 
+
     document.querySelector('.list-table').addEventListener('click', function(event){
         if (event.target.mozMatchesSelector('td')){
             showFilteredTable(event.target.parentNode.getAttribute('site-url'));
@@ -96,7 +96,7 @@ function showFilteredTable(filter){
     while ( document.querySelectorAll("table tbody").length > 0 ){
         table.removeChild(document.querySelector("table tbody"));
     }
- 
+
     table.appendChild(createBody("visited",filter));
     table.appendChild(createBody("third-party",filter));
 
@@ -128,15 +128,15 @@ function getNodes(filter){
         // check what's in the selected node's linkdedFrom array
         nodePicked.linkedFrom.forEach(function(key){
             var node = aggregate.nodeForKey(key);
-            addToList(node);          
+            addToList(node);
         });
         // check what's in the selected node's linkdedTo array
         nodePicked.linkedTo.forEach(function(key){
             var node = aggregate.nodeForKey(key);
-            addToList(node);  
+            addToList(node);
         });
     }
-    
+
     return filtered;
 }
 
@@ -167,6 +167,8 @@ function createRow(dataArray, type){
         row.appendChild(cell);
     });
     row.classList.add(type);
+    row.classList.add('node');
+    row.setAttribute('data-name', dataArray[1]);
     row.setAttribute("site-url", dataArray[1]);
 
     return row;
