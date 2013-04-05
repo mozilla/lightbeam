@@ -70,10 +70,12 @@ function createBubble(target, type, message){
 
 /* help mode for clock visualization */
 function clockHelp(){
-    createBubble(
+    if ( document.querySelectorAll(".node").length > 0 ){
+        createBubble(
             findTargetElement(document.querySelectorAll(".node")),
             "node",
             "each dot represents one third-party connection");
+    }
     var timehand = document.querySelector("#timerhand");
     createBubble(timehand, "timehand", "clock hand points to the current time");
 }
@@ -82,10 +84,10 @@ function clockHelp(){
 function graphHelp(){
     // select a random visited site, if any
     if ( document.querySelectorAll(".visitedYes").length > 0 ){
-    createBubble(
-        findTargetElement(document.querySelectorAll(".visitedYes")),
-        "node",
-        "circles represent visited sites");
+        createBubble(
+            findTargetElement(document.querySelectorAll(".visitedYes")),
+            "node",
+            "circles represent visited sites");
     }
     // select a random third-party site, if any
     if ( document.querySelectorAll(".visitedNo").length > 0 ){
@@ -102,10 +104,12 @@ function graphHelp(){
             "rectangles represent sites are both visited and third party");
     }
     // select a random edge, if any
-    createBubble(
-        findTargetElement(document.querySelectorAll(".edge")),
-        "edge",
-        "each line represents a connection");
+    if ( document.querySelectorAll(".edge").length > 0 ){
+        createBubble(
+            findTargetElement(document.querySelectorAll(".edge")),
+            "edge",
+            "each line represents a connection");
+    }
 }
 
 
