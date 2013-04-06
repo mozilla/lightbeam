@@ -220,7 +220,9 @@ function timeToBucket(timestamp){
     return timestamp.getHours() * 4 + Math.floor(timestamp.getMinutes() / 15);
 }
 
-
+function fadeEarlierTrackers(currentAngle){
+    console.log('implement fadeEarlierTrackers()');
+}
 
 var handTimer = null;
 var lastAngle = null;
@@ -237,7 +239,7 @@ function drawTimerHand(time){
     if (!lastAngle){
         lastAngle = timeToAngle(time);
     }
-    if (lastAngle !== timeToAngle(time){
+    if (lastAngle !== timeToAngle(time)){
         lastAngle = timeToAngle(time);
         fadeEarlierTrackers(lastAngle);
     }
