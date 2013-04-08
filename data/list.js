@@ -79,6 +79,7 @@ function setBreadcrumb(filter){
         if ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
         breadcrumb.appendChild(link);
         link.addEventListener('click', function(event){
+            document.querySelector("#content").classList.remove("showinfo");
             showFilteredTable();
         },false);
         var headerText = document.createTextNode("Site that have connections linked from/to " + filter);

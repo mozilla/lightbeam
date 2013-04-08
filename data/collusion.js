@@ -18,6 +18,7 @@ function switchVisualization(name){
         currentVisualization.emit('remove');
     }
     currentVisualization = visualizations[name];
+    document.querySelector("#content").classList.remove("showinfo");
     clearAllBubbles();
     addon.emit('uiready');
 }
