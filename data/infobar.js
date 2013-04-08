@@ -10,7 +10,7 @@ document.querySelector('#content').addEventListener('click', function(event){
         while(node.mozMatchesSelector('.node *')){
             node = node.parentElement;
         }
-        console.log('svg node: %o, name: %s, node list: %o', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
+        // console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
         updateInfo(node.getAttribute('data-name'));
     }else{
         console.log('does not match .node: %o', event.target);

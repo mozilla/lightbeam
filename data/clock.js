@@ -206,7 +206,7 @@ function drawText(){
 
 function timeNow(){
     var d = new Date();
-    return (d.getHours() % 12) + ':' + d.getMinutes() + ['am','pm'][Math.round(d.getHours() / 12)];
+    return (d.getHours() % 12) + ':' + d.toLocaleFormat('%M') + ['am','pm'][Math.round(d.getHours() / 12)];
 }
 
 function dateNow(){
@@ -220,9 +220,12 @@ function timeToBucket(timestamp){
     return timestamp.getHours() * 4 + Math.floor(timestamp.getMinutes() / 15);
 }
 
-
+function fadeEarlierTrackers(currentAngle){
+    console.log('implement fadeEarlierTrackers()');
+}
 
 var handTimer = null;
+var lastAngle = null;
 function drawTimerHand(time){
     if (!time) time = new Date();
     var hand = document.getElementById('timerhand');
@@ -233,6 +236,13 @@ function drawTimerHand(time){
         vizcanvas.appendChild(hand);
     }
     vizcanvas.appendChild(hand);
+    if (!lastAngle){
+        lastAngle = timeToAngle(time);
+    }
+    if (lastAngle !== timeToAngle(time)){
+        lastAngle = timeToAngle(time);
+        fadeEarlierTrackers(lastAngle);
+    }
     hand.setAttribute('transform', 'rotate(' + (timeToAngle(time) - 180) + ' ' + CENTRE + ') ' + HAND_TRANS);
     handTimer = setTimeout(drawTimerHand, 1000);
 }
