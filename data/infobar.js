@@ -10,16 +10,16 @@ document.querySelector('#content').addEventListener('click', function(event){
         while(node.mozMatchesSelector('.node *')){
             node = node.parentElement;
         }
-        console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
-        updateInfo(aggregate.nodeForKey(node.getAttribute('data-name')));
+        console.log('svg node: %o, name: %s, node list: %o', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
+        updateInfo(node.getAttribute('data-name'));
     }else{
         console.log('does not match .node: %o', event.target);
     }
 },false);
 
 // get server info from http://freegeoip.net
-function getServerInfo(node, callback){
-    var info = parseUri(node.name); // uses Steven Levithan's parseUri 1.2.2
+function getServerInfo(nodeName, callback){
+    var info = parseUri(nodeName); // uses Steven Levithan's parseUri 1.2.2
     var jsonURL = "http://freegeoip.net/json/" + info.host;
     var xmlHttp = null;
     xmlHttp = new XMLHttpRequest();
@@ -72,12 +72,12 @@ function updateMap(countryCode){
 
 
 // updates info on the right info bar
-function updateInfo(node){
+function updateInfo(nodeName){
 
     // update content in the side bar
-    getServerInfo(node, function(data){
-        document.querySelector(".holder .title").innerHTML = node.name;
-        //document.querySelector(".holder .url").innerHTML = node.name;
+    getServerInfo(nodeName, function(data){
+        document.querySelector(".holder .title").innerHTML = nodeName;
+        //document.querySelector(".holder .url").innerHTML = nodeName;
 
         if ( data == false || data.country_name === "Reserved" ){
             document.querySelector("#country").innerHTML = "(Unable to find server location)";
@@ -93,13 +93,14 @@ function updateInfo(node){
         }
 
         // update the connections list
-        var connections = new Array();
+        var nodeList = aggregate.nodeForKey(nodeName);
         var htmlList = "";
-        connections = connections.concat(node.linkedFrom, node.linkedTo);
-        connections.forEach(function(conn){
-            htmlList = htmlList + "<li>" + conn + "</li>";
-        });
-        document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = connections.length + " connections from current site";
+        for ( var key in nodeList ){
+            if ( key != nodeName ){
+                htmlList = htmlList + "<li>" + key + "</li>";
+            }
+        }
+        document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = Object.keys(nodeList).length-1 + " connections from current site";
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         document.querySelector("#content").classList.add("showinfo");

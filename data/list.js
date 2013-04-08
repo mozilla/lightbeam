@@ -106,12 +106,11 @@ function showFilteredTable(filter){
 
 function getNodes(filter){
     function addToList(myNode){
-        if ( myNode.nodeType == "both" ){
+        if ( myNode.nodeType == "site" || myNode.nodeType == "both" ){
             filtered.sitenodes.push(myNode);
+        }
+        if ( myNode.nodeType == "thirdparty" || myNode.nodeType == "both"){
             filtered.thirdnodes.push(myNode);
-        }else{
-            if ( myNode.nodeType == "site" ) filtered.sitenodes.push(myNode);
-            if ( myNode.nodeType == "thirdparty" ) filtered.thirdnodes.push(myNode);
         }
     }
 
@@ -122,19 +121,10 @@ function getNodes(filter){
         filtered.sitenodes = aggregate.sitenodes.concat(aggregate.bothnodes);
         filtered.thirdnodes = aggregate.thirdnodes.concat(aggregate.bothnodes);
     }else{
-        // the selected node itself
-        var nodePicked = aggregate.nodeForKey(filter);
-        addToList(nodePicked);
-        // check what's in the selected node's linkdedFrom array
-        nodePicked.linkedFrom.forEach(function(key){
-            var node = aggregate.nodeForKey(key);
-            addToList(node);
-        });
-        // check what's in the selected node's linkdedTo array
-        nodePicked.linkedTo.forEach(function(key){
-            var node = aggregate.nodeForKey(key);
-            addToList(node);
-        });
+        var nodeList = aggregate.nodeForKey(filter);
+        for ( var key in nodeList ){
+            addToList(nodeList[key]);
+        }
     }
 
     return filtered;
