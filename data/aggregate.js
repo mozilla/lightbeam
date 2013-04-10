@@ -28,7 +28,22 @@ function resetData(){
 resetData();
 aggregate.on('reset', resetData);
 aggregate.nodeForKey = function(key){
-    return nodemap[key];
+    var result = {};
+    var linkedNodes = new Array();
+    linkedNodes = nodemap[key].linkedFrom.concat(nodemap[key].linkedTo);
+    result[key] = nodemap[key];
+    linkedNodes.forEach(function(nodeName){
+        var node = nodemap[nodeName];
+        var temp = {};
+        for ( var p in node ){
+            if ( node.hasOwnProperty(p) && !( p == "linkedFrom" || p == "linkedTo" ) ){
+                temp[p] = node[p];
+            }
+        }
+        result[nodeName] = temp;
+    });
+
+    return result;
 };
 
 function onLoad(connections){
