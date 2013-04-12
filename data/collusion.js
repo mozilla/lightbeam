@@ -22,6 +22,8 @@ function switchVisualization(name){
     document.querySelector("#content").classList.remove("showinfo");
     document.querySelector(".settings-page").classList.add("hide");
     clearAllBubbles();
+    // show vizcanvas again in case it is hidden
+    document.querySelector(".vizcanvas").classList.remove("hide");
     
     addon.emit('uiready');
 }
