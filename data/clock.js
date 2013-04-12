@@ -45,6 +45,7 @@ function onInit(connections){
     connections.forEach(function(connection){
         onConnection(connection);
     });
+    fadeEarlierTrackers(timeToBucket(new Date()));
 };
 
 function onConnection(connection){
@@ -220,12 +221,32 @@ function timeToBucket(timestamp){
     return timestamp.getHours() * 4 + Math.floor(timestamp.getMinutes() / 15);
 }
 
-function fadeEarlierTrackers(currentAngle){
-    console.log('implement fadeEarlierTrackers()');
+function fadeEarlierTrackers(currentBucketIdx){
+    // currentBucketIdx is the index of the bucket (0 - 95)
+    // clock.timeslots[currentBucketIdx] is the current bucket
+    // bucket.group is the SVG <g> container
+    // bucket.connections is the array of connections
+    //
+    // Set opacity for each bucket
+    // Clear items from the next bucket
+    var total = clock.timeslots.length;
+    clock.timeslots.forEach(function(bucket, idx){
+        if (bucket){
+            var distance = ((total + currentBucketIdx) - idx) % total; // how far behind currentBucketIdx?
+            bucket.group.style.opacity = (100 - distance) / 100;
+        }
+    });
+    var nextBucket = clock.timeslots[(currentBucketIdx + 1) % total];
+    var group = nextBucket.group;
+    while(group.firstChild){
+        group.removeChild(group.firstChild);
+    }
+    nextBucket.connections.length = 0;
 }
 
 var handTimer = null;
-var lastAngle = null;
+var lastBucket = null;
+
 function drawTimerHand(time){
     if (!time) time = new Date();
     var hand = document.getElementById('timerhand');
@@ -236,12 +257,12 @@ function drawTimerHand(time){
         vizcanvas.appendChild(hand);
     }
     vizcanvas.appendChild(hand);
-    if (!lastAngle){
-        lastAngle = timeToAngle(time);
+    if (!lastBucket){
+        lastBucket = timeToBucket(time);
     }
-    if (lastAngle !== timeToAngle(time)){
-        lastAngle = timeToAngle(time);
-        fadeEarlierTrackers(lastAngle);
+    if (lastBucket !== timeToBucket(time)){
+        lastBucket = timeToBucket(time);
+        fadeEarlierTrackers(lastBucket);
     }
     hand.setAttribute('transform', 'rotate(' + (timeToAngle(time) - 180) + ' ' + CENTRE + ') ' + HAND_TRANS);
     handTimer = setTimeout(drawTimerHand, 1000);
