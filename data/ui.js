@@ -238,6 +238,7 @@ document.querySelector('.map-control .zoom-out').addEventListener('click', funct
     return false;
 });
 
+
 /* Help Mode ========================= */
 document.querySelector(".help-mode").checked = false;
 document.querySelector(".help-mode").addEventListener("click", function(){
@@ -247,3 +248,33 @@ document.querySelector(".help-mode").addEventListener("click", function(){
         triggerHelp(document.querySelector("body"), "toggleOffHelp", currentVisualization.name);
     }
 });
+
+
+/* Settings Page ========================= */
+document.querySelector(".settings").addEventListener("click", function(event){
+    if ( currentVisualization.name == "clock" || currentVisualization.name == "graph" ){
+        document.querySelector(".vizcanvas").classList.toggle("hide");
+    }else{
+        document.querySelector(".list-breadcrumb").classList.toggle("hide");
+        document.querySelector(".list-header").classList.toggle("hide");
+        document.querySelector(".list-table").classList.toggle("hide");
+        
+    }
+    var infoBarVisible = document.querySelector("#content").classList.contains("showinfo");
+    if ( infoBarVisible ){
+        document.querySelector("#content").classList.remove("showinfo");
+    }
+    document.querySelector(".settings-page").classList.toggle("hide");
+});
+
+document.querySelector(".settings-page").addEventListener("click", function(event){
+    if (event.target.mozMatchesSelector(".settings-page ul li, .settings-page ul li *")){
+        var site = event.target;
+        while(site.mozMatchesSelector(".settings-page ul li *")){
+            site = site.parentElement;
+        }
+        site.querySelector(".settings-option").classList.toggle("hide");
+        site.querySelector(".icon-caret-right").parentElement.classList.toggle("hide");
+        site.querySelector(".icon-caret-down").parentElement.classList.toggle("hide");
+    }
+},false);

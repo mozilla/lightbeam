@@ -187,6 +187,7 @@ function createCell(data){
 function resetCanvas(){
     document.querySelector(".stage").classList.remove("list");
     document.querySelector(".stage").removeChild( document.querySelector(".stage .list-breadcrumb") );
+    document.querySelector(".stage").removeChild( document.querySelector(".stage .list-header") );
     document.querySelector(".stage").removeChild( document.querySelector(".stage .list-table") );
     vizcanvas.classList.remove("hide");
 }

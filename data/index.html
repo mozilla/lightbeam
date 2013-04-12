@@ -48,10 +48,10 @@
                     <a class="zoom-out"><i class="icon-minus-sign"></i></a>
                     <a class="move-down"><i class="icon-circle-arrow-down"></i></a>
                 </li>
-                <li class="settings"><a><i class="icon-cog"></i>Settings</a></li>
                 <li class="upload"><a><i class="icon-arrow-up"></i>Share Data</a></li>
                 <li class="download"><a><i class="icon-arrow-down"></i>Download data</a></li>
-                <li class="reset-data"><a>Reset data</a></li>
+                <li class="reset-data"><a><i class="icon-refresh"></i>Reset data</a></li>
+                <li class="settings"><a>Toggle Settings</a></li>
                 <li class="show-info-button"><a>Toggle Info Panel</a></li>
                 <li><input type="checkbox" class="help-mode" /> Help Mode </li>
             </ul>
@@ -2718,7 +2718,102 @@
                     <defs>
                     </defs>
                 </svg>
+                <div class="settings-page hide">
+                    <div class="page-header">Settings</div>
+                    <header class="hidden-sites">Hidden Sites</header>
+                    <section>
+                        <div class="num-sites">2 sites in total</div>
+                        <ul>
+                            <li><div>
+                                <div><i class="icon-caret-right"></i></div>
+                                <div class="hide"><i class="icon-caret-down"></i></div>
+                                <div class="item">
+                                    <div class="site-url">aaaaa.example.com</div>
+                                    <div class="settings-option hide">
+                                        <input type="checkbox" name="">hide</input>
+                                        <input type="checkbox" name="">block</input>
+                                        <input type="checkbox" name="">whitelist</input>
+                                    </div>
+                                </div>
+                            </div></li>
+                            <li><div>
+                                <div><i class="icon-caret-right"></i></div>
+                                <div class="hide"><i class="icon-caret-down"></i></div>
+                                <div class="site-url">bbbbb.example.com</div>
+                                <div class="settings-option hide">
+                                    <input type="checkbox" name="">hide</input>
+                                    <input type="checkbox" name="">block</input>
+                                    <input type="checkbox" name="">whitelist</input>
+                                </div>
+                            </div></li>
+                        </ul>
+                    </section>
+                    <header class="blocked-sites">Blocked Sites</header>
+                    <section>
+                        <div class="num-sites">3 sites in total</div>
+                        <ul>
+                            <li><div>
+                                <div><i class="icon-caret-right"></i></div>
+                                <div class="hide"><i class="icon-caret-down"></i></div>
+                                <div class="site-url">ccccc.example.com</div>
+                                <div class="settings-option hide">
+                                    <input type="checkbox" name="">hide</input>
+                                    <input type="checkbox" name="">block</input>
+                                    <input type="checkbox" name="">whitelist</input>
+                                </div>
+                            </div></li>
+                            <li><div>
+                                <div><i class="icon-caret-right"></i></div>
+                                <div class="hide"><i class="icon-caret-down"></i></div>
+                                <div class="site-url">ddddd.example.com</div>
+                                <div class="settings-option hide">
+                                    <input type="checkbox" name="">hide</input>
+                                    <input type="checkbox" name="">block</input>
+                                    <input type="checkbox" name="">whitelist</input>
+                                </div>
+                            </div></li>
+                            <li><div>
+                                <div><i class="icon-caret-right"></i></div>
+                                <div class="hide"><i class="icon-caret-down"></i></div>
+                                <div class="site-url">eeeee.example.com</div>
+                                <div class="settings-option hide">
+                                    <input type="checkbox" name="">hide</input>
+                                    <input type="checkbox" name="">block</input>
+                                    <input type="checkbox" name="">whitelist</input>
+                                </div>
+                            </div></li>
+                          
+                        </ul>
+                    </section>
+                    <header class="whitelist">Whitelist Sites</header>
+                    <section>
+                        <div class="num-sites">2 sites in total</div>
+                        <ul>
+                            <li><div>
+                                <div><i class="icon-caret-right"></i></div>
+                                <div class="hide"><i class="icon-caret-down"></i></div>
+                                <div class="site-url">abcde.example.com</div>
+                                <div class="settings-option hide">
+                                    <input type="checkbox" name="">hide</input>
+                                    <input type="checkbox" name="">block</input>
+                                    <input type="checkbox" name="">whitelist</input>
+                                </div>
+                            </div></li>
+                            <li><div>
+                                <div><i class="icon-caret-right"></i></div>
+                                <div class="hide"><i class="icon-caret-down"></i></div>
+                                <div class="site-url">omgomg.example.com</div>
+                                <div class="settings-option hide">
+                                    <input type="checkbox" name="">hide</input>
+                                    <input type="checkbox" name="">block</input>
+                                    <input type="checkbox" name="">whitelist</input>
+                                </div>
+                            </div></li>
+                        </ul>
+                    </section>
+                </div>
             </div>
+            
         </div>
     </div>
     <div id="tooltip"></div>

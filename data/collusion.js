@@ -18,7 +18,10 @@ function switchVisualization(name){
         currentVisualization.emit('remove');
     }
     currentVisualization = visualizations[name];
+    // toggle off info panel, settings page, help bubbles
     document.querySelector("#content").classList.remove("showinfo");
+    document.querySelector(".settings-page").classList.add("hide");
     clearAllBubbles();
+    
     addon.emit('uiready');
 }

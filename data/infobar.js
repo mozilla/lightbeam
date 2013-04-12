@@ -13,7 +13,7 @@ document.querySelector('#content').addEventListener('click', function(event){
         // console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
         updateInfo(node.getAttribute('data-name'));
     }else{
-        console.log('does not match .node: %o', event.target);
+        //console.log('does not match .node: %o', event.target);
     }
 },false);
 
