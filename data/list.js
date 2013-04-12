@@ -10,16 +10,8 @@ visualizations.list = list;
 list.name = "list";
 
 var vizcanvas;
-document.querySelector(".stage").classList.add("list");
-// breadcrumb
-var breadcrumb = document.createElement("div");
-breadcrumb.classList.add("list-breadcrumb");
-document.querySelector(".stage").appendChild(breadcrumb);
-// list header
-var header = document.createElement("div");
-header.classList.add("list-header");
-document.querySelector(".stage").appendChild(header);
-
+var breadcrumb;
+var header;
 var columns = ["Type", "Site", "First Access", "Last Access"];
 
 list.on("init", OnInit);
@@ -52,6 +44,20 @@ function onRemove(){
 
 
 function initGraph(){
+    document.querySelector(".stage").classList.add("list");
+    // breadcrumb
+    if ( ! document.querySelector(".list-breadcrumb") ){
+        breadcrumb = document.createElement("div");
+        breadcrumb.classList.add("list-breadcrumb");
+        document.querySelector(".stage").appendChild(breadcrumb);
+    }
+    // list header
+    if ( ! document.querySelector(".list-header") ){
+        header = document.createElement("div");
+        header.classList.add("list-header");
+        document.querySelector(".stage").appendChild(header);
+    }
+ 
     var table = document.createElement("table");
     table.classList.add("list-table");
     document.querySelector(".stage.list").appendChild(table);
@@ -86,9 +92,9 @@ function setBreadcrumb(filter){
         if ( header.firstChild ) header.removeChild(header.firstChild);
         header.appendChild(headerText);
     }else{
-        if ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
+        while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
+        while (header.firstChild) header.removeChild(header.firstChild);
         var headerText = document.createTextNode("All");
-        if (header.firstChild) header.removeChild(header.firstChild);
         header.appendChild(headerText);
     }
 }
