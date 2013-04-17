@@ -237,11 +237,15 @@ function fadeEarlierTrackers(currentBucketIdx){
         }
     });
     var nextBucket = clock.timeslots[(currentBucketIdx + 1) % total];
-    var group = nextBucket.group;
-    while(group.firstChild){
-        group.removeChild(group.firstChild);
+    if (nextBucket){
+        var group = nextBucket.group;
+        while(group.firstChild){
+            group.removeChild(group.firstChild);
+        }
+        nextBucket.connections.length = 0;
+    }else{
+        console.log('no nextBucket at clock.timeslots[%s]', (currentBucketIdx + 1) % total);
     }
-    nextBucket.connections.length = 0;
 }
 
 var handTimer = null;
