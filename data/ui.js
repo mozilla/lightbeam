@@ -86,11 +86,12 @@ document.querySelector('.reset-data').addEventListener('click', function(){
 });
 
 var uploadButton = document.querySelector('.upload');
-if (localStorage.userHasOptedIntoSharing){
+if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
     uploadButton.innerHTML = 'Stop Sharing';
 }
+
 uploadButton.addEventListener('click', function(){
-    if (localStorage.userHasOptedIntoSharing){
+    if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
         stopSharing();
     }else{
         startSharing();

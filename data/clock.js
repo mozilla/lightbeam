@@ -243,8 +243,6 @@ function fadeEarlierTrackers(currentBucketIdx){
             group.removeChild(group.firstChild);
         }
         nextBucket.connections.length = 0;
-    }else{
-        console.log('no nextBucket at clock.timeslots[%s]', (currentBucketIdx + 1) % total);
     }
 }
 
