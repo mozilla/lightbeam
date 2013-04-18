@@ -218,7 +218,7 @@ function drawText(){
 
 function timeNow(){
     var d = new Date();
-    return (d.getHours() % 12) + ':' + d.toLocaleFormat('%M') + ['am','pm'][Math.round(d.getHours() / 12)];
+    return (d.getHours() % 12) + ':' + d.toLocaleFormat('%M') + ['am','pm'][Math.floor(d.getHours() / 12)];
 }
 
 function dateNow(){
