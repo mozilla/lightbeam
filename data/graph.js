@@ -100,7 +100,7 @@ function initGraph(){
             .attr('y1', function(edge){ return edge.source.y; })
             .attr('x2', function(edge){ return edge.target.x; })
             .attr('y2', function(edge){ return edge.target.y; });
-        vis.selectAll('.node'). call(updateNodes);
+        vis.selectAll('.node').call(updateNodes);
     });
 }
 

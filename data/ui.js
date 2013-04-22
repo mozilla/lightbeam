@@ -186,6 +186,67 @@ document.querySelector('.controls_options .zoom-out').addEventListener('click', 
 });
 
 
+/* Scroll over visualization to zoom in/out ========================= */
+
+document.querySelector(".stage").addEventListener("wheel",function(event){
+    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && currentVisualization.name != "list" ){
+        var currentViewBox = getZoom("vizcanvas");
+        var withinZoomInLimit;
+        var withinZoomOutLimit;
+        
+        if ( currentVisualization.name == "graph" ){  // default viewBox = [ 0 0 1000 1000 ]
+            withinZoomInLimit = ( currentViewBox.w > 300
+                               && currentViewBox.h > 300
+                               && currentViewBox.x < 300
+                               && currentViewBox.y < 300 );
+            withinZoomOutLimit = ( currentViewBox.w < 4000 && currentViewBox.h < 4000 );
+        }else{ // clock view, default viewBox = [ -350 -495 700 500 ]
+            withinZoomInLimit = ( currentViewBox.w > 560 && currentViewBox.h > 400 );
+            withinZoomOutLimit = ( currentViewBox.w < 2800 && currentViewBox.h < 2000 );
+        }
+        
+        // event.deltaY can only be larger than 1.0 or less than -1.0
+        if ( event.deltaY >= 1 ){
+            if ( withinZoomInLimit ){ // zoom in
+                vizZooming( 1.05 );
+            }
+        }else{ 
+            if( withinZoomOutLimit ){ // zoom out
+                vizZooming( 1/1.05 );
+            }
+        }
+    }
+},false);
+
+
+// Apply zoom level
+function vizZooming(ratio){
+    var stageBox = document.querySelector(".stage").getBoundingClientRect();
+    var vizBoundingBox = document.querySelector(".vizcanvas").getBoundingClientRect();
+    
+    var canvasCenter = {};
+    canvasCenter.x = stageBox.left + (stageBox.width/2);
+    canvasCenter.y = stageBox.top + (stageBox.height/2);
+    
+    var vizCenter = {};
+    vizCenter.x = vizBoundingBox.left + (vizBoundingBox.width/2);
+    vizCenter.y = vizBoundingBox.top + (vizBoundingBox.height/2);
+    
+    var offset = {};
+    offset.x =  vizCenter.x - (canvasCenter.x / ratio);
+    offset.y = vizCenter.y - (canvasCenter.y / ratio);
+    
+    var box = getZoom("vizcanvas");
+    box.w = box.w / ratio;
+    box.h = box.h / ratio;
+    box.x = box.x + offset.x;
+    box.y = (currentVisualization.name == "graph") ? (box.y + offset.y) : -1 * (box.h - 5);
+    
+    setZoom(box,"vizcanvas");
+}
+
+
+
 /* Map Controls ========================= */
 
 document.querySelector('.map-control .move-up').addEventListener('click', function(){
