@@ -100,7 +100,7 @@ function updateInfo(nodeName){
                 htmlList = htmlList + "<li>" + key + "</li>";
             }
         }
-        document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = Object.keys(nodeList).length-1 + " connections from current site";
+        document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = Object.keys(nodeList).length-1 + " sites have connections to/from current site";
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         document.querySelector("#content").classList.add("showinfo");
