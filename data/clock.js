@@ -40,8 +40,7 @@ function onInit(connections){
     });
     vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
     drawTimes();
-    drawText();
-    drawTimerHand();
+    updateTime();
     connections.forEach(function(connection){
         onConnection(connection);
     });
@@ -107,7 +106,7 @@ function onConnection(connection){
 
 function onRemove(){
     clearTimeout(handTimer);
-    clock.timeslots = {};
+    clock.timeslots = new Array(96);
     resetCanvas();
 };
 
@@ -193,21 +192,33 @@ function drawTimes(){
 }
 
 function drawText(){
-    vizcanvas.appendChild(svg('text', {
-        x: 0,
-        y: -80,
-        'class': 'clock-time'
-    }, timeNow()));
-    vizcanvas.appendChild(svg('text', {
-        x: 0,
-        y: -40,
-        'class': 'clock-date'
-    }, dateNow()));
+    var clocktime = document.querySelector('.clock-time');
+    if (!clocktime){
+        clocktime = svg('text', {
+            x: 0,
+            y: -80,
+            'class': 'clock-time'
+        }, timeNow());
+        vizcanvas.appendChild(clocktime);
+    }else{
+        clocktime.firstChild.data = timeNow();
+    }
+    var clockdate = document.querySelector('.clock-date');
+    if (!clockdate){
+        clockdate = svg('text', {
+            x: 0,
+            y: -40,
+            'class': 'clock-date'
+        }, dateNow());
+        vizcanvas.appendChild(clockdate);
+    }else{
+        clockdate.firstChild.data = dateNow();
+    }
 }
 
 function timeNow(){
     var d = new Date();
-    return (d.getHours() % 12) + ':' + d.toLocaleFormat('%M') + ['am','pm'][Math.round(d.getHours() / 12)];
+    return (d.getHours() % 12) + ':' + d.toLocaleFormat('%M') + ['am','pm'][Math.floor(d.getHours() / 12)];
 }
 
 function dateNow(){
@@ -237,24 +248,26 @@ function fadeEarlierTrackers(currentBucketIdx){
         }
     });
     var nextBucket = clock.timeslots[(currentBucketIdx + 1) % total];
-    var group = nextBucket.group;
-    while(group.firstChild){
-        group.removeChild(group.firstChild);
+    if (nextBucket){
+        var group = nextBucket.group;
+        while(group.firstChild){
+            group.removeChild(group.firstChild);
+        }
+        nextBucket.connections.length = 0;
     }
-    nextBucket.connections.length = 0;
 }
 
-var handTimer = null;
+var clockTimer = null;
 var lastBucket = null;
 
 function drawTimerHand(time){
+    console.log('drawTimerHand');
     if (!time) time = new Date();
     var hand = document.getElementById('timerhand');
     if (!hand){
         var hand = svg('g', {id: 'timerhand'});
         hand.appendChild(svg('line', {x1: 0, y1: 0, x2: 400, y2: 0}));
         hand.appendChild(svg('path', {d: 'M47,-8 L47,8 73,5 73,-5 Z'}));
-        vizcanvas.appendChild(hand);
     }
     vizcanvas.appendChild(hand);
     if (!lastBucket){
@@ -265,9 +278,13 @@ function drawTimerHand(time){
         fadeEarlierTrackers(lastBucket);
     }
     hand.setAttribute('transform', 'rotate(' + (timeToAngle(time) - 180) + ' ' + CENTRE + ') ' + HAND_TRANS);
-    handTimer = setTimeout(drawTimerHand, 1000);
 }
 
+function updateTime(){
+    drawTimerHand();
+    drawText();
+    clockTimer = setTimeout(updateTime, 1000);
+}
 
 
 })(visualizations);
