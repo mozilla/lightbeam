@@ -355,8 +355,8 @@ var mousemoveHandler = function(event){
         var offsetX = ( Math.ceil(event.clientX) - mapDragStart.x );
         var offsetY = ( Math.ceil(event.clientY) - mapDragStart.y );
         var box = getZoom("mapcanvas");
-        box.x -= offsetX;
-        box.y -= offsetY;
+        box.x -= (offsetX * 10);
+        box.y -= (offsetY * 10);
         mapDragStart.x += offsetX;
         mapDragStart.y += offsetY;
         setZoom(box,"mapcanvas");
