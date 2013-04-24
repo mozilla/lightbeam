@@ -181,12 +181,12 @@ var wheelHandler = function(event){
         
         // event.deltaY can only be larger than 1.0 or less than -1.0
         if ( event.deltaY >= 1 ){
-            if ( withinZoomInLimit ){ // zoom in
-                vizZooming("vis", 1.5);
+            if ( withinZoomOutLimit ){ // zoom in
+                vizZooming("vis", (1/1.5));
             }
         }else{ 
-            if( withinZoomOutLimit ){ // zoom out
-                vizZooming("vis", (1/1.5));
+            if( withinZoomInLimit ){ // zoom out
+                vizZooming("vis", 1.5);
             }
         }
     }
@@ -203,12 +203,12 @@ var wheelHandler = function(event){
         
         // event.deltaY can only be larger than 1.0 or less than -1.0
         if ( event.deltaY >= 1 ){
-            if ( withinZoomInLimit ){ // zoom in
-                vizZooming("map", 1.5);
+            if ( withinZoomOutLimit ){ // zoom in
+                vizZooming("map", (1/1.5));
             }
         }else{ 
-            if( withinZoomOutLimit ){ // zoom out
-                vizZooming("map", (1/1.5));
+            if( withinZoomInLimit ){ // zoom out
+                vizZooming("map", 1.5);
             }
         }
     }
