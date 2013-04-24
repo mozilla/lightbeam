@@ -159,63 +159,6 @@ function setZoom(box,canvas){
     }
 }
 
-document.querySelector('.controls_options .move-up').addEventListener('click', function(){
-    var box = getZoom('vizcanvas');
-    var dY = Math.floor(box.h / 10);
-    box.y += dY;
-    setZoom(box,'vizcanvas');
-    return false;
-});
-
-document.querySelector('.controls_options .move-down').addEventListener('click', function(){
-    var box = getZoom('vizcanvas');
-    var dY = Math.floor(box.h / 10);
-    box.y -= dY;
-    setZoom(box,'vizcanvas');
-    return false;
-});
-
-document.querySelector('.controls_options .move-left').addEventListener('click', function(){
-    var box = getZoom('vizcanvas');
-    var dX = Math.floor(box.w / 10);
-    box.x += dX;
-    setZoom(box,'vizcanvas');
-    return false;
-});
-
-document.querySelector('.controls_options .move-right').addEventListener('click', function(){
-    var box = getZoom('vizcanvas');
-    var dX = Math.floor(box.w / 10);
-    box.x -= dX;
-    setZoom(box,'vizcanvas');
-    return false;
-});
-
-document.querySelector('.controls_options .zoom-in').addEventListener('click', function(){
-    var box = getZoom('vizcanvas');
-    var dX = Math.floor(box.w / 5);
-    var dY = Math.floor(box.h / 5);
-    // box.x -= dX;
-    // box.h -= dY;
-    box.w /= 1.1;
-    box.h /= 1.1;
-    setZoom(box,'vizcanvas');
-    return false;
-});
-
-document.querySelector('.controls_options .zoom-out').addEventListener('click', function(){
-    var box = getZoom('vizcanvas');
-    var dX = Math.floor(box.w / 5);
-    var dY = Math.floor(box.h / 5);
-    // box.x += dX;
-    // box.h += dY;
-    box.w *= 1.1;
-    box.h *= 1.1;
-    setZoom(box,'vizcanvas');
-    return false;
-});
-
-
 
 /* Scroll over visualization to zoom in/out ========================= */
 
@@ -309,7 +252,7 @@ function vizZooming(target,ratio){
         box.w = box.w / ratio;
         box.h = box.h / ratio;
         box.x = box.x - offsetX;
-        box.y = ( currentVisualization.name == "graph") ? (box.y - offsetY) : -1 * (box.h - 5);
+        box.y = box.y - offsetY;;
         
         setZoom(box,"mapcanvas");
 
@@ -408,60 +351,6 @@ document.querySelector(".world-map").addEventListener("mousedown",mousedownHandl
 document.querySelector(".world-map").addEventListener("mousemove",mousemoveHandler,false);
 document.querySelector(".world-map").addEventListener("mouseup",mouseupHandler,false);
 document.querySelector(".world-map").addEventListener("mouseleave",mouseleaveHandler,false);
-
-
-/* Map Controls ========================= */
-
-document.querySelector('.map-control .move-up').addEventListener('click', function(){
-    var box = getZoom('mapcanvas');
-    var dY = Math.floor(box.h / 10);
-    box.y += dY;
-    setZoom(box,'mapcanvas');
-    return false;
-});
-
-document.querySelector('.map-control .move-down').addEventListener('click', function(){
-    var box = getZoom('mapcanvas');
-    var dY = Math.floor(box.h / 10);
-    box.y -= dY;
-    setZoom(box,'mapcanvas');
-    return false;
-});
-
-document.querySelector('.map-control .move-left').addEventListener('click', function(){
-    var box = getZoom('mapcanvas');
-    var dX = Math.floor(box.w / 10);
-    box.x += dX;
-    setZoom(box,'mapcanvas');
-    return false;
-});
-
-document.querySelector('.map-control .move-right').addEventListener('click', function(){
-    var box = getZoom('mapcanvas');
-    var dX = Math.floor(box.w / 10);
-    box.x -= dX;
-    setZoom(box,'mapcanvas');
-    return false;
-});
-
-document.querySelector('.map-control .zoom-in').addEventListener('click', function(){
-    // TODO: zoom in/out adjustment
-    var box = getZoom('mapcanvas');
-    box.w /= 1.5;
-    box.h /= 1.5;
-    setZoom(box,'mapcanvas');
-    return false;
-});
-
-document.querySelector('.map-control .zoom-out').addEventListener('click', function(){
-    // TODO: zoom in/out adjustment
-    var box = getZoom('mapcanvas');
-    box.w *= 1.5;
-    box.h *= 1.5;
-    setZoom(box,'mapcanvas');
-    return false;
-});
-
 
 /* Help Mode ========================= */
 document.querySelector(".help-mode").checked = false;
