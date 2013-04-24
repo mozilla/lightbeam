@@ -71,10 +71,10 @@ function updateMap(countryCode){
 
 
 
-// updates info on the right info bar
+// updates info on the info panel
 function updateInfo(nodeName){
 
-    // update content in the side bar
+    // get server info and then update content on the info panel
     getServerInfo(nodeName, function(data){
         document.querySelector(".holder .title").innerHTML = nodeName;
         //document.querySelector(".holder .url").innerHTML = nodeName;
@@ -100,29 +100,13 @@ function updateInfo(nodeName){
                 htmlList = htmlList + "<li>" + key + "</li>";
             }
         }
-        document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = Object.keys(nodeList).length-1 + " sites have connections to/from current site";
+        document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = (Object.keys(nodeList).length-1) + " site(s) have made connections to/from current site";
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         document.querySelector("#content").classList.add("showinfo");
     });
 
 }
-
-/*
-// FIX THIS!!! applying translation causes the map to fracture
-// the svg map uses Robinson projection
-d3.select("#mapcanvas").attr("cursor","-moz-grab").call(
-    d3.behavior.zoom()
-        .translate ([0, 0])
-        .scale (1.0)
-        .scaleExtent([1.0, 4.0])
-        .on("zoom", function(){
-            d3.selectAll("#mapcanvas > *")
-                .attr("transform","translate(" + d3.event.translate.join(",") + ")" +
-                      " scale(" +  d3.event.scale + ")");
-        })
-);
-*/
 
 
 })(this);

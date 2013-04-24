@@ -224,13 +224,13 @@ document.querySelector(".stage").addEventListener("wheel",function(event){
         var withinZoomInLimit;
         var withinZoomOutLimit;
         
-        if ( currentVisualization.name == "graph" ){  // default viewBox = [ 0 0 1000 1000 ]
+        if ( currentVisualization.name == "graph" ){  // default viewBox = " 0 0 1000 1000 "
             withinZoomInLimit = ( currentViewBox.w > 300
                                && currentViewBox.h > 300
                                && currentViewBox.x < 300
                                && currentViewBox.y < 300 );
             withinZoomOutLimit = ( currentViewBox.w < 4000 && currentViewBox.h < 4000 );
-        }else{ // clock view, default viewBox = [ -350 -495 700 500 ]
+        }else{ // clock view, default viewBox = " -350 -495 700 500 "
             withinZoomInLimit = ( currentViewBox.w > 560 && currentViewBox.h > 400 );
             withinZoomOutLimit = ( currentViewBox.w < 2800 && currentViewBox.h < 2000 );
         }
@@ -238,43 +238,163 @@ document.querySelector(".stage").addEventListener("wheel",function(event){
         // event.deltaY can only be larger than 1.0 or less than -1.0
         if ( event.deltaY >= 1 ){
             if ( withinZoomInLimit ){ // zoom in
-                vizZooming( 1.05 );
+                vizZooming("vis", 1.05);
             }
         }else{ 
             if( withinZoomOutLimit ){ // zoom out
-                vizZooming( 1/1.05 );
+                vizZooming("vis", (1/1.05));
             }
         }
     }
 },false);
 
+document.querySelector(".world-map").addEventListener("wheel",function(event){
+    if ( event.target.mozMatchesSelector("#mapcanvas, #mapcanvas *") ){
+        var currentViewBox = getZoom("mapcanvas");
+        var withinZoomInLimit;
+        var withinZoomOutLimit;
+        
+        // default viewBox = " 0 0 2711.3 1196.7 "
+        withinZoomInLimit = ( currentViewBox.w > (2711.3/5)
+                           && currentViewBox.h > (1196.7/5) );
+        withinZoomOutLimit = ( currentViewBox.w <= 2711.3 && currentViewBox.h <= 1196.7 );
+        console.log(withinZoomInLimit + " == " + withinZoomInLimit);
+        
+        // event.deltaY can only be larger than 1.0 or less than -1.0
+        if ( event.deltaY >= 1 ){
+            if ( withinZoomInLimit ){ // zoom in
+                vizZooming("map", 1.05);
+            }
+        }else{ 
+            if( withinZoomOutLimit ){ // zoom out
+                vizZooming("map", (1/1.05));
+            }
+        }
+    }
+},false);
 
 // Apply zoom level
-function vizZooming(ratio){
-    var stageBox = document.querySelector(".stage").getBoundingClientRect();
-    var vizBoundingBox = document.querySelector(".vizcanvas").getBoundingClientRect();
+function vizZooming(target,ratio){
+
+    if ( target == "vis" ){
+        var containerBox = document.querySelector(".stage").getBoundingClientRect();
+        var canvasBox = document.querySelector(".vizcanvas").getBoundingClientRect();
+        
+        var canvasCenter = {};
+        canvasCenter.x = containerBox.left + (containerBox.width/2);
+        canvasCenter.y = containerBox.top + (containerBox.height/2);
+        
+        var vizCenter = {};
+        vizCenter.x = canvasBox.left + (canvasBox.width/2);
+        vizCenter.y = canvasBox.top + (canvasBox.height/2);
+        
+        var offsetFromCenter = {};
+        offsetFromCenter.x = vizCenter.x - canvasCenter.x;
+        offsetFromCenter.y = vizCenter.y - canvasCenter.y;
+        
+        var offset = {};
+        offset.x =  vizCenter.x - (canvasCenter.x / ratio);
+        offset.y = vizCenter.y - (canvasCenter.y / ratio);
+        
+        var box = getZoom("vizcanvas");
+        box.w = box.w / ratio;
+        box.h = box.h / ratio;
+        box.x = box.x + offset.x;
+        
+        box.y = ( currentVisualization.name == "graph") ? (box.y + offset.y) : -1 * (box.h - 5);
+        setZoom(box,"vizcanvas");
+        
+    }else{
+        var box = getZoom("mapcanvas");
+        containerBox = document.querySelector(".world-map").getBoundingClientRect();
+        canvasBox = document.querySelector("#mapcanvas").getBoundingClientRect();
+        box.w /= ratio;
+        box.h /= ratio;
+        setZoom(box,"mapcanvas");
+
+    }
     
-    var canvasCenter = {};
-    canvasCenter.x = stageBox.left + (stageBox.width/2);
-    canvasCenter.y = stageBox.top + (stageBox.height/2);
-    
-    var vizCenter = {};
-    vizCenter.x = vizBoundingBox.left + (vizBoundingBox.width/2);
-    vizCenter.y = vizBoundingBox.top + (vizBoundingBox.height/2);
-    
-    var offset = {};
-    offset.x =  vizCenter.x - (canvasCenter.x / ratio);
-    offset.y = vizCenter.y - (canvasCenter.y / ratio);
-    
-    var box = getZoom("vizcanvas");
-    box.w = box.w / ratio;
-    box.h = box.h / ratio;
-    box.x = box.x + offset.x;
-    box.y = (currentVisualization.name == "graph") ? (box.y + offset.y) : -1 * (box.h - 5);
-    
-    setZoom(box,"vizcanvas");
 }
 
+
+/* Pan by dragging ====================== */
+var onDragGraph = false;
+var onDragMap = false;
+var graphDragStart = {};
+var mapDragStart = {};
+
+var mousedownHandler = function(event){
+    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && !event.target.mozMatchesSelector(".node, .node *") ){
+        onDragGraph = true;
+        graphDragStart.x = event.clientX;
+        graphDragStart.y = event.clientY;
+    }
+    
+    if ( event.target.mozMatchesSelector("#mapcanvas, #mapcanvas *") ){
+        onDragMap = true;
+        mapDragStart.x = event.clientX;
+        mapDragStart.y = event.clientY;
+    }
+    
+};
+
+var mousemoveHandler = function(event){
+    if ( event.target.mozMatchesSelector(".vizcanvas") && !event.target.mozMatchesSelector(".node, .node *") && onDragGraph ){
+        document.querySelector(".vizcanvas").style.cursor = "-moz-grab";
+        var offsetX = ( Math.ceil(event.clientX) - graphDragStart.x );
+        var offsetY = ( Math.ceil(event.clientY) - graphDragStart.y );
+        var box = getZoom("vizcanvas");
+        box.x -= offsetX;
+        box.y -= offsetY;
+        graphDragStart.x += offsetX;
+        graphDragStart.y += offsetY;
+        setZoom(box,"vizcanvas");
+    }
+    if ( event.target.mozMatchesSelector("#mapcanvas, #mapcanvas *") && onDragMap ){
+        document.querySelector("#mapcanvas").style.cursor = "-moz-grab";
+        var offsetX = ( Math.ceil(event.clientX) - mapDragStart.x );
+        var offsetY = ( Math.ceil(event.clientY) - mapDragStart.y );
+        var box = getZoom("mapcanvas");
+        box.x -= offsetX;
+        box.y -= offsetY;
+        mapDragStart.x += offsetX;
+        mapDragStart.y += offsetY;
+        setZoom(box,"mapcanvas");
+    }
+
+};
+
+var mouseupHandler = function(event){
+    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && !event.target.mozMatchesSelector(".node, .node *") ){
+        onDragGraph = false;
+        document.querySelector(".vizcanvas").style.cursor = "default";
+    }
+    if ( event.target.mozMatchesSelector("#mapcanvas, #mapcanvas *") ){
+        onDragMap = false;
+        document.querySelector("#mapcanvas").style.cursor = "default";
+    }
+};
+
+var mouseleaveHandler = function(event){
+    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && !event.target.mozMatchesSelector(".node, .node *") ){
+        onDragGraph = false;
+        document.querySelector(".vizcanvas").style.cursor = "default";
+    }
+    if ( event.target.mozMatchesSelector("#mapcanvas, #mapcanvas *") ){
+         onDragMap = false;
+        document.querySelector("#mapcanvas").style.cursor = "default";
+    }
+};
+
+document.querySelector(".stage").addEventListener("mousedown",mousedownHandler,false);
+document.querySelector(".stage").addEventListener("mousemove",mousemoveHandler,false);
+document.querySelector(".stage").addEventListener("mouseup",mouseupHandler,false);
+document.querySelector(".stage").addEventListener("mouseleave",mouseleaveHandler,false);
+
+document.querySelector(".world-map").addEventListener("mousedown",mousedownHandler,false);
+document.querySelector(".world-map").addEventListener("mousemove",mousemoveHandler,false);
+document.querySelector(".world-map").addEventListener("mouseup",mouseupHandler,false);
+document.querySelector(".world-map").addEventListener("mouseleave",mouseleaveHandler,false);
 
 
 /* Map Controls ========================= */
