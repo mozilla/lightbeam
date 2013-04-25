@@ -67,7 +67,7 @@ function onConnection(connection){
         if (oldNodeType !== sourcenode.nodeType){
             moveNode(sourcenode, oldNodeType);
             updated = true;
-    }
+        }
     }else{
         sourcenode = new GraphNode(connection, true);
         nodemap[connection.source] = sourcenode;
@@ -83,7 +83,7 @@ function onConnection(connection){
         if (oldNodeType !== targetnode.nodeType){
             moveNode(targetnode, oldNodeType);
             updated = true;
-    }
+        }
     }else{
         targetnode = new GraphNode(connection, false);
         nodemap[connection.target] = targetnode;
@@ -100,7 +100,9 @@ function onConnection(connection){
         aggregate.edges.push(edge);
         updated = true;
     }
-    aggregate.emit('updated'); // tell listeners there are new node(s)
+    if (updated){
+        aggregate.emit('updated'); // tell listeners there are new node(s)
+    }
 }
 
 aggregate.on('connection', onConnection);
@@ -204,7 +206,7 @@ GraphNode.prototype.update = function(connection, isSource){
     if ( this.status.indexOf(connection.status) < 0 ){
         this.status.push(connection.status);
     }
-    this.howMany++; 
+    this.howMany++;
     if ( this.visitedCount/this.howMany == 1 ){
         this.nodeType = 'site';
     }else if ( this.visitedCount/this.howMany == 0 ){
@@ -212,7 +214,7 @@ GraphNode.prototype.update = function(connection, isSource){
     }else{
         this.nodeType = 'both';
     }
- 
+
     return this;
 };
 
