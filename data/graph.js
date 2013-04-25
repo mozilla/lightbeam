@@ -94,13 +94,31 @@ function initGraph(){
     updateGraph();
 
     // update method
+    var lastUpdate, lastTick;
+    lastUpdate = lastTick = Date.now();
+    var draws = [];
+    var ticks = [];
+    const minute = 60 * 1000;
     force.on('tick', function(){
+        // find a way to report how often tick() is called, and how long it takes to run
+        // without trying to console.log() every 5 milliseconds...
+        var nextTick = Date.now();
+        ticks.push(nextTick - lastTick);
+        lastTick = nextTick;
+        if ((lastUpdate - lastTick) > minute){
+            console.log('%s ticks per minute, each draw takes %s milliseconds', ticks.length, d3.mean(draws));
+            lastUpdate = lastTick;
+            draws = [];
+            ticks = [];
+        }
         vis.selectAll('.edge')
             .attr('x1', function(edge){ return edge.source.x; })
             .attr('y1', function(edge){ return edge.source.y; })
             .attr('x2', function(edge){ return edge.target.x; })
             .attr('y2', function(edge){ return edge.target.y; });
-        vis.selectAll('.node'). call(updateNodes);
+        vis.selectAll('.node').call(updateNodes);
+        var endDraw = Date.now();
+        draws.push(endDraw - lastTick);
     });
 }
 
