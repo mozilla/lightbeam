@@ -1,6 +1,6 @@
 (function(global){
 
-const oriMapViewBox = document.querySelector('#mapcanvas').getAttribute('viewBox');
+const oriMapViewBox = document.querySelector('.mapcanvas').getAttribute('viewBox');
 
 // update info when clicking on a node in the graph visualization
 document.querySelector('#content').addEventListener('click', function(event){
@@ -36,18 +36,18 @@ function resetMap(){
             element.classList.remove("highlight-country");
         });
     }
-    document.querySelector("#mapcanvas").setAttribute("viewBox", oriMapViewBox);
+    document.querySelector(".mapcanvas").setAttribute("viewBox", oriMapViewBox);
 }
 
 // update map
 function updateMap(countryCode){
-    var countryOnMap = d3.select("#mapcanvas").select("#" + countryCode.toLowerCase());
+    var countryOnMap = d3.select(".mapcanvas").select("#" + countryCode.toLowerCase());
     countryOnMap.classed("highlight-country", true);
     countryOnMap.selectAll("*").classed("highlight-country", true);
 
     // position the highlighted country in center
-    var svgViewBox = document.querySelector("#mapcanvas").getAttribute("viewBox").split(" ");
-    var worldDimen = document.querySelector("#mapcanvas").getClientRects()[0];
+    var svgViewBox = document.querySelector(".mapcanvas").getAttribute("viewBox").split(" ");
+    var worldDimen = document.querySelector(".mapcanvas").getClientRects()[0];
     var countryDimen = document.querySelector("#"+countryCode).getClientRects()[0];
 
     var ratio = svgViewBox[2] / worldDimen.width;
