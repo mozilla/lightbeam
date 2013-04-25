@@ -40,14 +40,6 @@
                 </div>
             </div>
             <ul class="controls_options">
-                <li class="zooming">
-                    <a class="move-up"><i class="icon-circle-arrow-up"></i></a>
-                    <a class="move-left"><i class="icon-circle-arrow-left"></i></a>
-                    <a class="move-right"><i class="icon-circle-arrow-right"></i></a>
-                    <a class="zoom-in"><i class="icon-plus-sign"></i></a>
-                    <a class="zoom-out"><i class="icon-minus-sign"></i></a>
-                    <a class="move-down"><i class="icon-circle-arrow-down"></i></a>
-                </li>
                 <li class="upload"><a><i class="icon-arrow-up"></i>Share Data</a></li>
                 <li class="download"><a><i class="icon-arrow-down"></i>Download data</a></li>
                 <li class="reset-data"><a><i class="icon-refresh"></i>Reset data</a></li>
@@ -66,18 +58,10 @@
                     <header class="subhead">Location</header>
                     <div class="map-section">
                         <div><span id="country">&nbsp;</span></div>
-                        <div class="map-control zooming">
-                            <a class="move-up"><i class="icon-circle-arrow-up"></i></a>
-                            <a class="move-left"><i class="icon-circle-arrow-left"></i></a>
-                            <a class="move-right"><i class="icon-circle-arrow-right"></i></a>
-                            <a class="zoom-in"><i class="icon-plus-sign"></i></a>
-                            <a class="zoom-out"><i class="icon-minus-sign"></i></a>
-                            <a class="move-down"><i class="icon-circle-arrow-down"></i></a>
-                        </div>
 
                         <!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
                         <div class="world-map">
-<svg id="mapcanvas" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2711.3 1196.7" width="100%" height="100%">
+<svg class="mapcanvas" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2711.3 1196.7" width="100%" height="100%">
   <style type="text/css">
 /*
  * Below are Cascading Style Sheet (CSS) definitions in use in this file,
@@ -2817,7 +2801,9 @@
         </div>
     </div>
     <div id="tooltip"></div>
-    <div id="help"><svg class="helpcanvas" width="100%" height="100%"></svg></div>
+    <div id="help">
+        <svg class="helpcanvas" width="100%" height="100%"></svg>
+    </div>
     <script src="d3.v2.js"></script>
     <script src="events.js"></script>
     <script src="collusion.js"></script>

@@ -140,8 +140,8 @@ function updateGraph(){
     nodes.call(force.drag);
 
 	nodes.enter().append('g')
-        .classed('visitedYes', function(node){ return node.visitedCount/node.howMany == 1 })
-        .classed('visitedNo', function(node){ return node.visitedCount/node.howMany == 0 })
+        .classed('visitedYes', function(node){ return node.visitedCount/node.howMany === 1 })
+        .classed('visitedNo', function(node){ return node.visitedCount/node.howMany === 0 })
         .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
         .call(addShape)
         .attr('data-name', function(node){ return node.name; })
