@@ -289,17 +289,13 @@ document.querySelector(".stage").addEventListener("mousemove",function(event){
 },false);
 
 document.querySelector(".stage").addEventListener("mouseup",function(event){
-    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && !event.target.mozMatchesSelector(".node, .node *") ){
-        onDragGraph = false;
-        document.querySelector(".vizcanvas").style.cursor = "default";
-    }
+    onDragGraph = false;
+    document.querySelector(".vizcanvas").style.cursor = "default";
 },false);
 
 document.querySelector(".stage").addEventListener("mouseleave",function(event){
-    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && !event.target.mozMatchesSelector(".node, .node *") ){
-        onDragGraph = false;
-        document.querySelector(".vizcanvas").style.cursor = "default";
-    }
+    onDragGraph = false;
+    document.querySelector(".vizcanvas").style.cursor = "default";
 },false);
 
 /* mapcanvas */
@@ -327,19 +323,14 @@ document.querySelector(".world-map").addEventListener("mousemove",function(event
 },false);
 
 document.querySelector(".world-map").addEventListener("mouseup",function(event){
-    if ( event.target.mozMatchesSelector(".mapcanvas, .mapcanvas *") ){
-        onDragMap = false;
-        document.querySelector(".mapcanvas").style.cursor = "default";
-    }
+    onDragMap = false;
+    document.querySelector(".mapcanvas").style.cursor = "default";
 },false);
 
 document.querySelector(".world-map").addEventListener("mouseleave",function(event){
-    if ( event.target.mozMatchesSelector(".mapcanvas, .mapcanvas *") ){
-        onDragMap = false;
-        document.querySelector(".mapcanvas").style.cursor = "default";
-    }
+    onDragMap = false;
+    document.querySelector(".mapcanvas").style.cursor = "default";
 },false);
-
 
 
 /* Help Mode ========================= */
