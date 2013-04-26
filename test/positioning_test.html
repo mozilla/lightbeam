@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Positioning Test</title>
+    <style>
+        svg{ position: absolute; left: 0; top: 0;}
+        canvas{ position: absolute; left: 0; top: 0;}
+    </style>
+    <script src="https://raw.github.com/mrdoob/three.js/master/build/three.js"></script>
+</head>
+
+<body id="home">
+
+    <h1>Positioning Test</h1>
+    <svg width="500" height="500" viewBox="-250 -250 500 500"></svg>
+    <canvas width="500" height="500"></canvas>
+
+<script>
+// Test case for svg positioning vs. css translate vs. webgl vs. canvas
+var SVG_NS = 'http://www.w3.org/2000/svg';
+
+function svg(name, attrs, text){
+    var node = document.createElementNS(SVG_NS, name);
+    if (attrs){
+        Object.keys(attrs).forEach(function(key){
+            node.setAttribute(key, attrs[key]);
+        });
+    }
+    if (text){
+        node.appendChild(document.createTextNode(text));
+    }
+    return node;
+}
+
+function useSVG(){
+    var canvas = document.querySelector('svg');
+
+    var Line = function(p1, p2){
+        this.p1 = p1;
+        this.p2 = p2;
+        this.elem = svg('line', {x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'black'});
+        canvas.appendChild(this.elem);
+    };
+    Line.prototype.draw = function(){
+        this.elem.setAttribute('x1', this.p1.x);
+        this.elem.setAttribute('y1', this.p1.y);
+        this.elem.setAttribute('x2', this.p2.x);
+        this.elem.setAttribute('y2', this.p2.y);
+    };
+    var Circle = function(p, r){
+        this.p = p;
+        this.elem = svg('circle', {cx: p.x, cy: p.y, r: r, fill: 'blue', stroke: 'black'});
+        canvas.appendChild(this.elem);
+    };
+    Circle.prototype.draw = function(){
+        this.elem.setAttribute('cx', this.p.x);
+        this.elem.setAttribute('cy', this.p.y);
+    };
+    var Square = function(p,size){
+        this.p = p;
+        var x = p.x - (size / 2);
+        var y = p.y - (size / 2);
+        this.size = size;
+        this.elem = svg('rect', {x: x, y: y, width: size, height: size, fill: 'green'});
+        canvas.appendChild(this.elem);
+    };
+    Square.prototype.draw = function(){
+        var x = this.p.x - (this.size / 2);
+        var y = this.p.y - (this.size / 2);
+        this.elem.setAttribute('x', x);
+        this.elem.setAttribute('y', y);
+    };
+    return {
+        Line: Line,
+        Circle: Circle,
+        Square: Square,
+        clear: function(){} // don't need to clear SVG
+    }
+}
+
+function useCanvas(){
+    var canvas = document.querySelector('canvas');
+    var context = canvas.getContext('2d');
+
+    var Line = function(p1, p2){
+        this.p1 = p1;
+        this.p2 = p2;
+    };
+    Line.prototype.draw = function(){
+        context.beginPath();
+        context.strokeStyle = 'black';
+        context.moveTo(this.p1.x, this.p1.y);
+        context.lineTo(this.p2.x, this.p2.y);
+        context.stroke(); // Lots of room for optimization, only need to set color and call stroke onc
+    };
+    var Circle = function(p, r){
+        this.p = p;
+        this.r = r;
+    };
+    Circle.prototype.draw = function(){
+        context.beginPath();
+        context.fillStyle = 'blue';
+        context.strokeStyle = 'black';
+        context.arc(this.p.x, this.p.y, this.r, 0, Math.PI * 2, true);
+        context.fill();
+        context.stroke();
+    };
+    var Square = function(p, size){
+        this.p = p;
+        this.size = size;
+    };
+    Square.prototype.draw = function(){
+        context.beginPath();
+        context.fillStyle = 'green';
+        var x = this.p.x - this.size/2;
+        var y = this.p.y - this.size/2;
+        context.fillRect(x, y, this.size, this.size);
+    };
+    var clear = function(){
+        context.restore();
+        context.save();
+        context.translate(250, 250);
+        context.fillStyle = 'white';
+        context.fillRect(-250,-250,500,500);
+    }
+    return {
+        Line: Line,
+        Circle: Circle,
+        Square: Square,
+        clear: clear
+    }
+}
+
+function useWebGL(){
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, 1, 0.1, 1000 );
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( 500,500 );
+    document.body.appendChild( renderer.domElement );
+    var cubeGeometry = new THREE.CubeGeometry(25,25,0.1);
+    var sphereGeometry = new THREE.SphereGeometry(10);
+    var greenMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var blueMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+    var blackMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+    camera.position.z = 350;
+    var Line = function(p1, p2){
+        this.p1 = p1;
+        this.p2 = p2;
+        this.geometry = new THREE.Geometry();
+        this.geometry.vertices.push(new THREE.Vector3(p1.x, p1.y, 0));
+        this.geometry.vertices.push(new THREE.Vector3(p2.x, p2.y, 0));
+        this.line = new THREE.Line(this.geometry, blackMaterial);
+        scene.add(this.line);
+    };
+    Line.prototype.draw = function(){
+        this.geometry.vertices[0].x = this.p1.x;
+        this.geometry.vertices[0].y = this.p1.y;
+        this.geometry.vertices[1].x = this.p2.x;
+        this.geometry.vertices[1].y = this.p2.y;
+        this.geometry.verticesNeedUpdate = true;
+    };
+    var Circle = function(p, r){
+        this.p = p;
+        this.r = r;
+        this.sphere = new THREE.Mesh( sphereGeometry, blueMaterial);
+        this.sphere.position.x = p.x;
+        this.sphere.position.y = p.y;
+        // this.sphere.position.z -= r;
+        scene.add(this.sphere);
+    };
+    Circle.prototype.draw = function(){
+        this.sphere.position.x = this.p.x;
+        this.sphere.position.y = this.p.y;
+    };
+    var Square = function(p, size){
+        this.p = p;
+        this.size = size;
+        this.cube = new THREE.Mesh( cubeGeometry, greenMaterial );
+        this.cube.position.x = p.x;
+        this.cube.position.y = p.y;
+        // this.cube.position.z -= (size / 2);
+        scene.add( this.cube );
+    };
+    Square.prototype.draw = function(){
+        this.cube.position.x = this.p.x;// - (this.size / 2);
+        this.cube.position.y = this.p.y;// - (this.size / 2);
+    };
+    function clear(){
+        renderer.render(scene, camera);
+    }
+    return {
+        Line: Line,
+        Circle: Circle,
+        Square: Square,
+        clear: clear
+    };
+}
+
+var DEGREE = Math.PI / 180;
+var Point = function(maxRadius){
+    this.angle = Math.floor(Math.random() * 3600);
+    this.radius = Math.floor(Math.random() * (maxRadius - 50) + 50);
+    this.speed = Math.random() * 2 - 1;
+    this.cartesian();
+}
+Point.prototype.cartesian = function(){
+    this.x = Math.cos(DEGREE * this.angle) * this.radius;
+    this.y = Math.sin(DEGREE * this.angle) * this.radius;
+};
+Point.prototype.tick = function(){
+    this.angle += this.speed;
+    this.cartesian();
+};
+
+var timer = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+    setTimeout(callback, 17);
+  };
+
+function runTests(){
+    var points = [];
+    var shapes = window.shapes = [];
+    // var canvas = useSVG();
+    // var canvas = useCanvas();
+    var canvas = useWebGL();
+
+    var setup = function setup(nodes){
+        for (var i = 0; i < nodes; i++){
+            points.push(new Point(250));
+        }
+        points.forEach(function(point){
+            shapes.push(new canvas.Line(point, points[Math.floor(Math.random() * nodes)]));
+        });
+        points.forEach(function(point, idx){
+            if (idx % 4){
+                shapes.push(new canvas.Circle(point, 10));
+            }else{
+                shapes.push(new canvas.Square(point, 25));
+            }
+        });
+    }
+
+    var frame = function frame(){
+        canvas.clear();
+        points.forEach(function(point){ point.tick(); });
+        shapes.forEach(function(shape){ shape.draw(); });
+        timer(frame);
+    }
+
+    setup(200);
+    frame();
+}
+runTests();
+</script>
+</body>
+</html>
+
+
