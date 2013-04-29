@@ -402,6 +402,8 @@ line{
     padding-left: 10px;
     color: white;
     font-size: 15px;
+    background: rgba(34,34,34,0.3);
+    margin: 5px 10px;
 }
 
 .list-table{
