@@ -261,7 +261,6 @@ var clockTimer = null;
 var lastBucket = null;
 
 function drawTimerHand(time){
-    console.log('drawTimerHand');
     if (!time) time = new Date();
     var hand = document.getElementById('timerhand');
     if (!hand){
