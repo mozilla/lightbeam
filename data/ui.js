@@ -372,3 +372,18 @@ document.querySelector(".settings-page").addEventListener("click", function(even
         site.querySelector(".icon-caret-down").parentElement.classList.toggle("hide");
     }
 },false);
+
+
+/* Get data summary =============================== */
+
+function getSummary(callback){
+    addon.once("displaySummary",function(summary){
+        summary.numAllSites = aggregate.allnodes.length;
+        summary.numVisited = aggregate.sitenodes.length;
+        summary.numThird = aggregate.thirdnodes.length;
+        summary.numBoth = aggregate.bothnodes.length;
+        callback(summary);
+    });
+}
+
+

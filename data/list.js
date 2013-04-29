@@ -46,17 +46,14 @@ function onRemove(){
 function initGraph(){
     document.querySelector(".stage").classList.add("list");
     // breadcrumb
-    if ( ! document.querySelector(".list-breadcrumb") ){
-        breadcrumb = document.createElement("div");
-        breadcrumb.classList.add("list-breadcrumb");
-        document.querySelector(".stage").appendChild(breadcrumb);
-    }
+    breadcrumb = document.createElement("div");
+    breadcrumb.classList.add("list-breadcrumb");
+    document.querySelector(".stage").appendChild(breadcrumb);
+ 
     // list header
-    if ( ! document.querySelector(".list-header") ){
-        header = document.createElement("div");
-        header.classList.add("list-header");
-        document.querySelector(".stage").appendChild(header);
-    }
+    header = document.createElement("div");
+    header.classList.add("list-header");
+    document.querySelector(".stage").appendChild(header);
  
     var table = document.createElement("table");
     table.classList.add("list-table");
@@ -76,26 +73,55 @@ function initGraph(){
 }
 
 
+function setFilteredBreadcrumb(filter){
+    while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
+    while ( header.firstChild ) header.removeChild(header.firstChild);
+
+    var link = document.createElement("a");
+    link.setAttribute("filter-by", "All");
+    var text = document.createTextNode("<<< Return to All");
+    link.appendChild(text);
+    breadcrumb.appendChild(link);
+    link.addEventListener('click', function(event){
+        document.querySelector("#content").classList.remove("showinfo");
+        showFilteredTable();
+    },false);
+ 
+    var headerText = document.createTextNode("Site that have connections linked from/to " + filter);
+    header.appendChild(headerText);
+}
+
+function setUnfilteredBreadcrumb(){
+    while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
+    while ( header.firstChild ) header.removeChild(header.firstChild);
+    var link = document.createElement("a");
+    var text = document.createTextNode("All");
+    link.appendChild(text);
+    breadcrumb.appendChild(link);
+    getSummary(function(result){
+        var summaryDiv = document.createElement("div");
+        var timeSinceText = "Based on the data we have gathered since " + result.localTimeSince + ", ";
+        var timeSinceTextNode = document.createTextNode(timeSinceText);
+        var timeSinceDiv = document.createElement("div");
+        timeSinceDiv.appendChild(timeSinceTextNode);
+        summaryDiv.appendChild(timeSinceDiv);
+        var detailText = result.numConnections + " connections were set between " + (result.numVisited+result.numBoth) + " visited sites and " + (result.numThird+result.numBoth) + " third party sites";
+        var detailTextNode = document.createTextNode(detailText);
+        var detailDiv = document.createElement("div");
+        detailDiv.appendChild(detailTextNode);
+        summaryDiv.appendChild(detailDiv);
+        
+        header.appendChild(summaryDiv);
+    });
+
+}
+
+
 function setBreadcrumb(filter){
     if ( filter ){
-        var link = document.createElement("a");
-        link.setAttribute("filter-by", "All");
-        var text = document.createTextNode("<<< Return to All");
-        link.appendChild(text);
-        if ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
-        breadcrumb.appendChild(link);
-        link.addEventListener('click', function(event){
-            document.querySelector("#content").classList.remove("showinfo");
-            showFilteredTable();
-        },false);
-        var headerText = document.createTextNode("Site that have connections linked from/to " + filter);
-        if ( header.firstChild ) header.removeChild(header.firstChild);
-        header.appendChild(headerText);
+        setFilteredBreadcrumb(filter);
     }else{
-        while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
-        while (header.firstChild) header.removeChild(header.firstChild);
-        var headerText = document.createTextNode("All");
-        header.appendChild(headerText);
+        setUnfilteredBreadcrumb();
     }
 }
 
