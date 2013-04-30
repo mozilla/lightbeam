@@ -205,14 +205,12 @@ function zoomWithinLimit(event, targetSvg, zoomInLimit, zoomOutLimit){
     var withinZoomOutLimit = ( currentViewBox.w <= zoomOutLimit.w && currentViewBox.h <= zoomOutLimit.h );
     
     // event.deltaY can only be larger than 1.0 or less than -1.0
-    if ( event.deltaY >= 1 ){ // scroll up
-        if ( withinZoomOutLimit ){ // zoom in
-            svgZooming(targetSvg, (1/1.5));
-        }
-    }else{ // scroll down
-        if( withinZoomInLimit ){ // zoom out
-            svgZooming(targetSvg, 1.5);
-        }
+    // conditions set to +/- 3 to lower the scrolling control sensitivity
+    if ( event.deltaY >= 3 && withinZoomOutLimit ){ // scroll up to zoom out
+        svgZooming(targetSvg, (1/1.5));
+    }
+    if ( event.deltaY <= -3 && withinZoomInLimit) { // scroll down to zoom in
+        svgZooming(targetSvg, 1.5);
     }
 }
 
