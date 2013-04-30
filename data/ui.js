@@ -375,6 +375,7 @@ document.querySelector(".settings-page").addEventListener("click", function(even
 /* Get data summary =============================== */
 
 function getSummary(callback){
+    addon.emit("summarize");
     addon.once("displaySummary",function(summary){
         summary.numAllSites = aggregate.allnodes.length;
         summary.numVisited = aggregate.sitenodes.length;
