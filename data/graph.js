@@ -140,6 +140,16 @@ function updateGraph(){
 
 window.updategGraph = updateGraph;
 
+function addFavicon(selection){
+    selection.append("svg:image")
+          .attr("class", "favicon")
+          .attr("width", "16")
+          .attr("height", "16")
+          .attr("x", "-8") // offset to make 16x16 favicon appear centered
+          .attr("y", "-8")
+          .attr("xlink:href", function(node) {return 'http://' + node.name + '/favicon.ico'; } );
+}
+
 function addCircle(selection){
     selection
         .append('circle')
@@ -150,9 +160,9 @@ function addCircle(selection){
 }
 
 function addShape(selection){
-    selection.filter('.visitedYes').call(addCircle);
-    selection.filter('.visitedNo').call(addTriangle);
-    selection.filter('.visitedBoth').call(addSquare);
+    selection.filter('.visitedYes').call(addCircle).call(addFavicon);
+    selection.filter('.visitedNo').call(addTriangle).call(addFavicon);
+    selection.filter('.visitedBoth').call(addSquare).call(addFavicon);
 }
 
 function addTriangle(selection){
