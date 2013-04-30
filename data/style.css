@@ -212,6 +212,12 @@ h3 {
     display: block;
 }
 
+.info .holder .favicon{
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+}
+
 .showinfo .info{
     width: 300px;
     border-left: 1px solid #555555;
