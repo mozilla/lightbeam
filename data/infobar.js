@@ -76,8 +76,8 @@ function updateInfo(nodeName){
 
     // get server info and then update content on the info panel
     getServerInfo(nodeName, function(data){
-        document.querySelector(".holder .title").innerHTML = nodeName;
-        //document.querySelector(".holder .url").innerHTML = nodeName;
+        var favicon = "<img src='http://"+ nodeName +"/favicon.ico' class='favicon'>";
+        document.querySelector(".holder .title").innerHTML = favicon+nodeName;
 
         if ( data == false || data.country_name === "Reserved" ){
             document.querySelector("#country").innerHTML = "(Unable to find server location)";

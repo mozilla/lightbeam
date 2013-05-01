@@ -92,7 +92,7 @@ function setFilteredBreadcrumb(filter){
         showFilteredTable();
     },false);
 
-    var headerText = document.createTextNode("Site that have connections linked from/to " + filter);
+    var headerText = document.createTextNode(filter + " has connections linked from/to the following sites" );
     header.appendChild(headerText);
 }
 

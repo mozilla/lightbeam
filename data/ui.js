@@ -165,7 +165,7 @@ function setZoom(box,canvas){
 /* define viewBox limits
 *  graph view default viewBox = " 0 0 1000 1000 "
 *  clock                      = " -350 -495 700 500 "
-*  map                        =
+*  map                        = " 0 0 2711.3 1196.7 "
 */
 var graphZoomInLimit   = { x:300, y:300, w:200, h:300 };
 var graphZoomOutLimit  = { w:4000, h:4000 };
@@ -205,14 +205,12 @@ function zoomWithinLimit(event, targetSvg, zoomInLimit, zoomOutLimit){
     var withinZoomOutLimit = ( currentViewBox.w <= zoomOutLimit.w && currentViewBox.h <= zoomOutLimit.h );
     
     // event.deltaY can only be larger than 1.0 or less than -1.0
-    if ( event.deltaY >= 1 ){ // scroll up
-        if ( withinZoomOutLimit ){ // zoom in
-            svgZooming(targetSvg, (1/1.5));
-        }
-    }else{ // scroll down
-        if( withinZoomInLimit ){ // zoom out
-            svgZooming(targetSvg, 1.5);
-        }
+    // conditions set to +/- 3 to lower the scrolling control sensitivity
+    if ( event.deltaY >= 3 && withinZoomOutLimit ){ // scroll up to zoom out
+        svgZooming(targetSvg, (1/1.25));
+    }
+    if ( event.deltaY <= -3 && withinZoomInLimit) { // scroll down to zoom in
+        svgZooming(targetSvg, 1.25);
     }
 }
 
@@ -279,8 +277,8 @@ document.querySelector(".stage").addEventListener("mousemove",function(event){
         var offsetX = ( Math.ceil(event.clientX) - graphDragStart.x );
         var offsetY = ( Math.ceil(event.clientY) - graphDragStart.y );
         var box = getZoom("vizcanvas");
-        box.x -= ( offsetX * box.w/1000);
-        box.y -= ( offsetY * box.h/1000);
+        box.x -= ( offsetX * box.w/700);
+        box.y -= ( offsetY * box.h/700);
         graphDragStart.x += offsetX;
         graphDragStart.y += offsetY;
         setZoom(box,"vizcanvas");
@@ -377,6 +375,7 @@ document.querySelector(".settings-page").addEventListener("click", function(even
 /* Get data summary =============================== */
 
 function getSummary(callback){
+    addon.emit("summarize");
     addon.once("displaySummary",function(summary){
         summary.numAllSites = aggregate.allnodes.length;
         summary.numVisited = aggregate.sitenodes.length;
