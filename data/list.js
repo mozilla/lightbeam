@@ -17,6 +17,11 @@ var columns = ["Type", "Site", "First Access", "Last Access"];
 list.on("init", OnInit);
 list.on("conneciton", onConnection);
 list.on("remove", onRemove);
+list.on('setFilter', setFilter);
+
+function setFilter(){
+    addon.emit('setFilter', 'filterNothing');
+}
 
 
 function OnInit(connections){
@@ -49,12 +54,12 @@ function initGraph(){
     breadcrumb = document.createElement("div");
     breadcrumb.classList.add("list-breadcrumb");
     document.querySelector(".stage").appendChild(breadcrumb);
- 
+
     // list header
     header = document.createElement("div");
     header.classList.add("list-header");
     document.querySelector(".stage").appendChild(header);
- 
+
     var table = document.createElement("table");
     table.classList.add("list-table");
     document.querySelector(".stage.list").appendChild(table);
@@ -86,7 +91,7 @@ function setFilteredBreadcrumb(filter){
         document.querySelector("#content").classList.remove("showinfo");
         showFilteredTable();
     },false);
- 
+
     var headerText = document.createTextNode("Site that have connections linked from/to " + filter);
     header.appendChild(headerText);
 }
@@ -110,7 +115,7 @@ function setUnfilteredBreadcrumb(){
         var detailDiv = document.createElement("div");
         detailDiv.appendChild(detailTextNode);
         summaryDiv.appendChild(detailDiv);
-        
+
         header.appendChild(summaryDiv);
     });
 

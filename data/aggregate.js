@@ -46,19 +46,60 @@ aggregate.nodeForKey = function(key){
     return result;
 };
 
+aggregate.connectionAsObject = function(conn){
+    if (Array.isArray(conn)){
+        return{
+            source: conn[SOURCE],
+            target: conn[TARGET],
+            timestamp: new Date(conn[TIMESTAMP]),
+            contentType: conn[CONTENT_TYPE],
+            cookie: conn[COOKIE],
+            sourceVisited: conn[SOURCE_VISITED],
+            secure: conn[SECURE],
+            sourcePathDepth: conn[SOURCE_PATH_DEPTH],
+            sourceQueryDepth: conn[SOURCE_QUERY_DEPTH],
+            sourceSub: conn[SOURCE_SUB],
+            targetSub: conn[TARGET_SUB],
+            method: conn[METHOD],
+            status: conn[STATUS],
+            cacheable: conn[CACHEABLE]
+        };
+    }
+    return conn;
+
+}
+
 function onLoad(connections){
     connections.forEach(onConnection);
 }
 
 aggregate.on('load', onLoad);
 
-function onConnection(connection){
+// Constants for indexes of properties in array format
+const SOURCE = 0;
+const TARGET = 1;
+const TIMESTAMP = 2;
+const CONTENT_TYPE = 3;
+const COOKIE = 4;
+const SOURCE_VISITED = 5;
+const SECURE = 6;
+const SOURCE_PATH_DEPTH = 7;
+const SOURCE_QUERY_DEPTH = 8;
+const SOURCE_SUB = 9;
+const TARGET_SUB = 10;
+const METHOD = 11;
+const STATUS = 12;
+const CACHEABLE = 13;
+
+
+function onConnection(conn){
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
     // We want to shape the collection of connections that represent points in time into
     // aggregate data for graphing. Each connection has two endpoints represented by GraphNode objects
     // and one edge represented by a GraphEdge object, but we want to re-use these when connections
     // map to the same endpoints or edges.
+    var connection = aggregate.connectionAsObject(conn);
     var sourcenode, targetnode, edge, nodelist, updated = false;
     if (nodemap[connection.source]){
         sourcenode = nodemap[connection.source];

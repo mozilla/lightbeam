@@ -12,18 +12,20 @@ function initCap(str){
 
 
 function switchVisualization(name){
-    if (currentVisualization === visualizations[name]) return;
-    localStorage.visualization = initCap(name);
+    console.log('switchVisualizations(' + name + ')');
     if (currentVisualization){
+        if (currentVisualization === visualizations[name]) return;
         currentVisualization.emit('remove');
     }
+    localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
+    currentVisualization.emit('setFilter');
     // toggle off info panel, settings page, help bubbles
     document.querySelector("#content").classList.remove("showinfo");
     document.querySelector(".settings-page").classList.add("hide");
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
-    
+
     addon.emit('uiready');
 }

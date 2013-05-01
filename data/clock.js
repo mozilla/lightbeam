@@ -26,6 +26,11 @@ clock.name = "clock";
 clock.on('init', onInit);
 clock.on('connection', onConnection);
 clock.on('remove', onRemove);
+clock.on('setFilter', setFilter);
+
+function setFilter(){
+    addon.emit('setFilter', 'filter24hours');
+}
 
 function onInit(connections){
     // draw clock dial
@@ -47,9 +52,10 @@ function onInit(connections){
     fadeEarlierTrackers(timeToBucket(new Date()));
 };
 
-function onConnection(connection){
+function onConnection(conn){
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
+    var connection = aggregate.connectionAsObject(conn);
     aggregate.emit('connection', connection);
     var bucketIdx = timeToBucket(connection.timestamp);
     if (! clock.timeslots[bucketIdx]){
@@ -105,7 +111,7 @@ function onConnection(connection){
 }
 
 function onRemove(){
-    clearTimeout(handTimer);
+    clearTimeout(clockTimer);
     clock.timeslots = new Array(96);
     resetCanvas();
 };

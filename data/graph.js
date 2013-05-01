@@ -20,6 +20,12 @@ graph.on('init', onInit);
 graph.on('connection', onConnection);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
+graph.on('setFilter', setFilter);
+
+function setFilter(){
+    //addon.emit('setFilter', 'filterLastXSites', 5);
+    addon.emit('setFilter', 'filter24hours');
+}
 
 function onInit(connections){
     console.log('initializing graph from %s connections', connections.length);
@@ -155,8 +161,6 @@ function updateGraph(){
         .remove();
 
 }
-
-window.updategGraph = updateGraph;
 
 function addCircle(selection){
     selection
