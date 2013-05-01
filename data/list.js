@@ -36,7 +36,8 @@ function OnInit(connections){
 }
 
 
-function onConnection(){
+function onConnection(conn){
+    var connection = aggregate.connectionAsObject(conn);
     aggregate.emit('connection', connection);
 }
 
