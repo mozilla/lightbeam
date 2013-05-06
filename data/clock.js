@@ -62,53 +62,133 @@ function onConnection(conn){
         var angle = -180 + (bucketIdx * 1.875); // in degrees
         clock.timeslots[bucketIdx] = {
             group: svg('g', {
-                transform: 'rotate(' + angle + ' ' + CENTRE + ') ' + DOT_TRANS
+                transform: 'rotate(' + angle + ' ' + CENTRE + ') ' + DOT_TRANS,
+                bucketIdx: bucketIdx
             }),
+            sourceNodes: [],
+            targetNodes: [],
             connections: []
         }
         vizcanvas.appendChild(clock.timeslots[bucketIdx].group);
     }
+
+    appendOrUpdateSourceNode(bucketIdx,connection);
+    appendOrUpdateTargetNode(bucketIdx,connection);
+    arrangeNodePosition( d3.select("g[bucketIdx='"+bucketIdx+"']") );
+ 
+}
+
+
+function appendOrUpdateSourceNode(bucketIdx,connection){
     var bucket = clock.timeslots[bucketIdx];
-    var connectionIdx = bucket.connections.length;
-    // see if we've already added this source-target pair to the visualization
-    var existing = bucket.connections.filter(function(oldConnection){
-        return connection.source === oldConnection.source && connection.target === oldConnection.target;
-    });
-    if (existing.length){
-        if (existing.length > 1){
-            throw new Error('There can be only one!');
+    var sourceIdx = -1;
+    // see if we've already added this source node to the visualization
+    if ( bucket.sourceNodes.length > 0 ) {
+        for (var i=0; i<bucket.sourceNodes.length; i++){
+            if ( bucket.sourceNodes[i][connection.source] ){
+                sourceIdx = i;
+                break;
+            }
         }
-        existing[0].howMany += 1;
-        existing[0].view.setAttribute('data-how-many', parseInt(existing[0].view.getAttribute('data-how-many'), 10) + 1);
-        return; // bail early if we've already added to visualization
-    }else{
-        connection.howMany = 1;
-        bucket.connections.push(connection);
     }
-    var g = svg('g', {
-        // transform: 'rotate(90)',
-        'class': 'tracker node',
-        'data-target': connection.target,
-        'data-name': connection.target,
-        'data-timestamp': connection.timestamp.toISOString(),
-        'data-source': connection.source,
-        'data-cookie': connection.cookie,
-        'data-source-visited': connection.sourceVisited,
-        'data-content-type': connection.contentType,
-        'data-how-many': 1
+ 
+    if ( sourceIdx < 0 ){ // this source node has not been added to the visulization
+        appendSourceNode(bucket,connection);
+    }else{ // this source node has been added to the visulization already, update the info it contains
+        var itsTarget = bucket.sourceNodes[sourceIdx][connection.source];
+        if ( itsTarget.indexOf(connection.target) < 0 ){
+            itsTarget.push(connection.target);
+            var sourceDot = document.querySelector("g[bucketIdx='"+bucketIdx+"'] .source[data-name='" + connection.source+ "']");
+            sourceDot.setAttribute("data-target", sourceDot.getAttribute("data-target") + " " + connection.target );
+        }
+    }
+}
+
+
+function appendOrUpdateTargetNode(bucketIdx,connection){
+    var bucket = clock.timeslots[bucketIdx];
+    var targetIdx = -1;
+    // see if we've already added this target node to the visualization
+    if ( bucket.targetNodes.length > 0 ) {
+        for (var i=0; i<bucket.targetNodes.length; i++){
+            if ( bucket.targetNodes[i][connection.target] ){
+                targetIdx = i;
+                break;
+            }
+        }
+    }
+
+    if ( targetIdx < 0 ){ // this target node has not been added to the visulization
+        appendTargetNode(bucket,connection);
+    }else{ // this target node has been added to the visulization already, update the info it contains
+        var itsSource = bucket.targetNodes[targetIdx][connection.target];
+        if ( itsSource.indexOf(connection.source) < 0 ){
+            itsSource.push(connection.source);
+            var targetDot = document.querySelector("g[bucketIdx='"+bucketIdx+"'] .target[data-name='" + connection.target+ "']");
+            targetDot.setAttribute("data-source", targetDot.getAttribute("data-source") + " " + connection.source );
+        }
+    }
+}
+
+function appendSourceNode(bucket,connection){
+    var source = {};
+    source[connection.source] = [ connection.target ];
+    bucket.sourceNodes.push(source);
+    var sourceg = svg('g', {
+        'class': 'source node',
+        'data-name': connection.source,
+        'data-target': connection.target
     });
-    var x = connectionIdx * 10;
-    var y = 0;
-    g.appendChild(svg('circle', {
-        cx: x,
-        cy: y,
-        r: 3,
+    sourceg.appendChild(svg('circle', {
+        cx: 0,
+        cy: 0,
+        r: 5,
         'class': 'tracker'
     }));
-    connection.view = g;
-    tooltip.add(g);
-    bucket.group.appendChild(g);
+    connection.view = sourceg;
+    tooltip.add(sourceg);
+    bucket.group.appendChild(sourceg);
 }
+
+function appendTargetNode(bucket,connection){
+    var target = {};
+    target[connection.target] = [ connection.source ];
+    bucket.targetNodes.push(target);
+    var targetg = svg('g', {
+        'class': 'target node',
+        'data-name': connection.target,
+        'data-source': connection.source
+        
+    });
+    targetg.appendChild(svg('circle', {
+        cx: 0,
+        cy: 0,
+        r: 5,
+        'class': 'tracker'
+    }));
+    connection.view = targetg;
+    tooltip.add(targetg);
+    bucket.group.appendChild(targetg);
+}
+
+function positionTargetDot(selection, numSourceNode){
+    selection.select("circle").attr("cx", function(d,i){
+        return ( numSourceNode + i + 1 ) * 10;
+    });
+};
+
+function positionSourceDot(selection){
+    selection.select("circle").attr("cx", function(d,i){
+        return ( i + 1) * 10;
+    });
+};
+
+function arrangeNodePosition(bucketG){
+    var numSourceNode = bucketG.selectAll("g.source")[0].length;
+    bucketG.selectAll("g.source").call(positionSourceDot);
+    bucketG.selectAll("g.target").call(positionTargetDot, numSourceNode);
+}
+
 
 function onRemove(){
     clearTimeout(clockTimer);

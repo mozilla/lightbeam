@@ -289,12 +289,18 @@ text {
     color: #343533;
 }
 
-.tracker{
-    fill: #777;
+.source{
+    fill: #945F3D;
     stroke: none;
 }
 
-.tracker text{
+.target{
+    fill: #EBBD59;
+    stroke: none;
+}
+
+
+.source text, .target text{
     font-size: 6px;
     text-anchor: right;
     stroke: #FFF;
