@@ -9,9 +9,8 @@ function showTooltip(event){
     }
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
-    var d = svgdataset(event.target);
     // console.error(event, event.target, event.target.dataset);
-    tooltip.innerHTML = d.source + ' -> ' + d.target + '<span class="howMany">(&times;' + d.howMany + ')</span>';
+    tooltip.innerHTML = event.target.getAttribute(["data-name"]);
     var rect = event.target.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
     tooltip.style.top = (rect.top - 60) + 'px';
