@@ -76,7 +76,7 @@ function onConnection(conn){
     var bucket = clock.timeslots[bucketIdx];
     appendSourceNode(bucket,connection);
     appendTargetNode(bucket,connection);
-    arrangeNodePosition( d3.select("g[bucketIdx='"+bucketIdx+"']") );
+    arrangeNodePosition(bucketIdx);
  
 }
 
@@ -158,7 +158,8 @@ function positionSourceDot(selection){
     });
 };
 
-function arrangeNodePosition(bucketG){
+function arrangeNodePosition(bucketIdx){
+    var bucketG = d3.select("g[bucketIdx='"+bucketIdx+"']");
     var numSourceNode = bucketG.selectAll("g.source")[0].length;
     bucketG.selectAll("g.source").call(positionSourceDot);
     bucketG.selectAll("g.target").call(positionTargetDot, numSourceNode);
