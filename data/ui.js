@@ -386,3 +386,44 @@ function getSummary(callback){
 }
 
 
+/* Clock View ===================================== */
+
+document.querySelector('#content').addEventListener('click', function(event){
+    function highlightColludingNode(selection,type){
+        selection.attr("data-"+type).split(" ").forEach(function(nodeName){
+            d3.selectAll("g."+ type + "[data-name='" + nodeName +"']")
+                .classed("greyed-out", false);
+        });
+    }
+    /*
+    *   When a node in the clock visualization is clicked,
+    *       all instances of the same node across the day should be highlighted
+    *       all colluding nodes should also be highlighted (differently)
+    */
+    if ( currentVisualization.name == "clock" ){
+        // click could happen on .node or an element inside of .node
+        if (event.target.mozMatchesSelector('.node, .node *')){
+            var node = event.target;
+            while(node.mozMatchesSelector('.node *')){
+                node = node.parentElement;
+            }
+            
+            // first, set all nodes to the "background"
+            d3.selectAll("g.node").classed("greyed-out", true);
+            d3.selectAll("g.node").classed("glow", false);
+            
+            if ( node.getAttribute("class").contains("source") ){ // the clicked node is a source node
+                d3.selectAll("g.source[data-name='" + node.getAttribute("data-name") +"']")
+                    .classed("greyed-out", false)
+                    .classed("glow", true)
+                    .call(highlightColludingNode,"target");
+            }else{ // the clicked node is a target node
+                d3.selectAll("g.target[data-name='" + node.getAttribute("data-name") +"']")
+                    .classed("greyed-out", false)
+                    .classed("glow", true)
+                    .call(highlightColludingNode,"source");
+            }
+        }
+    }
+},false);
+
