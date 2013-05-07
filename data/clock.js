@@ -142,7 +142,7 @@ function appendSourceNode(bucket,connection){
     sourceg.appendChild(svg('circle', {
         cx: 0,
         cy: 0,
-        r: 5,
+        r: 4,
         'class': 'tracker'
     }));
     connection.view = sourceg;
@@ -163,7 +163,7 @@ function appendTargetNode(bucket,connection){
     targetg.appendChild(svg('circle', {
         cx: 0,
         cy: 0,
-        r: 5,
+        r: 4,
         'class': 'tracker'
     }));
     connection.view = targetg;

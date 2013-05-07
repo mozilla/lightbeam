@@ -290,12 +290,12 @@ text {
 }
 
 .source{
-    fill: #945F3D;
+    fill: #128764;
     stroke: none;
 }
 
 .target{
-    fill: #EBBD59;
+    fill: #FA6900;
     stroke: none;
 }
 
@@ -341,6 +341,15 @@ text {
 
 line{
     stroke: #FFF;
+}
+
+.greyed-out{
+    opacity: 0.2;
+}
+
+.glow.node{
+    stroke: #fff;
+    stroke-width: 2;
 }
 
 
