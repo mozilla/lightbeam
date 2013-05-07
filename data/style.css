@@ -347,11 +347,23 @@ line{
     opacity: 0.2;
 }
 
-.glow.node{
-    stroke: #fff;
+.clicked-node.node{
     stroke-width: 2;
+    fill: #fff;
 }
 
+.clicked-node.node.source {
+    stroke: #128764;
+}
+
+.clicked-node.node.target{
+    stroke: #FA6900;
+}
+
+.colluded-source.node, .colluded-target.node{
+    stroke: #fff;
+    stroke-width: 1;
+}
 
 /* Graph Visualization */
 

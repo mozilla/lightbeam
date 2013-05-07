@@ -389,16 +389,23 @@ function getSummary(callback){
 /* Clock View ===================================== */
 
 document.querySelector('#content').addEventListener('click', function(event){
-    function highlightColludingNode(selection,type){
-        selection.attr("data-"+type).split(" ").forEach(function(nodeName){
-            d3.selectAll("g."+ type + "[data-name='" + nodeName +"']")
-                .classed("greyed-out", false);
+    function highlightColludedNode(selection){
+        selection.each(function(){
+            var colludedNode = d3.select(this);
+            if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
+                console.log("i'm a source");
+                colludedNode.classed("colluded-source", true);
+            }
+            if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
+                console.log("targettt");
+                colludedNode.classed("colluded-target", true);
+            }
         });
     }
     /*
     *   When a node in the clock visualization is clicked,
     *       all instances of the same node across the day should be highlighted
-    *       all colluding nodes should also be highlighted (differently)
+    *       all colluded nodes should also be highlighted (differently)
     */
     if ( currentVisualization.name == "clock" ){
         // click could happen on .node or an element inside of .node
@@ -408,21 +415,23 @@ document.querySelector('#content').addEventListener('click', function(event){
                 node = node.parentElement;
             }
             
-            // first, set all nodes to the "background"
-            d3.selectAll("g.node").classed("greyed-out", true);
-            d3.selectAll("g.node").classed("glow", false);
+            // reset styling effect
+            d3.selectAll("g.node").classed("clicked-node", false)
+                                  .classed("colluded-source", false)
+                                  .classed("colluded-target", false);
             
-            if ( node.getAttribute("class").contains("source") ){ // the clicked node is a source node
-                d3.selectAll("g.source[data-name='" + node.getAttribute("data-name") +"']")
-                    .classed("greyed-out", false)
-                    .classed("glow", true)
-                    .call(highlightColludingNode,"target");
-            }else{ // the clicked node is a target node
-                d3.selectAll("g.target[data-name='" + node.getAttribute("data-name") +"']")
-                    .classed("greyed-out", false)
-                    .classed("glow", true)
-                    .call(highlightColludingNode,"source");
+            // highlight all instances of the clicked node(both source and target)
+            var clickedNodeName = node.getAttribute("data-name");
+            d3.selectAll("g[data-name='" + clickedNodeName +"']")
+                    .classed("clicked-node", true);
+            
+            // find all the colluded sites and highlight all instances of them
+            for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
+                if ( key != clickedNodeName ){ 
+                    d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
+                }
             }
+            
         }
     }
 },false);
