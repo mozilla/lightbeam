@@ -58,6 +58,7 @@ function onConnection(conn){
     var connection = aggregate.connectionAsObject(conn);
     aggregate.emit('connection', connection);
     var bucketIdx = timeToBucket(connection.timestamp);
+    
     if (! clock.timeslots[bucketIdx]){
         var angle = -180 + (bucketIdx * 1.875); // in degrees
         clock.timeslots[bucketIdx] = {
@@ -72,15 +73,15 @@ function onConnection(conn){
         vizcanvas.appendChild(clock.timeslots[bucketIdx].group);
     }
 
-    appendOrUpdateSourceNode(bucketIdx,connection);
-    appendOrUpdateTargetNode(bucketIdx,connection);
+    var bucket = clock.timeslots[bucketIdx];
+    appendSourceNode(bucket,connection);
+    appendTargetNode(bucket,connection);
     arrangeNodePosition( d3.select("g[bucketIdx='"+bucketIdx+"']") );
  
 }
 
 
-function appendOrUpdateSourceNode(bucketIdx,connection){
-    var bucket = clock.timeslots[bucketIdx];
+function appendSourceNode(bucket,connection){
     var sourceIdx = -1;
     // see if we've already added this source node to the visualization
     if ( bucket.sourceNodes.length > 0 ) {
@@ -93,20 +94,27 @@ function appendOrUpdateSourceNode(bucketIdx,connection){
     }
  
     if ( sourceIdx < 0 ){ // this source node has not been added to the visulization
-        appendSourceNode(bucket,connection);
-    }else{ // this source node has been added to the visulization already, update the info it contains
-        var itsTarget = bucket.sourceNodes[sourceIdx][connection.source];
-        if ( itsTarget.indexOf(connection.target) < 0 ){
-            itsTarget.push(connection.target);
-            var sourceDot = document.querySelector("g[bucketIdx='"+bucketIdx+"'] .source[data-name='" + connection.source+ "']");
-            sourceDot.setAttribute("data-target", sourceDot.getAttribute("data-target") + " " + connection.target );
-        }
+        var source = {};
+        source[connection.source] = [ connection.target ];
+        bucket.sourceNodes.push(source);
+        var sourceg = svg('g', {
+            'class': 'source node',
+            'data-name': connection.source
+        });
+        sourceg.appendChild(svg('circle', {
+            cx: 0,
+            cy: 0,
+            r: 4,
+            'class': 'tracker'
+        }));
+        connection.view = sourceg;
+        tooltip.add(sourceg);
+        bucket.group.appendChild(sourceg);
     }
 }
 
 
-function appendOrUpdateTargetNode(bucketIdx,connection){
-    var bucket = clock.timeslots[bucketIdx];
+function appendTargetNode(bucket,connection){
     var targetIdx = -1;
     // see if we've already added this target node to the visualization
     if ( bucket.targetNodes.length > 0 ) {
@@ -119,56 +127,23 @@ function appendOrUpdateTargetNode(bucketIdx,connection){
     }
 
     if ( targetIdx < 0 ){ // this target node has not been added to the visulization
-        appendTargetNode(bucket,connection);
-    }else{ // this target node has been added to the visulization already, update the info it contains
-        var itsSource = bucket.targetNodes[targetIdx][connection.target];
-        if ( itsSource.indexOf(connection.source) < 0 ){
-            itsSource.push(connection.source);
-            var targetDot = document.querySelector("g[bucketIdx='"+bucketIdx+"'] .target[data-name='" + connection.target+ "']");
-            targetDot.setAttribute("data-source", targetDot.getAttribute("data-source") + " " + connection.source );
-        }
+        var target = {};
+        target[connection.target] = [ connection.source ];
+        bucket.targetNodes.push(target);
+        var targetg = svg('g', {
+            'class': 'target node',
+            'data-name': connection.target
+        });
+        targetg.appendChild(svg('circle', {
+            cx: 0,
+            cy: 0,
+            r: 4,
+            'class': 'tracker'
+        }));
+        connection.view = targetg;
+        tooltip.add(targetg);
+        bucket.group.appendChild(targetg);
     }
-}
-
-function appendSourceNode(bucket,connection){
-    var source = {};
-    source[connection.source] = [ connection.target ];
-    bucket.sourceNodes.push(source);
-    var sourceg = svg('g', {
-        'class': 'source node',
-        'data-name': connection.source,
-        'data-target': connection.target
-    });
-    sourceg.appendChild(svg('circle', {
-        cx: 0,
-        cy: 0,
-        r: 4,
-        'class': 'tracker'
-    }));
-    connection.view = sourceg;
-    tooltip.add(sourceg);
-    bucket.group.appendChild(sourceg);
-}
-
-function appendTargetNode(bucket,connection){
-    var target = {};
-    target[connection.target] = [ connection.source ];
-    bucket.targetNodes.push(target);
-    var targetg = svg('g', {
-        'class': 'target node',
-        'data-name': connection.target,
-        'data-source': connection.source
-        
-    });
-    targetg.appendChild(svg('circle', {
-        cx: 0,
-        cy: 0,
-        r: 4,
-        'class': 'tracker'
-    }));
-    connection.view = targetg;
-    tooltip.add(targetg);
-    bucket.group.appendChild(targetg);
 }
 
 function positionTargetDot(selection, numSourceNode){

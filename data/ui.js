@@ -393,11 +393,9 @@ document.querySelector('#content').addEventListener('click', function(event){
         selection.each(function(){
             var colludedNode = d3.select(this);
             if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
-                console.log("i'm a source");
                 colludedNode.classed("colluded-source", true);
             }
             if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
-                console.log("targettt");
                 colludedNode.classed("colluded-target", true);
             }
         });
