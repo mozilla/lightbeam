@@ -115,7 +115,6 @@ function onConnection(conn){
 
 
 function appendNodeG(bucket,connection,nodeType){
-    console.log(connection);
     var g = svg('g', {
         'class': 'node ' + nodeType,
         'data-name': connection[nodeType]
