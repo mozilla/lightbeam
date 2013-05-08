@@ -130,7 +130,7 @@ function appendNodeG(bucket,connection,nodeType){
     // highlight this node if it belongs to the "colluded nodes" of the currently selected(clicked) node 
     if ( document.querySelector(".clicked-node") ){
         var clickedNodeName = document.querySelector(".clicked-node").getAttribute("data-name");
-        if ( connection.source == clickedNodeName ){
+        if ( connection[nodeType] == clickedNodeName ){
             d3.select(g).classed("clicked-node", true);
         }
         for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
