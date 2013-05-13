@@ -63,8 +63,7 @@ function onConnection(conn){
         var angle = -180 + (bucketIdx * 1.875); // in degrees
         clock.timeslots[bucketIdx] = {
             group: svg('g', {
-                transform: 'rotate(' + angle + ' ' + CENTRE + ') ' + DOT_TRANS,
-                bucketIdx: bucketIdx
+                transform: 'rotate(' + angle + ' ' + CENTRE + ') ' + DOT_TRANS
             }),
             sourceNodes: [],
             targetNodes: [],
@@ -158,7 +157,7 @@ function positionSourceDot(selection){
 };
 
 function arrangeNodePosition(bucketIdx){
-    var bucketG = d3.select("g[bucketIdx='"+bucketIdx+"']");
+    var bucketG = d3.select(clock.timeslots[bucketIdx].group);
     var numSourceNode = bucketG.selectAll("g.source")[0].length;
     bucketG.selectAll("g.source").call(positionSourceDot);
     bucketG.selectAll("g.target").call(positionTargetDot, numSourceNode);
