@@ -17,10 +17,35 @@ var force, vizcanvas, vis;
 // connection notifies of a new connection that matches existing filter
 // remove lets the visualization know it is about to be switched out so it can clean up
 graph.on('init', onInit);
-graph.on('connection', onConnection);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
 graph.on('setFilter', setFilter);
+
+var aggregate;
+
+addon.on("aggregateInit", function(aggr){
+    console.log("==aggregate init======== ");
+    aggregate = aggr;
+    console.log(aggregate.edges);
+    
+    addon.on("aggregateUpdated", function(aggr){
+        count++;
+        console.log("=====aggregateUpdated===== " + count + " nodes");
+        console.log("before: " + aggregate.allnodes.length);
+        aggregate = aggr;
+        console.log("after: " + aggregate.allnodes.length);
+        // new nodes, reheat graph simulation
+        updateGraph();
+        if (force){
+            console.log("im forceeeee");
+            force.start();
+        }
+
+    });
+});
+
+var count = 1;
+// FIXME: what out for firstAccess/lastAccess format.  should be in GMT or UNIX?
 
 function setFilter(){
     //addon.emit('setFilter', 'filterLastXSites', 5);
@@ -32,29 +57,24 @@ function onInit(connections){
     vizcanvas = document.querySelector('.vizcanvas');
     vis = d3.select('.vizcanvas');
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
-    aggregate.emit('load', connections);
+    //aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
+//    if ( aggregate  ){
+//        console.log(aggregate.allnodes);
+//        
+//        console.log("===");
+//        console.log(aggregate.allnodes);
+//    }
     initGraph();
-    aggregate.on('updated', function(){
-        // new nodes, reheat graph simulation
-        if (force){
-            force.start();
-        }
-    });
+//    });
+
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
 };
 
-function onConnection(connection){
-    aggregate.emit('connection', connection);
-    updateGraph();
-    if (force){
-        force.start();
-    }
-}
 
 function onRemove(){
-    aggregate.emit('reset');
+//    aggregate.emit('reset');
     if (force){
         force.stop();
         force = null;
@@ -91,6 +111,7 @@ function polygonAsString(points, size){
 
 function initGraph(){
     // Initialize D3 layout and bind data
+    console.log("initGraph ===");
     force = d3.layout.force()
         .nodes(aggregate.allnodes)
         .links(aggregate.edges)
@@ -132,7 +153,7 @@ function updateGraph(){
 
         // Data binding for links
     var lines = vis.selectAll('.edge')
-        .data(aggregate.edges, function(edge){ return edge.name; });
+        .data(aggregate.edges, function(edge){ console.log("source x = " + edge.source.x); return edge.name; });
 
     lines.enter().insert('line', ':first-child')
         .classed('edge', true);
@@ -218,7 +239,7 @@ function updateNodes(thenodes){
     .classed('cookieYes', function(node){ return node.cookieCount/node.howMany == 1 })
     .classed('cookieNo', function(node){ return node.cookieCount/node.howMany == 0 })
     .classed('cookieBoth', function(node){ return node.cookieCount/node.howMany > 0 && node.cookieCount/node.howMany < 1 })
-    .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); })
+    .attr('data-timestamp', function(node){ return node.lastAccess; })
     .attr('visited-scale', function(node){ return node.visitedCount/node.howMany; })
     .attr('secure-scale', function(node){ return node.secureCount/node.howMany; })
     .attr('cookie-scale', function(node){ return node.cookieCount/node.howMany; })

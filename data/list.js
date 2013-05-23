@@ -104,21 +104,23 @@ function setUnfilteredBreadcrumb(){
     var text = document.createTextNode("All");
     link.appendChild(text);
     breadcrumb.appendChild(link);
-    getSummary(function(result){
-        var summaryDiv = document.createElement("div");
-        var timeSinceText = "Based on the data we have gathered since " + result.localTimeSince + ", ";
-        var timeSinceTextNode = document.createTextNode(timeSinceText);
-        var timeSinceDiv = document.createElement("div");
-        timeSinceDiv.appendChild(timeSinceTextNode);
-        summaryDiv.appendChild(timeSinceDiv);
-        var detailText = result.numConnections + " connections were set between " + (result.numVisited+result.numBoth) + " visited sites and " + (result.numThird+result.numBoth) + " third party sites";
-        var detailTextNode = document.createTextNode(detailText);
-        var detailDiv = document.createElement("div");
-        detailDiv.appendChild(detailTextNode);
-        summaryDiv.appendChild(detailDiv);
+    if ( aggregate.allnodes.length > 0 ){
+        getSummary(function(result){
+            var summaryDiv = document.createElement("div");
+            var timeSinceText = "Based on the data we have gathered since " + result.localTimeSince + ", ";
+            var timeSinceTextNode = document.createTextNode(timeSinceText);
+            var timeSinceDiv = document.createElement("div");
+            timeSinceDiv.appendChild(timeSinceTextNode);
+            summaryDiv.appendChild(timeSinceDiv);
+            var detailText = result.numConnections + " connections were set between " + (result.numVisited+result.numBoth) + " visited sites and " + (result.numThird+result.numBoth) + " third party sites";
+            var detailTextNode = document.createTextNode(detailText);
+            var detailDiv = document.createElement("div");
+            detailDiv.appendChild(detailTextNode);
+            summaryDiv.appendChild(detailDiv);
 
-        header.appendChild(summaryDiv);
-    });
+            header.appendChild(summaryDiv);
+        });
+    }
 
 }
 
