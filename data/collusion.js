@@ -1,5 +1,7 @@
 var visualizations = {};
 var currentVisualization;
+var allConnections = [];
+
 window.addEventListener('load', function(evt){
     // Wire up events
     document.querySelector('.btn_group.visualization').click();

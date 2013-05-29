@@ -11,6 +11,7 @@ self.port.on('connection', function(connection){
         // var connection = JSON.parse(message);
         connection.timestamp = new Date(connection.timestamp);
         unsafeWindow.currentVisualization.emit('connection', connection);
+        unsafeWindow.allConnections.push(connection);
     }else{
         console.log('cannot call unsafeWindow.currentVisualization: '  + unsafeWindow);
     }
@@ -26,6 +27,14 @@ self.port.on('init', function(message){
     }else{
         console.log('cannot call unsafeWindow.currentVisualization: ' + unsafeWindow);
     }
+});
+
+self.port.on("sendTempConnections", function(message){
+    // message is an array of connection objects [ {},{},{} ]
+    localStorage.tempConnections = JSON.stringify(message);
+    localStorage.tempSize = message.length;
+    unsafeWindow.allConnections = unsafeWindow.allConnections.concat(message);
+    self.port.emit("tempConnecitonTransferred", true);
 });
 
 unsafeWindow.addon = self.port;
