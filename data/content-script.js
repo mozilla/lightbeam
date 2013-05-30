@@ -36,7 +36,7 @@ self.port.on('connection', function(connection){
     }
 });
 
-self.port.on('init', function(message){
+self.port.on('init', function(){
     // TODO: handle(save) storage.connections
     if (unsafeWindow && unsafeWindow.currentVisualization){
 //        var connections = message.map(function(connection){
@@ -46,7 +46,8 @@ self.port.on('init', function(message){
         if ( localStorage.connections ){
             unsafeWindow.allConnections = JSON.parse(localStorage.connections);
         }
-        unsafeWindow.currentVisualization.emit('init', connections);
+//        unsafeWindow.currentVisualization.emit('init', connections);
+        unsafeWindow.currentVisualization.emit('init', unsafeWindow.allConnections);
     }else{
         console.log('cannot call unsafeWindow.currentVisualization: ' + unsafeWindow);
     }

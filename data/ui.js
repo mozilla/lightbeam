@@ -379,15 +379,16 @@ document.querySelector(".settings-page").addEventListener("click", function(even
 
 /* Get data summary =============================== */
 
+// to be fixed
 function getSummary(callback){
-    addon.emit("summarize");
-    addon.once("displaySummary",function(summary){
-        summary.numAllSites = aggregate.allnodes.length;
-        summary.numVisited = aggregate.sitenodes.length;
-        summary.numThird = aggregate.thirdnodes.length;
-        summary.numBoth = aggregate.bothnodes.length;
-        callback(summary);
-    });
+    var summary = {};
+    summary.localTimeSince = "(to be fixed)";
+    summary.numConnections = allConnections.length;
+    summary.numAllSites = aggregate.allnodes.length;
+    summary.numVisited = aggregate.sitenodes.length;
+    summary.numThird = aggregate.thirdnodes.length;
+    summary.numBoth = aggregate.bothnodes.length;
+    callback(summary);
 }
 
 

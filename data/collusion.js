@@ -26,7 +26,7 @@ function switchVisualization(name){
     }
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
-    currentVisualization.emit('setFilter');
+//    currentVisualization.emit('setFilter'); // mavis: to be deleted?
     // toggle off info panel, settings page, help bubbles
     document.querySelector("#content").classList.remove("showinfo");
     document.querySelector(".settings-page").classList.add("hide");
