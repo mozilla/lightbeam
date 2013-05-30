@@ -29,5 +29,6 @@ function switchVisualization(name){
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
 
+    console.log(allConnections);
     addon.emit('uiready');
 }
