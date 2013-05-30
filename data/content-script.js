@@ -52,32 +52,33 @@ self.port.on('init', function(message){
             connection.timestamp = new Date(connection.timestamp);
             return connection;
         });
-        
-        var parsedTempConnections = localStorage.tempConnections ? JSON.parse(localStorage.tempConnections) : [ {} ] ;
         if ( localStorage.connections ){
-            var paresedConnections = JSON.parse(localStorage.connections);
-            localStorage.temp = JSON.stringify(paresedConnections);
-            unsafeWindow.allConnections = paresedConnections.concat(parsedTempConnections);
-            localStorage.connections = JSON.stringify( paresedConnections.concat(parsedTempConnections) );
-        }else{
-            localStorage.connections = localStorage.tempConnections;
-            unsafeWindow.allConnections = parsedTempConnections;
+            unsafeWindow.allConnections = JSON.parse(localStorage.connections);
         }
-        localStorage.totalSize = unsafeWindow.allConnections.length;
+        unsafeWindow.currentVisualization.emit('init', connections);
     }else{
         console.log('cannot call unsafeWindow.currentVisualization: ' + unsafeWindow);
     }
-    
-    unsafeWindow.currentVisualization.emit('init', connections);
 });
 
 self.port.on("sendTempConnections", function(message){
     // message is an array of connection objects [ {},{},{} ]
-    if ( message ){
-        localStorage.tempConnections = JSON.stringify(message);
-        localStorage.tempSize = message.length;
-        self.port.emit("tempConnecitonTransferred", true);
+    localStorage.tempConnections = JSON.stringify(message);
+    localStorage.tempSize = message.length;
+    self.port.emit("tempConnecitonTransferred", true);
+    
+    var parsedTempConnections = localStorage.tempConnections ? JSON.parse(localStorage.tempConnections) : [ {} ] ;
+    if ( localStorage.connections ){
+        var paresedConnections = JSON.parse(localStorage.connections);
+        localStorage.temp = JSON.stringify(paresedConnections);
+        unsafeWindow.allConnections = paresedConnections.concat(parsedTempConnections);
+        localStorage.connections = JSON.stringify( paresedConnections.concat(parsedTempConnections) );
+    }else{
+        localStorage.connections = localStorage.tempConnections;
+        unsafeWindow.allConnections = parsedTempConnections;
     }
+    localStorage.totalSize = unsafeWindow.allConnections.length;
 });
+
 
 unsafeWindow.addon = self.port;

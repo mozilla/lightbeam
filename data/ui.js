@@ -82,6 +82,7 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     addon.emit('reset');
     aggregate.emit('reset');
     currentVisualization.emit('reset');
+    allConnections = [];
     delete localStorage.tempSize;
     delete localStorage.connections;
     delete localStorage.temp;

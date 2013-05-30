@@ -33,6 +33,7 @@ function setFilter(){
 }
 
 function onInit(connections){
+    console.log("= onInit = allConnections.length = %s" , allConnections.length);
     // draw clock dial
     console.log('initializing clock from %s connections', connections.length);
     vizcanvas = document.querySelector('.vizcanvas');
@@ -53,6 +54,7 @@ function onInit(connections){
 };
 
 function onConnection(conn){
+    console.log("= allConnections.length = %s" , allConnections.length);
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
     var connection = aggregate.connectionAsObject(conn);
