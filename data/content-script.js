@@ -14,15 +14,6 @@ const METHOD = 11;
 const STATUS = 12;
 const CACHEABLE = 13;
 
-// better way to convert it into object? .map?
-function convertIntoArray(conn){
-    return Object.keys(conn).map(function(key){
-        return conn[key];
-    });
-    
-}
-
-
 /* === */
 
 
@@ -48,10 +39,10 @@ self.port.on('connection', function(connection){
 self.port.on('init', function(message){
     // TODO: handle(save) storage.connections
     if (unsafeWindow && unsafeWindow.currentVisualization){
-        var connections = message.map(function(connection){
-            connection.timestamp = new Date(connection.timestamp);
-            return connection;
-        });
+//        var connections = message.map(function(connection){
+//            connection.timestamp = new Date(connection.timestamp);
+//            return connection;
+//        });
         if ( localStorage.connections ){
             unsafeWindow.allConnections = JSON.parse(localStorage.connections);
         }
