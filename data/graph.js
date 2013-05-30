@@ -28,7 +28,7 @@ function setFilter(){
 }
 
 function onInit(connections){
-    console.log(allConnections);
+    console.log("= onInit = allConnections.length = %s" , allConnections.length);
     console.log('initializing graph from %s connections', connections.length);
     vizcanvas = document.querySelector('.vizcanvas');
     vis = d3.select('.vizcanvas');
@@ -47,7 +47,7 @@ function onInit(connections){
 };
 
 function onConnection(connection){
-    console.log(allConnections);
+    console.log("= allConnections.length = %s" , allConnections.length);
     aggregate.emit('connection', connection);
     updateGraph();
     if (force){

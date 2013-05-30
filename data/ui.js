@@ -82,6 +82,10 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     addon.emit('reset');
     aggregate.emit('reset');
     currentVisualization.emit('reset');
+    delete localStorage.tempSize;
+    delete localStorage.connections;
+    delete localStorage.temp;
+    delete localStorage.totalSize;
     // FIXME: empty the data from current view too
 });
 
