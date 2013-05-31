@@ -17,8 +17,9 @@ self.port.on('connection', function(connection){
     }
 });
 
-self.port.on('init', function(){
-    // TODO: handle(save) storage.connections
+self.port.on('init', function(collusionToken){
+    localStorage.collusionToken = collusionToken;
+    
     if (unsafeWindow && unsafeWindow.currentVisualization){
         if ( localStorage.connections ){
             unsafeWindow.allConnections = JSON.parse(localStorage.connections);

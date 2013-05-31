@@ -71,11 +71,8 @@ window.addEventListener("DOMContentLoaded", function(){
 });
 
 document.querySelector(".download").addEventListener('click', function() {
-    addon.once('export-data', function(connections){
-        console.log('received export data');
-        window.open('data:application/json,' + connections);
-    });
-    addon.emit('export');
+    console.log('received export data');
+    window.open('data:application/json,' + exportFormat(allConnections));
 });
 
 document.querySelector('.reset-data').addEventListener('click', function(){
@@ -440,3 +437,17 @@ document.querySelector('#content').addEventListener('click', function(event){
     }
 },false);
 
+
+/* Export ========== */
+
+function exportFormat(connections){
+//    if (!lastSync){
+//        lastSync = 0;
+//    }
+    return JSON.stringify({
+        format: 'Collusion Save File',
+        version: '1.1',
+        token: localStorage.collusionToken,
+        connections: connections
+    });
+}
