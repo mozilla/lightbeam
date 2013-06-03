@@ -100,26 +100,6 @@ uploadButton.addEventListener('click', function(){
     }
 });
 
-function stopSharing(){
-        if (confirm('You are about to stop sharing data with the Mozilla Collusion server.\n\n' +
-                    'By clicking Okay you will no longer be uploading data.')){
-        addon.emit('stopUpload');
-        uploadButton.innerHTML = 'Share Data';
-        localStorage.userHasOptedIntoSharing = false;
-    }
-}
-
-function startSharing(){
-    if (confirm('You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
-                'Your data will continue to be uploaded periodically until you turn off sharing. ' +
-                'For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
-                'privacy policies are, please visit http://ItsOurData.com/privacy/.\n\nBy clicking Okay ' +
-                'you are agreeing to share your data under those terms.')){
-        addon.emit('startUpload');
-        uploadButton.innerHTML = 'Stop Sharing';
-        localStorage.userHasOptedIntoSharing = true;
-    }
-}
 
 function getZoom(canvas){
     // TODO: code cleanup if both cases use basically the same code

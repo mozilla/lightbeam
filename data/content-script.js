@@ -31,7 +31,7 @@ self.port.on('init', function(collusionToken){
 });
 
 self.port.on("sendTempConnections", function(message){
-    // message is an array of connection objects [ {},{},{} ]
+    // message is an array of connection [ [],[],[] ]
     localStorage.tempConnections = JSON.stringify(message);
     localStorage.tempSize = message.length;
     self.port.emit("tempConnecitonTransferred", true);
