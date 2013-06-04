@@ -3,16 +3,34 @@ var currentVisualization;
 var allConnections = [];
 // FIXME: Read this from config file
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
-//var uploadServer = 'http://localhost:7000/shareData';
 var uploadTimer;
+var saveTimer;
+
+// Constants for indexes of properties in array format
+const SOURCE = 0;
+const TARGET = 1;
+const TIMESTAMP = 2;
+const CONTENT_TYPE = 3;
+const COOKIE = 4;
+const SOURCE_VISITED = 5;
+const SECURE = 6;
+const SOURCE_PATH_DEPTH = 7;
+const SOURCE_QUERY_DEPTH = 8;
+const SOURCE_SUB = 9;
+const TARGET_SUB = 10;
+const METHOD = 11;
+const STATUS = 12;
+const CACHEABLE = 13;
 
 window.addEventListener('load', function(evt){
+    addon.emit('uiready');
     // Wire up events
     document.querySelector('.btn_group.visualization').click();
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
+    saveTimer = setInterval(saveConnections, 5 * 60 * 1000); // save to localStorage every 5 minutes
 });
 
 
@@ -35,51 +53,34 @@ function switchVisualization(name){
     }
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
-//    currentVisualization.emit('setFilter'); // mavis: to be deleted?
+//    currentVisualization.emit('setFilter');
     // toggle off info panel, settings page, help bubbles
     document.querySelector("#content").classList.remove("showinfo");
     document.querySelector(".settings-page").classList.add("hide");
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
-
-    addon.emit('uiready');
 }
 
 
-function saveConnections(connections){
+function saveConnections(){
     if ( localStorage.connections && localStorage.connections != "[]" ){
-        // TODO: currently using localStorage.totalSize to define the lastSavedIndex
-        // will have to use timestamp once we have enable fitlering
-        console.log("== existed ============");
-        var paresedConnections = JSON.parse(localStorage.connections);
-        var unsavedConnections = connections.slice(localStorage.totalSize, connections.length);
-        localStorage.connections = JSON.stringify( paresedConnections.concat(unsavedConnections) );
+        var lastSaved = localStorage.lastSaved || 0;
+        var unsavedConnections = allConnections.slice(localStorage.totalNumConnections, allConnections.length);
+        var connections = allConnections.filter(function(connection){
+            return ( connection[TIMESTAMP] ) > lastSaved;
+        });
+        if ( connections.length > 0 ){
+            localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(connections).slice(1);
+        }
         console.log("--- unsavedConnections.length = " + unsavedConnections.length );
+        localStorage.lastSaved = Date.now();
     }else{
-        console.log("== NOT existed ============");
-        localStorage.connections = JSON.stringify(connections);
+        localStorage.connections = JSON.stringify(allConnections);
     }
-    localStorage.totalSize = JSON.parse(localStorage.connections).length;
+    localStorage.totalNumConnections = JSON.parse(localStorage.connections).length;
 }
 
-
-// Mavis:  should we have this here? or keep them in aggregate.js
-// Constants for indexes of properties in array format
-const SOURCE = 0;
-const TARGET = 1;
-const TIMESTAMP = 2;
-const CONTENT_TYPE = 3;
-const COOKIE = 4;
-const SOURCE_VISITED = 5;
-const SECURE = 6;
-const SOURCE_PATH_DEPTH = 7;
-const SOURCE_QUERY_DEPTH = 8;
-const SOURCE_SUB = 9;
-const TARGET_SUB = 10;
-const METHOD = 11;
-const STATUS = 12;
-const CACHEABLE = 13;
 
 function startSharing(){
     if (confirm('You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
@@ -87,7 +88,6 @@ function startSharing(){
                 'For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
                 'privacy policies are, please visit http://ItsOurData.com/privacy/.\n\nBy clicking Okay ' +
                 'you are agreeing to share your data under those terms.')){
-//        addon.emit('startUpload');
         sharingData();
         uploadButton.innerHTML = 'Stop Sharing';
         localStorage.userHasOptedIntoSharing = true;
@@ -109,7 +109,6 @@ function stopSharing(){
 function sharingData(){
     console.log("Beginning Upload...");
     var lastUpload = localStorage.lastUpload || 0;
-    // mavis: use allConnections or localStorage.connections?
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
     });

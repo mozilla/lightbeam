@@ -80,10 +80,10 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     aggregate.emit('reset');
     currentVisualization.emit('reset');
     allConnections = [];
-    delete localStorage.tempSize;
+    delete localStorage.tempConnectionsSize;
     delete localStorage.connections;
     delete localStorage.temp;
-    delete localStorage.totalSize;
+    delete localStorage.totalNumConnections;
     // FIXME: empty the data from current view too
 });
 

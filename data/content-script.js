@@ -21,7 +21,7 @@ self.port.on('init', function(collusionToken){
     localStorage.collusionToken = collusionToken;
     
     if (unsafeWindow && unsafeWindow.currentVisualization){
-        if ( localStorage.connections ){
+        if ( localStorage.connections && localStorage.connections != "[]" ){
             unsafeWindow.allConnections = JSON.parse(localStorage.connections);
         }
         unsafeWindow.currentVisualization.emit('init', unsafeWindow.allConnections);
@@ -33,20 +33,19 @@ self.port.on('init', function(collusionToken){
 self.port.on("sendTempConnections", function(message){
     // message is an array of connection [ [],[],[] ]
     localStorage.tempConnections = JSON.stringify(message);
-    localStorage.tempSize = message.length;
-    self.port.emit("tempConnecitonTransferred", true);
+    localStorage.tempConnectionsSize = message.length;
+    self.port.emit("tempConnectionTransferred", true);
     
-    var parsedTempConnections = localStorage.tempConnections ? JSON.parse(localStorage.tempConnections) : [ {} ] ;
-    if ( localStorage.connections ){
-        var paresedConnections = JSON.parse(localStorage.connections);
-        localStorage.temp = JSON.stringify(paresedConnections);
-        unsafeWindow.allConnections = paresedConnections.concat(parsedTempConnections);
-        localStorage.connections = JSON.stringify( paresedConnections.concat(parsedTempConnections) );
+    if ( localStorage.connections & localStorage.connections != "[]" ){
+        var allConnectionsAsString = localStorage.connections.slice(0,-1) + "," + localStorage.tempConnections.slice(1);
+        localStorage.connections = allConnectionsAsString;
+        unsafeWindow.allConnections = JSON.parse(allConnectionsAsString);
     }else{
+        var parsedTempConnections = localStorage.tempConnections ? JSON.parse(localStorage.tempConnections) : [ [] ] ;
         localStorage.connections = localStorage.tempConnections;
         unsafeWindow.allConnections = parsedTempConnections;
     }
-    localStorage.totalSize = unsafeWindow.allConnections.length;
+    localStorage.totalNumConnections = unsafeWindow.allConnections.length;
 });
 
 
