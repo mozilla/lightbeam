@@ -37,7 +37,7 @@ self.port.on("sendTempConnections", function(message){
     self.port.emit("tempConnectionTransferred", true);
     
     localStorage.lastSaved = Date.now();
-    if ( localStorage.connections & localStorage.connections != "[]" ){
+    if ( localStorage.connections && localStorage.connections != "[]" ){
         var allConnectionsAsString = localStorage.connections.slice(0,-1) + "," + localStorage.tempConnections.slice(1);
         localStorage.connections = allConnectionsAsString;
         unsafeWindow.allConnections = JSON.parse(allConnectionsAsString);
