@@ -23,7 +23,6 @@ const STATUS = 12;
 const CACHEABLE = 13;
 
 window.addEventListener('load', function(evt){
-    addon.emit('uiready');
     // Wire up events
     document.querySelector('.btn_group.visualization').click();
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
@@ -60,6 +59,8 @@ function switchVisualization(name){
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
+    
+    addon.emit('uiready');
 }
 
 
