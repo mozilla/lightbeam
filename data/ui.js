@@ -388,18 +388,38 @@ function getSummary(callback){
 
 /* Clock View ===================================== */
 
-document.querySelector('#content').addEventListener('click', function(event){
-    function highlightColludedNode(selection){
-        selection.each(function(){
-            var colludedNode = d3.select(this);
-            if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
-                colludedNode.classed("colluded-source", true);
-            }
-            if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
-                colludedNode.classed("colluded-target", true);
-            }
-        });
+function highlightColludedNode(selection){
+    selection.each(function(){
+        var colludedNode = d3.select(this);
+        if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
+            colludedNode.classed("colluded-source", true);
+        }
+        if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
+            colludedNode.classed("colluded-target", true);
+        }
+    });
+}
+
+function applyHighlightingEffect(clickedNodeName){
+    // reset styling effect
+    d3.selectAll("g.node").classed("clicked-node", false)
+                          .classed("colluded-source", false)
+                          .classed("colluded-target", false);
+    
+    // highlight all instances of the clicked node(both source and target)
+    d3.selectAll("g[data-name='" + clickedNodeName +"']")
+            .classed("clicked-node", true);
+    
+    // find all the colluded sites and highlight all instances of them
+    for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
+        if ( key != clickedNodeName ){ 
+            d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
+        }
     }
+
+}
+
+document.querySelector('#content').addEventListener('click', function(event){
     /*
     *   When a node in the clock visualization is clicked,
     *       all instances of the same node across the day should be highlighted
@@ -412,25 +432,23 @@ document.querySelector('#content').addEventListener('click', function(event){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
-            
-            // reset styling effect
-            d3.selectAll("g.node").classed("clicked-node", false)
-                                  .classed("colluded-source", false)
-                                  .classed("colluded-target", false);
-            
-            // highlight all instances of the clicked node(both source and target)
-            var clickedNodeName = node.getAttribute("data-name");
-            d3.selectAll("g[data-name='" + clickedNodeName +"']")
-                    .classed("clicked-node", true);
-            
-            // find all the colluded sites and highlight all instances of them
-            for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
-                if ( key != clickedNodeName ){ 
-                    d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
-                }
-            }
-            
+            applyHighlightingEffect(node.getAttribute("data-name"));
         }
     }
 },false);
 
+
+/* Info Panel Connections List ===================================== */
+
+document.querySelector(".connections-list ul").addEventListener("click", function(event){
+    if (event.target.mozMatchesSelector("li")){
+        if ( currentVisualization.name === "clock" ){
+            applyHighlightingEffect(event.target.innerHTML);
+        }
+        else if ( currentVisualization.name === "list" ){
+            currentVisualization.emit("showFilteredTable", event.target.innerHTML);
+        }else{
+        
+        }
+    }
+});

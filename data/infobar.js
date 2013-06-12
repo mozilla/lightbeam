@@ -17,6 +17,12 @@ document.querySelector('#content').addEventListener('click', function(event){
     }
 },false);
 
+document.querySelector(".connections-list ul").addEventListener("click", function(event){
+    if (event.target.mozMatchesSelector("li")){
+        updateInfo(event.target.innerHTML);
+    }
+});
+
 // get server info from http://freegeoip.net
 function getServerInfo(nodeName, callback){
     var info = parseUri(nodeName); // uses Steven Levithan's parseUri 1.2.2
