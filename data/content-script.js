@@ -30,9 +30,8 @@ self.port.on('init', function(collusionToken){
     }
 });
 
-self.port.on("sendTempConnections", function(message){
+self.port.on("passTempConnections", function(message){
     localStorage.tempConnections = JSON.stringify(message);
-    localStorage.tempConnectionsSize = message.length;
     self.port.emit("tempConnectionTransferred", true);
     
     localStorage.lastSaved = Date.now();

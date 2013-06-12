@@ -67,14 +67,12 @@ function switchVisualization(name){
 function saveConnections(){
     if ( localStorage.connections && localStorage.connections != "[]" ){
         var lastSaved = localStorage.lastSaved || 0;
-        var unsavedConnections = allConnections.slice(localStorage.totalNumConnections, allConnections.length);
         var connections = allConnections.filter(function(connection){
             return ( connection[TIMESTAMP] ) > lastSaved;
         });
         if ( connections.length > 0 ){
             localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(connections).slice(1);
         }
-        console.log("--- unsavedConnections.length = " + unsavedConnections.length );
         localStorage.lastSaved = Date.now();
     }else{
         localStorage.connections = JSON.stringify(allConnections);
