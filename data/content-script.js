@@ -8,8 +8,6 @@ self.port.on('log', function log(arguments){
 
 self.port.on('connection', function(connection){
     if (unsafeWindow && unsafeWindow.currentVisualization){
-        // var connection = JSON.parse(message);
-        connection.timestamp = new Date(connection.timestamp);
         unsafeWindow.allConnections.push(connection);
         unsafeWindow.currentVisualization.emit('connection', connection);
     }else{

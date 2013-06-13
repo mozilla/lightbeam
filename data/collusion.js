@@ -73,10 +73,10 @@ function saveConnections(){
         if ( connections.length > 0 ){
             localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(connections).slice(1);
         }
-        localStorage.lastSaved = Date.now();
     }else{
         localStorage.connections = JSON.stringify(allConnections);
     }
+    localStorage.lastSaved = Date.now();
     localStorage.totalNumConnections = JSON.parse(localStorage.connections).length;
 }
 

@@ -420,9 +420,6 @@ document.querySelector('#content').addEventListener('click', function(event){
 /* Export ========== */
 
 function exportFormat(connections){
-//    if (!lastSync){
-//        lastSync = 0;
-//    }
     return JSON.stringify({
         format: 'Collusion Save File',
         version: '1.1',
