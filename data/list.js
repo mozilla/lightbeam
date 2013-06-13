@@ -109,17 +109,21 @@ function setUnfilteredBreadcrumb(){
     breadcrumb.appendChild(link);
  
     var summaryDiv = document.createElement("div");
-    var timeSinceText = "Based on the data we have gathered since " + new Date(allConnections[0][TIMESTAMP]) + ", ";
-    var timeSinceTextNode = document.createTextNode(timeSinceText);
-    var timeSinceDiv = document.createElement("div");
-    timeSinceDiv.appendChild(timeSinceTextNode);
-    summaryDiv.appendChild(timeSinceDiv);
-    var detailText = allConnections.length + " connections were made between " + (aggregate.sitenodes.length+aggregate.bothnodes.length) + " visited sites and " + (aggregate.thirdnodes.length+aggregate.bothnodes.length) + " third party sites";
-    var detailTextNode = document.createTextNode(detailText);
-    var detailDiv = document.createElement("div");
-    detailDiv.appendChild(detailTextNode);
-    summaryDiv.appendChild(detailDiv);
-
+    if ( allConnections.length > 0 ){
+        var timeSinceText = "Based on the data we have gathered since " + new Date(allConnections[0][TIMESTAMP]) + ", ";
+        var timeSinceTextNode = document.createTextNode(timeSinceText);
+        var timeSinceDiv = document.createElement("div");
+        timeSinceDiv.appendChild(timeSinceTextNode);
+        summaryDiv.appendChild(timeSinceDiv);
+        var detailText = allConnections.length + " connections were made between " + (aggregate.sitenodes.length+aggregate.bothnodes.length) + " visited sites and " + (aggregate.thirdnodes.length+aggregate.bothnodes.length) + " third party sites";
+        var detailTextNode = document.createTextNode(detailText);
+        var detailDiv = document.createElement("div");
+        detailDiv.appendChild(detailTextNode);
+        summaryDiv.appendChild(detailDiv);
+    }else{
+        var msg = document.createTextNode("No data has been collected yet.");
+        summaryDiv.appendChild(msg);
+    }
     header.appendChild(summaryDiv);
 }
 
