@@ -353,21 +353,6 @@ document.querySelector(".settings-page").addEventListener("click", function(even
 },false);
 
 
-/* Get data summary =============================== */
-
-// to be fixed
-function getSummary(callback){
-    var summary = {};
-    summary.localTimeSince = "(to be fixed)";
-    summary.numConnections = allConnections.length;
-    summary.numAllSites = aggregate.allnodes.length;
-    summary.numVisited = aggregate.sitenodes.length;
-    summary.numThird = aggregate.thirdnodes.length;
-    summary.numBoth = aggregate.bothnodes.length;
-    callback(summary);
-}
-
-
 /* Clock View ===================================== */
 
 function highlightColludedNode(selection){
