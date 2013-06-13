@@ -1,10 +1,10 @@
 {
   "name": "c2",
-  "fullName": "Collusion v2",
-  "description": "Testing a clean rewrite of Collusion",
-  "author": "Dethe Elza",
+  "fullName": "Collusion",
+  "description": "A clean rewrite of Collusion",
+  "author": "Mozilla Foundation",
   "license": "MPL 2.0",
-  "version": "0.8",
+  "version": "0.8.4",
   "id": "jid1-7OBiDHPW1YAPaQ",
   "permissions": {"private-browsing": true}
 }

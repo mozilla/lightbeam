@@ -157,7 +157,7 @@ var mapZoomOutLimit    = { w:2711.3, h:1196.7 };
 
 document.querySelector(".stage").addEventListener("wheel",function(event){
     if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && currentVisualization.name != "list" ){
-        if ( currentVisualization.name == "graph" ){ 
+        if ( currentVisualization.name == "graph" ){
             zoomWithinLimit(event,"vizcanvas", graphZoomInLimit, graphZoomOutLimit);
         }else{ // clock view
             zoomWithinLimit(event,"vizcanvas", clockZoomInLimit, clockZoomOutLimit);
@@ -176,15 +176,15 @@ document.querySelector(".world-map").addEventListener("wheel",function(event){
 // if yes, zoom
 function zoomWithinLimit(event, targetSvg, zoomInLimit, zoomOutLimit){
     var currentViewBox = getZoom(targetSvg);
-    
+
     var withinZoomInLimit = ( currentViewBox.w > zoomInLimit.w && currentViewBox.h > zoomInLimit.h);
     if ( zoomInLimit.x && zoomInLimit.y ){
         withinZoomInLimit =
             withinZoomInLimit && ( currentViewBox.x < zoomInLimit.x && currentViewBox.y < zoomInLimit.y );
     }
-    
+
     var withinZoomOutLimit = ( currentViewBox.w <= zoomOutLimit.w && currentViewBox.h <= zoomOutLimit.h );
-    
+
     // event.deltaY can only be larger than 1.0 or less than -1.0
     // conditions set to +/- 3 to lower the scrolling control sensitivity
     if ( event.deltaY >= 3 && withinZoomOutLimit ){ // scroll up to zoom out
@@ -197,26 +197,26 @@ function zoomWithinLimit(event, targetSvg, zoomInLimit, zoomOutLimit){
 
 // Apply zoom level
 function svgZooming(target,ratio){
-    
+
     function generateNewViewBox(target, box){
         var oldWidth = box.w;
         var newWidth = oldWidth / ratio;
         var offsetX = ( newWidth - oldWidth ) / 2;
-        
+
         var oldHeight = box.h;
         var newHeight = oldHeight / ratio;
         var offsetY = ( newHeight - oldHeight ) / 2;
-        
+
         box.w = box.w / ratio;
         box.h = box.h / ratio;
         box.x = box.x - offsetX;
-        
+
         if ( target == "vizcanvas" ){
             box.y = ( currentVisualization.name == "graph") ? (box.y - offsetY) : -1 * (box.h - 5);
         }else{
             box.y = box.y - offsetY;
         }
-        
+
         return box;
     }
 
@@ -225,7 +225,7 @@ function svgZooming(target,ratio){
         var box = getZoom("vizcanvas");
         var newViewBox = generateNewViewBox(target, box);
         setZoom(newViewBox,"vizcanvas");
-        
+
     }else{
         var box = getZoom("mapcanvas");
         var newViewBox = generateNewViewBox(target, box);
@@ -370,18 +370,38 @@ function getSummary(callback){
 
 /* Clock View ===================================== */
 
-document.querySelector('#content').addEventListener('click', function(event){
-    function highlightColludedNode(selection){
-        selection.each(function(){
-            var colludedNode = d3.select(this);
-            if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
-                colludedNode.classed("colluded-source", true);
-            }
-            if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
-                colludedNode.classed("colluded-target", true);
-            }
-        });
+function highlightColludedNode(selection){
+    selection.each(function(){
+        var colludedNode = d3.select(this);
+        if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
+            colludedNode.classed("colluded-source", true);
+        }
+        if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
+            colludedNode.classed("colluded-target", true);
+        }
+    });
+}
+
+function applyHighlightingEffect(clickedNodeName){
+    // reset styling effect
+    d3.selectAll("g.node").classed("clicked-node", false)
+                          .classed("colluded-source", false)
+                          .classed("colluded-target", false);
+
+    // highlight all instances of the clicked node(both source and target)
+    d3.selectAll("g[data-name='" + clickedNodeName +"']")
+            .classed("clicked-node", true);
+
+    // find all the colluded sites and highlight all instances of them
+    for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
+        if ( key != clickedNodeName ){
+            d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
+        }
     }
+
+}
+
+document.querySelector('#content').addEventListener('click', function(event){
     /*
     *   When a node in the clock visualization is clicked,
     *       all instances of the same node across the day should be highlighted
@@ -394,24 +414,7 @@ document.querySelector('#content').addEventListener('click', function(event){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
-            
-            // reset styling effect
-            d3.selectAll("g.node").classed("clicked-node", false)
-                                  .classed("colluded-source", false)
-                                  .classed("colluded-target", false);
-            
-            // highlight all instances of the clicked node(both source and target)
-            var clickedNodeName = node.getAttribute("data-name");
-            d3.selectAll("g[data-name='" + clickedNodeName +"']")
-                    .classed("clicked-node", true);
-            
-            // find all the colluded sites and highlight all instances of them
-            for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
-                if ( key != clickedNodeName ){ 
-                    d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
-                }
-            }
-            
+            applyHighlightingEffect(node.getAttribute("data-name"));
         }
     }
 },false);
@@ -427,3 +430,17 @@ function exportFormat(connections){
         connections: connections
     });
 }
+/* Info Panel Connections List ===================================== */
+
+document.querySelector(".connections-list ul").addEventListener("click", function(event){
+    if (event.target.mozMatchesSelector("li")){
+        if ( currentVisualization.name === "clock" ){
+            applyHighlightingEffect(event.target.innerHTML);
+        }
+        else if ( currentVisualization.name === "list" ){
+            currentVisualization.emit("showFilteredTable", event.target.innerHTML);
+        }else{
+
+        }
+    }
+});

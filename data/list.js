@@ -18,6 +18,9 @@ list.on("init", OnInit);
 list.on("conneciton", onConnection);
 list.on("remove", onRemove);
 list.on('setFilter', setFilter);
+list.on("showFilteredTable", function(filter){
+    showFilteredTable(filter);
+});
 
 function setFilter(){
     addon.emit('setFilter', 'filterNothing');
