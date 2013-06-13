@@ -21,6 +21,7 @@ const TARGET_SUB = 10;
 const METHOD = 11;
 const STATUS = 12;
 const CACHEABLE = 13;
+const FROM_PRIVATE_MODE = 14;
 
 window.addEventListener('load', function(evt){
     // Wire up events
@@ -45,7 +46,6 @@ function initCap(str){
 
 function switchVisualization(name){
     console.log('switchVisualizations(' + name + ')');
-    saveConnections(allConnections);
     if (currentVisualization){
         if (currentVisualization === visualizations[name]) return;
         currentVisualization.emit('remove');
@@ -67,14 +67,14 @@ function switchVisualization(name){
 function saveConnections(){
     if ( localStorage.connections && localStorage.connections != "[]" ){
         var lastSaved = localStorage.lastSaved || 0;
-        var connections = allConnections.filter(function(connection){
-            return ( connection[TIMESTAMP] ) > lastSaved;
+        var connections = excludePrivateConnection(allConnections).filter(function(connection){
+            return ( connection[TIMESTAMP] > lastSaved);
         });
         if ( connections.length > 0 ){
             localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(connections).slice(1);
         }
     }else{
-        localStorage.connections = JSON.stringify(allConnections);
+        localStorage.connections = JSON.stringify( excludePrivateConnection(allConnections) );
     }
     localStorage.lastSaved = Date.now();
     localStorage.totalNumConnections = JSON.parse(localStorage.connections).length;

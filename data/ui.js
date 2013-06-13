@@ -427,9 +427,17 @@ function exportFormat(connections){
         format: 'Collusion Save File',
         version: '1.1',
         token: localStorage.collusionToken,
-        connections: connections
+        connections: excludePrivateConnection(connections)
     });
 }
+
+/* Filter out connections collected in Private Mode */
+function excludePrivateConnection(connections){
+    return connections.filter(function(connection){
+        return (connection[FROM_PRIVATE_MODE] == null);
+    })
+}
+
 /* Info Panel Connections List ===================================== */
 
 document.querySelector(".connections-list ul").addEventListener("click", function(event){
