@@ -41,9 +41,15 @@ window.addEventListener('beforeunload', function(){
 
 
 addon.on("isPrivateWindow", function(isPrivate){
-    if ( isPrivate ){
-        alert("You've launched Collusion in a Private Browsing Window. Connections collected under Private Browsing Windows will not be perserved. They won't appear again once the Window is close.");
+    if ( !localStorage.privateBrowsingMsgShown ){
+        if ( isPrivate ){
+            alert("You've launched Collusion in a Private Browsing Window. Data collected under Private Browsing Windows will not be perserved or stored. It will not appear again once the Window is close.");
+        }else{
+            alert("Data collected under Private Browsing Windows will not be perserved or stored. It will not appear again once the Collusion tab is close.");
+        }
     }
+    
+    localStorage.privateBrowsingMsgShown = true;
 });
 
 function initCap(str){
