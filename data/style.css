@@ -206,6 +206,8 @@ h3 {
     padding: 10px 0;
     font-size: 12px;
     font-weight: bold;
+    white-space: nowrap;
+    width: 100%;
 }
 
 .info .holder span{
@@ -227,6 +229,35 @@ h3 {
     color: #5A50F0;
     font-size: 10px;
 }
+
+.info .filters{
+    margin-bottom: 1em;
+}
+
+.info .filters h2{
+    white-space: nowrap;
+    font-size: 10px;
+    font-color: #CCC;
+    width: 100%;
+}
+
+.info .closed p{
+    display: none;
+}
+
+.info .disclosure{
+    cursor: pointer;
+}
+.info .disclosure:before{
+    content: "▼";
+    padding-right: 1em;
+}
+
+.info .closed .disclosure:before{
+    content: "▶";
+}
+
+
 
 .connections-list ul{
     font-size: 12px;

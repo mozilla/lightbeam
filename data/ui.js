@@ -99,6 +99,12 @@ uploadButton.addEventListener('click', function(){
     }
 });
 
+document.querySelector('.disclosure').addEventListener('click', function(event){
+    console.log('toggling filter open/closed');
+    var filterSection = document.querySelector('.info .filters');
+    filterSection.classList.toggle('closed');
+});
+
 
 function getZoom(canvas){
     // TODO: code cleanup if both cases use basically the same code
