@@ -19,7 +19,8 @@ self.port.on('init', function(collusionToken){
     localStorage.collusionToken = collusionToken;
     
     if (unsafeWindow && unsafeWindow.currentVisualization){
-        if ( localStorage.connections && localStorage.connections != "[]" ){
+        if ( unsafeWindow.allConnections.length == 0 ){ // when the addon is initialized
+            localStorage.connections = localStorage.connections || "[]";
             unsafeWindow.allConnections = JSON.parse(localStorage.connections);
         }
         unsafeWindow.currentVisualization.emit('init', unsafeWindow.allConnections);
@@ -30,29 +31,24 @@ self.port.on('init', function(collusionToken){
 
 const FROM_PRIVATE_MODE = 14;
 
-self.port.on("passTempConnections", function(message){
-    // message can be an empty array [] or an array of connection arrays [ [], [], [] ]
-    localStorage.tempConnections = JSON.stringify(message);
+self.port.on("passTempConnections", function(connReceived){
+    // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
+    localStorage.tempConnections = JSON.stringify(connReceived);
     self.port.emit("tempConnectionTransferred", true);
     
+    var allConnectionsAsArray = connReceived;
     localStorage.lastSaved = Date.now();
+    
     if ( localStorage.connections && localStorage.connections != "[]" ){
         var allConnectionsAsString = localStorage.connections.slice(0,-1) + "," + localStorage.tempConnections.slice(1);
-        var allConnectionsAsArray = JSON.parse(allConnectionsAsString);
-        var allNonPrivateConnections = allConnectionsAsArray.filter(function(connection){
-            return (connection[FROM_PRIVATE_MODE] == null);
-        });
-
-        localStorage.connections = JSON.stringify(allNonPrivateConnections); // do not store connections collected in private mode
-        unsafeWindow.allConnections = allConnectionsAsArray;
-    }else{
-        var allNonPrivateConnections = message.filter(function(connection){
-            return (connection[FROM_PRIVATE_MODE] == null);
-        });
-        localStorage.connections = JSON.stringify(allNonPrivateConnections); // do not store connections collected in private mode
-        unsafeWindow.allConnections = message;
+        allConnectionsAsArray = JSON.parse(allConnectionsAsString);
     }
+    var allNonPrivateConnections = allConnectionsAsArray.filter(function(connection){
+        return (connection[FROM_PRIVATE_MODE] == null);
+    });
+    localStorage.connections = JSON.stringify(allNonPrivateConnections); // do not store connections collected in private mode
     localStorage.totalNumConnections = unsafeWindow.allConnections.length;
+    unsafeWindow.allConnections = allConnectionsAsArray;
 });
 
 

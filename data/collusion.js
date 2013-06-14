@@ -46,6 +46,7 @@ function initCap(str){
 
 function switchVisualization(name){
     console.log('switchVisualizations(' + name + ')');
+    saveConnections(allConnections);
     if (currentVisualization){
         if (currentVisualization === visualizations[name]) return;
         currentVisualization.emit('remove');
