@@ -359,21 +359,6 @@ document.querySelector(".settings-page").addEventListener("click", function(even
 },false);
 
 
-/* Get data summary =============================== */
-
-// to be fixed
-function getSummary(callback){
-    var summary = {};
-    summary.localTimeSince = "(to be fixed)";
-    summary.numConnections = allConnections.length;
-    summary.numAllSites = aggregate.allnodes.length;
-    summary.numVisited = aggregate.sitenodes.length;
-    summary.numThird = aggregate.thirdnodes.length;
-    summary.numBoth = aggregate.bothnodes.length;
-    callback(summary);
-}
-
-
 /* Clock View ===================================== */
 
 function highlightColludedNode(selection){
@@ -433,9 +418,17 @@ function exportFormat(connections){
         format: 'Collusion Save File',
         version: '1.1',
         token: localStorage.collusionToken,
-        connections: connections
+        connections: excludePrivateConnection(connections)
     });
 }
+
+/* Filter out connections collected in Private Mode */
+function excludePrivateConnection(connections){
+    return connections.filter(function(connection){
+        return (connection[FROM_PRIVATE_MODE] == null);
+    })
+}
+
 /* Info Panel Connections List ===================================== */
 
 document.querySelector(".connections-list ul").addEventListener("click", function(event){

@@ -21,8 +21,10 @@ const TARGET_SUB = 10;
 const METHOD = 11;
 const STATUS = 12;
 const CACHEABLE = 13;
+const FROM_PRIVATE_MODE = 14;
 
 window.addEventListener('load', function(evt){
+    addon.emit("privateWindowCheck");
     // Wire up events
     document.querySelector('.btn_group.visualization').click();
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
@@ -37,6 +39,18 @@ window.addEventListener('beforeunload', function(){
     saveConnections(allConnections);
 }, false);
 
+
+addon.on("isPrivateWindow", function(isPrivate){
+    if ( !localStorage.privateBrowsingMsgShown ){
+        if ( isPrivate ){
+            alert("You've launched Collusion in a Private Browsing Window. Data collected under Private Browsing Windows will not be perserved or stored. It will not appear again once the Window is close.");
+        }else{
+            alert("Data collected under Private Browsing Windows will not be perserved or stored. It will not appear again once the Collusion tab is close.");
+        }
+    }
+    
+    localStorage.privateBrowsingMsgShown = true;
+});
 
 function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
@@ -67,14 +81,14 @@ function switchVisualization(name){
 function saveConnections(){
     if ( localStorage.connections && localStorage.connections != "[]" ){
         var lastSaved = localStorage.lastSaved || 0;
-        var connections = allConnections.filter(function(connection){
-            return ( connection[TIMESTAMP] ) > lastSaved;
+        var connections = excludePrivateConnection(allConnections).filter(function(connection){
+            return ( connection[TIMESTAMP] > lastSaved);
         });
         if ( connections.length > 0 ){
             localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(connections).slice(1);
         }
     }else{
-        localStorage.connections = JSON.stringify(allConnections);
+        localStorage.connections = JSON.stringify( excludePrivateConnection(allConnections) );
     }
     localStorage.lastSaved = Date.now();
     localStorage.totalNumConnections = JSON.parse(localStorage.connections).length;
