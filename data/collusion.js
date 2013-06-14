@@ -24,6 +24,7 @@ const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
 window.addEventListener('load', function(evt){
+    addon.emit("privateWindowCheck");
     // Wire up events
     document.querySelector('.btn_group.visualization').click();
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
@@ -38,6 +39,12 @@ window.addEventListener('beforeunload', function(){
     saveConnections(allConnections);
 }, false);
 
+
+addon.on("isPrivateWindow", function(isPrivate){
+    if ( isPrivate ){
+        alert("You've launched Collusion in a Private Browsing Window. Connections collected under Private Browsing Windows will not be perserved. They won't appear again once the Window is close.");
+    }
+});
 
 function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
