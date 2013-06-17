@@ -95,13 +95,11 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     delete localStorage.tempConnections;
     delete localStorage.totalNumConnections;
     
-    if ( localStorage.dates ){
-        var dates = localStorage.dates.split(",");
-        dates.forEach(function(date){
-            delete localStorage[date];
-        });
-        delete localStorage.dates;
-    }
+    Object.keys(localStorage).sort().forEach(function(key){
+        if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
+            delete localStorage[key];;
+        }
+    });
     
     // FIXME: empty the data from current view too
 });
