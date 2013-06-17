@@ -113,12 +113,7 @@ function saveConnectionsByDate(connections){
 
 
 function dateAsKey(timestamp){
-    //timestamp in UNIX
-    var date = new Date(timestamp);
-    var yyyy = date.getFullYear();
-    var mm = "00" + ( date.getMonth()+1 );
-    var dd = "00" + date.getDate();
-    return yyyy + "-" + mm.substr(-2,2) + "-" + dd.substr(-2,2);
+    return new Date(timestamp).toISOString().slice(0,10);
 }
 
 
