@@ -37,23 +37,19 @@ self.port.on("passTempConnections", function(connReceived){
     var nonPrivateConnections = connReceived.filter(function(connection){
         return (connection[unsafeWindow.FROM_PRIVATE_MODE] == null);
     });
-    unsafeWindow.splitByDate(nonPrivateConnections);
+    unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
     localStorage.totalNumConnections = unsafeWindow.allConnections.length;
 });
 
 
 function getAllConnections(){
     var allConnectionsAsArray = [];
-
     Object.keys(localStorage).sort().forEach(function(key){
         if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
             var conns = JSON.parse(localStorage.getItem(key));
             allConnectionsAsArray = allConnectionsAsArray.concat(conns);
         }
     });
-    
-//    unsafeWindow.console.log(allConnectionsAsArray);
-
     return allConnectionsAsArray;
 }
 

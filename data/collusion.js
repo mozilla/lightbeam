@@ -92,14 +92,14 @@ function saveConnections(){
         return ( connection[TIMESTAMP] > lastSaved);
     });
     if ( unsavedNonPrivateConn.length > 0 ){
-        splitByDate(unsavedNonPrivateConn);
+        saveConnectionsByDate(unsavedNonPrivateConn);
     }
     localStorage.lastSaved = Date.now();
     localStorage.totalNumConnections = allConnections.length;
 }
 
 
-function splitByDate(connections){
+function saveConnectionsByDate(connections){
     for ( var i=0; i<connections.length; i++ ){
         var conn = connections[i];
         var key = dateAsKey( conn[TIMESTAMP] );
