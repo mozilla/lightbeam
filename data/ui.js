@@ -70,9 +70,21 @@ window.addEventListener("DOMContentLoaded", function(){
 
 });
 
-document.querySelector(".download").addEventListener('click', function() {
+document.querySelector(".download").addEventListener('click', function(evt) {
     console.log('received export data');
-    window.open('data:application/json,' + exportFormat(allConnections));
+    var file = new Blob([exportFormat(allConnections)], {type: 'application/json'});
+    var reader = new FileReader();
+    var a = document.createElement('a');
+    reader.onloadend = function(){
+        a.href = reader.result;
+        a.download = 'collusionData.json';
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+    };
+    reader.readAsDataURL(file);
+    evt.preventDefault();
+    // window.open('data:application/json,' + exportFormat(allConnections));
 });
 
 document.querySelector('.reset-data').addEventListener('click', function(){
@@ -105,6 +117,12 @@ uploadButton.addEventListener('click', function(){
     }else{
         startSharing();
     }
+});
+
+document.querySelector('.disclosure').addEventListener('click', function(event){
+    console.log('toggling filter open/closed');
+    var filterSection = document.querySelector('.info .filters');
+    filterSection.classList.toggle('closed');
 });
 
 
