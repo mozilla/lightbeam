@@ -67,33 +67,73 @@ function switchVisualization(name){
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
 //    currentVisualization.emit('setFilter');
+    resetAddtionalUI();
+    
+    addon.emit('uiready');
+}
+
+
+function resetAddtionalUI(){
     // toggle off info panel, settings page, help bubbles
     document.querySelector("#content").classList.remove("showinfo");
     document.querySelector(".settings-page").classList.add("hide");
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
-    
-    addon.emit('uiready');
 }
 
 
+/****************************************
+*   Save connections
+*/
 function saveConnections(){
+    var unSavedNonPrivateConn;
     if ( localStorage.connections && localStorage.connections != "[]" ){
         var lastSaved = localStorage.lastSaved || 0;
-        var connections = excludePrivateConnection(allConnections).filter(function(connection){
+        unSavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
             return ( connection[TIMESTAMP] > lastSaved);
         });
-        if ( connections.length > 0 ){
-            localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(connections).slice(1);
+        if ( unSavedNonPrivateConn.length > 0 ){
+            localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(unSavedNonPrivateConn).slice(1);
+            splitByDate(unSavedNonPrivateConn);
         }
     }else{
-        localStorage.connections = JSON.stringify( excludePrivateConnection(allConnections) );
+        unSavedNonPrivateConn = excludePrivateConnection(allConnections);
+        localStorage.connections = JSON.stringify(unSavedNonPrivateConn);
+        splitByDate(unSavedNonPrivateConn);
     }
     localStorage.lastSaved = Date.now();
     localStorage.totalNumConnections = JSON.parse(localStorage.connections).length;
 }
 
+
+function splitByDate(connections){
+    for ( var i=0; i<connections.length; i++ ){
+        var conn = connections[i];
+        var key = dateAsKey( conn[TIMESTAMP] );
+        if ( !localStorage.getItem(key) ){
+            localStorage.dates = localStorage.dates ? (localStorage.dates + "," + key) : key;
+            localStorage.setItem(key, "[" + JSON.stringify(conn) + "]");
+        }else{
+            localStorage.setItem(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
+        }
+    }
+}
+
+
+function dateAsKey(timestamp){
+    //timestamp in UNIX
+    var date = new Date(timestamp);
+    var yyyy = date.getFullYear();
+    var mm = "00" + ( date.getMonth()+1 );
+    var dd = "00" + date.getDate();
+    return yyyy + "-" + mm.substr(-2,2) + "-" + dd.substr(-2,2);
+}
+
+
+/****************************************
+*   Upload data
+*/
 
 function startSharing(){
     if (confirm('You are about to start uploading anonymized data to the Mozilla Collusion server. ' +

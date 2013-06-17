@@ -19,7 +19,7 @@ self.port.on('init', function(collusionToken){
     localStorage.collusionToken = collusionToken;
     
     if (unsafeWindow && unsafeWindow.currentVisualization){
-        if ( unsafeWindow.allConnections.length == 0 ){ // when the addon is initialized
+        if ( unsafeWindow.allConnections.length == 0 ){ // when the addon is initialized and passTempConnections was not emitted
             localStorage.connections = localStorage.connections || "[]";
             unsafeWindow.allConnections = JSON.parse(localStorage.connections);
         }
@@ -29,7 +29,6 @@ self.port.on('init', function(collusionToken){
     }
 });
 
-const FROM_PRIVATE_MODE = 14;
 
 self.port.on("passTempConnections", function(connReceived){
     // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
@@ -44,9 +43,10 @@ self.port.on("passTempConnections", function(connReceived){
         allConnectionsAsArray = JSON.parse(allConnectionsAsString);
     }
     var allNonPrivateConnections = allConnectionsAsArray.filter(function(connection){
-        return (connection[FROM_PRIVATE_MODE] == null);
+        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == null);
     });
     localStorage.connections = JSON.stringify(allNonPrivateConnections); // do not store connections collected in private mode
+    unsafeWindow.splitByDate(allNonPrivateConnections);
     localStorage.totalNumConnections = unsafeWindow.allConnections.length;
     unsafeWindow.allConnections = allConnectionsAsArray;
 });

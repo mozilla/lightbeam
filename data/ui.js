@@ -83,6 +83,15 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     delete localStorage.connections;
     delete localStorage.tempConnections;
     delete localStorage.totalNumConnections;
+    
+    if ( localStorage.dates ){
+        var dates = localStorage.dates.split(",");
+        dates.forEach(function(date){
+            delete localStorage[date];
+        });
+        delete localStorage.dates;
+    }
+    
     // FIXME: empty the data from current view too
 });
 
