@@ -80,7 +80,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     aggregate.emit('reset');
     currentVisualization.emit('reset');
     allConnections = [];
-    delete localStorage.connections;
     delete localStorage.tempConnections;
     delete localStorage.totalNumConnections;
     

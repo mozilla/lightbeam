@@ -87,23 +87,15 @@ function resetAddtionalUI(){
 *   Save connections
 */
 function saveConnections(){
-    var unSavedNonPrivateConn;
-    if ( localStorage.connections && localStorage.connections != "[]" ){
-        var lastSaved = localStorage.lastSaved || 0;
-        unSavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
-            return ( connection[TIMESTAMP] > lastSaved);
-        });
-        if ( unSavedNonPrivateConn.length > 0 ){
-            localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(unSavedNonPrivateConn).slice(1);
-            splitByDate(unSavedNonPrivateConn);
-        }
-    }else{
-        unSavedNonPrivateConn = excludePrivateConnection(allConnections);
-        localStorage.connections = JSON.stringify(unSavedNonPrivateConn);
+    var lastSaved = localStorage.lastSaved || 0;
+    var unSavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
+        return ( connection[TIMESTAMP] > lastSaved);
+    });
+    if ( unSavedNonPrivateConn.length > 0 ){
         splitByDate(unSavedNonPrivateConn);
     }
     localStorage.lastSaved = Date.now();
-    localStorage.totalNumConnections = JSON.parse(localStorage.connections).length;
+    localStorage.totalNumConnections = allConnections.length;
 }
 
 
