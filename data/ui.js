@@ -30,7 +30,6 @@ window.addEventListener("DOMContentLoaded", function(){
                 e.target.setAttribute("data-selected", true);
                 callback(targetValue);
             }
-
         }, false);
     }
 
@@ -111,11 +110,33 @@ uploadButton.addEventListener('click', function(){
     }
 });
 
-document.querySelector('.disclosure').addEventListener('click', function(event){
-    console.log('toggling filter open/closed');
-    var filterSection = document.querySelector('.info .filters');
-    filterSection.classList.toggle('closed');
+function handleDisclosureToggle(elem){
+    console.log('disclosure toggled');
+}
+
+function handleUserSettingToggle(elem){
+    console.log('User setting changed');
+}
+
+document.querySelector('.stage').addEventListener('click', function(event){
+    // demultiplex "live" event handlers
+    if (event.target.mozMatchesSelector('.disclosure')){
+        handleDisclosureToggle(event.target);
+        event.preventDefault();
+        event.stopPropagation();
+    }else if (event.target.mozMatchesSelector('.userSetting')){
+        handleUserSettingToggle(event.target);
+        event.stopPropagation();
+    }else{
+        console.log('so what is it, then? %o', event.target);
+    }
 });
+
+// document.querySelector('.disclosure').addEventListener('click', function(event){
+//     console.log('toggling filter open/closed');
+//     var filterSection = document.querySelector('.info .filters');
+//     filterSection.classList.toggle('closed');
+// });
 
 
 function getZoom(canvas){
