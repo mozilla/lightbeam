@@ -70,7 +70,7 @@ function initGraph(){
 
     var thead = document.createElement("thead");
     table.appendChild(thead);
-    thead.appendChild(createRow(columns));
+    thead.appendChild(createRow(columns, 'head'));
 
     showFilteredTable(); // showing all data so no filter param is passed here
 
@@ -107,7 +107,7 @@ function setUnfilteredBreadcrumb(){
     var text = document.createTextNode("All");
     link.appendChild(text);
     breadcrumb.appendChild(link);
- 
+
     var summaryDiv = document.createElement("div");
     if ( allConnections.length > 0 ){
         var timeSinceText = "Based on the data we have gathered since " + new Date(allConnections[0][TIMESTAMP]) + ", ";
@@ -185,38 +185,93 @@ function createBody(type, nodes){
         nodes.forEach(function(node){
             var data = [ "Visited", node.name, node.firstAccess.toString().substring(0,24), node.lastAccess.toString().substring(0,24) ];
             tbody.appendChild(createRow(data,"visited-row"));
+            tbody.appendChild(createSettingsRow(node.name, userSettings[node.name] || {}));
         });
     }else{ // type == "third-party"
         nodes.forEach(function(node){
             var data = [ "Third-Party", node.name, node.firstAccess.toString().substring(0,24), node.lastAccess.toString().substring(0,24) ];
             tbody.appendChild(createRow(data,"third-row"));
+            tbody.appendChild(createSettingsRow(node.name, userSettings[node.name] || {}));
         });
     }
     return tbody;
 }
 
+function createSettingsRow(nodeName, settings){
+    var row = document.createElement('tr');
+    try{
+    var td = document.createElement('td');
+    td.setAttribute('colspan', '20');
+    td.appendChild(createSettingsLine(nodeName, 'hide', settings.hide));
+    td.appendChild(createSettingsLine(nodeName, 'block', settings.block));
+    td.appendChild(createSettingsLine(nodeName, 'follow', settings.follow));
+    row.appendChild(td);
+    row.className = 'settings';
+    }catch(e){
+        console.log('problem in createSettingsRow: %o', e);
+    }
+    return row;
+}
+
+var inputText = {
+    'hide': 'Hide site from graph',
+    'block': 'Block site from loading (use with caution)',
+    'follow': 'Follow site (highlights in graph)'
+};
+
+function createSettingsLine(nodeName, settingsName, settingsValue){
+    var p = document.createElement('p');
+    try{
+    var input = document.createElement('input');
+    input.setAttribute('type', 'checkbox');
+    input.setAttribute('name', settingsName);
+    input.className = 'userSetting';
+    input.dataset.siteUrl = nodeName;
+    if (settingsValue){
+        input.checked = true;
+    }
+    var label = document.createElement('label');
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(inputText[settingsName]));
+    p.appendChild(label);
+    }catch(e){
+        console.log('Problem in createSettingsLine: %o', e);
+    }
+    return p;
+}
+
 
 function createRow(dataArray, type){
+    console.log('createRow(%s, %s)', dataArray, type);
     var row = document.createElement("tr");
+    if (type && type === 'head'){
+        row.appendChild(document.createElement('th'));
+    }else{
+        var disclosure = createCell("▶");
+        disclosure.className = 'disclosure';
+        row.appendChild(disclosure);
+    }
     dataArray.forEach(function(data){
-        var cell = createCell(data);
-        row.appendChild(cell);
+        row.appendChild(createCell(data, type));
     });
-    if ( type ){
+    if ( type && type !== 'head' ){
         row.classList.add(type);
         row.classList.add('node');
         row.setAttribute('data-name', dataArray[1]);
         row.setAttribute("site-url", dataArray[1]);
     }
-
     return row;
 }
 
 
-function createCell(data){
-    var cell = document.createElement("td");
-    var text = document.createTextNode(data);
-    cell.appendChild(text);
+function createCell(data, type){
+    var cell;
+    if (type && type === 'head'){
+        cell = document.createElement('th');
+    }else{
+        cell = document.createElement("td");
+    }
+    cell.appendChild(document.createTextNode(data));
     return cell;
 }
 
