@@ -68,33 +68,59 @@ function switchVisualization(name){
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
 //    currentVisualization.emit('setFilter');
+    resetAddtionalUI();
+
+    addon.emit('uiready');
+}
+
+
+function resetAddtionalUI(){
     // toggle off info panel, settings page, help bubbles
     document.querySelector("#content").classList.remove("showinfo");
     document.querySelector(".settings-page").classList.add("hide");
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
-
-    addon.emit('uiready');
 }
 
 
+/****************************************
+*   Save connections
+*/
 function saveConnections(){
-    if ( localStorage.connections && localStorage.connections != "[]" ){
-        var lastSaved = localStorage.lastSaved || 0;
-        var connections = excludePrivateConnection(allConnections).filter(function(connection){
-            return ( connection[TIMESTAMP] > lastSaved);
-        });
-        if ( connections.length > 0 ){
-            localStorage.connections = localStorage.connections.slice(0,-1) + "," + JSON.stringify(connections).slice(1);
-        }
-    }else{
-        localStorage.connections = JSON.stringify( excludePrivateConnection(allConnections) );
+    var lastSaved = localStorage.lastSaved || 0;
+    var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
+        return ( connection[TIMESTAMP] > lastSaved);
+    });
+    if ( unsavedNonPrivateConn.length > 0 ){
+        saveConnectionsByDate(unsavedNonPrivateConn);
     }
     localStorage.lastSaved = Date.now();
-    localStorage.totalNumConnections = JSON.parse(localStorage.connections).length;
+    localStorage.totalNumConnections = allConnections.length;
 }
 
+
+function saveConnectionsByDate(connections){
+    for ( var i=0; i<connections.length; i++ ){
+        var conn = connections[i];
+        var key = dateAsKey( conn[TIMESTAMP] );
+        if ( !localStorage.getItem(key) ){
+            localStorage.setItem(key, "[" + JSON.stringify(conn) + "]");
+        }else{
+            localStorage.setItem(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
+        }
+    }
+}
+
+
+function dateAsKey(timestamp){
+    return new Date(timestamp).toISOString().slice(0,10);
+}
+
+
+/****************************************
+*   Upload data
+*/
 
 function startSharing(){
     if (confirm('You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
