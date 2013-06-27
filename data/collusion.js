@@ -1,6 +1,7 @@
 var visualizations = {};
 var currentVisualization;
 var allConnections = [];
+var userSettings = {};
 // FIXME: Read this from config file
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
 var uploadTimer;
@@ -48,7 +49,7 @@ addon.on("isPrivateWindow", function(isPrivate){
             alert("Data collected under Private Browsing Windows will not be perserved or stored. It will not appear again once the Collusion tab is close.");
         }
     }
-    
+
     localStorage.privateBrowsingMsgShown = true;
 });
 
@@ -73,7 +74,7 @@ function switchVisualization(name){
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
-    
+
     addon.emit('uiready');
 }
 
