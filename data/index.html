@@ -53,11 +53,6 @@
             <aside class="info">
                 <div class="holder">
                     <h3 class="title"></h3>
-                    <div class="filters closed">
-                      <h2><span class="disclosure">filters</span></h2>
-                      <p><input type="checkbox" name="hide-site" /> <label>Hide site from graph</label></p>
-                      <p><input type="checkbox" name="block-site" /> <label>Block site from loading (use with caution)</label></p>
-                    </div>
                     <!--span class="blue-text">You are currently browsing this site</span-->
                     <header class="subhead">Location</header>
                     <div class="map-section">
@@ -2716,22 +2711,22 @@
                                 <div><i class="icon-caret-right"></i></div>
                                 <div class="hide"><i class="icon-caret-down"></i></div>
                                 <div class="item">
-                                    <div class="site-url">aaaaa.example.com</div>
+                                    <div class="site-url">doubleclick.com</div>
                                     <div class="settings-option hide">
-                                        <input type="checkbox" name="">hide</input>
-                                        <input type="checkbox" name="">block</input>
-                                        <input type="checkbox" name="">whitelist</input>
+                                        <input type="checkbox" class="useroption" data-url="doubleclick.com" name="hide">hide</input>
+                                        <input type="checkbox" class="useroption" data-url="doubleclick.com" name="block">block</input>
+                                        <input type="checkbox" class="useroption" data-url="doubleclick.com" name="follow">whitelist</input>
                                     </div>
                                 </div>
                             </div></li>
                             <li><div>
                                 <div><i class="icon-caret-right"></i></div>
                                 <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="site-url">bbbbb.example.com</div>
+                                <div class="site-url">localhost</div>
                                 <div class="settings-option hide">
-                                    <input type="checkbox" name="">hide</input>
-                                    <input type="checkbox" name="">block</input>
-                                    <input type="checkbox" name="">whitelist</input>
+                                    <label><input type="checkbox" name="hide"> hide</label>
+                                    <label><input type="checkbox" name=""> block</label>
+                                    <label><input type="checkbox" name=""> whitelist</label>
                                 </div>
                             </div></li>
                         </ul>
