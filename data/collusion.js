@@ -24,6 +24,51 @@ const STATUS = 12;
 const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
+// DOM Utility
+
+function elem(name, attributes, children){
+   // name is the tagName of an element
+   // [optional] attributes can be null or undefined, or an object of key/values to setAttribute on, attribute values can be functions to call to get the actual value
+   // [optional] children can be an element, text or an array (or null or undefined). If an array, can contain strings or elements
+   var e = document.createElement(name);
+   var val;
+   if (attributes && (Array.isArray(attributes) || attributes.nodeName || typeof attributes === 'string')){
+        children = attributes;
+        attributes = null;
+   }
+   try{
+   if (attributes){
+       Object.keys(attributes).forEach(function(key){
+           if (attributes[key] === null || attributes[key] === undefined) return;
+           if (typeof attributes[key] === 'function'){
+               val = attributes[key](key, attributes);
+               if (val){
+                   e.setAttribute(key, val);
+               }
+           }else{
+               e.setAttribute(key, attributes[key]);
+           }
+       });
+   }
+    }catch(e){
+        console.log('attributes: not what we think they are: %o', attributes);
+    }
+   if (children){
+       if (!Array.isArray(children)){
+    children = [children]; // convenience, allow a single argument vs. an array of one
+   }
+   children.forEach(function(child){
+          if (child.nodeName){
+              e.appendChild(child);
+          }else{
+               // assumes child is a string
+               e.appendChild(document.createTextNode(child));
+           }
+       });
+   }
+   return e;
+};
+
 window.addEventListener('load', function(evt){
     addon.emit("privateWindowCheck");
     // Wire up events

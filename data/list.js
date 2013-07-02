@@ -14,7 +14,7 @@ var breadcrumb;
 var header;
 var columns = ["Type", "Site", "First Access", "Last Access"];
 
-list.on("init", OnInit);
+list.on("init", onInit);
 list.on("conneciton", onConnection);
 list.on("remove", onRemove);
 list.on('setFilter', setFilter);
@@ -27,13 +27,13 @@ function setFilter(){
 }
 
 
-function OnInit(connections){
+function onInit(connections){
     console.log('initializing list from %s connections', connections.length);
     vizcanvas = document.querySelector('.vizcanvas');
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
-    initGraph();
+    initList();
     //aggregate.on('updated', function(){ });
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
 }
@@ -52,44 +52,52 @@ function onRemove(){
 }
 
 
-function initGraph(){
-    document.querySelector(".stage").classList.add("list");
+function initList(){
+    console.log('begin initList()');
+    var stage = document.querySelector('.stage');
+    stage.classList.add("list");
     // breadcrumb
-    breadcrumb = document.createElement("div");
-    breadcrumb.classList.add("list-breadcrumb");
-    document.querySelector(".stage").appendChild(breadcrumb);
+    breadcrumb = elem("div", {'class': 'list-breadcrumb'});
+    stage.appendChild(breadcrumb);
 
     // list header
-    header = document.createElement("div");
-    header.classList.add("list-header");
-    document.querySelector(".stage").appendChild(header);
+    header = elem("div", {'class': 'list-header'});
+    stage.appendChild(header);
 
-    var table = document.createElement("table");
-    table.classList.add("list-table");
-    document.querySelector(".stage.list").appendChild(table);
-
-    var thead = document.createElement("thead");
-    table.appendChild(thead);
-    thead.appendChild(createRow(columns, 'head'));
+    var table = elem("table", {'class': 'list-table'}, [
+        elem('thead', [
+            elem('tr', [
+                elem('th', elem('input', {'class': 'selectedHeader', type: 'checkbox'})),
+                elem('th', 'Type'),
+                elem('th', 'Preference'),
+                elem('th', 'Website'),
+                elem('th', 'First Access'),
+                elem('th', 'Last Access'),
+                elem('th', 'Connections')
+            ])
+        ]),
+        elem('tbody', {'class': 'list-body'})
+    ]);
+    stage.appendChild(table);
 
     showFilteredTable(); // showing all data so no filter param is passed here
 
     document.querySelector('.list-table').addEventListener('click', function(event){
+        // FIXME: This selector is too broad
         if (event.target.mozMatchesSelector('td') && event.target.parentNode.getAttribute('site-url') ){
             showFilteredTable(event.target.parentNode.getAttribute('site-url'));
         }
     },false);
+    console.log('done initList()');
 }
 
 
 function setFilteredBreadcrumb(filter){
+    console.log('begin setFilteredBreadcrumb()')
     while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
     while ( header.firstChild ) header.removeChild(header.firstChild);
 
-    var link = document.createElement("a");
-    link.setAttribute("filter-by", "All");
-    var text = document.createTextNode("<<< Return to All");
-    link.appendChild(text);
+    var link = elem("a", {'filter-by': 'All'}, '<<< Return to All');
     breadcrumb.appendChild(link);
     link.addEventListener('click', function(event){
         document.querySelector("#content").classList.remove("showinfo");
@@ -98,33 +106,33 @@ function setFilteredBreadcrumb(filter){
 
     var headerText = document.createTextNode(filter + " has connections linked from/to the following sites" );
     header.appendChild(headerText);
+    console.log('done setFilteredBreadcrumb');
 }
 
 function setUnfilteredBreadcrumb(){
+    console.log('begin setUnfilteredBreadcrumb()');
     while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
     while ( header.firstChild ) header.removeChild(header.firstChild);
-    var link = document.createElement("a");
-    var text = document.createTextNode("All");
-    link.appendChild(text);
-    breadcrumb.appendChild(link);
+    breadcrumb.appendChild(elem("a", 'All'));
 
     var summaryDiv = document.createElement("div");
     if ( allConnections.length > 0 ){
-        var timeSinceText = "Based on the data we have gathered since " + new Date(allConnections[0][TIMESTAMP]) + ", ";
-        var timeSinceTextNode = document.createTextNode(timeSinceText);
-        var timeSinceDiv = document.createElement("div");
-        timeSinceDiv.appendChild(timeSinceTextNode);
-        summaryDiv.appendChild(timeSinceDiv);
-        var detailText = allConnections.length + " connections were made between " + (aggregate.sitenodes.length+aggregate.bothnodes.length) + " visited sites and " + (aggregate.thirdnodes.length+aggregate.bothnodes.length) + " third party sites";
-        var detailTextNode = document.createTextNode(detailText);
-        var detailDiv = document.createElement("div");
-        detailDiv.appendChild(detailTextNode);
-        summaryDiv.appendChild(detailDiv);
+        header.appendChild(elem('div', [
+            elem("div", [
+                "Based on the data we have gathered since "
+                    + new Date(allConnections[0][TIMESTAMP]) + ", ",
+                elem("div", allConnections.length
+                    + " connections were made between "
+                    + (aggregate.sitenodes.length+aggregate.bothnodes.length)
+                    + " visited sites and "
+                    + (aggregate.thirdnodes.length+aggregate.bothnodes.length)
+                    + " third party sites")
+            ])
+        ]));
     }else{
-        var msg = document.createTextNode("No data has been collected yet.");
-        summaryDiv.appendChild(msg);
+        header.appendChild(elem('div', 'No data has been collected yet.'));
     }
-    header.appendChild(summaryDiv);
+    console.log('done setUnfilteredBreadcrumb()');
 }
 
 
@@ -140,141 +148,61 @@ function setBreadcrumb(filter){
 function showFilteredTable(filter){
     // remove existinb table tbodys, if any
     var table = document.querySelector("table.list-table");
-    while ( document.querySelectorAll("table tbody").length > 0 ){
-        table.removeChild(document.querySelector("table tbody"));
-    }
-
-    var filtered = getNodes(filter);
-    table.appendChild( createBody("visited",filtered.sitenodes) );
-    table.appendChild( createBody("third-party",filtered.thirdnodes) );
-
+    table.removeChild(table.querySelector('.list-body'));
+    var nodes = getNodes(filter);
+    // FIXME: For sorting we only want one tbody
+    table.appendChild( createBody(nodes) );
     setBreadcrumb(filter);
 }
 
 
 function getNodes(filter){
-    function addToList(myNode){
-        if ( myNode.nodeType == "site" || myNode.nodeType == "both" ){
-            filtered.sitenodes.push(myNode);
-        }
-        if ( myNode.nodeType == "thirdparty" || myNode.nodeType == "both"){
-            filtered.thirdnodes.push(myNode);
-        }
-    }
-
-    var filtered = {};
-    filtered.sitenodes = new Array();
-    filtered.thirdnodes = new Array();
     if( !filter ){ // if no filter, show all
-        filtered.sitenodes = aggregate.sitenodes.concat(aggregate.bothnodes);
-        filtered.thirdnodes = aggregate.thirdnodes.concat(aggregate.bothnodes);
+        return aggregate.allnodes;
     }else{
-        var nodeList = aggregate.nodeForKey(filter);
-        for ( var key in nodeList ){
-            if ( key != filter ) addToList(nodeList[key]);
-        }
+        var nodeMap = aggregate.nodeForKey(filter);
+        return Object.keys(nodeMap).map(function(key){ return nodeMap[key]; });
     }
+}
+// A Node has the following properties:
+// contentTypes: []
+// cookieCount: #
+// firstAccess: Date
+// howMany: #
+// method: []
+// name: ""
+// nodeType: site | thirdparty | both
+// secureCount: #
+// status: []
+// subdomain: []
+// visitedCount: #
 
-    return filtered;
+
+function nodeToRow(node){
+    return elem('tr', {'class': userSettings[node.name]}, [
+        elem('td', elem('input', {'type': 'checkbox', 'class': 'selectedRow'})),
+        elem('td', node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
+        elem('td', {'class': 'preferences'}),
+        elem('td', node.name),
+        elem('td', node.firstAccess.toString().slice(0,24)),
+        elem('td', node.lastAccess.toString().slice(0,24)),
+        elem('td', '' + node.howMany)
+    ]);
 }
 
 
-function createBody(type, nodes){
-    var tbody = document.createElement("tbody");
-    if (type == "visited"){
-        nodes.forEach(function(node){
-            var data = [ "Visited", node.name, node.firstAccess.toString().substring(0,24), node.lastAccess.toString().substring(0,24) ];
-            tbody.appendChild(createRow(data,"visited-row"));
-            tbody.appendChild(createSettingsRow(node.name, userSettings[node.name] || {}));
-        });
-    }else{ // type == "third-party"
-        nodes.forEach(function(node){
-            var data = [ "Third-Party", node.name, node.firstAccess.toString().substring(0,24), node.lastAccess.toString().substring(0,24) ];
-            tbody.appendChild(createRow(data,"third-row"));
-            tbody.appendChild(createSettingsRow(node.name, userSettings[node.name] || {}));
-        });
-    }
-    return tbody;
+function createBody(nodes){
+    return elem("tbody", {'class': 'list-body'}, nodes.map(nodeToRow));
 }
 
-function createSettingsRow(nodeName, settings){
-    var row = document.createElement('tr');
-    try{
-    var td = document.createElement('td');
-    td.setAttribute('colspan', '20');
-    td.appendChild(createSettingsLine(nodeName, 'hide', settings.hide));
-    td.appendChild(createSettingsLine(nodeName, 'block', settings.block));
-    td.appendChild(createSettingsLine(nodeName, 'follow', settings.follow));
-    row.appendChild(td);
-    row.className = 'settings';
-    }catch(e){
-        console.log('problem in createSettingsRow: %o', e);
-    }
-    return row;
+function createRow(namelist, type){
+    return elem('tr',
+        {'class': 'node ' + type, 'data-name': namelist[1], 'site-url': namelist[1] },
+        namelist.map(function(name){
+            return elem('td', name);
+        })
+    );
 }
-
-var inputText = {
-    'hide': 'Hide site from graph',
-    'block': 'Block site from loading (use with caution)',
-    'follow': 'Follow site (highlights in graph)'
-};
-
-function createSettingsLine(nodeName, settingsName, settingsValue){
-    var p = document.createElement('p');
-    try{
-    var input = document.createElement('input');
-    input.setAttribute('type', 'checkbox');
-    input.setAttribute('name', settingsName);
-    input.className = 'userSetting';
-    input.dataset.siteUrl = nodeName;
-    if (settingsValue){
-        input.checked = true;
-    }
-    var label = document.createElement('label');
-    label.appendChild(input);
-    label.appendChild(document.createTextNode(inputText[settingsName]));
-    p.appendChild(label);
-    }catch(e){
-        console.log('Problem in createSettingsLine: %o', e);
-    }
-    return p;
-}
-
-
-function createRow(dataArray, type){
-    console.log('createRow(%s, %s)', dataArray, type);
-    var row = document.createElement("tr");
-    if (type && type === 'head'){
-        row.appendChild(document.createElement('th'));
-    }else{
-        var disclosure = createCell("▶");
-        disclosure.className = 'disclosure';
-        row.appendChild(disclosure);
-    }
-    dataArray.forEach(function(data){
-        row.appendChild(createCell(data, type));
-    });
-    if ( type && type !== 'head' ){
-        row.classList.add(type);
-        row.classList.add('node');
-        row.setAttribute('data-name', dataArray[1]);
-        row.setAttribute("site-url", dataArray[1]);
-    }
-    return row;
-}
-
-
-function createCell(data, type){
-    var cell;
-    if (type && type === 'head'){
-        cell = document.createElement('th');
-    }else{
-        cell = document.createElement("td");
-    }
-    cell.appendChild(document.createTextNode(data));
-    return cell;
-}
-
 
 function resetCanvas(){
     document.querySelector(".stage").classList.remove("list");
@@ -283,7 +211,5 @@ function resetCanvas(){
     document.querySelector(".stage").removeChild( document.querySelector(".stage .list-table") );
     vizcanvas.classList.remove("hide");
 }
-
-
 
 })(visualizations);
