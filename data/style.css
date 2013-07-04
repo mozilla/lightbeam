@@ -257,7 +257,13 @@ h3 {
     content: "▶";
 }
 
+.sorted::after{
+    content: '▼';
+}
 
+.reverse-sorted::after{
+    content: '▲';
+}
 
 .connections-list ul{
     font-size: 12px;
@@ -604,3 +610,5 @@ line{
     padding-left: 15px;
     clear: both;
 }
+
+

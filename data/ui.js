@@ -93,13 +93,13 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     allConnections = [];
     delete localStorage.tempConnections;
     delete localStorage.totalNumConnections;
-    
+
     Object.keys(localStorage).sort().forEach(function(key){
         if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
             delete localStorage[key];;
         }
     });
-    
+
     // FIXME: empty the data from current view too
 });
 
@@ -133,16 +133,15 @@ document.querySelector('.stage').addEventListener('click', function(event){
     }else if (event.target.mozMatchesSelector('.userSetting')){
         handleUserSettingToggle(event.target);
         event.stopPropagation();
+    }else if (event.target.mozMatchesSelector('[type=checkbox]')){
+        event.stopPropagation();
+        if (event.target.mozMatchesSelector('selectedHeader')){
+            // what to do here, select all or sort?
+        }
     }else{
         console.log('so what is it, then? %o', event.target);
     }
 });
-
-// document.querySelector('.disclosure').addEventListener('click', function(event){
-//     console.log('toggling filter open/closed');
-//     var filterSection = document.querySelector('.info .filters');
-//     filterSection.classList.toggle('closed');
-// });
 
 
 function getZoom(canvas){
