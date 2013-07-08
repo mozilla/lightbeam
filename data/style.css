@@ -283,6 +283,7 @@ h3 {
 .stage{
     position: relative;
     height: 100%;
+    overflow: hidden;
     margin-right: 1px;
     transition: margin-right 0.5s ease;
 }
@@ -444,47 +445,29 @@ line{
     height: 0;
 }
 
-.stage.list{
-    overflow-y: auto;
-}
-
-.list-breadcrumb {
-    height: 20px;
-    margin-bottom: 5px;
-}
-
-.list-breadcrumb a{
-    color: rgba(130,130,130,0.7);
-    font-size: 15px;
-    line-height: 20px;
-    padding: 10px;
-}
-
-.list-breadcrumb a[filter-by]{
-    cursor: pointer;
-}
-
-.list-breadcrumb a[filter-by]:hover{
-    color: rgba(180,180,180,1);
-}
-
-.list-header {
-    padding: 10px;
-    color: white;
-    font-size: 15px;
-    background: rgba(255,255,255,0.3);
-    margin: 5px 40px;
-}
 
 .list-table{
     border-collapse: collapse;
     margin-left: 50px;
     font-size: 12px;
+    height: 100%;
 }
+
+.list-table table{
+    width: 100%;
+}
+
+.header-table{
+}
+
+.body-table{
+    height: calc(100% - 40px);
+    overflow-y: scroll;
+}
+
 
 .list-table th,
 .list-table td{
-    min-width: 120px;
     border-bottom: 1px solid #555;
     line-height: 35px;
     margin: 0;
@@ -492,10 +475,6 @@ line{
 
 .list-table th{
     text-align: left;
-}
-
-.list-table td{
-    padding-right: 30px;
 }
 
 .list-table tr[site-url]{
@@ -512,6 +491,33 @@ line{
 
 .list-table .third-row td{
     color: #FF617B;
+}
+
+.header-table th:nth-child(1), .body-table td:nth-child(1){
+    width: 2em;
+}
+
+.header-table th:nth-child(2), .body-table td:nth-child(2){
+    width: 6em;
+}
+
+.header-table th:nth-child(3), .body-table td:nth-child(3){
+    width: 4em;
+}
+
+.header-table th:nth-child(5), .body-table td:nth-child(5){
+    width: 10em;
+}
+
+.header-table th:nth-child(6), .body-table td:nth-child(6){
+    width: 10em;
+}
+
+.header-table th:nth-child(7){
+    width: 100px; /* 20 extra to allow for scrollbar */
+}
+.body-table td:nth-child(7){
+    width: 80px;
 }
 
 /* Help Mode */

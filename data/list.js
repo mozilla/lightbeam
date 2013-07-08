@@ -10,9 +10,6 @@ visualizations.list = list;
 list.name = "list";
 
 var vizcanvas;
-var breadcrumb;
-var header;
-var columns = ["Type", "Site", "First Access", "Last Access"];
 
 list.on("init", onInit);
 list.on("conneciton", onConnection);
@@ -56,26 +53,27 @@ function initList(){
     console.log('begin initList()');
     var stage = document.querySelector('.stage');
     stage.classList.add("list");
-    // breadcrumb
-    breadcrumb = elem("div", {'class': 'list-breadcrumb'});
-    stage.appendChild(breadcrumb);
 
     // list header
-    header = elem("div", {'class': 'list-header'});
-    stage.appendChild(header);
-    var table = elem("table", {'class': 'list-table'}, [
-        elem('thead', [
-            elem('tr', [
-                elem('th', elem('input', {'class': 'selectedHeader', type: 'checkbox'})),
-                elem('th', 'Type'),
-                elem('th', 'Preference'),
-                elem('th', 'Website'),
-                elem('th', 'First Access'),
-                elem('th', 'Last Access'),
-                elem('th', {'class': 'sort-numeric'}, 'Connections')
-            ])
+    var table = elem("div", {'class': 'list-table'}, [
+        elem('table', [
+            elem('thead', {'class': 'header-table'}, [
+                elem('tr', [
+                    elem('th', elem('input', {'class': 'selectedHeader', type: 'checkbox'})),
+                    elem('th', 'Type'),
+                    elem('th', 'Prefs'),
+                    elem('th', 'Website'),
+                    elem('th', 'First Access'),
+                    elem('th', 'Last Access'),
+                    elem('th', {'class': 'sort-numeric'}, 'Connections')
+                ])
+            ]),
         ]),
-        elem('tbody', {'class': 'list-body'})
+        elem('div', {'class': 'body-table'},
+            elem('table',
+                elem('tbody', {'class': 'list-body'})
+            )
+        )
     ]);
     stage.appendChild(table);
 
@@ -97,68 +95,15 @@ function initList(){
     console.log('done initList()');
 }
 
-
-function setFilteredBreadcrumb(filter){
-    console.log('begin setFilteredBreadcrumb()')
-    while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
-    while ( header.firstChild ) header.removeChild(header.firstChild);
-
-    var link = elem("a", {'filter-by': 'All'}, '<<< Return to All');
-    breadcrumb.appendChild(link);
-    link.addEventListener('click', function(event){
-        document.querySelector("#content").classList.remove("showinfo");
-        showFilteredTable();
-    },false);
-
-    var headerText = document.createTextNode(filter + " has connections linked from/to the following sites" );
-    header.appendChild(headerText);
-    console.log('done setFilteredBreadcrumb');
-}
-
-function setUnfilteredBreadcrumb(){
-    console.log('begin setUnfilteredBreadcrumb()');
-    while ( breadcrumb.firstChild ) breadcrumb.removeChild(breadcrumb.firstChild);
-    while ( header.firstChild ) header.removeChild(header.firstChild);
-    breadcrumb.appendChild(elem("a", 'All'));
-
-    var summaryDiv = document.createElement("div");
-    if ( allConnections.length > 0 ){
-        header.appendChild(elem('div', [
-            elem("div", [
-                "Based on the data we have gathered since "
-                    + new Date(allConnections[0][TIMESTAMP]) + ", ",
-                elem("div", allConnections.length
-                    + " connections were made between "
-                    + (aggregate.sitenodes.length+aggregate.bothnodes.length)
-                    + " visited sites and "
-                    + (aggregate.thirdnodes.length+aggregate.bothnodes.length)
-                    + " third party sites")
-            ])
-        ]));
-    }else{
-        header.appendChild(elem('div', 'No data has been collected yet.'));
-    }
-    console.log('done setUnfilteredBreadcrumb()');
-}
-
-
-function setBreadcrumb(filter){
-    if ( filter ){
-        setFilteredBreadcrumb(filter);
-    }else{
-        setUnfilteredBreadcrumb();
-    }
-}
-
-
 function showFilteredTable(filter){
     // remove existinb table tbodys, if any
-    var table = document.querySelector("table.list-table");
-    table.removeChild(table.querySelector('.list-body'));
+    var table = document.querySelector(".list-table");
+    var tbody = table.querySelector('.list-body');
+    var tbodyParent = tbody.parentElement;
+    tbodyParent.removeChild(tbody);
     var nodes = getNodes(filter);
-    table.appendChild( createBody(nodes) );
+    tbodyParent.appendChild( createBody(nodes) );
     resort(table);
-    setBreadcrumb(filter);
 }
 
 
@@ -199,7 +144,7 @@ function nodeToRow(node){
     }, [
         elem('td', elem('input', {'type': 'checkbox', 'class': 'selectedRow'})),
         elem('td', {'data-sort-key': node.nodeType}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
-        elem('td', {'class': 'preferences', 'data-sort-key': settings}),
+        elem('td', {'class': 'preferences', 'data-sort-key': settings}, '\u00A0'),
         elem('td', {'data-sort-key': node.name}, node.name),
         elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10)}, node.firstAccess.toLocaleDateString()),
         elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10)}, node.lastAccess.toLocaleDateString()),
@@ -285,8 +230,6 @@ function resort(table){
 
 function resetCanvas(){
     document.querySelector(".stage").classList.remove("list");
-    document.querySelector(".stage").removeChild( document.querySelector(".stage .list-breadcrumb") );
-    document.querySelector(".stage").removeChild( document.querySelector(".stage .list-header") );
     document.querySelector(".stage").removeChild( document.querySelector(".stage .list-table") );
     vizcanvas.classList.remove("hide");
 }
