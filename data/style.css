@@ -62,28 +62,30 @@ h3 {
     overflow-y: auto;
 }
 
-.controls i:not(.icon-sort-down){
+/*.controls i:not(.icon-sort-down){
     margin-right: 5px;
     font-size: 14px;
     vertical-align: middle;
+}*/
+
+.hidden{
+    display: none;
 }
 
-.btn_group > *{
-    background: #363636;
-}
-
-.btn_group{
+.btn_group, 
+.btn{
     width: 100%;
     position: relative;
-    cursor: pointer;
-    font-size: 12px;
+    margin-bottom: 15px;
+    background: #25292D;
+    font-size: 7pt;
+    letter-spacing: 1px;
 }
 
 .btn_group .dropdown_button{
     height: 32px;
     line-height: 30px;
-    border: 1px solid #555555;
-    border-radius: 2px;
+    border-radius: 5px 0 0 0;
     padding-left: 10px;
 }
 
@@ -92,39 +94,62 @@ h3 {
     color: #EAEAEA;
 }
 
-.btn_group .downarrow{
+.btn_group .arrow{
     float: right;
-    border-left: 1px solid #555555;
+    /*border-left: 1px solid #555555;*/
     padding: 0 10px;
+    background: #12181B;
+    border-radius: 0 5px 0 0;
+    cursor: pointer;
 }
 
 .collapsed {
     display: none;
 }
 
-.invi_focus:focus{
-    outline: none;
+.btn a,
+.square-button{
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.controls .btn_group .dropdown_options{
-    line-height: 28px;
-    position: absolute;
-    width: 100%;
-    z-index: 100;
-}
-
-.controls .btn_group div.dropdown_options a{
+.btn_group div.dropdown_options a,
+.btn a{
     margin: 0;
     display: block;
     padding-left: 10px;
-    border-color: #555555;
-    border-width: 0 1px 1px 1px;
-    border-style: solid;
+    background: #303539;
     line-height: 28px;
 }
 
-.controls .btn_group div.dropdown_options a[data-selected]{
+.btn_group div.dropdown_options.expanded a:hover{
+    cursor: pointer;
+}
+
+.btn_group div.dropdown_options a[data-selected]{
+    border-radius: 0 0 5px 5px;
+    background: #5F6771;
+}
+
+.btn_group div.dropdown_options.expanded a{
+    border-radius: 0;
+}
+
+.btn_group div.dropdown_options.expanded a:last-child{
+    border-radius: 0 0 5px 5px;
+}
+
+.btn_group div.dropdown_options a.collapsed{
     display: none;
+}
+
+.btn_group img,
+.btn img{
+    width: 15px;
+    height: 15px;
+    margin-right: 15px;
+    position: relative;
+    top: 3px;
 }
 
 .controls ul{
@@ -143,8 +168,44 @@ h3 {
     cursor: pointer;
 }
 
-.controls a:hover{
+.controls .square-button-controls{
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 50px;
+}
+
+.controls .square-button-controls div{
+    float: left;
+    text-align: center;
+    width: 40px;
+    height: 40px;
+}
+
+.controls .square-button-controls div:not(:last-child){
+    margin-right: 10px;
+}
+
+.controls .square-button{
+    background: #25292D;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.controls .square-button.active{
+    background: #5F6771;
+}
+
+.controls .square-button img{
+    width: 30px;
+    height: 30px;
+}
+
+.controls .square-button-controls .button-label{
+    font-size: 7pt;
+    /*color: #2D3337;*/
     color: white;
+    text-align: center;
+    margin-top: 5px;
 }
 
 #content{

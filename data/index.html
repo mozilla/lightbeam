@@ -13,40 +13,77 @@
     </header>
     <div class="main">
         <aside class="controls">
-            <div class="btn_group filter" style="margin-bottom: 10px">
-                <div data-view class="dropdown_button">
-                    <a class="invi_focus" href="#"></a>
-                    <a class="selected_time"><i class="icon-time"></i>Today</a>
-                    <div class="downarrow"><i class="icon-sort-down"></i></div>
-                </div>
-                <div data-list class="dropdown_options collapsed">
-                    <a data-selected data-value="Today">Today</a>
-                    <a data-value="BBB">BBB</a>
-                    <a data-value="CCC">CCC</a>
-                    <a data-value="DDD">DDD</a>
-                </div>
-            </div>
-            <span>Current View:</span>
             <div class="btn_group visualization">
                 <div data-view class="dropdown_button">
-                    <a class="invi_focus" href="#"></a>
-                    <a class="selected_visualization">Graph</a>
-                    <div class="downarrow"><i class="icon-sort-down"></i></div>
+                    <span>VISUALIZATION</span>
+                    <div class="arrow">
+                        <i class="icon-sort-down"></i><i class="icon-sort-up hidden"></i>
+                    </div>
                 </div>
-                <div data-list class="dropdown_options collapsed">
-                    <a data-selected data-value="Graph">Graph</a>
-                    <a data-value="Clock">Clock</a>
-                    <a data-value="List">List</a>
+                <div data-list class="dropdown_options">
+                    <a class="collapsed" data-value="Graph">
+                        <img src="image/collusion_icon_graph.png" />graph
+                    </a>
+                    <a class="collapsed" data-value="Clock">
+                        <img src="image/collusion_icon_clock.png" />clock
+                    </a>
+                    <a class="collapsed" data-value="List">
+                        <img src="image/collusion_icon_list.png" />list
+                    </a>
                 </div>
             </div>
+            <div class="btn_group session">
+                <div data-view class="dropdown_button">
+                    <span>SESSION</span>
+                    <div class="arrow">
+                        <i class="icon-sort-down"></i><i class="icon-sort-up hidden"></i>
+                    </div>
+                </div>
+                <div data-list class="dropdown_options">
+                    <a data-selected data-value="recent">recent site</a>
+                    <a class="collapsed" data-value="last10sites">last 10 sites</a>
+                    <a class="collapsed" data-value="daily">daily</a>
+                    <a class="collapsed" data-value="weekly">weekly</a>
+                </div>
+            </div>
+            <div class="btn">
+                <a class="upload">
+                    <img src="image/collusion_icon_share.png" />share
+                </a>
+            </div>
+            <div class="btn">
+                <a class="download">
+                    <img src="image/collusion_icon_save.png" />download
+                </a>
+            </div>
+            <div class="btn">
+                <a class="reset-data">
+                    <img src="image/collusion_icon_reset.png" />reset
+                </a>
+            </div>
             <ul class="controls_options">
-                <li class="upload"><a><i class="icon-arrow-up"></i>Share Data</a></li>
-                <li class="download"><a><i class="icon-arrow-down"></i>Download data</a></li>
-                <li class="reset-data"><a><i class="icon-refresh"></i>Reset data</a></li>
-                <li class="settings"><a>Toggle Settings</a></li>
                 <li class="show-info-button"><a>Toggle Info Panel</a></li>
-                <li><input type="checkbox" class="help-mode" /> Help Mode </li>
             </ul>
+            <div class="square-button-controls">
+                <div>
+                    <div class="square-button">
+                        <a class="help-mode"><img src="image/collusion_icon_help.png" /></a>
+                    </div>
+                    <div class="button-label">HELP</div>
+                </div>
+                <div>
+                    <div class="square-button">
+                        <a class="settings"><img src="image/collusion_icon_settings.png" /></a>
+                    </div>
+                    <div class="button-label">SETTINGS</div>
+                </div>
+                <div>
+                    <div class="square-button">
+                        <a><img src="image/collusion_icon_about.png" /></a>
+                    </div>
+                    <div class="button-label">ABOUT</div>
+                </div>
+            </div>
         </aside>
 
         <div id="content" class="">
