@@ -13,6 +13,8 @@ var btnSelectCallback = function(e,btnGroup,callback){
     var targetValue = e.target.getAttribute("data-value");
     var otherOptions = btnGroup.querySelectorAll(".dropdown_options a:not([data-selected])");
     btnGroup.querySelector(".dropdown_options").classList.remove("expanded");
+    btnGroup.querySelector(".arrow").querySelector(".icon-sort-down").classList.remove("hidden");
+    btnGroup.querySelector(".arrow").querySelector(".icon-sort-up").classList.add("hidden");
     toArray(otherOptions).forEach(function(option){
         option.classList.add("collapsed");
     });

@@ -2,19 +2,19 @@
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 400;
-  src: url('font/opensans-italic-webfont.woff') format('woff')
+  src: url('font/OpenSans-LightItalic.ttf') format('truetype')
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: bold;
   font-weight: 700;
-  src: url('font/opensans-bold-webfont.woff') format('woff')
+  src: url('font/OpenSans-Regular.ttf') format('truetype')
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: url('font/opensans-regular-webfont.woff') format('woff')
+  src: url('font/OpenSans-Light.ttf') format('truetype')
 }
