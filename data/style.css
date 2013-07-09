@@ -34,18 +34,18 @@ h3 {
 
 .main{
     position: relative;
-    height: calc(100% - 80px);
+    height: calc(100%);
 }
 
-.mainhead{
-    height: 80px;
-    line-height: 80px;
-    background: #333131;
+.collusion-title{
+    height:65px;
+    margin-bottom:15px;
+    
 }
-
-.mainhead h1{
-    margin-left: 30px;
-    font-size: 20px;
+.collusion-title h1{
+    font-size: 25px;
+    vertical-align: center;
+    line-height: 50px;
 }
 
 .controls{
@@ -148,16 +148,28 @@ h3 {
 }
 
 #content{
+    flex:1;
     position: relative;
-    margin-left: 200px;
     z-index: 0;
-    height: 100%;
     border-top: 1px solid #555555;
 }
 
 #content span,
 #content p{
     font-size: 12px;
+}
+
+.content-flex{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    width:calc(100% - 200px);
+}
+
+.stats-bar{
+    height: 80px;
+    background-color:#fff;
+    flex:none;
 }
 
 .info{
@@ -257,12 +269,20 @@ h3 {
     content: "▶";
 }
 
-.sorted::after{
-    content: '▼';
+.sorted:after, .reverse-sorted:after{
+    padding:0px 5px;
+    content: '▾';
+    display: inline-block;
+    position: relative;
+    -moz-transition:all 0.3s linear;
 }
 
-.reverse-sorted::after{
-    content: '▲';
+.sorted:after{
+    transform:rotate(0deg);
+}
+
+.reverse-sorted:after{
+    transform:rotate(180deg);
 }
 
 .connections-list ul{
@@ -281,28 +301,51 @@ h3 {
 }
 
 .stage-stack{
+    padding:20px 40px;
     flex-direction: column;
     display: flex;
     position: relative;
     height: 100%;
     overflow: hidden;
-    margin-right: 1px;
-    transition: margin-right 0.5s ease;
 }
 
 .stage-header{
     flex: none;
 }
+.stage-header h1{
+    font-family:"Helvetica Neue", Arial, sans-serif;;
+    font-weight: 100;
+}
+.stage-header .data-since-title{
+    color:#A0D8E9;
+    font-weight:bold;
+}
 
 .stage{
     flex: 1;
-}
-.showinfo .stage{
-    margin-right: 300px;
+    margin:20px 0px;
 }
 
 .stage-footer{
     flex: none;
+}
+.stage-footer h3{
+    font-size: 12px;
+    color:#A0D8E9;
+    font-weight: 600;
+    margin-bottom:10px;
+}
+.stage-footer-btns{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+.stage-footer-btns button{
+    flex:none;
+    margin-right:20px;
+}
+.btn-spacer{
+    flex:1;
 }
 
 /* SVG STYLES */
@@ -462,16 +505,19 @@ line{
 
 .list-table{
     border-collapse: collapse;
-    margin-left: 50px;
     font-size: 12px;
     height: 100%;
 }
 
 .list-table table{
     width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .header-table{
+    background-color:#404040;
+    margin-right: 20px;
 }
 
 .body-table{
@@ -489,6 +535,8 @@ line{
 
 .list-table th{
     text-align: left;
+    cursor:pointer;
+    -moz-user-select: -moz-none !important;
 }
 
 .list-table tr[site-url]{
@@ -496,7 +544,7 @@ line{
 }
 
 .list-table tbody tr:hover{
-    background: rgba(0,0,0,0.2);
+    background: #475B64;
 }
 
 .list-table .visited-row td{
@@ -508,7 +556,8 @@ line{
 }
 
 .header-table th:nth-child(1), .body-table td:nth-child(1){
-    width: 2em;
+    padding-left:10px;
+    width: 35px;
 }
 
 .header-table th:nth-child(2), .body-table td:nth-child(2){
@@ -516,7 +565,7 @@ line{
 }
 
 .header-table th:nth-child(3), .body-table td:nth-child(3){
-    width: 4em;
+    width: 5em;
 }
 
 .header-table th:nth-child(5), .body-table td:nth-child(5){
@@ -528,7 +577,7 @@ line{
 }
 
 .header-table th:nth-child(7){
-    width: 100px; /* 20 extra to allow for scrollbar */
+    width: 95px;
 }
 .body-table td:nth-child(7){
     width: 80px;
@@ -630,5 +679,20 @@ line{
     padding-left: 15px;
     clear: both;
 }
+
+.btn{
+    padding:5px 20px;
+    background-color:#404040;
+    border-radius: 2px;
+    border:none;
+    cursor:pointer;
+    color: rgb(234, 234, 234)
+}
+
+.btn.orange{background-color:#AD5E33}
+.btn:hover{
+    background-color:#505050;
+}
+.btn.orange:hover{background-color:#9C4D22}/*DO THIS NEXT*?
 
 
