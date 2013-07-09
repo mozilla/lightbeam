@@ -44,8 +44,8 @@ h3 {
 }
 
 .controls{
-    width: 200px;
-    padding: 15px 30px;
+    width: 170px;
+    padding: 15px 15px;
     float: left;
     z-index: 5;
     height: 100%;
@@ -54,6 +54,25 @@ h3 {
     overflow-x: hidden;
     overflow-y: auto;
     background: #404850;
+}
+
+.controls header{
+    height: 35px;
+    margin-bottom: 20px;
+}
+
+.collusion-icon{
+    border:1px solid #5ABED2; 
+    width: 35px; 
+    height: 35px; 
+    border-radius: 5px;
+    float: left;
+}
+
+.logo{
+    float: left;
+    width: 85px;
+    margin-left: 10px;
 }
 
 .hidden{
@@ -70,7 +89,6 @@ h3 {
 .btn_group, 
 .btn{
     width: 100%;
-    position: relative;
     margin-bottom: 15px;
     background: #25292D;
     font-size: 7pt;
@@ -166,14 +184,14 @@ h3 {
 
 .controls .square-button-controls{
     position: fixed;
-    bottom: 70px;
+    bottom: 30px;
     margin-bottom: 20px;
 }
 
 .controls .collusion-url{
     position: fixed;
     bottom: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .square-button{
@@ -183,7 +201,7 @@ h3 {
 }
 
 .square-button:not(:last-child){
-    margin-right: 15px;
+    margin-right: 20px;
 }
 
 .square-button a{
