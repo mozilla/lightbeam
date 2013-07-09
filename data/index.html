@@ -2733,107 +2733,27 @@
                     </div>
                 </div>
             </aside>
-            <div class="stage">
-                <svg class="vizcanvas" width="100%" height="100%" viewBox="-350 -450 700 500">
-                    <defs>
-                    </defs>
-                </svg>
-                <div class="settings-page hide">
-                    <div class="page-header">Settings</div>
-                    <header class="hidden-sites">Hidden Sites</header>
-                    <section>
-                        <div class="num-sites">2 sites in total</div>
-                        <ul>
-                            <li><div>
-                                <div><i class="icon-caret-right"></i></div>
-                                <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="item">
-                                    <div class="site-url">doubleclick.com</div>
-                                    <div class="settings-option hide">
-                                        <input type="checkbox" class="useroption" data-url="doubleclick.com" name="hide">hide</input>
-                                        <input type="checkbox" class="useroption" data-url="doubleclick.com" name="block">block</input>
-                                        <input type="checkbox" class="useroption" data-url="doubleclick.com" name="follow">whitelist</input>
-                                    </div>
-                                </div>
-                            </div></li>
-                            <li><div>
-                                <div><i class="icon-caret-right"></i></div>
-                                <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="site-url">localhost</div>
-                                <div class="settings-option hide">
-                                    <label><input type="checkbox" name="hide"> hide</label>
-                                    <label><input type="checkbox" name=""> block</label>
-                                    <label><input type="checkbox" name=""> whitelist</label>
-                                </div>
-                            </div></li>
-                        </ul>
-                    </section>
-                    <header class="blocked-sites">Blocked Sites</header>
-                    <section>
-                        <div class="num-sites">3 sites in total</div>
-                        <ul>
-                            <li><div>
-                                <div><i class="icon-caret-right"></i></div>
-                                <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="site-url">ccccc.example.com</div>
-                                <div class="settings-option hide">
-                                    <input type="checkbox" name="">hide</input>
-                                    <input type="checkbox" name="">block</input>
-                                    <input type="checkbox" name="">whitelist</input>
-                                </div>
-                            </div></li>
-                            <li><div>
-                                <div><i class="icon-caret-right"></i></div>
-                                <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="site-url">ddddd.example.com</div>
-                                <div class="settings-option hide">
-                                    <input type="checkbox" name="">hide</input>
-                                    <input type="checkbox" name="">block</input>
-                                    <input type="checkbox" name="">whitelist</input>
-                                </div>
-                            </div></li>
-                            <li><div>
-                                <div><i class="icon-caret-right"></i></div>
-                                <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="site-url">eeeee.example.com</div>
-                                <div class="settings-option hide">
-                                    <input type="checkbox" name="">hide</input>
-                                    <input type="checkbox" name="">block</input>
-                                    <input type="checkbox" name="">whitelist</input>
-                                </div>
-                            </div></li>
-
-                        </ul>
-                    </section>
-                    <header class="whitelist">Whitelist Sites</header>
-                    <section>
-                        <div class="num-sites">2 sites in total</div>
-                        <ul>
-                            <li><div>
-                                <div><i class="icon-caret-right"></i></div>
-                                <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="site-url">abcde.example.com</div>
-                                <div class="settings-option hide">
-                                    <input type="checkbox" name="">hide</input>
-                                    <input type="checkbox" name="">block</input>
-                                    <input type="checkbox" name="">whitelist</input>
-                                </div>
-                            </div></li>
-                            <li><div>
-                                <div><i class="icon-caret-right"></i></div>
-                                <div class="hide"><i class="icon-caret-down"></i></div>
-                                <div class="site-url">omgomg.example.com</div>
-                                <div class="settings-option hide">
-                                    <input type="checkbox" name="">hide</input>
-                                    <input type="checkbox" name="">block</input>
-                                    <input type="checkbox" name="">whitelist</input>
-                                </div>
-                            </div></li>
-                        </ul>
-                    </section>
-                </div>
-            </div>
-
+            <div class="stage-stack">
+              <div class="stage-header">
+                  <h1>List View</h1>
+                  <span class="data-since-title">Data gathered since</span>
+                  <span class="data-since">July 18, 2011</span>
+              </div><!-- stage-header -->
+              <div class="stage">
+                  <svg class="vizcanvas" width="100%" height="100%" viewBox="-350 -450 700 500">
+                      <defs>
+                      </defs>
+                  </svg>
+              </div><!-- .stage -->
+              <div class="stage-footer">
+                <h3>Site Preferences</h3>
+                <button class="block-pref">Block Site</button>
+                <button class="hide-pref">Hide Site</button>
+                <button class="watch-pref">Watch Site</button>
+                <button class="no-pref">Remove</button>
+                <button class="toggle-hidden">Hide Hidden</button>
+              </div>
+            </div><!-- .stage-stack -->
         </div>
     </div>
     <div id="tooltip"></div>

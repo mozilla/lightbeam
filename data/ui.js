@@ -396,17 +396,6 @@ document.querySelector(".settings").addEventListener("click", function(event){
     document.querySelector(".settings-page").classList.toggle("hide");
 });
 
-document.querySelector(".settings-page").addEventListener("click", function(event){
-    if (event.target.mozMatchesSelector(".settings-page ul li, .settings-page ul li *")){
-        var site = event.target;
-        while(site.mozMatchesSelector(".settings-page ul li *")){
-            site = site.parentElement;
-        }
-        site.querySelector(".settings-option").classList.toggle("hide");
-        site.querySelector(".icon-caret-right").parentElement.classList.toggle("hide");
-        site.querySelector(".icon-caret-down").parentElement.classList.toggle("hide");
-    }
-},false);
 
 
 /* Clock View ===================================== */

@@ -126,7 +126,6 @@ function switchVisualization(name){
 function resetAddtionalUI(){
     // toggle off info panel, settings page, help bubbles
     document.querySelector("#content").classList.remove("showinfo");
-    document.querySelector(".settings-page").classList.add("hide");
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
