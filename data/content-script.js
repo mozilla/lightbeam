@@ -16,13 +16,14 @@ self.port.on('connection', function(connection){
 });
 
 self.port.on('init', function(collusionToken){
+    console.error('content-script::init()');
     localStorage.collusionToken = collusionToken;
     
     if (unsafeWindow && unsafeWindow.currentVisualization){
         unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.currentVisualization.emit('init', unsafeWindow.allConnections);
     }else{
-        console.log('cannot call unsafeWindow.currentVisualization: ' + unsafeWindow);
+        console.error('cannot call unsafeWindow.currentVisualization: ' + unsafeWindow);
     }
 });
 
