@@ -280,15 +280,29 @@ h3 {
     background-color: #EBE9E9;
 }
 
-.stage{
+.stage-stack{
+    flex-direction: column;
+    display: flex;
     position: relative;
     height: 100%;
     overflow: hidden;
     margin-right: 1px;
     transition: margin-right 0.5s ease;
 }
+
+.stage-header{
+    flex: none;
+}
+
+.stage{
+    flex: 1;
+}
 .showinfo .stage{
     margin-right: 300px;
+}
+
+.stage-footer{
+    flex: none;
 }
 
 /* SVG STYLES */
