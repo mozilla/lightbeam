@@ -381,13 +381,20 @@ h3 {
 .stage{
     flex: 1;
 }
-.showinfo .stage{
+.showinfo .stage-stack{
     margin-right: 300px;
 }
 
-.stage-footer{
+.list-footer{
     flex: none;
+    display: none;
 }
+
+.list .list-footer{
+    display: block;
+}
+
+
 
 /* SVG STYLES */
 
@@ -577,6 +584,40 @@ line{
 
 .list-table tr[site-url]{
     cursor: pointer;
+}
+
+[data-pref=watch]{
+    color: teal;
+}
+
+.preferences{
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+[data-pref=watch] .preferences{
+    background-image: url(icons/collusion_icon_watch.png);
+}
+
+[data-pref=block]{
+    color: red;
+}
+
+[data-pref=block] .preferences{
+    background-image: url(icons/collusion_icon_block.png);
+}
+
+[data-pref=hide]{
+    color: orange;
+}
+
+[data-pref=hide] .preferences{
+    background-image: url(icons/collusion_icon_hide.png);
+}
+
+.hide-hidden-rows [data-pref=hide]{
+    display: none;
 }
 
 .list-table tbody tr:hover{
