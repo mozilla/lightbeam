@@ -86,15 +86,31 @@
         </aside>
 		
 		<div class="content-flex">
-			<div class="stats-bar"></div>
+			<div class="stats-bar">
+				<div class="stat total-connections">
+					<h3>518</h3>
+					<span>TOTAL CONNECTIONS</span>
+				</div>
+				<div class="stat 3rd-party-connections">
+					<h3>394</h3>
+					<span>3RD PARTY</span>
+				</div>
+				<div class="stat 1st-party-connections">
+					<h3>156</h3>
+					<span>1ST PARTY</span>
+				</div>
+			</div>
 			<div id="content" class="">
 				<aside class="info">
 					<div class="holder">
-						<h3 class="title"></h3>
-						<!--span class="blue-text">You are currently browsing this site</span-->
-						<header class="subhead">Location</header>
-						<div class="map-section">
-							<div><span id="country">&nbsp;</span></div>
+						<div>
+							<h2 class="title"></h2>
+							<!--span class="blue-text">You are currently browsing this site</span-->
+							<span><span class="blue-text"><b>First Access </b></span>Date</span><br>
+							<span><span class="blue-text"><b>Last Access </b></span>Date</span>
+							<h3 class="dark-blue-text">Server Location</h3>
+							<div class="map-section">
+								<div><span id="country">&nbsp;</span></div>
 
 							<!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
 							<div class="world-map">
@@ -2725,10 +2741,13 @@
 
 							</div>
 							<!-- SVG world map code ends ===========================  -->
+							</div>
+							<h3 class="dark-blue-text">Privacy Score</h3>
+							<span>76 out of 100</span>
+							<h3 class="connections-head dark-blue-text"><b class="blue-text">17</b> Connection</h3>
 						</div>
-						<h3 class="connections-head">Connections</h3>
 						<div class="connections-list">
-							<span class="blue-text"></span>
+							<span>Made to/from this site</span>
 							<ul>
 							</ul>
 						</div>
@@ -2737,7 +2756,7 @@
 				<div class="stage-stack">
 				  <div class="stage-header">
 					  <h1>List View</h1>
-					  <span class="data-since-title">DATA GATHERED SINCE</span>
+					  <span class="blue-text"><b>DATA GATHERED SINCE</b></span>
 					  <span class="data-since">July 18, 2011</span>
 				  </div><!-- stage-header -->
 				  <div class="stage">
@@ -2747,7 +2766,7 @@
 					  </svg>
 				  </div><!-- .stage -->
 				  <div class="stage-footer">
-					<h3>SITE PREFERENCES</h3>
+					<h3 class="blue-text">SITE PREFERENCES</h3>
 					<div class="stage-footer-btns">
 						<div class="block-pref btn"><a>Block Site</a></div>
 						<div class="hide-pref btn"><a>Hide Site</a></div>

@@ -265,6 +265,25 @@ h3 {
     height: 80px;
     background-color:#fff;
     flex:none;
+    padding-top:30px;
+    padding-left:40px;
+}
+
+.stat{
+    display:inline-block;
+    margin-right:20px;
+}
+.stat h3{
+    display:inline-block;
+    font-weight:bold;
+    color:#38a9cb;
+    font-size:30px;
+}
+.stat span{
+    display:inline;
+    font-size:7pt;
+    font-weight:bold;
+    color:#707070;
 }
 
 .info{
@@ -276,6 +295,11 @@ h3 {
     overflow-x: hidden;
     overflow-y: auto;
     background: #404850;
+}
+.info .holder{
+    display:flex;
+    flex-direction:column;
+    height:100%;
 }
 
 .map-section{
@@ -294,10 +318,20 @@ h3 {
 }
 
 
-.map{
-    background-color: #555555;
-    width: 240px;
-    height: 200px;
+.world-map, .connections-list ul{
+    background-color: #303539;
+    border-radius:5px;
+}
+
+.connections-list{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    margin-top:34px;
+}
+
+.connections-list ul li{
+    padding:2px 2px 2px 10px;
 }
 
 .highlight-country{
@@ -310,21 +344,9 @@ h3 {
     padding: 15px 30px;
 }
 
-.info .holder .subhead {
-    padding: 10px 0;
-    font-size: 12px;
-    font-weight: bold;
-    white-space: nowrap;
-    width: 100%;
-}
-
-.info .holder span{
-    display: block;
-}
-
 .info .holder .favicon{
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     margin-right: 10px;
 }
 
@@ -332,9 +354,11 @@ h3 {
     width: 300px;
 }
 
-.info .blue-text {
-    color: #5A50F0;
-    font-size: 10px;
+.blue-text {
+    color: #64aac5;
+}
+.dark-blue-text{
+    color:#317792;
 }
 
 .info .filters{
@@ -384,15 +408,15 @@ h3 {
     font-size: 12px;
     line-height: 15px;
     list-style-type: none;
-    cursor: pointer;
-    height: 75px;
+    min-height: 75px;
     overflow-y: auto;
+    flex:1;
 }
 
 .connections-list ul li:hover,
 .settings-page ul li:hover{
-    color: #2E2B2B;
-    background-color: #EBE9E9;
+    cursor: pointer;
+    background-color: #475B61;
 }
 
 .stage-stack{
@@ -408,12 +432,10 @@ h3 {
     flex: none;
 }
 .stage-header h1{
-    font-family:"Helvetica Neue", Arial, sans-serif;;
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    font-smooth:always;
+    letter-spacing:3px;
     font-weight: 100;
-}
-.stage-header .data-since-title{
-    color:#A0D8E9;
-    font-weight:bold;
 }
 
 .stage{
@@ -426,8 +448,6 @@ h3 {
 }
 .stage-footer h3{
     font-size: 12px;
-    color:#A0D8E9;
-    font-weight: 600;
     margin-bottom:10px;
 }
 .stage-footer-btns{
@@ -641,7 +661,7 @@ line{
 }
 
 .list-table tbody tr:hover{
-    background: #475B64;
+    background: #33464d;
 }
 
 .list-table .visited-row td{
