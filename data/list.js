@@ -52,14 +52,15 @@ function onRemove(){
 function initList(){
     console.log('begin initList()');
     var stage = document.querySelector('.stage');
-    stage.classList.add("list");
+    document.querySelector('.stage-stack').classList.add("list");
+    document.querySelector('.stage-header h1').textContent = 'List View';
 
     // list header
     var table = elem("div", {'class': 'list-table'}, [
         elem('table', [
             elem('thead', {'class': 'header-table'}, [
                 elem('tr', [
-                    elem('th', elem('input', {'class': 'selectedHeader', type: 'checkbox'})),
+                    elem('th', elem('input', {'class': 'selected-header', type: 'checkbox'})),
                     elem('th', 'Type'),
                     elem('th', 'Prefs'),
                     elem('th', 'Website'),
@@ -131,18 +132,13 @@ function getNodes(filter){
 
 function nodeToRow(node){
     var settings = userSettings[node.name] || '';
-    var settingsSort = {
-        '': 0,
-        'block': 1,
-        'hide': 2,
-        'watch': 3
-    }[settings];
     return elem('tr', {
-            'class': userSettings[node.name] + ' node ' + node.nodeType,
+            'class': 'node ' + node.nodeType,
+            'data-pref': settings,
             'data-name': node.name,
             'site-url': node.name
     }, [
-        elem('td', elem('input', {'type': 'checkbox', 'class': 'selectedRow'})),
+        elem('td', elem('input', {'type': 'checkbox', 'class': 'selected-row'})),
         elem('td', {'data-sort-key': node.nodeType}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
         elem('td', {'class': 'preferences', 'data-sort-key': settings}, '\u00A0'),
         elem('td', {'data-sort-key': node.name}, node.name),
@@ -213,7 +209,6 @@ function sortTableOnColumn(table, n){
 }
 
 function resort(table){
-    try{
     var direction = localStorage.lastSortDirection;
     if (direction){
         var index = parseInt(localStorage.lastSortColumn, 10) + 1; // nth child is 1-based
@@ -223,9 +218,6 @@ function resort(table){
         header.classList.add(direction === 'forward' ? 'reverse-sorted' : 'sorted');
         header.dispatchEvent(new MouseEvent('click'))
     }
-}catch(e){
-    console.log('Problem in resort: %o', e);
-}
 }
 
 function resetCanvas(){
@@ -233,5 +225,79 @@ function resetCanvas(){
     document.querySelector(".stage").removeChild( document.querySelector(".stage .list-table") );
     vizcanvas.classList.remove("hide");
 }
+
+function getSelectedRows(){
+    // returns selected rows as an Array
+    return Array.prototype.slice.call(document.querySelectorAll('.body-table tr')).filter(function(item){
+        return item.querySelector('.selected-row:checked');
+    })
+}
+
+// Event handlers
+
+function setUserSetting(row, pref){
+    var site = row.dataset.name;
+    console.log('setting user setting %s for %s', pref, site);
+    // change setting
+    userSettings[site] = pref;
+    // send change through to add-on
+    addon.emit('updateBlocklist', site, pref === 'block');
+    // modify row
+    row.dataset.pref = pref;
+}
+
+function selectAllRows(flag){
+    var checkboxes = document.querySelectorAll('.selected-row');
+    for (var i = 0; i < checkboxes.length; i++){
+        checkboxes[i].checked = flag;
+    }
+}
+
+function setPreferences(pref){
+    getSelectedRows().forEach(function(row){
+        setUserSetting(row, pref);
+    });
+}
+
+function toggleHiddenSites(target){
+    if (target.dataset.state === 'shown'){
+        target.dataset.state = 'hidden';
+        target.textContent = 'Show Hidden';
+        document.querySelector('.stage-stack').classList.add('hide-hidden-rows');
+        localStorage.listViewHideRows = true;
+    }else{
+        target.dataset.state = 'shown';
+        target.textContent = 'Hide Hidden';
+        document.querySelector('.stage-stack').classList.remove('hide-hidden-rows');
+        localStorage.listViewHideRows = false;
+    }
+}
+
+// Restore state on load
+if (localStorage.listViewHideRows){
+    var button = document.querySelector('.toggle-hidden');
+    button.dataset.state = 'hidden';
+    button.textContent = 'Show Hidden';
+    document.querySelector('.stage-stack').classList.add('hide-hidden-rows');
+}
+
+// Install handlers
+
+document.querySelector('.stage-stack').addEventListener('click', function(event){
+    var target = event.target;
+    if (target.mozMatchesSelector('.selected-header')){
+        selectAllRows(target.checked);
+    }else if(target.mozMatchesSelector('.block-pref')){
+        setPreferences('block');
+    }else if (target.mozMatchesSelector('.hide-pref')){
+        setPreferences('hide');
+    }else if (target.mozMatchesSelector('.watch-pref')){
+        setPreferences('watch');
+    }else if(target.mozMatchesSelector('.no-pref')){
+        setPreferences('');
+    }else if(target.mozMatchesSelector('.toggle-hidden')){
+        toggleHiddenSites(target);
+    }
+});
 
 })(visualizations);
