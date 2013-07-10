@@ -24,6 +24,17 @@ const STATUS = 12;
 const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
+const vizcanvas = document.querySelector('.vizcanvas');
+var mapDocument, mapcanvas;
+document.querySelector('.world-map').addEventListener('load', function(event){
+  mapDocument = event.target.contentDocument;
+  mapcanvas = mapDocument.querySelector('.mapcanvas');
+  console.log('we should have a mapcanvas now: %o', mapcanvas);
+  initMap();
+  console.log('map initialized');
+}, false);
+
+
 // DOM Utility
 
 function elem(name, attributes, children){

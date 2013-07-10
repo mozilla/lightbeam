@@ -10,7 +10,7 @@ var graph = new Emitter();
 visualizations.graph = graph;
 graph.name = "graph";
 var width = 1000, height = 1000;
-var force, vizcanvas, vis;
+var force, vis;
 
 // There are three phases for a visualization life-cycle:
 // init does initialization and receives the existing set of connections
@@ -30,8 +30,7 @@ function setFilter(){
 function onInit(connections){
     console.log("= onInit = allConnections.length = %s" , allConnections.length);
     console.log('initializing graph from %s connections', connections.length);
-    vizcanvas = document.querySelector('.vizcanvas');
-    vis = d3.select('.vizcanvas');
+    vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
