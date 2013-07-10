@@ -32,6 +32,7 @@ function onInit(connections){
     aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
     initList();
+    initializeHandlers();
     //aggregate.on('updated', function(){ });
 }
 
@@ -247,6 +248,7 @@ function setUserSetting(row, pref){
 }
 
 function selectAllRows(flag){
+    console.log('selecting all rows');
     var checkboxes = document.querySelectorAll('.selected-row');
     for (var i = 0; i < checkboxes.length; i++){
         checkboxes[i].checked = flag;
@@ -282,22 +284,29 @@ if (localStorage.listViewHideRows){
 }
 
 // Install handlers
+function initializeHandlers(){
+    try{
+    document.querySelector('.selected-header').addEventListener('change', function(event){
+        selectAllRows(event.target.checked);
+    }, false);
 
-document.querySelector('.stage-stack').addEventListener('click', function(event){
-    var target = event.target;
-    if (target.mozMatchesSelector('.selected-header')){
-        selectAllRows(target.checked);
-    }else if(target.mozMatchesSelector('.block-pref')){
-        setPreferences('block');
-    }else if (target.mozMatchesSelector('.hide-pref')){
-        setPreferences('hide');
-    }else if (target.mozMatchesSelector('.watch-pref')){
-        setPreferences('watch');
-    }else if(target.mozMatchesSelector('.no-pref')){
-        setPreferences('');
-    }else if(target.mozMatchesSelector('.toggle-hidden')){
-        toggleHiddenSites(target);
-    }
-});
+    document.querySelector('.stage-stack').addEventListener('click', function(event){
+        var target = event.target;
+        if(target.mozMatchesSelector('.block-pref')){
+            setPreferences('block');
+        }else if (target.mozMatchesSelector('.hide-pref')){
+            setPreferences('hide');
+        }else if (target.mozMatchesSelector('.watch-pref')){
+            setPreferences('watch');
+        }else if(target.mozMatchesSelector('.no-pref')){
+            setPreferences('');
+        }else if(target.mozMatchesSelector('.toggle-hidden')){
+            toggleHiddenSites(target);
+        }
+    }, false);
+}catch(e){
+    console.log('Error: %o', e);
+}
+}
 
 })(visualizations);
