@@ -9,8 +9,6 @@ var list = new Emitter();
 visualizations.list = list;
 list.name = "list";
 
-var vizcanvas;
-
 list.on("init", onInit);
 list.on("conneciton", onConnection);
 list.on("remove", onRemove);
@@ -26,7 +24,6 @@ function setFilter(){
 
 function onInit(connections){
     console.log('initializing list from %s connections', connections.length);
-    vizcanvas = document.querySelector('.vizcanvas');
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     aggregate.emit('load', connections);
@@ -245,6 +242,7 @@ function setUserSetting(row, pref){
     addon.emit('updateBlocklist', site, pref === 'block');
     // modify row
     row.dataset.pref = pref;
+    // FIXME: add sort order to preference column
 }
 
 function selectAllRows(flag){

@@ -157,43 +157,15 @@ document.querySelector('.stage').addEventListener('click', function(event){
 
 
 function getZoom(canvas){
-    // TODO: code cleanup if both cases use basically the same code
-    switch(canvas){
-        case 'vizcanvas': {
-            var box = document.querySelector('.vizcanvas')
-                        .getAttribute('viewBox')
-                        .split(/\s/)
-                        .map(function(i){ return parseInt(i, 10); });
-            return {x: box[0], y: box[1], w: box[2], h: box[3]};
-        }
-        case 'mapcanvas': {
-            var box = document.querySelector('.mapcanvas')
-                        .getAttribute('viewBox')
-                        .split(/\s/)
-                        .map(function(i){ return parseInt(i, 10); });
-            console.log(box);
-            return {x: box[0], y: box[1], w: box[2], h: box[3]};
-        }
-        default: throw new Error('It has to be one of the choices above');
-    }
+    var box = canvas.getAttribute('viewBox')
+                    .split(/\s/)
+                    .map(function(i){ return parseInt(i, 10); });
+    return {x: box[0], y: box[1], w: box[2], h: box[3]};
 }
 
 function setZoom(box,canvas){
     // TODO: code cleanup if both cases use basically the same code
-    switch(canvas){
-        case 'vizcanvas': {
-                document.querySelector('.vizcanvas')
-                    .setAttribute('viewBox', [box.x, box.y, box.w, box.h].join(' '));
-                break;
-        }
-        case 'mapcanvas': {
-                document.querySelector('.mapcanvas')
-                    .setAttribute('viewBox', [box.x, box.y, box.w, box.h].join(' '));
-                break;
-
-        }
-        default: throw new Error('It has to be one of the choices above');
-    }
+    canvas.setAttribute('viewBox', [box.x, box.y, box.w, box.h].join(' '));
 }
 
 
@@ -276,16 +248,15 @@ function svgZooming(target,ratio){
         return box;
     }
 
-
     if ( target == "vizcanvas" ){
-        var box = getZoom("vizcanvas");
+        var box = getZoom(vizcanvas);
         var newViewBox = generateNewViewBox(target, box);
-        setZoom(newViewBox,"vizcanvas");
+        setZoom(newViewBox,vizcanvas);
 
     }else{
-        var box = getZoom("mapcanvas");
+        var box = getZoom(mapcanvas);
         var newViewBox = generateNewViewBox(target, box);
-        setZoom(newViewBox,"mapcanvas");
+        setZoom(newViewBox, mapcanvas);
     }
 
 }
@@ -310,61 +281,27 @@ document.querySelector(".stage").addEventListener("mousedown",function(event){
 
 document.querySelector(".stage").addEventListener("mousemove",function(event){
     if ( event.target.mozMatchesSelector(".vizcanvas") && !event.target.mozMatchesSelector(".node, .node *") && onDragGraph ){
-        document.querySelector(".vizcanvas").style.cursor = "-moz-grab";
+        vizcanvas.style.cursor = "-moz-grab";
         var offsetX = ( Math.ceil(event.clientX) - graphDragStart.x );
         var offsetY = ( Math.ceil(event.clientY) - graphDragStart.y );
-        var box = getZoom("vizcanvas");
+        var box = getZoom(vizcanvas);
         box.x -= ( offsetX * box.w/700);
         box.y -= ( offsetY * box.h/700);
         graphDragStart.x += offsetX;
         graphDragStart.y += offsetY;
-        setZoom(box,"vizcanvas");
+        setZoom(box,vizcanvas);
     }
 
 },false);
 
 document.querySelector(".stage").addEventListener("mouseup",function(event){
     onDragGraph = false;
-    document.querySelector(".vizcanvas").style.cursor = "default";
+    vizcanvas.style.cursor = "default";
 },false);
 
 document.querySelector(".stage").addEventListener("mouseleave",function(event){
     onDragGraph = false;
-    document.querySelector(".vizcanvas").style.cursor = "default";
-},false);
-
-/* mapcanvas */
-document.querySelector(".world-map").addEventListener("mousedown",function(event){
-    if ( event.target.mozMatchesSelector(".mapcanvas, .mapcanvas *") ){
-        onDragMap = true;
-        mapDragStart.x = event.clientX;
-        mapDragStart.y = event.clientY;
-    }
-},false);
-
-document.querySelector(".world-map").addEventListener("mousemove",function(event){
-    if ( event.target.mozMatchesSelector(".mapcanvas, .mapcanvas *") && onDragMap ){
-        document.querySelector(".mapcanvas").style.cursor = "-moz-grab";
-        var offsetX = ( Math.ceil(event.clientX) - mapDragStart.x );
-        var offsetY = ( Math.ceil(event.clientY) - mapDragStart.y );
-        var box = getZoom("mapcanvas");
-        box.x -= (offsetX * 10);
-        box.y -= (offsetY * 10);
-        mapDragStart.x += offsetX;
-        mapDragStart.y += offsetY;
-        setZoom(box,"mapcanvas");
-    }
-
-},false);
-
-document.querySelector(".world-map").addEventListener("mouseup",function(event){
-    onDragMap = false;
-    document.querySelector(".mapcanvas").style.cursor = "default";
-},false);
-
-document.querySelector(".world-map").addEventListener("mouseleave",function(event){
-    onDragMap = false;
-    document.querySelector(".mapcanvas").style.cursor = "default";
+    vizcanvas.style.cursor = "default";
 },false);
 
 
@@ -378,27 +315,6 @@ document.querySelector(".help-mode").addEventListener("click", function(){
         triggerHelp(document.querySelector("body"), "toggleOffHelp", currentVisualization.name);
     }
 });
-
-
-/* Settings Page ========================= */
-document.querySelector(".settings").addEventListener("click", function(event){
-    if ( currentVisualization.name == "clock" || currentVisualization.name == "graph" ){
-        document.querySelector(".vizcanvas").classList.toggle("hide");
-    }else{
-        document.querySelector(".list-breadcrumb").classList.toggle("hide");
-        document.querySelector(".list-header").classList.toggle("hide");
-        document.querySelector(".list-table").classList.toggle("hide");
-
-    }
-    var infoBarVisible = document.querySelector("#content").classList.contains("showinfo");
-    if ( infoBarVisible ){
-        document.querySelector("#content").classList.remove("showinfo");
-    }
-    document.querySelector(".settings").parentElement.classList.toggle("active");
-    document.querySelector(".settings-page").classList.toggle("hide");
-});
-
-
 
 /* Clock View ===================================== */
 
