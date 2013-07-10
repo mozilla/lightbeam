@@ -9,12 +9,18 @@
   dropdown buttons: #363636
   sidebar "link" buttons: #939393
 */
+ 
+
+/*  New colour scheme:
+    sidebar, info panel 
+        background:#404850
+*/
 
 html, body{
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #2E2B2B;
+    background-color: #000;
     color: #EAEAEA;
     overflow: hidden;
 }
@@ -34,56 +40,69 @@ h3 {
 
 .main{
     position: relative;
-    height: calc(100%);
-}
-
-.collusion-title{
-    height:65px;
-    margin-bottom:15px;
-    
-}
-.collusion-title h1{
-    font-size: 25px;
-    vertical-align: center;
-    line-height: 50px;
+    height: 100%;
 }
 
 .controls{
-    width: 200px;
-    padding: 15px 30px;
+    width: 170px;
+    padding: 15px 15px;
     float: left;
-    border-top: 1px solid #555555;
-    border-right: 1px solid #555555;
     z-index: 5;
     height: 100%;
     font-size: 12px;
     font-weight: bold;
     overflow-x: hidden;
     overflow-y: auto;
+    background: #404850;
 }
 
-.controls i:not(.icon-sort-down){
-    margin-right: 5px;
-    font-size: 14px;
-    vertical-align: middle;
+.controls .btn{
+    width:100%;
 }
 
-.btn_group > *{
-    background: #363636;
+.controls header{
+    height: 35px;
+    margin-bottom: 20px;
 }
 
-.btn_group{
-    width: 100%;
-    position: relative;
-    cursor: pointer;
-    font-size: 12px;
+.collusion-icon{
+    border:1px solid #5ABED2; 
+    width: 35px; 
+    height: 35px; 
+    border-radius: 5px;
+    float: left;
+}
+
+.logo{
+    float: left;
+    width: 85px;
+    margin-left: 10px;
+}
+
+.hidden{
+    display: none;
+}
+
+/* Button Styling =============== */
+
+.btn a:hover,
+.square-button a:hover{
+    background: #475B61;
+}
+
+.btn_group, 
+.btn{
+    margin-bottom: 15px;
+    background: #25292D;
+    font-size: 7pt;
+    letter-spacing: 1px;
+    border-radius: 5px;
 }
 
 .btn_group .dropdown_button{
     height: 32px;
     line-height: 30px;
-    border: 1px solid #555555;
-    border-radius: 2px;
+    border-radius: 5px 0 0 0;
     padding-left: 10px;
 }
 
@@ -92,39 +111,68 @@ h3 {
     color: #EAEAEA;
 }
 
-.btn_group .downarrow{
+.btn_group .arrow{
     float: right;
-    border-left: 1px solid #555555;
     padding: 0 10px;
+    background: #12181B;
+    border-radius: 0 5px 0 0;
+    cursor: pointer;
 }
 
 .collapsed {
     display: none;
 }
 
-.invi_focus:focus{
-    outline: none;
+.btn a,
+.square-button a{
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.controls .btn_group .dropdown_options{
-    line-height: 28px;
-    position: absolute;
-    width: 100%;
-    z-index: 100;
-}
-
-.controls .btn_group div.dropdown_options a{
+.btn_group div.dropdown_options a,
+.btn a{
     margin: 0;
     display: block;
     padding-left: 10px;
-    border-color: #555555;
-    border-width: 0 1px 1px 1px;
-    border-style: solid;
+    background: #303539;
     line-height: 28px;
 }
+.btn.orange a{
+    background: rgb(250, 105, 0);
+}
+.btn.orange a:hover{
+    background: rgb(200, 75, 0);
+}
 
-.controls .btn_group div.dropdown_options a[data-selected]{
+.btn_group .dropdown_options.expanded a:hover{
+    cursor: pointer;
+    background: #475B61;
+}
+
+.btn_group .dropdown_options a[data-selected]{
+    border-radius: 0 0 5px 5px;
+    background: #5F6771;
+}
+
+.btn_group .dropdown_options.expanded a{
+    border-radius: 0;
+}
+
+.btn_group .dropdown_options.expanded a:last-child{
+    border-radius: 0 0 5px 5px;
+}
+
+.btn_group .dropdown_options a.collapsed{
     display: none;
+}
+
+.btn_group img,
+.btn img{
+    width: 15px;
+    height: 15px;
+    margin-right: 15px;
+    position: relative;
+    top: 3px;
 }
 
 .controls ul{
@@ -143,15 +191,62 @@ h3 {
     cursor: pointer;
 }
 
-.controls a:hover{
-    color: white;
+.controls .square-button-controls{
+    position: fixed;
+    bottom: 30px;
+    margin-bottom: 20px;
 }
+
+.controls .collusion-url{
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 10px;
+}
+
+.square-button{
+    float: left;
+    cursor: pointer;
+    text-align: center;
+}
+
+.square-button:not(:last-child){
+    margin-right: 20px;
+}
+
+.square-button a{
+    display: block;
+    background: #25292D;
+    width: 18px;
+    height: 18px;
+    padding: 5px;
+    margin: 0 auto;
+}
+
+.square-button.active{
+    background: #5F6771;
+}
+
+.square-button img{
+    position: relative;
+    top: 2px;
+    width: 15px;
+    height: 15px;
+}
+
+.square-button .button-label{
+    font-size: 7pt;
+    color: #fff;
+    margin-top: 5px;
+    text-align: center;
+}
+
 
 #content{
     flex:1;
     position: relative;
     z-index: 0;
     border-top: 1px solid #555555;
+    height: 100%;
 }
 
 #content span,
@@ -163,7 +258,7 @@ h3 {
     display:flex;
     flex-direction:column;
     height:100%;
-    width:calc(100% - 200px);
+    width:calc(100% - 170px);
 }
 
 .stats-bar{
@@ -180,6 +275,7 @@ h3 {
     transition: width 0.5s ease;
     overflow-x: hidden;
     overflow-y: auto;
+    background: #404850;
 }
 
 .map-section{
@@ -234,7 +330,6 @@ h3 {
 
 .showinfo .info{
     width: 300px;
-    border-left: 1px solid #555555;
 }
 
 .info .blue-text {
@@ -340,9 +435,11 @@ h3 {
     justify-content:space-between;
     align-items:flex-start;
 }
-.stage-footer-btns button{
-    flex:none;
+.stage-footer-btns .btn{
     margin-right:20px;
+}
+.stage-footer-btns .btn a{
+    padding-right:10px;
 }
 .btn-spacer{
     flex:1;
@@ -679,20 +776,5 @@ line{
     padding-left: 15px;
     clear: both;
 }
-
-.btn{
-    padding:5px 20px;
-    background-color:#404040;
-    border-radius: 2px;
-    border:none;
-    cursor:pointer;
-    color: rgb(234, 234, 234)
-}
-
-.btn.orange{background-color:#AD5E33}
-.btn:hover{
-    background-color:#505050;
-}
-.btn.orange:hover{background-color:#9C4D22}/*DO THIS NEXT*?
 
 

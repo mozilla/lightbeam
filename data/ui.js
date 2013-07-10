@@ -5,69 +5,81 @@ function toArray(nl){
 }
 
 
-/* DOMContentLoaded event listener */
-window.addEventListener("DOMContentLoaded", function(){
+/**************************************************
+*   Buttons
+*/
 
-    function dropdownGroup(btnGroup, callback){
-        var view = btnGroup.querySelector("[data-view]");
-        var list = btnGroup.querySelector("[data-list]");
+var btnSelectCallback = function(e,btnGroup,callback){
+    var targetValue = e.target.getAttribute("data-value");
+    var otherOptions = btnGroup.querySelectorAll(".dropdown_options a:not([data-selected])");
+    btnGroup.querySelector(".dropdown_options").classList.remove("expanded");
+    btnGroup.querySelector(".arrow").querySelector(".icon-sort-down").classList.remove("hidden");
+    btnGroup.querySelector(".arrow").querySelector(".icon-sort-up").classList.add("hidden");
+    toArray(otherOptions).forEach(function(option){
+        option.classList.add("collapsed");
+    });
+    callback(targetValue);
+}
 
-        callback = callback || function(){};
-
-        btnGroup.addEventListener("click", function(e){
-            var selected = btnGroup.querySelector("[data-selected]");
-            var targetValue = e.target.getAttribute("data-value");
-            var activeDropdown = document.querySelector(".active_dropdown");
-
-            // opens up the current selected dropdown list
-            btnGroup.querySelector(".dropdown_options").classList.toggle("collapsed");
-            btnGroup.classList.toggle("active_dropdown");
-
-            // when user selects an option from the dropdown list
-            if ( targetValue ){
-                view.querySelector("a:not(.invi_focus)").innerHTML = e.target.innerHTML;
-                selected.removeAttribute("data-selected");
-                e.target.setAttribute("data-selected", true);
-                callback(targetValue);
-            }
-        }, false);
-    }
-
-    /* Bind click event listener to each of the btn_group memebers */
-    var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
-    btnGroupArray.forEach(function(btnGroup){
-        dropdownGroup(btnGroup, function(val){
-            val = val.toLowerCase();
-            switch(val){
-                case 'clock':
-                case 'graph':
-                case 'list':
-                    switchVisualization(val);
-                    break;
-                default:
-                    console.log("selected val=" + val);
-            }
+function dropdownGroup(btnGroup, callback){
+    callback = callback || function(){};
+    var arrow = btnGroup.querySelector(".arrow");
+    arrow.addEventListener("click", function(event){
+        var otherOptions = btnGroup.querySelectorAll(".dropdown_options a:not([data-selected])");
+        var allOptions = btnGroup.querySelectorAll(".dropdown_options a");
+        arrow.querySelector(".icon-sort-down").classList.toggle("hidden");
+        arrow.querySelector(".icon-sort-up").classList.toggle("hidden");
+        btnGroup.querySelector(".dropdown_options").classList.toggle("expanded");
+        toArray(otherOptions).forEach(function(option){
+            option.classList.toggle("collapsed");
         });
-    });
 
+        toArray(allOptions).forEach(function(option){
+            option.addEventListener("click", function(e){
+                btnGroup.querySelector("[data-selected]").removeAttribute("data-selected");
+                e.target.setAttribute("data-selected", true);
+                btnSelectCallback(e,btnGroup,function(selectedValue){
+                    callback(selectedValue);
+                });
+            }); 
+        });
 
-    /* Toggle Info Panel */
-    document.querySelector(".show-info-button").addEventListener("click", function(){
-        document.querySelector("#content").classList.toggle("showinfo");
-    });
+    }, false);
+}
 
-
-    /* When a open dropdown list loses focus, collapse it. */
-    window.addEventListener("click", function(e){
-        var activeDropdown = document.querySelector(".active_dropdown");
-        if ( activeDropdown && !activeDropdown.contains(e.target) ){
-                activeDropdown.querySelector(".dropdown_options").classList.add("collapsed");
-                activeDropdown.classList.remove("active_dropdown");
+/* Bind click event listener to each of the btn_group memebers */
+var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
+btnGroupArray.forEach(function(btnGroup){
+    dropdownGroup(btnGroup, function(val){
+        val = val.toLowerCase();
+        switch(val){
+            case 'clock':
+            case 'graph':
+            case 'list':
+                switchVisualization(val);
+                break;
+            default:
+                console.log("selected val=" + val);
         }
-    }, true);
-
-
+    });
 });
+
+
+/* Toggle Info Panel */
+document.querySelector(".show-info-button").addEventListener("click", function(){
+    document.querySelector("#content").classList.toggle("showinfo");
+});
+
+
+/* When a open dropdown list loses focus, collapse it. */
+window.addEventListener("click", function(e){
+    var activeDropdown = document.querySelector(".active_dropdown");
+    if ( activeDropdown && !activeDropdown.contains(e.target) ){
+            activeDropdown.querySelector(".dropdown_options").classList.add("collapsed");
+            activeDropdown.classList.remove("active_dropdown");
+    }
+}, true);
+
 
 document.querySelector(".download").addEventListener('click', function(evt) {
     console.log('received export data');
@@ -105,7 +117,7 @@ document.querySelector('.reset-data').addEventListener('click', function(){
 
 var uploadButton = document.querySelector('.upload');
 if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
-    uploadButton.innerHTML = 'Stop Sharing';
+    uploadButton.innerHTML = '<img src="image/collusion_icon_share.png" /> Stop Sharing';
 }
 
 uploadButton.addEventListener('click', function(){
@@ -357,9 +369,10 @@ document.querySelector(".world-map").addEventListener("mouseleave",function(even
 
 
 /* Help Mode ========================= */
-document.querySelector(".help-mode").checked = false;
 document.querySelector(".help-mode").addEventListener("click", function(){
-    if( this.checked ){
+    var theButton = document.querySelector(".help-mode").parentElement;
+    theButton.classList.toggle("active");
+    if( theButton.className.contains("active") ){
         triggerHelp(document.querySelector("body"), "toggleOnHelp", currentVisualization.name);
     }else{
         triggerHelp(document.querySelector("body"), "toggleOffHelp", currentVisualization.name);
@@ -381,6 +394,7 @@ document.querySelector(".settings").addEventListener("click", function(event){
     if ( infoBarVisible ){
         document.querySelector("#content").classList.remove("showinfo");
     }
+    document.querySelector(".settings").parentElement.classList.toggle("active");
     document.querySelector(".settings-page").classList.toggle("hide");
 });
 

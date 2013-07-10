@@ -72,8 +72,12 @@ function elem(name, attributes, children){
 window.addEventListener('load', function(evt){
     addon.emit("privateWindowCheck");
     // Wire up events
-    document.querySelector('.btn_group.visualization').click();
-    document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
+    // document.querySelector('.btn_group.visualization').click();
+    // document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
+    // document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected").click();
+    document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
+    document.querySelector('.btn_group.visualization [data-selected]').classList.remove("collapsed");
+    switchVisualization(localStorage.visualization.toLowerCase() || 'graph');
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
@@ -181,7 +185,7 @@ function startSharing(){
 function stopSharing(){
     if (confirm('You are about to stop sharing data with the Mozilla Collusion server.\n\n' +
                     'By clicking Okay you will no longer be uploading data.')){
-        uploadButton.innerHTML = '<i class="icon-arrow-up"></i>Share Data';
+        uploadButton.innerHTML = '<img src="image/collusion_icon_share.png" /></i>Share Data';
         localStorage.userHasOptedIntoSharing = false;
         if (uploadTimer){
             clearTimeout(uploadTimer);
