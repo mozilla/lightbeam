@@ -506,38 +506,66 @@ text {
 
 /* Graph Visualization */
 
+.cookieYes,
+.cookieNo,
+.cookieBoth{
+    stroke: #FFFFFF;
+    stroke-width: 2;
+}
+
+.visitedSites,
+.unvisitedSites{
+    fill: #FFF;
+}
+
+.connectionLine{
+    stroke: #FFF;
+    stroke-width: 2;
+}
+
+.watchedSites{
+    fill: #FFF;
+    stroke: #268CB7;
+    stroke-width: 2;
+}
+
+.blockedSites{
+    fill: #FFF;
+    stroke: #FF0000;
+    stroke-width: 2;
+}
+
+.hiddenSites{
+    fill: #FFF;
+    stroke: #FA9828;
+    stroke-width: 2;
+}
+
 .edge{
     stroke: #FFF;
+    opacity: 0.5;
 }
 
-.node{
-    stroke-width: 4;
+.visitedYes,
+.visitedNo,
+.visitedBoth{
+    fill: #FFFFFF;
+    opacity: 0.5;
 }
 
-.secureYes{
-    /* stroke: #1ABE15; */
+.visitedYes.highlighted,
+.visitedNo.highlighted,
+.visitedBoth.highlighted,
+.edge.highlighted{
+    opacity: 1;
 }
 
-.secureNo{
-    /* stroke: #CE1105; */
+.cookieYes.coloured,
+.cookieBoth.coloured,
+.cookies{
+    stroke: #800080;
+    stroke-width: 2;
 }
-
-.secureBoth{
-    /* stroke: #00FF00; */
-}
-
-.cookieYes{
-    /* fill: #1E55EE; */
-}
-
-.cookieNo{
-    /* fill: #FEEB1E; */
-}
-
-.cookieBoth{
-    /* fill: #EA5E15; */
-}
-
 
 /* List Visualization */
 .hide {
@@ -826,50 +854,4 @@ text {
 
 .graph-legend .legend-canvas-large{
     width: 34px;
-}
-
-.visitedSites,
-.unvisitedSites{
-    fill: #FFF;
-}
-
-.connectionLine{
-    stroke: #FFF;
-    stroke-width: 2;
-}
-
-.watchedSites{
-    fill: #FFF;
-    stroke: #268CB7;
-    stroke-width: 2;
-}
-
-.blockedSites{
-    fill: #FFF;
-    stroke: #FF0000;
-    stroke-width: 2;
-}
-
-.hiddenSites{
-    fill: #FFF;
-    stroke: #FA9828;
-    stroke-width: 2;
-}
-
-.secureConnection{
-    stroke: #107A10;
-    stroke-width: 2;
-}
-
-.unsecureConnection{
-    stroke: #FFFF00;
-    stroke-width: 2;
-}
-
-.cookies{
-    fill: #800080;
-}
-
-.noCookies{
-    fill: #FFF;
 }
