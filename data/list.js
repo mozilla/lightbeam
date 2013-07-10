@@ -242,7 +242,12 @@ function setUserSetting(row, pref){
     addon.emit('updateBlocklist', site, pref === 'block');
     // modify row
     row.dataset.pref = pref;
-    // FIXME: add sort order to preference column
+    // Add sort order to preference column
+    row.querySelector('.preferences').dataset.sortKey = pref;
+    // Re-sort if sorted by preference
+    if(localStorage.lastSortColumn === '2'){
+        resort(document.querySelector(".list-table"));
+    }
 }
 
 function selectAllRows(flag){
