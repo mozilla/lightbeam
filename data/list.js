@@ -243,6 +243,7 @@ function setUserSetting(row, pref){
     // modify row
     row.dataset.pref = pref;
     // FIXME: add sort order to preference column
+    row.querySelector('.preferences').dataset.sortKey = pref;
 }
 
 function selectAllRows(flag){
