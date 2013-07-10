@@ -400,3 +400,29 @@ document.querySelector(".connections-list ul").addEventListener("click", functio
         }
     }
 });
+
+
+/* Legend & Controls for Graph ===================================== */
+
+document.querySelector(".graph-legend .legend-controls").addEventListener("click", function(event){
+    if (event.target.mozMatchesSelector(".btn, .btn *")){
+        var btn = event.target;
+        while(btn.mozMatchesSelector('.btn *')){
+            btn = btn.parentElement;
+        }
+        btn.classList.toggle("active");
+    }
+});
+
+document.querySelector(".graph-legend .legend-toggle").addEventListener("click", function(event){
+    var controlsSection = document.querySelector(".graph-legend .legend-controls");
+    if ( controlsSection.classList.contains("hidden") ){
+        controlsSection.classList.remove("hidden");
+        event.target.innerHTML = "Hide";
+    }else{
+        controlsSection.classList.add("hidden");
+        event.target.innerHTML = "Show";
+    }
+    
+});
+

@@ -24,7 +24,7 @@ const STATUS = 12;
 const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
-const vizcanvas = document.querySelector('.vizcanvas');
+var vizcanvas = document.querySelector('.vizcanvas');
 var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
@@ -83,9 +83,6 @@ function elem(name, attributes, children){
 window.addEventListener('load', function(evt){
     addon.emit("privateWindowCheck");
     // Wire up events
-    // document.querySelector('.btn_group.visualization').click();
-    // document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
-    // document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected").click();
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     document.querySelector('.btn_group.visualization [data-selected]').classList.remove("collapsed");
     switchVisualization(localStorage.visualization.toLowerCase() || 'graph');
@@ -140,6 +137,13 @@ function resetAddtionalUI(){
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
+    // toggle graph legend section
+    console.log(currentVisualization.name);
+    if( currentVisualization.name != "graph" ){
+        document.querySelector(".graph-legend").classList.add("hidden"); 
+    }else{
+        document.querySelector(".graph-legend").classList.remove("hidden")   
+    }
 }
 
 
