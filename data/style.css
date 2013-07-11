@@ -709,6 +709,12 @@ text {
     width: 5em;
 }
 
+.body-table td:nth-child(4) img{
+    width: 16px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
 .header-table th:nth-child(5), .body-table td:nth-child(5){
     width: 10em;
 }
