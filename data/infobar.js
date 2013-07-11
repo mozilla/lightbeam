@@ -106,7 +106,13 @@ function updateInfo(nodeName){
                 htmlList = htmlList + "<li>" + key + "</li>";
             }
         }
-        document.querySelector(".connections-list").querySelector(".blue-text").innerHTML = (Object.keys(nodeList).length-1) + " site(s) have made connections to/from current site";
+        var connections_head = document.querySelector(".connections-head").innerHTML;
+        if(connections_head.substring(connections_head.length-1, connections_head.length) === 'n' && (Object.keys(nodeList).length-1) > 1){
+        	document.querySelector(".connections-head").innerHTML+='s';
+        }else if(connections_head.substring(connections_head.length-1, connections_head.length) === 's' && (Object.keys(nodeList).length-1) < 2){
+        	connections_head.splice(0, -1);
+        }
+        document.querySelector(".connections-head b").innerHTML = Object.keys(nodeList).length-1;
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         document.querySelector("#content").classList.add("showinfo");
