@@ -421,7 +421,7 @@ function toggleLegendSection(eventTarget,elmToToggle){
     }
 }
 
-var graphLegend = document.querySelector(".graph-legend");
+var graphLegend = document.querySelector(".graph-footer");
 
 graphLegend.querySelector(".legend-controls").addEventListener("click", function(event){
     if (event.target.mozMatchesSelector(".btn, .btn *")){
@@ -481,7 +481,7 @@ function toggleGraphElements(elements,classToggle,flag){
 
 /* for Clock -------------------- */
 
-document.querySelector(".clock-legend .legend-toggle").addEventListener("click", function(event){
-    var controlsSection = document.querySelector(".clock-legend .legend-controls");
+document.querySelector(".clock-footer .legend-toggle").addEventListener("click", function(event){
+    var controlsSection = document.querySelector(".clock-footer .legend-controls");
     toggleLegendSection(event.target,controlsSection);
 });

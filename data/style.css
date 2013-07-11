@@ -880,8 +880,8 @@ text {
 
 /* Legend for Graph and Clock */
 
-.graph-legend,
-.clock-legend{
+.graph-footer,
+.clock-footer{
     margin-right: 30px;
     flex: none;
 }
