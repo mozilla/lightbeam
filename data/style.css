@@ -516,12 +516,19 @@ text {
 .sourceSites{
     fill: #FFF;
     stroke: none;
+    opacity: 0.3;
 }
 
 .target,
 .targetSites{
     fill: #FFDD64;
     stroke: none;
+    opacity: 0.3;
+}
+
+.source.highlighted,
+.target.highlighted{
+    opacity: 1;
 }
 
 
@@ -627,14 +634,14 @@ text {
 
 .edge{
     stroke: #FFF;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 .visitedYes,
 .visitedNo,
 .visitedBoth{
     fill: #FFFFFF;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 .visitedYes.highlighted,

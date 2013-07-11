@@ -241,4 +241,41 @@ function resetCanvas(){
 }
 
 
+
+/* for Highlighting and Colouring -------------------- */
+
+var highlightVisited = true;
+var highlightNeverVisited = true;
+var highlightConnections = true;
+var highlightCookies = false;
+var graphLegend = document.querySelector(".graph-footer");
+
+legendBtnClickHandler(graphLegend);
+
+graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
+    var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
+    toggleVizElements(visited,"highlighted");
+    highlightVisited = !highlightVisited;
+});
+
+graphLegend.querySelector(".toggle-never-visited").addEventListener("click", function(event){
+    var neverVisited = document.querySelectorAll(".visitedNo");
+    toggleVizElements(neverVisited,"highlighted");
+    highlightNeverVisited = !highlightNeverVisited;
+});
+
+graphLegend.querySelector(".toggle-connections").addEventListener("click", function(event){
+    var cookiesConnections = document.querySelectorAll(".edge");
+    toggleVizElements(cookiesConnections,"highlighted");
+    highlightConnections = !highlightConnections;
+});
+
+graphLegend.querySelector(".toggle-cookies").addEventListener("click", function(event){
+    var cookiesConnections = document.querySelectorAll(".cookieYes");
+    toggleVizElements(cookiesConnections,"coloured");
+    highlightCookies = !highlightCookies;
+});
+
+
+
 })(visualizations);

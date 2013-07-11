@@ -115,8 +115,16 @@ function onConnection(conn){
 
 
 function appendNodeG(bucket,connection,nodeType){
+    var classes = [ "node", nodeType ];
+    if ( nodeType == "source" && highlightSource ){
+        classes.push("highlighted");
+    }
+    if ( nodeType == "target" && highlightTarget ){
+        classes.push("highlighted");
+    }
+
     var g = svg('g', {
-        'class': 'node ' + nodeType,
+        'class': classes.join(" "),
         'data-name': connection[nodeType]
     });
     g.appendChild(svg('circle', {
@@ -345,6 +353,27 @@ function updateTime(){
     drawText();
     clockTimer = setTimeout(updateTime, 1000);
 }
+
+
+
+/* for Highlighting and Colouring -------------------- */
+var highlightSource = true;
+var highlightTarget = true;
+var clockLegend = document.querySelector(".clock-footer");
+
+legendBtnClickHandler(clockLegend);
+
+clockLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
+    var visited = document.querySelectorAll(".source");
+    toggleVizElements(visited,"highlighted");
+    highlightSource = !highlightSource;
+});
+
+clockLegend.querySelector(".toggle-target").addEventListener("click", function(event){
+    var targets = document.querySelectorAll(".target");
+    toggleVizElements(targets,"highlighted");
+    highlightTarget = !highlightTarget;
+});
 
 
 })(visualizations);
