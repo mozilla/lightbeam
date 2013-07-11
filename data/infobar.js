@@ -97,6 +97,9 @@ function updateInfo(nodeName){
                 if ( countryOnMap ){ updateMap(data.country_code.toLowerCase()); }
             }
         }
+        
+        var node = document.querySelector('[data-name="'+nodeName+'"]');
+        
 
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
