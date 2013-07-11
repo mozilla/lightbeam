@@ -404,6 +404,11 @@ document.querySelector(".connections-list ul").addEventListener("click", functio
 
 /* Legend & Controls for Graph ===================================== */
 
+var highlightVisited = true;
+var highlightNeverVisited = true;
+var highlightConnections = true;
+var highlightCookies = false;
+
 document.querySelector(".graph-legend .legend-controls").addEventListener("click", function(event){
     if (event.target.mozMatchesSelector(".btn, .btn *")){
         var btn = event.target;
@@ -423,6 +428,46 @@ document.querySelector(".graph-legend .legend-toggle").addEventListener("click",
         controlsSection.classList.add("hidden");
         event.target.innerHTML = "Show";
     }
-    
 });
+
+document.querySelector(".toggle-visited").addEventListener("click", function(event){
+    var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
+    toggleGraphElements(visited,"highlighted","highlightVisited");
+});
+
+document.querySelector(".toggle-never-visited").addEventListener("click", function(event){
+    var neverVisited = document.querySelectorAll(".visitedNo");
+    toggleGraphElements(neverVisited,"highlighted","highlightNeverVisited");
+});
+
+document.querySelector(".toggle-connections").addEventListener("click", function(event){
+    var cookiesConnections = document.querySelectorAll(".edge");
+    toggleGraphElements(cookiesConnections,"highlighted","highlightConnections");
+});
+
+document.querySelector(".toggle-cookies").addEventListener("click", function(event){
+    console.log("clicked");
+    var cookiesConnections = document.querySelectorAll(".cookieYes");
+    toggleGraphElements(cookiesConnections,"coloured","highlightCookies");
+});
+
+function toggleGraphElements(elements,classToggle,flag){
+    console.log(toArray(elements).length);
+    toArray(elements).forEach(function(elm){
+        elm.classList.toggle(classToggle);
+    });
+    switch(flag){
+        case "highlightVisited": 
+            highlightVisited = !highlightVisited;
+        case "highlightNeverVisited": 
+            highlightNeverVisited = !highlightNeverVisited;
+        case "highlightConnections": 
+            highlightConnections = !highlightConnections;
+        case "highlightCookies": 
+            highlightCookies = !highlightCookies;
+            break;
+        default:
+            console.log("toggle flag=" + flag);
+    }
+}
 

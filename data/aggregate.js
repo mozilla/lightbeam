@@ -135,8 +135,9 @@ function onConnection(conn){
     }
     if (edgemap[connection.source + '->' + connection.target]){
         edge = edgemap[connection.source + '->' + connection.target];
+        edge.update(connection);
     }else{
-        edge = new GraphEdge(sourcenode, targetnode);
+        edge = new GraphEdge(sourcenode, targetnode, connection);
         edgemap[edge.name] = edge;
         aggregate.edges.push(edge);
         updated = true;
@@ -165,10 +166,11 @@ function moveNode(node, oldNodeType){
 }
 
 
-function GraphEdge(source, target){
+function GraphEdge(source, target, connection){
     this.source = source;
     this.target = target;
     this.name = source.name + '->' + target.name;
+    this.cookieCount = connection.cookie ? 1 : 0;
     // console.log('edge: %s', this.name);
 }
 GraphEdge.prototype.lastAccess = function(){
@@ -176,6 +178,9 @@ GraphEdge.prototype.lastAccess = function(){
 }
 GraphEdge.prototype.firstAccess = function(){
     return (this.source.firstAccess < this.target.firstAccess) ? this.source.firstAccess : this.target.firstAccess;
+}
+GraphEdge.prototype.update = function(connection){
+    this.cookieCount = connection.cookie ? this.cookieCount+1 : this.cookieCount;
 }
 
 // A graph node represents one end of a connection, either a target or a source
