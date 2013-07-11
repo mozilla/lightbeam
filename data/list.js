@@ -278,7 +278,7 @@ function toggleHiddenSites(target){
 
 // Restore state on load
 if (localStorage.listViewHideRows){
-    var button = document.querySelector('.toggle-hidden');
+    var button = document.querySelector('.toggle-hidden a');
     button.dataset.state = 'hidden';
     button.textContent = 'Show Hidden';
     document.querySelector('.stage-stack').classList.add('hide-hidden-rows');
@@ -293,15 +293,15 @@ function initializeHandlers(){
 
     document.querySelector('.stage-stack').addEventListener('click', function(event){
         var target = event.target;
-        if(target.mozMatchesSelector('.block-pref')){
+        if(target.mozMatchesSelector('.block-pref a')){
             setPreferences('block');
-        }else if (target.mozMatchesSelector('.hide-pref')){
+        }else if (target.mozMatchesSelector('.hide-pref a')){
             setPreferences('hide');
-        }else if (target.mozMatchesSelector('.watch-pref')){
+        }else if (target.mozMatchesSelector('.watch-pref a')){
             setPreferences('watch');
-        }else if(target.mozMatchesSelector('.no-pref')){
+        }else if(target.mozMatchesSelector('.no-pref a')){
             setPreferences('');
-        }else if(target.mozMatchesSelector('.toggle-hidden')){
+        }else if(target.mozMatchesSelector('.toggle-hidden a')){
             toggleHiddenSites(target);
         }
     }, false);

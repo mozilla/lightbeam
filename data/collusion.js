@@ -142,7 +142,20 @@ function resetAddtionalUI(){
     if( currentVisualization.name != "graph" ){
         document.querySelector(".graph-legend").classList.add("hidden"); 
     }else{
-        document.querySelector(".graph-legend").classList.remove("hidden")   
+        document.querySelector(".graph-legend").classList.remove("hidden");
+        document.querySelector('.stage-header h1').textContent = 'Graph View';
+    }
+    if( currentVisualization.name != "list" ){
+        document.querySelector(".list-footer").classList.add("hidden");
+        console.log('should be hidden'); 
+    }else{
+        document.querySelector(".list-footer").classList.remove("hidden");
+        document.querySelector('.stage-header h1').textContent = 'List View';
+    }
+    if( currentVisualization.name != "clock" ){
+    		
+    }else{
+        document.querySelector('.stage-header h1').textContent = 'Clock View';
     }
 }
 
