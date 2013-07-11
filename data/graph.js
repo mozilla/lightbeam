@@ -276,6 +276,9 @@ graphLegend.querySelector(".toggle-cookies").addEventListener("click", function(
     highlightCookies = !highlightCookies;
 });
 
+graphLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
+    toggleLegendSection(event.target,graphLegend);
+});
 
 
 })(visualizations);

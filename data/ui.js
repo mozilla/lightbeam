@@ -404,7 +404,8 @@ document.querySelector(".connections-list ul").addEventListener("click", functio
 
 /* Legend & Controls ===================================== */
 
-function toggleLegendSection(eventTarget,elmToToggle){
+function toggleLegendSection(eventTarget,legendElm){
+    var elmToToggle = legendElm.querySelector(".legend-controls");
     if ( elmToToggle.classList.contains("hidden") ){
         elmToToggle.classList.remove("hidden");
         eventTarget.innerHTML = "Hide";
@@ -422,19 +423,12 @@ function toggleVizElements(elements,classToggle){
 
 function legendBtnClickHandler(legendElm){
     legendElm.querySelector(".legend-controls").addEventListener("click", function(event){
-    if (event.target.mozMatchesSelector(".btn, .btn *")){
-        var btn = event.target;
-        while(btn.mozMatchesSelector('.btn *')){
-            btn = btn.parentElement;
+        if (event.target.mozMatchesSelector(".btn, .btn *")){
+            var btn = event.target;
+            while(btn.mozMatchesSelector('.btn *')){
+                btn = btn.parentElement;
+            }
+            btn.classList.toggle("active");
         }
-        btn.classList.toggle("active");
-    }
-});
+    });
 }
-
-/* for Clock -------------------- */
-
-document.querySelector(".clock-footer .legend-toggle").addEventListener("click", function(event){
-    var controlsSection = document.querySelector(".clock-footer .legend-controls");
-    toggleLegendSection(event.target,controlsSection);
-});

@@ -357,6 +357,7 @@ function updateTime(){
 
 
 /* for Highlighting and Colouring -------------------- */
+
 var highlightSource = true;
 var highlightTarget = true;
 var clockLegend = document.querySelector(".clock-footer");
@@ -374,6 +375,11 @@ clockLegend.querySelector(".toggle-target").addEventListener("click", function(e
     toggleVizElements(targets,"highlighted");
     highlightTarget = !highlightTarget;
 });
+
+clockLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
+    toggleLegendSection(event.target,clockLegend);
+});
+
 
 
 })(visualizations);
