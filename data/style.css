@@ -495,13 +495,15 @@ text {
     color: #343533;
 }
 
-.source{
-    fill: #128764;
+.source,
+.sourceSites{
+    fill: #FFF;
     stroke: none;
 }
 
-.target{
-    fill: #FA6900;
+.target,
+.targetSites{
+    fill: #FFDD64;
     stroke: none;
 }
 
@@ -554,7 +556,7 @@ text {
     fill: #fff;
 }
 
-.clicked-node.node.source {
+.clicked-node.node.source{
     stroke: #128764;
 }
 
@@ -577,7 +579,9 @@ text {
 }
 
 .visitedSites,
-.unvisitedSites{
+.unvisitedSites,
+.selectedSites,
+.colludedSites{
     fill: #FFF;
 }
 
@@ -851,14 +855,15 @@ text {
 
 
 
-/* Legend for Graph */
+/* Legend for Graph and Clock */
 
-.graph-legend{
+.graph-legend,
+.clock-legend{
     margin-right: 30px;
     flex: none;
 }
 
-.graph-legend .legend-header{
+.legend-header{
     overflow: hidden;
     border-bottom: 1px solid #fff;
     padding-bottom: 5px;
@@ -872,55 +877,62 @@ text {
     float: right;
 }
 
-.graph-legend header{
+.legend-header header{
     display: inline-block;
     font-size: 15px;
     color: #4CC7E6;
     margin-bottom: 3px;
 }
 
-.graph-legend .legend-toggle{
+.legend-header .legend-toggle{
     display: inline-block;
     font-size: 12px;
     cursor: pointer;
 }
 
-.graph-legend .legend-controls{
+.legend-controls{
     clear: both;
     padding: 10px 0;
 }
 
-.graph-legend .column{
+.legend-controls .legend-label{
+    margin-bottom: 15px;
+    font-size: 7pt;
+    letter-spacing: 1px;
+    border-radius: 5px
+}
+
+.legend-controls .column{
     float: left;
 }
 
-.graph-legend .column .btn{
+.legend-controls .column .btn{
     width: 170px;
     margin-right: 30px;
     margin-bottom: 8px;
     opacity: 0.4;
 }
 
-.graph-legend .column .btn:hover{
+.legend-controls .column .btn:hover{
     opacity: 1;
 }
 
-.graph-legend .column .btn.active{
+.legend-controls .column .btn.active{
     opacity: 1;
 }
 
-.graph-legend .legend-canvas-small,
-.graph-legend .legend-canvas-large{
+.legend-controls .legend-canvas-small,
+.legend-controls .legend-canvas-large{
     height: 18px;
     position: relative;
     top: 7px;
     margin-right: 5px;
 }
 
-.graph-legend .legend-canvas-small{
+.legend-controls .legend-canvas-small{
     width: 17px;
 }
 
-.graph-legend .legend-canvas-large{
+.legend-controls .legend-canvas-large{
     width: 34px;
 }

@@ -137,12 +137,11 @@ function resetAddtionalUI(){
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
-    // toggle graph legend section
-    console.log(currentVisualization.name);
-    if( currentVisualization.name != "graph" ){
-        document.querySelector(".graph-legend").classList.add("hidden"); 
-    }else{
-        document.querySelector(".graph-legend").classList.remove("hidden")   
+    // toggle legend section
+    document.querySelector(".graph-legend").classList.add("hidden");
+    document.querySelector(".clock-legend").classList.add("hidden");
+    if ( currentVisualization.name != "list" ){
+        document.querySelector("." + currentVisualization.name + "-legend").classList.remove("hidden");
     }
 }
 

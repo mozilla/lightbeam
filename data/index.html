@@ -118,6 +118,7 @@
                       </defs>
                   </svg>
               </div><!-- .stage -->
+              <!-- LEGEND & CONTROLS for Graph ================================  -->
               <div class="graph-legend">
                     <section class="legend-header">
                         <div><header>LEGEND & CONTROLS</header></div>
@@ -162,7 +163,7 @@
                             </div>
                             <div class="btn">
                                 <a>
-                                     <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="blockedSites" cx="8" cy="8" r="6" />
                                         <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
                                         <polygon class="blockedSites" points="18,14 25,2 32,14" />
@@ -173,7 +174,7 @@
                             </div>
                             <div class="btn">
                                 <a>
-                                     <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="hiddenSites" cx="8" cy="8" r="6" />
                                         <polygon class="hiddenSites" points="18,14 25,2 32,14" />
                                     </svg>
@@ -193,6 +194,76 @@
                         </section>
                     </section>
                 </div>
+                <!-- LEGEND & CONTROLS for Clock ================================  -->
+                <div class="clock-legend">
+                    <section class="legend-header">
+                        <div><header>LEGEND & CONTROLS</header></div>
+                        <div><a class="legend-toggle">Hide</a></div>
+                    </section>
+                    <section class="legend-controls">
+                        <section class="column">
+                            <div class="btn toggle-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="sourceSites" cx="8" cy="8" r="6" />
+                                    </svg>
+                                    Visited Site("source")
+                                </a>
+                            </div>
+                            <div class="btn toggle-never-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="targetSites" cx="8" cy="8" r="6" />
+                                    </svg>
+                                    Third Party Site("target")
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="btn toggle-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="watchedSites" cx="8" cy="8" r="6" />
+                                    </svg>
+                                    Watched Sites
+                                </a>
+                            </div>
+                            <div class="btn toggle-never-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="blockedSites" cx="8" cy="8" r="6" />
+                                        <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
+                                    </svg>
+                                    Blocked Sites
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="btn toggle-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="hiddenSites" cx="8" cy="8" r="6" />
+                                    </svg>
+                                    Hidden Sites
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="legend-label toggle-visited active">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="selectedSites" cx="8" cy="8" r="6" />
+                                </svg>
+                                Selected Site
+                            </div>
+                            <div class="legend-label toggle-never-visited active">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="colludedSites" cx="8" cy="8" r="6" />
+                                </svg>
+                                "Colluded Sites"
+                            </div>
+                        </section>
+                    </section>
+              </div>
               <div class="list-footer">
                 <h3>Site Preferences</h3>
 					<div class="list-footer-btns">

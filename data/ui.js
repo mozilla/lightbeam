@@ -402,14 +402,28 @@ document.querySelector(".connections-list ul").addEventListener("click", functio
 });
 
 
-/* Legend & Controls for Graph ===================================== */
+/* Legend & Controls ===================================== */
+
+/* for Graph -------------------- */
 
 var highlightVisited = true;
 var highlightNeverVisited = true;
 var highlightConnections = true;
 var highlightCookies = false;
 
-document.querySelector(".graph-legend .legend-controls").addEventListener("click", function(event){
+function toggleLegendSection(eventTarget,elmToToggle){
+    if ( elmToToggle.classList.contains("hidden") ){
+        elmToToggle.classList.remove("hidden");
+        eventTarget.innerHTML = "Hide";
+    }else{
+        elmToToggle.classList.add("hidden");
+        eventTarget.innerHTML = "Show";
+    }
+}
+
+var graphLegend = document.querySelector(".graph-legend");
+
+graphLegend.querySelector(".legend-controls").addEventListener("click", function(event){
     if (event.target.mozMatchesSelector(".btn, .btn *")){
         var btn = event.target;
         while(btn.mozMatchesSelector('.btn *')){
@@ -419,34 +433,27 @@ document.querySelector(".graph-legend .legend-controls").addEventListener("click
     }
 });
 
-document.querySelector(".graph-legend .legend-toggle").addEventListener("click", function(event){
-    var controlsSection = document.querySelector(".graph-legend .legend-controls");
-    if ( controlsSection.classList.contains("hidden") ){
-        controlsSection.classList.remove("hidden");
-        event.target.innerHTML = "Hide";
-    }else{
-        controlsSection.classList.add("hidden");
-        event.target.innerHTML = "Show";
-    }
+graphLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
+    var controlsSection = graphLegend.querySelector(".legend-controls");
+    toggleLegendSection(event.target,controlsSection);
 });
 
-document.querySelector(".toggle-visited").addEventListener("click", function(event){
+graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
     toggleGraphElements(visited,"highlighted","highlightVisited");
 });
 
-document.querySelector(".toggle-never-visited").addEventListener("click", function(event){
+graphLegend.querySelector(".toggle-never-visited").addEventListener("click", function(event){
     var neverVisited = document.querySelectorAll(".visitedNo");
     toggleGraphElements(neverVisited,"highlighted","highlightNeverVisited");
 });
 
-document.querySelector(".toggle-connections").addEventListener("click", function(event){
+graphLegend.querySelector(".toggle-connections").addEventListener("click", function(event){
     var cookiesConnections = document.querySelectorAll(".edge");
     toggleGraphElements(cookiesConnections,"highlighted","highlightConnections");
 });
 
-document.querySelector(".toggle-cookies").addEventListener("click", function(event){
-    console.log("clicked");
+graphLegend.querySelector(".toggle-cookies").addEventListener("click", function(event){
     var cookiesConnections = document.querySelectorAll(".cookieYes");
     toggleGraphElements(cookiesConnections,"coloured","highlightCookies");
 });
@@ -471,3 +478,10 @@ function toggleGraphElements(elements,classToggle,flag){
     }
 }
 
+
+/* for Clock -------------------- */
+
+document.querySelector(".clock-legend .legend-toggle").addEventListener("click", function(event){
+    var controlsSection = document.querySelector(".clock-legend .legend-controls");
+    toggleLegendSection(event.target,controlsSection);
+});
