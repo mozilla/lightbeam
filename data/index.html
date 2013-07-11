@@ -11,9 +11,8 @@
     <div class="main">
         <aside class="controls">
             <header>
-                <div class="collusion-icon">
-                </div>
-                <img class="logo" src="image/collusion_wordmark_temp.png" />
+                <div class="collusion-icon"></div>
+                <img class="logo" src="icons/collusion_wordmark_temp.png" />
             </header>
             <div class="btn_group visualization">
                 <div data-view class="dropdown_button">
@@ -50,17 +49,17 @@
             </div>
             <div class="btn">
                 <a class="upload">
-                    <img src="image/collusion_icon_share.png" />share
+                    <img src="image/collusion_icon_share.png" />Share
                 </a>
             </div>
             <div class="btn">
                 <a class="download">
-                    <img src="image/collusion_icon_save.png" />download
+                    <img src="image/collusion_icon_save.png" />Download
                 </a>
             </div>
             <div class="btn">
                 <a class="reset-data">
-                    <img src="image/collusion_icon_reset.png" />reset
+                    <img src="image/collusion_icon_reset.png" />Reset
                 </a>
             </div>
             <ul class="controls_options">
@@ -96,162 +95,241 @@
 					<span>3RD PARTY</span>
 				</div>
 				<div class="stat 1st-party-connections">
-					<h3>156</h3>
+					<h3>124</h3>
 					<span>1ST PARTY</span>
 				</div>
 			</div>
-			<div id="content" class="">
-				<aside class="info">
-					<div class="holder">
-						<div>
-							<h2 class="title"></h2>
-							<!--span class="blue-text">You are currently browsing this site</span-->
-							<span><span class="blue-text"><b>First Access </b></span>Date</span><br>
-							<span><span class="blue-text"><b>Last Access </b></span>Date</span>
-							<h3 class="dark-blue-text">Server Location</h3>
-							<div class="map-section">
-								<div><span id="country">&nbsp;</span></div>
-								<!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
-								<object type="image/svg+xml" data="map.svg" class="world-map"></object>
-							</div>
-							<h3 class="dark-blue-text">Privacy Score</h3>
-							<span>76 out of 100</span>
-							<h3 class="connections-head dark-blue-text"><b class="blue-text">17</b> Connection</h3>
+        <div id="content" class="">
+            <aside class="info">
+                <div class="holder">
+					<div>
+						<h2 class="title"></h2>
+						<!--span class="blue-text">You are currently browsing this site</span-->
+						<span><span class="blue-text"><b>First Access </b></span>Date</span><br>
+						<span><span class="blue-text"><b>Last Access </b></span>Date</span>
+						<h3 class="dark-blue-text">Server Location</h3>
+						<div class="map-section">
+							<div><span id="country">&nbsp;</span></div>
+							<!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
+							<object type="image/svg+xml" data="map.svg" class="world-map"></object>
 						</div>
-						<div class="connections-list">
-							<span>Made to/from this site</span>
-							<ul>
-							</ul>
-						</div>
+						<h3 class="dark-blue-text">Privacy Score</h3>
+						<span>50 out of 100</span>
+						<h3 class="connections-head dark-blue-text"><b class="blue-text">17</b> Connection</h3>
+						<span>Made to/from this site</span>
 					</div>
-				</aside>
-				<div class="stage-stack">
-				  <div class="stage-header">
+                    <div class="connections-list">
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+            <div class="stage-stack">
+              <div class="stage-header">
 					  <h1>[current view]</h1>
 						  <span class="blue-text">DATA GATHERED SINCE</span>
-					  <span class="data-since">July 18, 2011</span>
-				  </div><!-- stage-header -->
-				  <div class="stage">
-					  <svg class="vizcanvas" width="100%" height="100%" viewBox="-350 -450 700 500">
-						  <defs>
-						  </defs>
-					  </svg>
-				  </div><!-- .stage -->
-				  <div class="graph-legend">
-						<section class="legend-header">
-							<div><header>LEGEND & CONTROLS</header></div>
-							<div><a class="legend-toggle">Hide</a></div>
+                  <span class="data-since">July 18, 2011</span>
+              </div><!-- stage-header -->
+              <div class="stage">
+                  <svg class="vizcanvas" width="100%" height="100%" viewBox="-350 -450 700 500">
+                      <defs>
+                      </defs>
+                  </svg>
+              </div><!-- .stage -->
+              <!-- LEGEND & CONTROLS for Graph ================================  -->
+              <div class="graph-footer hidden">
+                    <section class="legend-header">
+                        <div><header class="blue-text">LEGEND & CONTROLS</header></div>
+                        <div><a class="legend-toggle">Hide</a></div>
+                    </section>
+                    <section class="legend-controls">
+                        <section class="column">
+                            <div class="btn toggle-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="visitedSites" cx="8" cy="8" r="6" />
+                                    </svg>
+                                    Visited Site
+                                </a>
+                            </div>
+                            <div class="btn toggle-never-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <polygon class="unvisitedSites" points="0,14 7,2 14,14" />
+                                    </svg>
+                                    Never Visited Site
+                                </a>
+                            </div>
+                            <div class="btn toggle-connections active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <line class="connectionLine" x1="14" y1="2" x2="2" y2="14" />
+                                    </svg>
+                                    Connection
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="btn">
+                                <a>
+                                    <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="watchedSites" cx="8" cy="8" r="6" />
+                                        <polygon class="watchedSites" points="18,14 25,2 32,14" />
+                                    </svg>
+                                    Watched Sites
+                                </a>
+                            </div>
+                            <div class="btn">
+                                <a>
+                                    <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="blockedSites" cx="8" cy="8" r="6" />
+                                        <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
+                                        <polygon class="blockedSites" points="18,14 25,2 32,14" />
+                                        <line class="blockedSites" x1="27.5" y1="4.5" x2="23" y2="14" />
+                                    </svg>
+                                    Blocked Sites
+                                </a>
+                            </div>
+                            <div class="btn">
+                                <a>
+                                    <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="hiddenSites" cx="8" cy="8" r="6" />
+                                        <polygon class="hiddenSites" points="18,14 25,2 32,14" />
+                                    </svg>
+                                    Hidden Sites
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="btn toggle-cookies">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <line class="cookies" x1="14" y1="2" x2="2" y2="14" />
+                                    </svg>
+                                    Cookies
+                                </a>
+                            </div>
+                        </section>
+                    </section>
+                </div>
+                <!-- LEGEND & CONTROLS for Clock ================================  -->
+                <div class="clock-footer hidden">
+                    <section class="legend-header">
+                        <div><header class="blue-text">LEGEND & CONTROLS</header></div>
+                        <div><a class="legend-toggle">Hide</a></div>
+                    </section>
+                    <section class="legend-controls">
+                        <section class="column">
+                            <div class="btn toggle-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="sourceSites" cx="8" cy="8" r="6" />
+                                    </svg>
+                                    Visited Site("source")
+                                </a>
+                            </div>
+                            <div class="btn toggle-never-visited active">
+                                <a>
+                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="targetSites" cx="8" cy="8" r="6" />
+                                    </svg>
+                                    Third Party Site("target")
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="btn toggle-visited active">
+                                <a>
+                                	<img src="icons/collusion_icon_watch.png" />
+                                    <!--<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="watchedSites" cx="8" cy="8" r="6" />
+                                    </svg>-->
+                                    Watched Sites
+                                </a>
+                            </div>
+                            <div class="btn toggle-never-visited active">
+                                <a>
+                                	<img src="icons/collusion_icon_block.png" />
+                                    <!--<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="blockedSites" cx="8" cy="8" r="6" />
+                                        <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
+                                    </svg>-->
+                                    Blocked Sites
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="btn toggle-visited active">
+                                <a>
+                                	<img src="icons/collusion_icon_hide.png" />
+                                    <!--<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <circle class="hiddenSites" cx="8" cy="8" r="6" />
+                                    </svg>-->
+                                    Hidden Sites
+                                </a>
+                            </div>
+                        </section>
+                        <section class="column">
+                            <div class="legend-label toggle-visited active">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="selectedSites" cx="8" cy="8" r="6" />
+                                </svg>
+                                Selected Site
+                            </div>
+                            <div class="legend-label toggle-never-visited active">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="colludedSites" cx="8" cy="8" r="6" />
+                                </svg>
+                                "Colluded Sites"
+                            </div>
+                        </section>
+                    </section>
+              </div>
+              <div class="list-footer">
+              		<section class="legend-header">
+                        <div><header class="blue-text">SITE PREFERENCES</header></div>
+                        <div><a class="legend-toggle">Hide</a></div>
+                    </section>
+                    <section class="legend-controls">
+						<section class="column">
+							<div class="block-pref btn active">
+								<a>
+									<img src="icons/collusion_icon_block.png" />
+									Block Site
+								</a>
+							</div>
+							<div class="hide-pref btn active">
+								<a>
+									<img src="icons/collusion_icon_hide.png" />
+									Hide Site
+								</a>
+							</div>
+							<div class="watch-pref btn active">
+								<a>
+									<img src="icons/collusion_icon_watch.png" />
+									Watch Site
+								</a>
+							</div>
 						</section>
-						<section class="legend-controls">
-							<section class="column">
-								<div class="btn active">
-									<a>
-										<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<circle class="visitedSites" cx="8" cy="8" r="6" />
-										</svg>
-										Visited Site
-									</a>
-								</div>
-								<div class="btn active">
-									<a>
-										<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<polygon class="unvisitedSites" points="0,14 7,2 14,14" />
-										</svg>
-										Never Visited Site
-									</a>
-								</div>
-								<div class="btn active">
-									<a>
-										<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<line class="connectionLine" x1="14" y1="2" x2="2" y2="14" />
-										</svg>
-										Connection
-									</a>
-								</div>
-							</section>
-							<section class="column">
-								<div class="btn">
-									<a>
-										<svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<circle class="watchedSites" cx="8" cy="8" r="6" />
-											<polygon class="watchedSites" points="18,14 25,2 32,14" />
-										</svg>
-										Watched Sites
-									</a>
-								</div>
-								<div class="btn">
-									<a>
-										 <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<circle class="blockedSites" cx="8" cy="8" r="6" />
-											<line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
-											<polygon class="blockedSites" points="18,14 25,2 32,14" />
-											<line class="blockedSites" x1="27.5" y1="4.5" x2="23" y2="14" />
-										</svg>
-										Blocked Sites
-									</a>
-								</div>
-								<div class="btn">
-									<a>
-										 <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<circle class="hiddenSites" cx="8" cy="8" r="6" />
-											<polygon class="hiddenSites" points="18,14 25,2 32,14" />
-										</svg>
-										Hidden Sites
-									</a>
-								</div>
-							</section>
-							<section class="column">
-								<div class="btn">
-									<a>
-										<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<line class="secureConnection" x1="14" y1="2" x2="2" y2="14" />
-										</svg>
-										Secure Connection
-									</a>
-								</div>
-								<div class="btn">
-									<a>
-										<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<line class="unsecureConnection" x1="14" y1="2" x2="2" y2="14" />
-										</svg>
-										Unsecured Connection
-									</a>
-								</div>
-							</section>
-							<section class="column">
-								<div class="btn">
-									<a>
-										<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<circle class="cookies" cx="8" cy="8" r="6" />
-										</svg>
-										Cookies
-									</a>
-								</div>
-								<div class="btn">
-									<a>
-										<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-											<circle class="noCookies" cx="8" cy="8" r="6" />
-										</svg>
-										No Cookies
-									</a>
-								</div>
-							</section>
+						<section class="column">
+							<div class="no-pref btn active">
+								<a>
+									Remove Preference
+								</a>
+							</div>
 						</section>
-					</div>
-					  <div class="list-footer">
-						<h3 class="blue-text">SITE PREFERENCES</h3>
-						<div class="list-footer-btns">
-							<div class="block-pref btn"><a><img src="icons/collusion_icon_block.png" />Block Site</a></div>
-							<div class="hide-pref btn"><a><img src="icons/collusion_icon_hide.png" />Hide Site</a></div>
-							<div class="watch-pref btn"><a><img src="icons/collusion_icon_watch.png" />Watch Site</a></div>
-							<div class="no-pref btn"><a>Remove Preference</a></div>
-							<div class="btn-spacer"></div>	
-							<div class="toggle-hidden btn orange"><a>Hide Hidden</a></div>
-						</div>
-				  </div>
-				</div><!-- .stage-stack -->
-			</div>
-		</div>
+						<section class="column">
+							<div class="toggle-hidden btn active orange">
+								<a>
+									Hide Hidden
+								</a>
+							</div>
+						</section>
+					</section>
+              </div>
+            </div><!-- .stage-stack -->
+        </div>
+    </div>
     </div>
     <div id="tooltip"></div>
     <div id="help">

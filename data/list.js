@@ -23,7 +23,6 @@ function setFilter(){
 
 
 function onInit(connections){
-    console.log('initializing list from %s connections', connections.length);
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     aggregate.emit('load', connections);
@@ -48,7 +47,6 @@ function onRemove(){
 
 
 function initList(){
-    console.log('begin initList()');
     var stage = document.querySelector('.stage');
     document.querySelector('.stage-stack').classList.add("list");
     document.querySelector('.stage-header h1').textContent = 'List View';
@@ -85,17 +83,16 @@ function initList(){
     // Add handler for rows
     document.querySelector('.list-table').addEventListener('click', function(event){
         // FIXME: This selector is too broad
-        var url = event.target.parentNode.getAttribute('site-url');
-        if (event.target.mozMatchesSelector('td') && url ){
+        var url = event.target.parentNode.dataset.sortKey;
+        if (event.target.mozMatchesSelector('.update-table') && url ){
             showFilteredTable(url);
         }
     },false);
     showFilteredTable(); // showing all data so no filter param is passed here
-    console.log('done initList()');
 }
 
 function showFilteredTable(filter){
-    // remove existinb table tbodys, if any
+    // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");
     var tbody = table.querySelector('.list-body');
     var tbodyParent = tbody.parentElement;
@@ -139,7 +136,10 @@ function nodeToRow(node){
         elem('td', elem('input', {'type': 'checkbox', 'class': 'selected-row'})),
         elem('td', {'data-sort-key': node.nodeType}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
         elem('td', {'class': 'preferences', 'data-sort-key': settings}, '\u00A0'),
-        elem('td', {'data-sort-key': node.name}, node.name),
+        elem('td', {'data-sort-key': node.name}, [
+                elem('img', {'src': 'icons/collusion_icon_list.png', 'class': 'update-table'}),
+                node.name
+            ]),
         elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10)}, node.firstAccess.toLocaleDateString()),
         elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10)}, node.lastAccess.toLocaleDateString()),
         elem('td', {'data-sort-key': node.howMany}, '' + node.howMany)
@@ -235,7 +235,6 @@ function getSelectedRows(){
 
 function setUserSetting(row, pref){
     var site = row.dataset.name;
-    console.log('setting user setting %s for %s', pref, site);
     // change setting
     userSettings[site] = pref;
     // send change through to add-on
@@ -251,7 +250,6 @@ function setUserSetting(row, pref){
 }
 
 function selectAllRows(flag){
-    console.log('selecting all rows');
     var checkboxes = document.querySelectorAll('.selected-row');
     for (var i = 0; i < checkboxes.length; i++){
         checkboxes[i].checked = flag;
