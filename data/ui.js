@@ -404,14 +404,8 @@ document.querySelector(".connections-list ul").addEventListener("click", functio
 
 /* Legend & Controls ===================================== */
 
-/* for Graph -------------------- */
-
-var highlightVisited = true;
-var highlightNeverVisited = true;
-var highlightConnections = true;
-var highlightCookies = false;
-
-function toggleLegendSection(eventTarget,elmToToggle){
+function toggleLegendSection(eventTarget,legendElm){
+    var elmToToggle = legendElm.querySelector(".legend-controls");
     if ( elmToToggle.classList.contains("hidden") ){
         elmToToggle.classList.remove("hidden");
         eventTarget.innerHTML = "Hide";
@@ -421,74 +415,20 @@ function toggleLegendSection(eventTarget,elmToToggle){
     }
 }
 
-var graphLegend = document.querySelector(".graph-footer");
-
-graphLegend.querySelector(".legend-controls").addEventListener("click", function(event){
-    if (event.target.mozMatchesSelector(".btn, .btn *")){
-        var btn = event.target;
-        while(btn.mozMatchesSelector('.btn *')){
-            btn = btn.parentElement;
-        }
-        btn.classList.toggle("active");
-    }
-});
-
-graphLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
-    var controlsSection = graphLegend.querySelector(".legend-controls");
-    toggleLegendSection(event.target,controlsSection);
-});
-
-graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
-    var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
-    toggleGraphElements(visited,"highlighted","highlightVisited");
-});
-
-graphLegend.querySelector(".toggle-never-visited").addEventListener("click", function(event){
-    var neverVisited = document.querySelectorAll(".visitedNo");
-    toggleGraphElements(neverVisited,"highlighted","highlightNeverVisited");
-});
-
-graphLegend.querySelector(".toggle-connections").addEventListener("click", function(event){
-    var cookiesConnections = document.querySelectorAll(".edge");
-    toggleGraphElements(cookiesConnections,"highlighted","highlightConnections");
-});
-
-graphLegend.querySelector(".toggle-cookies").addEventListener("click", function(event){
-    var cookiesConnections = document.querySelectorAll(".cookieYes");
-    toggleGraphElements(cookiesConnections,"coloured","highlightCookies");
-});
-
-function toggleGraphElements(elements,classToggle,flag){
-    console.log(toArray(elements).length);
+function toggleVizElements(elements,classToggle){
     toArray(elements).forEach(function(elm){
         elm.classList.toggle(classToggle);
     });
-    switch(flag){
-        case "highlightVisited": 
-            highlightVisited = !highlightVisited;
-        case "highlightNeverVisited": 
-            highlightNeverVisited = !highlightNeverVisited;
-        case "highlightConnections": 
-            highlightConnections = !highlightConnections;
-        case "highlightCookies": 
-            highlightCookies = !highlightCookies;
-            break;
-        default:
-            console.log("toggle flag=" + flag);
-    }
 }
 
-
-/* for Clock -------------------- */
-
-document.querySelector(".clock-footer .legend-toggle").addEventListener("click", function(event){
-    var controlsSection = document.querySelector(".clock-footer .legend-controls");
-    toggleLegendSection(event.target,controlsSection);
-});
-
-/* for List -------------------- */
-
-document.querySelector(".list-footer .legend-toggle").addEventListener("click", function(event){
-    var controlsSection = document.querySelector(".list-footer .legend-controls");
-    toggleLegendSection(event.target,controlsSection);
-});
+function legendBtnClickHandler(legendElm){
+    legendElm.querySelector(".legend-controls").addEventListener("click", function(event){
+        if (event.target.mozMatchesSelector(".btn, .btn *")){
+            var btn = event.target;
+            while(btn.mozMatchesSelector('.btn *')){
+                btn = btn.parentElement;
+            }
+            btn.classList.toggle("active");
+        }
+    });
+}
