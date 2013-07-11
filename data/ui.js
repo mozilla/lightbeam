@@ -485,3 +485,10 @@ document.querySelector(".clock-footer .legend-toggle").addEventListener("click",
     var controlsSection = document.querySelector(".clock-footer .legend-controls");
     toggleLegendSection(event.target,controlsSection);
 });
+
+/* for List -------------------- */
+
+document.querySelector(".list-footer .legend-toggle").addEventListener("click", function(event){
+    var controlsSection = document.querySelector(".list-footer .legend-controls");
+    toggleLegendSection(event.target,controlsSection);
+});
