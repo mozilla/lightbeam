@@ -80,7 +80,7 @@ h3 {
 }
 
 .hidden{
-    display: none;
+    display: none !important;
 }
 
 /* Button Styling =============== */
@@ -433,37 +433,48 @@ h3 {
 }
 .stage-header h1{
     font-family:"Helvetica Neue", Arial, sans-serif;
-    font-smooth:always;
     letter-spacing:3px;
     font-weight: 100;
 }
 
 .stage{
     flex: 1;
-    margin:20px 0px;
+    margin: 20px 0px;
+}
+.showinfo .stage-stack{
+    margin-right: 300px;
 }
 
-.stage-footer{
+.list-footer{
     flex: none;
+    display: none;
 }
-.stage-footer h3{
+
+.list .list-footer{
+    display: block;
+}
+.list-footer h3{
     font-size: 12px;
     margin-bottom:10px;
 }
-.stage-footer-btns{
+.list-footer-btns{
     display:flex;
     justify-content:space-between;
     align-items:flex-start;
 }
-.stage-footer-btns .btn{
+.list-footer-btns .btn{
     margin-right:20px;
+    color: rgb(234, 234, 234);
+    border: 0;
 }
-.stage-footer-btns .btn a{
+.list-footer-btns .btn a{
     padding-right:10px;
 }
 .btn-spacer{
     flex:1;
 }
+
+
 
 /* SVG STYLES */
 
@@ -549,10 +560,6 @@ text {
     fill: rgba(79, 129, 85, .6);
     stroke: rgba(79, 129, 85, .6);
     strokewidth: 3px;
-}
-
-line{
-    stroke: #FFF;
 }
 
 .greyed-out{
@@ -658,6 +665,40 @@ line{
 
 .list-table tr[site-url]{
     cursor: pointer;
+}
+
+[data-pref=watch]{
+    color: teal;
+}
+
+.preferences{
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+[data-pref=watch] .preferences{
+    background-image: url(icons/collusion_icon_watch.png);
+}
+
+[data-pref=block]{
+    color: red;
+}
+
+[data-pref=block] .preferences{
+    background-image: url(icons/collusion_icon_block.png);
+}
+
+[data-pref=hide]{
+    color: orange;
+}
+
+[data-pref=hide] .preferences{
+    background-image: url(icons/collusion_icon_hide.png);
+}
+
+.hide-hidden-rows [data-pref=hide]{
+    display: none;
 }
 
 .list-table tbody tr:hover{
@@ -798,3 +839,123 @@ line{
 }
 
 
+
+/* Legend for Graph */
+
+.graph-legend{
+    margin-right: 30px;
+    flex: none;
+}
+
+.graph-legend .legend-header{
+    overflow: hidden;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 5px;
+}
+
+.legend-header div:first-of-type{
+    float: left;
+}
+
+.legend-header div:last-of-type{
+    float: right;
+}
+
+.graph-legend header{
+    display: inline-block;
+    font-size: 15px;
+    color: #4CC7E6;
+    margin-bottom: 3px;
+}
+
+.graph-legend .legend-toggle{
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.graph-legend .legend-controls{
+    clear: both;
+    padding: 10px 0;
+}
+
+.graph-legend .column{
+    float: left;
+}
+
+.graph-legend .column .btn{
+    width: 170px;
+    margin-right: 30px;
+    margin-bottom: 8px;
+    opacity: 0.4;
+}
+
+.graph-legend .column .btn:hover{
+    opacity: 1;
+}
+
+.graph-legend .column .btn.active{
+    opacity: 1;
+}
+
+.graph-legend .legend-canvas-small,
+.graph-legend .legend-canvas-large{
+    height: 18px;
+    position: relative;
+    top: 7px;
+    margin-right: 5px;
+}
+
+.graph-legend .legend-canvas-small{
+    width: 17px;
+}
+
+.graph-legend .legend-canvas-large{
+    width: 34px;
+}
+
+.visitedSites,
+.unvisitedSites{
+    fill: #FFF;
+}
+
+.connectionLine{
+    stroke: #FFF;
+    stroke-width: 2;
+}
+
+.watchedSites{
+    fill: #FFF;
+    stroke: #268CB7;
+    stroke-width: 2;
+}
+
+.blockedSites{
+    fill: #FFF;
+    stroke: #FF0000;
+    stroke-width: 2;
+}
+
+.hiddenSites{
+    fill: #FFF;
+    stroke: #FA9828;
+    stroke-width: 2;
+}
+
+.secureConnection{
+    stroke: #107A10;
+    stroke-width: 2;
+}
+
+.unsecureConnection{
+    stroke: #FFFF00;
+    stroke-width: 2;
+}
+
+.cookies{
+    fill: #800080;
+}
+
+.noCookies{
+    fill: #FFF;
+}

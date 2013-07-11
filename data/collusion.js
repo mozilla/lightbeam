@@ -24,6 +24,17 @@ const STATUS = 12;
 const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
+var vizcanvas = document.querySelector('.vizcanvas');
+var mapDocument, mapcanvas;
+document.querySelector('.world-map').addEventListener('load', function(event){
+  mapDocument = event.target.contentDocument;
+  mapcanvas = mapDocument.querySelector('.mapcanvas');
+  console.log('we should have a mapcanvas now: %o', mapcanvas);
+  initMap();
+  console.log('map initialized');
+}, false);
+
+
 // DOM Utility
 
 function elem(name, attributes, children){
@@ -72,9 +83,6 @@ function elem(name, attributes, children){
 window.addEventListener('load', function(evt){
     addon.emit("privateWindowCheck");
     // Wire up events
-    // document.querySelector('.btn_group.visualization').click();
-    // document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').click();
-    // document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected").click();
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     document.querySelector('.btn_group.visualization [data-selected]').classList.remove("collapsed");
     switchVisualization(localStorage.visualization.toLowerCase() || 'graph');
@@ -129,6 +137,26 @@ function resetAddtionalUI(){
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
+    // toggle graph legend section
+    console.log(currentVisualization.name);
+    if( currentVisualization.name != "graph" ){
+        document.querySelector(".graph-legend").classList.add("hidden"); 
+    }else{
+        document.querySelector(".graph-legend").classList.remove("hidden");
+        document.querySelector('.stage-header h1').textContent = 'Graph View';
+    }
+    if( currentVisualization.name != "list" ){
+        document.querySelector(".list-footer").classList.add("hidden");
+        console.log('should be hidden'); 
+    }else{
+        document.querySelector(".list-footer").classList.remove("hidden");
+        document.querySelector('.stage-header h1').textContent = 'List View';
+    }
+    if( currentVisualization.name != "clock" ){
+    		
+    }else{
+        document.querySelector('.stage-header h1').textContent = 'Clock View';
+    }
 }
 
 

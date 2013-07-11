@@ -1,6 +1,6 @@
-(function(global){
+function initMap(){
 
-const oriMapViewBox = document.querySelector('.mapcanvas').getAttribute('viewBox');
+var oriMapViewBox = mapcanvas.getAttribute('viewBox');
 
 // update info when clicking on a node in the graph visualization
 document.querySelector('#content').addEventListener('click', function(event){
@@ -36,25 +36,25 @@ function getServerInfo(nodeName, callback){
 
 // reset map
 function resetMap(){
-    var preHighlight = document.querySelectorAll(".highlight-country");
+    var preHighlight = mapDocument.querySelectorAll(".highlight-country");
     if (preHighlight){
         toArray(preHighlight).forEach(function(element){
             element.classList.remove("highlight-country");
         });
     }
-    document.querySelector(".mapcanvas").setAttribute("viewBox", oriMapViewBox);
+    mapcanvas.setAttribute("viewBox", oriMapViewBox);
 }
 
 // update map
 function updateMap(countryCode){
-    var countryOnMap = d3.select(".mapcanvas").select("#" + countryCode.toLowerCase());
+    var countryOnMap = d3.select(mapcanvas).select("#" + countryCode.toLowerCase());
     countryOnMap.classed("highlight-country", true);
     countryOnMap.selectAll("*").classed("highlight-country", true);
 
     // position the highlighted country in center
-    var svgViewBox = document.querySelector(".mapcanvas").getAttribute("viewBox").split(" ");
-    var worldDimen = document.querySelector(".mapcanvas").getClientRects()[0];
-    var countryDimen = document.querySelector("#"+countryCode).getClientRects()[0];
+    var svgViewBox = mapcanvas.getAttribute("viewBox").split(" ");
+    var worldDimen = mapcanvas.getClientRects()[0];
+    var countryDimen = mapDocument.querySelector("#"+countryCode).getClientRects()[0];
 
     var ratio = svgViewBox[2] / worldDimen.width;
     var worldCenter = {
@@ -72,7 +72,7 @@ function updateMap(countryCode){
         w: svgViewBox[2],
         h: svgViewBox[3]
     };
-    setZoom(newViewBox,'mapcanvas');
+    setZoom(newViewBox, mapcanvas);
 }
 
 
@@ -120,7 +120,39 @@ function updateInfo(nodeName){
 
 }
 
+/* mapcanvas events */
+mapcanvas.addEventListener("mousedown",function(event){
+    onDragMap = true;
+    mapDragStart.x = event.clientX;
+    mapDragStart.y = event.clientY;
+},false);
 
-})(this);
+mapcanvas.addEventListener("mousemove",function(event){
+    if ( onDragMap ){
+        mapcanvas.style.cursor = "-moz-grab";
+        var offsetX = ( Math.ceil(event.clientX) - mapDragStart.x );
+        var offsetY = ( Math.ceil(event.clientY) - mapDragStart.y );
+        var box = getZoom(mapcanvas);
+        box.x -= (offsetX * 10);
+        box.y -= (offsetY * 10);
+        mapDragStart.x += offsetX;
+        mapDragStart.y += offsetY;
+        setZoom(box,mapcanvas);
+    }
 
+},false);
+
+mapcanvas.addEventListener("mouseup",function(event){
+    onDragMap = false;
+    mapcanvas.style.cursor = "default";
+},false);
+
+mapcanvas.addEventListener("mouseleave",function(event){
+    onDragMap = false;
+    mapcanvas.style.cursor = "default";
+},false);
+
+
+
+}
 
