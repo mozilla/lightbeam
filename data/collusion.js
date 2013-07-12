@@ -85,7 +85,8 @@ window.addEventListener('load', function(evt){
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     document.querySelector('.btn_group.visualization [data-selected]').classList.remove("collapsed");
-    switchVisualization(localStorage.visualization.toLowerCase() || 'graph');
+    var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
+    switchVisualization(visualization);
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
@@ -159,7 +160,6 @@ function saveConnections(){
         saveConnectionsByDate(unsavedNonPrivateConn);
     }
     localStorage.lastSaved = Date.now();
-    localStorage.totalNumConnections = allConnections.length;
 }
 
 
@@ -168,9 +168,9 @@ function saveConnectionsByDate(connections){
         var conn = connections[i];
         var key = dateAsKey( conn[TIMESTAMP] );
         if ( !localStorage.getItem(key) ){
-            localStorage.setItem(key, "[" + JSON.stringify(conn) + "]");
+            saveToLocalStorage(key, "[" + JSON.stringify(conn) + "]");
         }else{
-            localStorage.setItem(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
+            saveToLocalStorage(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
         }
     }
 }
@@ -235,4 +235,27 @@ function sharingData(){
 
 function startUploadTimer(){
     uploadTimer = setTimeout(sharingData, 10 * 60 * 1000); // upload every 10 minutes
+}
+
+function saveToLocalStorage(key,value){
+    try{
+        localStorage.setItem(key,value);
+    }catch(error){
+        console.log(error);
+        if ( error.code == 1014 ){ // QUOTA_EXCEEDED_ERR
+            console.log("localStorage reaches its quota, deleting the oldest connections set.");
+            var dateKeyArray = [];
+            Object.keys(localStorage).sort().forEach(function(key){
+                if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
+                    dateKeyArray.push(key);
+                }
+            });
+            if ( dateKeyArray.length == 0 ){ // exceed localStorage quota and there are no more connections can be deleted
+                console.log("[ Error ] Failed to store data to localStorage.");
+                return;
+            }
+            localStorage.removeItem( dateKeyArray.shift() );
+            saveToLocalStorage(key,value); // try saving again
+        }
+    }
 }

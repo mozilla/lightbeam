@@ -103,8 +103,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     aggregate.emit('reset');
     currentVisualization.emit('reset');
     allConnections = [];
-    delete localStorage.tempConnections;
-    delete localStorage.totalNumConnections;
 
     Object.keys(localStorage).sort().forEach(function(key){
         if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd

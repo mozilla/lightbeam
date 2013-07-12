@@ -30,7 +30,6 @@ self.port.on('init', function(collusionToken){
 
 self.port.on("passTempConnections", function(connReceived){
     // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
-    localStorage.tempConnections = JSON.stringify(connReceived);
     self.port.emit("tempConnectionTransferred", true);
     
     localStorage.lastSaved = Date.now();
@@ -39,7 +38,6 @@ self.port.on("passTempConnections", function(connReceived){
         return (connection[unsafeWindow.FROM_PRIVATE_MODE] == null);
     });
     unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
-    localStorage.totalNumConnections = unsafeWindow.allConnections.length;
 });
 
 
