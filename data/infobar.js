@@ -75,7 +75,12 @@ function updateMap(countryCode){
     setZoom(newViewBox, mapcanvas);
 }
 
-
+function getLongDate(Short){
+	var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+	var day_deco = ['st','nd','rd','th','th','th','th','th','th']
+	var array = Short.split('/');
+	return months[Number(array[0])-1]+' '+Number(array[1])+day_deco[Number(array[0].slice(-1))]+', '+array[2];
+}
 
 // updates info on the info panel
 function updateInfo(nodeName){
@@ -99,10 +104,8 @@ function updateInfo(nodeName){
         }
         
         var HTMLnode = document.querySelector('[data-name="'+nodeName+'"]');
-        var first_access = HTMLnode.children[4].textContent;
-        var last_access = HTMLnode.children[5].textContent;
-        document.querySelector('.info-first-access').textContent = String(new Date(Number(first_access.substring(6, 10)),Number(first_access.substring(4, 5)),Number(first_access.substring(1, 2)))).substring(0, 15);
-        document.querySelector('.info-last-access').textContent = String(new Date(Number(last_access.substring(6, 10)),Number(last_access.substring(4, 5)),Number(last_access.substring(1, 2)))).substring(0, 15);
+        document.querySelector('.info-first-access').textContent = getLongDate(HTMLnode.children[4].textContent);
+        document.querySelector('.info-last-access').textContent = getLongDate(HTMLnode.children[5].textContent);
         
 
         // update the connections list
