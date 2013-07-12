@@ -98,7 +98,11 @@ function updateInfo(nodeName){
             }
         }
         
-        var node = document.querySelector('[data-name="'+nodeName+'"]');
+        var HTMLnode = document.querySelector('[data-name="'+nodeName+'"]');
+        var first_access = HTMLnode.children[4].textContent;
+        var last_access = HTMLnode.children[5].textContent;
+        document.querySelector('.info-first-access').textContent = String(new Date(Number(first_access.substring(6, 10)),Number(first_access.substring(4, 5)),Number(first_access.substring(1, 2)))).substring(0, 15);
+        document.querySelector('.info-last-access').textContent = String(new Date(Number(last_access.substring(6, 10)),Number(last_access.substring(4, 5)),Number(last_access.substring(1, 2)))).substring(0, 15);
         
 
         // update the connections list
