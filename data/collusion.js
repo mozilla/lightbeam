@@ -142,24 +142,6 @@ function resetAddtionalUI(){
     clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
-    // toggle graph legend section
-    if( currentVisualization.name != "graph" ){
-        document.querySelector(".graph-legend").classList.add("hidden"); 
-    }else{
-        document.querySelector(".graph-legend").classList.remove("hidden");
-        document.querySelector('.stage-header h1').textContent = 'Graph View';
-    }
-    if( currentVisualization.name != "list" ){
-        document.querySelector(".list-footer").classList.add("hidden");
-    }else{
-        document.querySelector(".list-footer").classList.remove("hidden");
-        document.querySelector('.stage-header h1').textContent = 'List View';
-    }
-    if( currentVisualization.name != "clock" ){
-            
-    }else{
-        document.querySelector('.stage-header h1').textContent = 'Clock View';
-    }
     // toggle footer section accordingly
     document.querySelector(".graph-footer").classList.add("hidden");
     document.querySelector(".clock-footer").classList.add("hidden");
