@@ -43,6 +43,9 @@ function onInit(connections){
     });
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
+    if ( !statsBarInitiated ){  
+        updateStatsBar();
+    }
 };
 
 function onConnection(connection){
@@ -52,6 +55,7 @@ function onConnection(connection){
     if (force){
         force.start();
     }
+    updateStatsBar();
 }
 
 function onRemove(){
@@ -239,6 +243,46 @@ function resetCanvas(){
     parent.replaceChild(newcanvas, vizcanvas);
     vizcanvas = newcanvas;
 }
+
+
+
+/* for Highlighting and Colouring -------------------- */
+
+var highlightVisited = true;
+var highlightNeverVisited = true;
+var highlightConnections = true;
+var highlightCookies = false;
+var graphLegend = document.querySelector(".graph-footer");
+
+legendBtnClickHandler(graphLegend);
+
+graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
+    var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
+    toggleVizElements(visited,"highlighted");
+    highlightVisited = !highlightVisited;
+});
+
+graphLegend.querySelector(".toggle-never-visited").addEventListener("click", function(event){
+    var neverVisited = document.querySelectorAll(".visitedNo");
+    toggleVizElements(neverVisited,"highlighted");
+    highlightNeverVisited = !highlightNeverVisited;
+});
+
+graphLegend.querySelector(".toggle-connections").addEventListener("click", function(event){
+    var cookiesConnections = document.querySelectorAll(".edge");
+    toggleVizElements(cookiesConnections,"highlighted");
+    highlightConnections = !highlightConnections;
+});
+
+graphLegend.querySelector(".toggle-cookies").addEventListener("click", function(event){
+    var cookiesConnections = document.querySelectorAll(".cookieYes");
+    toggleVizElements(cookiesConnections,"coloured");
+    highlightCookies = !highlightCookies;
+});
+
+graphLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
+    toggleLegendSection(event.target,graphLegend);
+});
 
 
 })(visualizations);

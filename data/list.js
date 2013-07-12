@@ -30,12 +30,16 @@ function onInit(connections){
     initList();
     initializeHandlers();
     //aggregate.on('updated', function(){ });
+    if ( !statsBarInitiated ){  
+        updateStatsBar();
+    }
 }
 
 
 function onConnection(conn){
     var connection = aggregate.connectionAsObject(conn);
     aggregate.emit('connection', connection);
+    updateStatsBar();
 }
 
 

@@ -11,6 +11,7 @@ try{
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
 var uploadTimer;
 var saveTimer;
+var statsBarInitiated;
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -88,7 +89,8 @@ window.addEventListener('load', function(evt){
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     document.querySelector('.btn_group.visualization [data-selected]').classList.remove("collapsed");
-    switchVisualization(localStorage.visualization.toLowerCase() || 'graph');
+    var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
+    switchVisualization(visualization);
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
@@ -158,6 +160,13 @@ function resetAddtionalUI(){
     }else{
         document.querySelector('.stage-header h1').textContent = 'Clock View';
     }
+    // toggle footer section accordingly
+    document.querySelector(".graph-footer").classList.add("hidden");
+    document.querySelector(".clock-footer").classList.add("hidden");
+    document.querySelector(".list-footer").classList.add("hidden");
+    var vizName = currentVisualization.name;
+    document.querySelector("." + vizName + "-footer").classList.remove("hidden");
+    document.querySelector(".stage-header h1").textContent = initCap(vizName) + " View";
 }
 
 
@@ -173,7 +182,6 @@ function saveConnections(){
         saveConnectionsByDate(unsavedNonPrivateConn);
     }
     localStorage.lastSaved = Date.now();
-    localStorage.totalNumConnections = allConnections.length;
 }
 
 
@@ -182,16 +190,22 @@ function saveConnectionsByDate(connections){
         var conn = connections[i];
         var key = dateAsKey( conn[TIMESTAMP] );
         if ( !localStorage.getItem(key) ){
-            localStorage.setItem(key, "[" + JSON.stringify(conn) + "]");
+            saveToLocalStorage(key, "[" + JSON.stringify(conn) + "]");
         }else{
-            localStorage.setItem(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
+            saveToLocalStorage(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
         }
     }
 }
 
 
 function dateAsKey(timestamp){
-    return new Date(timestamp).toISOString().slice(0,10);
+    var theDate = new Date(timestamp);
+    var year = theDate.getFullYear();
+    var month = "00" + (theDate.getMonth()+1);
+    var date = "00" + theDate.getDate();
+    month = month.substr(-2); // fix the format
+    date = date.substr(-2);
+    return year+ "-" + month + "-" + date; // in the format of YYYY-MM-DD
 }
 
 
@@ -261,3 +275,39 @@ window.addEventListener('beforeunload', function(event){
     });
     localStorage.userSettings = JSON.stringify(userSettings);
 }, false);
+
+function saveToLocalStorage(key,value){
+    try{
+        localStorage.setItem(key,value);
+    }catch(error){
+        console.log(error);
+        if ( error.code == 1014 ){ // QUOTA_EXCEEDED_ERR
+            console.log("localStorage reaches its quota, deleting the oldest connections set.");
+            var dateKeyArray = [];
+            Object.keys(localStorage).sort().forEach(function(key){
+                if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
+                    dateKeyArray.push(key);
+                }
+            });
+            if ( dateKeyArray.length == 0 ){ // exceed localStorage quota and there are no more connections can be deleted
+                console.log("[ Error ] Failed to store data to localStorage.");
+                return;
+            }
+            localStorage.removeItem( dateKeyArray.shift() );
+            saveToLocalStorage(key,value); // try saving again
+        }
+    }
+}
+
+
+/****************************************
+*   update Stats Bar
+*/
+
+function updateStatsBar(){
+    document.querySelector(".stats-bar .total-connections h3").innerHTML = allConnections.length;
+    document.querySelector(".stats-bar .third-party-sites h3").innerHTML = aggregate.thirdnodes.length;
+    document.querySelector(".stats-bar .first-party-sites h3").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    statsBarInitiated = true;
+}
+
