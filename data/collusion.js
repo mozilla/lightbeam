@@ -177,7 +177,13 @@ function saveConnectionsByDate(connections){
 
 
 function dateAsKey(timestamp){
-    return new Date(timestamp).toISOString().slice(0,10);
+    var theDate = new Date(timestamp);
+    var year = theDate.getFullYear();
+    var month = "00" + (theDate.getMonth()+1);
+    var date = "00" + theDate.getDate();
+    month = month.substr(-2); // fix the format
+    date = date.substr(-2);
+    return year+ "-" + month + "-" + date; // in the format of YYYY-MM-DD
 }
 
 
