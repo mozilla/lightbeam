@@ -405,11 +405,11 @@ h3 {
 
 .connections-list ul li{
     padding:2px 2px 2px 10px;
+    cursor: pointer;
 }
 
 .connections-list ul li:hover,
 .settings-page ul li:hover{
-    cursor: pointer;
     background-color: #475B61;
 }
 

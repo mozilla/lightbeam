@@ -77,9 +77,10 @@ function updateMap(countryCode){
 
 function getLongDate(Short){
 	var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-	var day_deco = ['st','nd','rd','th','th','th','th','th','th']
+	var number_deco = ['st','nd','rd','th','th','th','th','th','th'];
+	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 	var array = Short.split('/');
-	return months[Number(array[0])-1]+' '+Number(array[1])+day_deco[Number(array[0].slice(-1))]+', '+array[2];
+	return days[new Date(Number(array[2]), Number(array[0])-1, Number(array[1])).getDay()]+', '+months[Number(array[0])-1]+' '+Number(array[1])+number_deco[Number(array[0].slice(-1))]+', '+array[2];
 }
 
 // updates info on the info panel
