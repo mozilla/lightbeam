@@ -43,6 +43,9 @@ function onInit(connections){
     });
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
+    if ( !statsBarInitiated ){  
+        updateStatsBar();
+    }
 };
 
 function onConnection(connection){
@@ -52,6 +55,7 @@ function onConnection(connection){
     if (force){
         force.start();
     }
+    updateStatsBar();
 }
 
 function onRemove(){

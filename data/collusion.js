@@ -6,6 +6,7 @@ var userSettings = {};
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
 var uploadTimer;
 var saveTimer;
+var statsBarInitiated;
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -265,3 +266,16 @@ function saveToLocalStorage(key,value){
         }
     }
 }
+
+
+/****************************************
+*   update Stats Bar
+*/
+
+function updateStatsBar(){
+    document.querySelector(".stats-bar .total-connections h3").innerHTML = allConnections.length;
+    document.querySelector(".stats-bar .third-party-sites h3").innerHTML = aggregate.thirdnodes.length;
+    document.querySelector(".stats-bar .first-party-sites h3").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    statsBarInitiated = true;
+}
+

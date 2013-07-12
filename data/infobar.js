@@ -101,18 +101,15 @@ function updateInfo(nodeName){
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
         var htmlList = "";
+        var numConnectedSites = 0;
         for ( var key in nodeList ){
             if ( key != nodeName ){
                 htmlList = htmlList + "<li>" + key + "</li>";
+                numConnectedSites++;
             }
         }
-        var connections_head = document.querySelector(".connections-head").innerHTML;
-        if(connections_head.substring(connections_head.length-1, connections_head.length) === 'n' && (Object.keys(nodeList).length-1) > 1){
-        	document.querySelector(".connections-head").innerHTML+='s';
-        }else if(connections_head.substring(connections_head.length-1, connections_head.length) === 's' && (Object.keys(nodeList).length-1) < 2){
-        	connections_head.splice(0, -1);
-        }
-        document.querySelector(".connections-head b").innerHTML = Object.keys(nodeList).length-1;
+        document.querySelector(".num-connected-sites").innerHTML 
+            = ( numConnectedSites > 1) ? ( numConnectedSites + " Connected Sites" ) : ( numConnectedSites + " Connected Site" ) ;
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         document.querySelector("#content").classList.add("showinfo");

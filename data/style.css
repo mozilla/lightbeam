@@ -262,10 +262,10 @@ h3 {
 }
 
 .stats-bar{
-    height: 80px;
+    height: 60px;
     background-color:#fff;
     flex:none;
-    padding-top:30px;
+    padding-top:10px;
     padding-left:40px;
 }
 
@@ -303,7 +303,7 @@ h3 {
 }
 
 .map-section{
-    margin-bottom: 10px;
+    margin: 10px 0;
     font-size: 10px;
 }
 
@@ -327,7 +327,7 @@ h3 {
     flex:1;
     display:flex;
     flex-direction:column;
-    margin-top:34px;
+    margin-top:15px;
 }
 
 .connections-list ul li{
