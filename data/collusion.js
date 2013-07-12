@@ -1,7 +1,12 @@
 var visualizations = {};
 var currentVisualization;
 var allConnections = [];
-var userSettings = {};
+var userSettings;
+try{
+    userSettings = JSON.parse(localStorage.userSettings || '{}');
+}catch(e){
+    userSettings = {};
+}
 // FIXME: Read this from config file
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
 var uploadTimer;
@@ -29,9 +34,7 @@ var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  console.log('we should have a mapcanvas now: %o', mapcanvas);
   initMap();
-  console.log('map initialized');
 }, false);
 
 
@@ -138,7 +141,6 @@ function resetAddtionalUI(){
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
     // toggle graph legend section
-    console.log(currentVisualization.name);
     if( currentVisualization.name != "graph" ){
         document.querySelector(".graph-legend").classList.add("hidden"); 
     }else{
@@ -147,13 +149,12 @@ function resetAddtionalUI(){
     }
     if( currentVisualization.name != "list" ){
         document.querySelector(".list-footer").classList.add("hidden");
-        console.log('should be hidden'); 
     }else{
         document.querySelector(".list-footer").classList.remove("hidden");
         document.querySelector('.stage-header h1').textContent = 'List View';
     }
     if( currentVisualization.name != "clock" ){
-    		
+            
     }else{
         document.querySelector('.stage-header h1').textContent = 'Clock View';
     }
@@ -249,3 +250,14 @@ function sharingData(){
 function startUploadTimer(){
     uploadTimer = setTimeout(sharingData, 10 * 60 * 1000); // upload every 10 minutes
 }
+
+// Save user settings on exit
+window.addEventListener('beforeunload', function(event){
+    // don't need to store empty settings
+    Object.keys(userSettings).forEach(function(key){
+        if (!userSettings[key]){
+            delete userSettings[key];
+        } 
+    });
+    localStorage.userSettings = JSON.stringify(userSettings);
+}, false);

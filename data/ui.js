@@ -128,32 +128,32 @@ uploadButton.addEventListener('click', function(){
     }
 });
 
-function handleDisclosureToggle(elem){
-    console.log('disclosure toggled');
-}
+// function handleDisclosureToggle(elem){
+//     console.log('disclosure toggled');
+// }
 
-function handleUserSettingToggle(elem){
-    console.log('User setting changed');
-}
+// function handleUserSettingToggle(elem){
+//     console.log('User setting changed');
+// }
 
-document.querySelector('.stage').addEventListener('click', function(event){
-    // demultiplex "live" event handlers
-    if (event.target.mozMatchesSelector('.disclosure')){
-        handleDisclosureToggle(event.target);
-        event.preventDefault();
-        event.stopPropagation();
-    }else if (event.target.mozMatchesSelector('.userSetting')){
-        handleUserSettingToggle(event.target);
-        event.stopPropagation();
-    }else if (event.target.mozMatchesSelector('[type=checkbox]')){
-        event.stopPropagation();
-        if (event.target.mozMatchesSelector('selectedHeader')){
-            // what to do here, select all or sort?
-        }
-    }else{
-        console.log('so what is it, then? %o', event.target);
-    }
-});
+// document.querySelector('.stage').addEventListener('click', function(event){
+//     // demultiplex "live" event handlers
+//     if (event.target.mozMatchesSelector('.disclosure')){
+//         handleDisclosureToggle(event.target);
+//         event.preventDefault();
+//         event.stopPropagation();
+//     }else if (event.target.mozMatchesSelector('.userSetting')){
+//         handleUserSettingToggle(event.target);
+//         event.stopPropagation();
+//     }else if (event.target.mozMatchesSelector('[type=checkbox]')){
+//         event.stopPropagation();
+//         if (event.target.mozMatchesSelector('selectedHeader')){
+//             // what to do here, select all or sort?
+//         }
+//     }else{
+//         console.log('so what is it, then? %o', event.target);
+//     }
+// });
 
 
 function getZoom(canvas){
@@ -394,7 +394,7 @@ document.querySelector(".connections-list ul").addEventListener("click", functio
             applyHighlightingEffect(event.target.innerHTML);
         }
         else if ( currentVisualization.name === "list" ){
-            currentVisualization.emit("showFilteredTable", event.target.innerHTML);
+            //currentVisualization.emit("showFilteredTable", event.target.innerHTML);
         }else{
 
         }
