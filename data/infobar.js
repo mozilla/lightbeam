@@ -75,7 +75,12 @@ function updateMap(countryCode){
     setZoom(newViewBox, mapcanvas);
 }
 
-
+function getLongDate(Short){
+	var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+	var day_deco = ['st','nd','rd','th','th','th','th','th','th']
+	var array = Short.split('/');
+	return months[Number(array[0])-1]+' '+Number(array[1])+day_deco[Number(array[0].slice(-1))]+', '+array[2];
+}
 
 // updates info on the info panel
 function updateInfo(nodeName){
@@ -97,6 +102,11 @@ function updateInfo(nodeName){
                 if ( countryOnMap ){ updateMap(data.country_code.toLowerCase()); }
             }
         }
+        
+        var HTMLnode = document.querySelector('[data-name="'+nodeName+'"]');
+        document.querySelector('.info-first-access').textContent = getLongDate(HTMLnode.children[4].textContent);
+        document.querySelector('.info-last-access').textContent = getLongDate(HTMLnode.children[5].textContent);
+        
 
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);

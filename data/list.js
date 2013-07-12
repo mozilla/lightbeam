@@ -290,6 +290,10 @@ function initializeHandlers(){
     document.querySelector('.selected-header').addEventListener('change', function(event){
         selectAllRows(event.target.checked);
     }, false);
+    
+    document.querySelector('.list-footer').querySelector(".legend-toggle").addEventListener("click", function(event){
+    	toggleLegendSection(event.target,document.querySelector('.list-footer'));
+	});
 
     document.querySelector('.stage-stack').addEventListener('click', function(event){
         var target = event.target;
