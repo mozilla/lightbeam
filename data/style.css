@@ -175,22 +175,6 @@ h3 {
     top: 3px;
 }
 
-.controls ul{
-    list-style-type: none;
-}
-
-.controls ul li{
-    height: 40px;
-    border-bottom: 1px solid #3E3D3D;
-    line-height: 38px;
-    padding-left: 6px;
-}
-
-.controls ul.controls_options li{
-    color: #939393;
-    cursor: pointer;
-}
-
 .controls .square-button-controls{
     position: fixed;
     bottom: 30px;
@@ -287,7 +271,7 @@ h3 {
 }
 
 .info{
-    width: 0;
+    width: 8px;
     height: 100%;
     float: right;
     border-left: none;
@@ -296,6 +280,19 @@ h3 {
     overflow-y: auto;
     background: #404850;
 }
+
+.toggle-info-panel{
+    display: block;
+    float: right;
+    background: #404850;
+    border-radius: 10px 10px 0 0 ;
+    transform: translate(0px,-2px) rotate(-90deg);
+    padding: 5px 10px;
+    font-size: 15px;
+    cursor: pointer;
+    
+}
+
 .info .holder{
     display:flex;
     flex-direction:column;
@@ -303,7 +300,7 @@ h3 {
 }
 
 .map-section{
-    margin: 10px 0;
+    margin: 10px 0 50px 0;
     font-size: 10px;
 }
 
@@ -420,7 +417,7 @@ h3 {
 }
 
 .stage-stack{
-    padding:20px 40px;
+    padding: 20px 0 20px 40px;
     flex-direction: column;
     display: flex;
     position: relative;
@@ -442,7 +439,7 @@ h3 {
     margin: 20px 0px;
 }
 .showinfo .stage-stack{
-    margin-right: 300px;
+    /*margin-right: 300px;*/
 }
 
 .list-footer{

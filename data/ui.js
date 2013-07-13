@@ -66,8 +66,15 @@ btnGroupArray.forEach(function(btnGroup){
 
 
 /* Toggle Info Panel */
-document.querySelector(".show-info-button").addEventListener("click", function(){
-    document.querySelector("#content").classList.toggle("showinfo");
+document.querySelector(".toggle-info-panel").addEventListener("click", function(){
+    var infoShown = document.querySelector("#content").classList.contains("showinfo");
+    if ( infoShown ){
+        document.querySelector("#content").classList.remove("showinfo");
+        document.querySelector(".toggle-info-panel").innerHTML = "+";
+    }else{
+        document.querySelector("#content").classList.add("showinfo");
+        document.querySelector(".toggle-info-panel").innerHTML = "X";
+    }
 });
 
 

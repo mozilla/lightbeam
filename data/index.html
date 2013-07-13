@@ -63,9 +63,9 @@
                     <img src="image/collusion_icon_reset.png" />reset
                 </a>
             </div>
-            <ul class="controls_options">
+            <!-- <ul class="controls_options">
                 <li class="show-info-button"><a>Toggle Info Panel</a></li>
-            </ul>
+            </ul> -->
             <div class="square-button-controls">
                 <div class="square-button">
                     <a class="help-mode"><img src="image/collusion_icon_help.png" /></a>
@@ -103,21 +103,17 @@
         <div id="content" class="">
             <aside class="info">
                 <div class="holder">
-						<div>
-							<h2 class="title"></h2>
-                    <!--span class="blue-text">You are currently browsing this site</span-->
-							<span><span class="blue-text"><b>First Access </b></span>Date</span><br>
-							<span><span class="blue-text"><b>Last Access </b></span>Date</span>
+					<div>
+						<h2 class="title"></h2>
+						<span><span class="blue-text"><b>First Access </b></span>Date</span><br>
+						<span><span class="blue-text"><b>Last Access </b></span>Date</span>
+                    </div>
                     <div class="map-section">
                         <h3 class="blue-text">Server Location</h3>
                         <div><span id="country">&nbsp;</span></div>
                         <!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
                         <object type="image/svg+xml" data="map.svg" class="world-map"></object>
                     </div>
-                    <div>
-						<h3 class="blue-text">Privacy Score</h3>
-						<span>__ out of 100</span>
-					</div>
                     <div class="connections-list">
                         <h3 class="num-connected-sites blue-text">___ Connected Sites</h3>
                         <ul>
@@ -125,6 +121,9 @@
                     </div>
                 </div>
             </aside>
+            <div class="toggle-info-panel">
+                +
+            </div>
             <div class="stage-stack">
               <div class="stage-header">
 					  <h1>[current view]</h1>
