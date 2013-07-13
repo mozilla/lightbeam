@@ -1,7 +1,12 @@
 var visualizations = {};
 var currentVisualization;
 var allConnections = [];
-var userSettings = {};
+var userSettings;
+try{
+    userSettings = JSON.parse(localStorage.userSettings || '{}');
+}catch(e){
+    userSettings = {};
+}
 // FIXME: Read this from config file
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
 var uploadTimer;
@@ -30,9 +35,7 @@ var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  console.log('we should have a mapcanvas now: %o', mapcanvas);
   initMap();
-  console.log('map initialized');
 }, false);
 
 
@@ -243,6 +246,17 @@ function sharingData(){
 function startUploadTimer(){
     uploadTimer = setTimeout(sharingData, 10 * 60 * 1000); // upload every 10 minutes
 }
+
+// Save user settings on exit
+window.addEventListener('beforeunload', function(event){
+    // don't need to store empty settings
+    Object.keys(userSettings).forEach(function(key){
+        if (!userSettings[key]){
+            delete userSettings[key];
+        } 
+    });
+    localStorage.userSettings = JSON.stringify(userSettings);
+}, false);
 
 function saveToLocalStorage(key,value){
     try{

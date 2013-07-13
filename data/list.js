@@ -88,7 +88,12 @@ function initList(){
     document.querySelector('.list-table').addEventListener('click', function(event){
         // FIXME: This selector is too broad
         var url = event.target.parentNode.dataset.sortKey;
-        if (event.target.mozMatchesSelector('.update-table') && url ){
+        if (event.target.mozMatchesSelector('td:nth-child(1)')){
+            var checkbox = event.target.querySelector('input')
+            if (checkbox){
+                checkbox.checked = !checkbox.checked; // toggle it
+            }
+        }else if (event.target.mozMatchesSelector('.update-table') && url ){
             showFilteredTable(url);
         }
     },false);
@@ -251,6 +256,8 @@ function setUserSetting(row, pref){
     if(localStorage.lastSortColumn === '2'){
         resort(document.querySelector(".list-table"));
     }
+    // uncheck the row
+    row.querySelector('[type=checkbox]').checked = false;
 }
 
 function selectAllRows(flag){
