@@ -9,42 +9,28 @@ function toArray(nl){
 *   Buttons
 */
 
-var btnSelectCallback = function(e,btnGroup,callback){
-    var targetValue = e.target.getAttribute("data-value");
-    var otherOptions = btnGroup.querySelectorAll(".dropdown_options a:not([data-selected])");
-    btnGroup.querySelector(".dropdown_options").classList.remove("expanded");
-    btnGroup.querySelector(".arrow").querySelector(".icon-sort-down").classList.remove("hidden");
-    btnGroup.querySelector(".arrow").querySelector(".icon-sort-up").classList.add("hidden");
-    toArray(otherOptions).forEach(function(option){
-        option.classList.add("collapsed");
-    });
-    callback(targetValue);
-}
-
 function dropdownGroup(btnGroup, callback){
     callback = callback || function(){};
+
     var arrow = btnGroup.querySelector(".arrow");
     arrow.addEventListener("click", function(event){
         var otherOptions = btnGroup.querySelectorAll(".dropdown_options a:not([data-selected])");
-        var allOptions = btnGroup.querySelectorAll(".dropdown_options a");
         arrow.querySelector(".icon-sort-down").classList.toggle("hidden");
         arrow.querySelector(".icon-sort-up").classList.toggle("hidden");
         btnGroup.querySelector(".dropdown_options").classList.toggle("expanded");
         toArray(otherOptions).forEach(function(option){
             option.classList.toggle("collapsed");
         });
-
-        toArray(allOptions).forEach(function(option){
-            option.addEventListener("click", function(e){
-                btnGroup.querySelector("[data-selected]").removeAttribute("data-selected");
-                e.target.setAttribute("data-selected", true);
-                btnSelectCallback(e,btnGroup,function(selectedValue){
-                    callback(selectedValue);
-                });
-            }); 
-        });
-
     }, false);
+
+    var allOptions = btnGroup.querySelectorAll(".dropdown_options a");
+    toArray(allOptions).forEach(function(option){
+        option.addEventListener("click", function(e){
+            btnGroup.querySelector("[data-selected]").removeAttribute("data-selected");
+            e.target.setAttribute("data-selected", true);
+            callback( e.target.getAttribute("data-value") );
+        }); 
+    });
 }
 
 /* Bind click event listener to each of the btn_group memebers */

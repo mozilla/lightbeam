@@ -9,13 +9,13 @@ const CY = 0;
 const CENTRE = CX + ',' + CY;
 const DOT_TRANS = 'translate(305, 5)';
 const HAND_TRANS = 'translate(205, 5)';
-const TIME_TRANS = 'translate(0, 5)';
+const TIME_TRANS = 'translate(280, -265)';
+const TIME_LABEL_TRANS = 'translate(280, -248)';
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const TIME_X1 = -275;
-const TIME_X2 = 270 ;
+const TIME_X = -275;
 const TIME_Y = CY - 5;
 
-var times, timeslots, offsets;
+var times, timeAmPmLabels, timeslots, offsets;
 
 // TODO: Make visualization an event emitter, so I can call on('connection', fn) and emit('connection', connection)
 
@@ -37,13 +37,14 @@ function onInit(connections){
     // draw clock dial
     console.log('initializing clock from %s connections', connections.length);
     aggregate.emit('init', connections);
-    times = ['12 am', '1 am', '2 am', '3 am', '4 am', '5 am', '6 am', '7 am', '8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm', '6 pm', '7 pm', '8 pm', '9 pm', '10 pm', '11 pm', '12 am'];
+    times = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+    timeAmPmLabels = [ 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'AM' ]
     timeslots = {};
     offsets = [':00', ':15', ':30', ':45'];
     times.slice(1).forEach(function(time){
         timeslots[time] = {':00': [], ':15': [], ':30': [], ':45': [] };
     });
-    vizcanvas.setAttribute('viewBox', '-350 -495 700 500');
+    vizcanvas.setAttribute('viewBox', '-350 -515 700 530');
     drawTimes();
     updateTime();
     connections.forEach(function(connection){
@@ -235,32 +236,30 @@ function drawTimes(){
     var text;
     // Draw arcs
     vizcanvas.appendChild(svg('path', {
-        stroke: '#999', // move to CSS
-        fill: 'none',
-        'stroke-width': 90,
-        d: 'M-250,5 A185,185 0 0,1 250,5'
+        d: 'M-240,5 A185,185 0 0,1 240,5',
+        'class': 'clock-inner-curve'
     }));
     vizcanvas.appendChild(svg('path', {
-        stroke: '#CCC', // move to CSS
-        fill: 'none',
-        'stroke-width': 35,
-        d: 'M-275,5 A205,205 0 0,1 275,5'
+        d: 'M-300,5 A205,205 0 0,1 300,5',
+        'class': 'clock-outer-curve'
     }));
     // Draw all the :00 time increment titles
-    times.slice(0,13).forEach(function(time, idx){
+    times.forEach(function(time, idx){
         vizcanvas.appendChild(svg('text', {
-            x: TIME_X1,
+            x: TIME_X,
             y: TIME_Y,
-            transform: 'rotate(' + (7.5 * idx) + ' ' + CENTRE + ') ' + TIME_TRANS
+            transform: 'rotate(' + (-90+7.5*idx) + ' ' + CENTRE + ') ' + TIME_TRANS,
+            'class': 'times-label'
         }, time)
     );});
-    times.slice(13).reverse().forEach(function(time, idx){
+    timeAmPmLabels.forEach(function(time, idx){
         vizcanvas.appendChild(svg('text', {
-            x: TIME_X2,
+            x: TIME_X,
             y: TIME_Y,
-            transform: 'rotate(' + (-7.5 * idx) + ' ' + CENTRE + ') ' + TIME_TRANS
+            transform: 'rotate(' + (-90+7.5*idx) + ' ' + CENTRE + ') ' + TIME_LABEL_TRANS,
+            'class': 'times-am-pm-label'
         }, time)
-    )});
+    );});
 }
 
 function drawText(){
@@ -337,8 +336,14 @@ function drawTimerHand(time){
     var hand = document.getElementById('timerhand');
     if (!hand){
         var hand = svg('g', {id: 'timerhand'});
-        hand.appendChild(svg('line', {x1: 0, y1: 0, x2: 400, y2: 0}));
-        hand.appendChild(svg('path', {d: 'M47,-8 L47,8 73,5 73,-5 Z'}));
+        hand.appendChild(svg('line', {x1: 87, y1: 0, x2: 400, y2: 0}));
+        hand.appendChild(svg('path', {d: 'M32,-4 L32,4 88,4 88,-4 Z'}));
+        hand.appendChild(svg('text',{
+            x:0,
+            y:-15,
+            'class':'time-hand-label',
+            transform: 'rotate(90)'
+        },"Now"));
     }
     vizcanvas.appendChild(hand);
     if (!lastBucket){
