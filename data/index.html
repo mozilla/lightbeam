@@ -11,9 +11,8 @@
     <div class="main">
         <aside class="controls">
             <header>
-                <div class="collusion-icon">
-                </div>
-                <img class="logo" src="image/collusion_wordmark_temp.png" />
+                <div class="collusion-icon"></div>
+                <img class="logo" src="icons/collusion_wordmark_temp.png" />
             </header>
             <div class="btn_group visualization">
                 <div data-view class="dropdown_button">
@@ -50,17 +49,17 @@
             </div>
             <div class="btn">
                 <a class="upload">
-                    <img src="image/collusion_icon_share.png" />share
+                    <img src="image/collusion_icon_share.png" />Share
                 </a>
             </div>
             <div class="btn">
                 <a class="download">
-                    <img src="image/collusion_icon_save.png" />download
+                    <img src="image/collusion_icon_save.png" />Download
                 </a>
             </div>
             <div class="btn">
                 <a class="reset-data">
-                    <img src="image/collusion_icon_reset.png" />reset
+                    <img src="image/collusion_icon_reset.png" />Reset
                 </a>
             </div>
             <!-- <ul class="controls_options">
@@ -95,8 +94,8 @@
 					<h3></h3>
 					<span>3RD PARTY</span>
 				</div>
-				<div class="stat first-party-sites">
-					<h3></h3>
+				<div class="stat 1st-party-connections">
+					<h3>124</h3>
 					<span>1ST PARTY</span>
 				</div>
 			</div>
@@ -105,17 +104,19 @@
                 <div class="holder">
 					<div>
 						<h2 class="title"></h2>
-						<span><span class="blue-text"><b>First Access </b></span>Date</span><br>
-						<span><span class="blue-text"><b>Last Access </b></span>Date</span>
-                    </div>
+						<!--span class="blue-text">You are currently browsing this site</span-->
+						<span class="blue-text"><b>First Access </b></span><span class="info-first-access">Date</span><br>
+						<span class="blue-text"><b>Last Access </b></span><span class="info-last-access">Date</span>
                     <div class="map-section">
                         <h3 class="blue-text">Server Location</h3>
                         <div><span id="country">&nbsp;</span></div>
                         <!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
                         <object type="image/svg+xml" data="map.svg" class="world-map"></object>
                     </div>
+						<h3 class="connections-head dark-blue-text"><b class="blue-text num-connected-sites">17</b> Connection</h3>
+						<span>Made to/from this site</span>
+					</div>
                     <div class="connections-list">
-                        <h3 class="num-connected-sites blue-text">___ Connected Sites</h3>
                         <ul>
                         </ul>
                     </div>
@@ -139,7 +140,7 @@
               <!-- LEGEND & CONTROLS for Graph ================================  -->
               <div class="graph-footer hidden">
                     <section class="legend-header">
-                        <div><header>LEGEND & CONTROLS</header></div>
+                        <div><header class="blue-text">LEGEND & CONTROLS</header></div>
                         <div><a class="legend-toggle">Hide</a></div>
                     </section>
                     <section class="legend-controls">
@@ -215,7 +216,7 @@
                 <!-- LEGEND & CONTROLS for Clock ================================  -->
                 <div class="clock-footer hidden">
                     <section class="legend-header">
-                        <div><header>LEGEND & CONTROLS</header></div>
+                        <div><header class="blue-text">LEGEND & CONTROLS</header></div>
                         <div><a class="legend-toggle">Hide</a></div>
                     </section>
                     <section class="legend-controls">
@@ -248,10 +249,11 @@
                             </div>
                             <div class="btn">
                                 <a>
-                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                	<img src="icons/collusion_icon_block.png" />
+                                    <!--<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="blockedSites" cx="8" cy="8" r="6" />
                                         <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
-                                    </svg>
+                                    </svg>-->
                                     Blocked Sites
                                 </a>
                             </div>
@@ -283,15 +285,46 @@
                     </section>
               </div>
               <div class="list-footer">
-						<h3 class="blue-text">SITE PREFERENCES</h3>
-					<div class="list-footer-btns">
-							<div class="block-pref btn"><a>Block Site</a></div>
-							<div class="hide-pref btn"><a>Hide Site</a></div>
-							<div class="watch-pref btn"><a>Watch Site</a></div>
-							<div class="no-pref btn"><a>Remove</a></div>
-						<div class="btn-spacer"></div>
-							<div class="toggle-hidden btn orange"><a>Hide Hidden</a></div>
+              		<section class="legend-header">
+                        <div><header class="blue-text">SITE PREFERENCES</header></div>
+                        <div><a class="legend-toggle">Hide</a></div>
+                    </section>
+                    <section class="legend-controls">
+						<section class="column">
+							<div class="block-pref btn active">
+								<a>
+									<img src="icons/collusion_icon_block.png" />
+									Block Site
+								</a>
+							</div>
+							<div class="hide-pref btn active">
+								<a>
+									<img src="icons/collusion_icon_hide.png" />
+									Hide Site
+								</a>
 					</div>
+							<div class="watch-pref btn active">
+								<a>
+									<img src="icons/collusion_icon_watch.png" />
+									Watch Site
+								</a>
+							</div>
+						</section>
+						<section class="column">
+							<div class="no-pref btn active">
+								<a>
+									Remove Preference
+								</a>
+							</div>
+						</section>
+						<section class="column">
+							<div class="toggle-hidden btn active orange">
+								<a>
+									Hide Hidden
+								</a>
+							</div>
+						</section>
+					</section>
               </div>
             </div><!-- .stage-stack -->
         </div>

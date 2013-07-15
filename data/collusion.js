@@ -1,3 +1,5 @@
+'use strict';
+
 var visualizations = {};
 var currentVisualization;
 var allConnections = [];
