@@ -1,3 +1,5 @@
+'use strict';
+
 function initMap(){
 
 var oriMapViewBox = mapcanvas.getAttribute('viewBox');
@@ -7,10 +9,10 @@ document.querySelector('#content').addEventListener('click', function(event){
     // click could happen on .node or an element inside of .node
     if (event.target.mozMatchesSelector('.node, .node *')){
         var node = event.target;
+        if (node.mozMatchesSelector('[type=checkbox], td [type=checkbox]')) return;
         while(node.mozMatchesSelector('.node *')){
             node = node.parentElement;
         }
-        if (node.querySelector('[type=checkbox]')) return;
         // console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
         updateInfo(node.dataset.name);
     }else{
@@ -76,7 +78,13 @@ function updateMap(countryCode){
     setZoom(newViewBox, mapcanvas);
 }
 
-
+function getLongDate(Short){
+	var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+	var number_deco = ['st','nd','rd','th','th','th','th','th','th'];
+	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+	var array = Short.split('/');
+	return days[new Date(Number(array[2]), Number(array[0])-1, Number(array[1])).getDay()]+', '+months[Number(array[0])-1]+' '+Number(array[1])+number_deco[Number(array[0].slice(-1))]+', '+array[2];
+}
 
 // updates info on the info panel
 function updateInfo(nodeName){
@@ -99,6 +107,11 @@ function updateInfo(nodeName){
             }
         }
 
+        var HTMLnode = document.querySelector('[data-name="'+nodeName+'"]');
+        document.querySelector('.info-first-access').textContent = getLongDate(HTMLnode.children[4].textContent);
+        document.querySelector('.info-last-access').textContent = getLongDate(HTMLnode.children[5].textContent);
+        
+
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
         var htmlList = "";
@@ -109,8 +122,7 @@ function updateInfo(nodeName){
                 numConnectedSites++;
             }
         }
-        document.querySelector(".num-connected-sites").innerHTML 
-            = ( numConnectedSites > 1) ? ( numConnectedSites + " Connected Sites" ) : ( numConnectedSites + " Connected Site" ) ;
+        document.querySelector(".num-connected-sites").textContent = numConnectedSites;
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         document.querySelector("#content").classList.add("showinfo");
