@@ -318,19 +318,10 @@ h3 {
     flex:1;
     display:flex;
     flex-direction:column;
-<<<<<<< HEAD
-    margin-top:15px;
 }
 
-.connections-list ul li{
-    padding:2px 2px 2px 10px;
-=======
->>>>>>> azlen-c2_fresh_start
-}
 
-.highlight-country{
-    fill: #0CA0E2 !important;
-}
+/* End Map Styles */
 
 .info .holder{
     width: 300px;

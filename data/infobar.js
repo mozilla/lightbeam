@@ -50,14 +50,17 @@ function resetMap(){
 
 // update map
 function updateMap(countryCode){
-    var countryOnMap = d3.select(mapcanvas).select("#" + countryCode.toLowerCase());
-    countryOnMap.classed("highlight-country", true);
-    countryOnMap.selectAll("*").classed("highlight-country", true);
+    var countryOnMap = mapcanvas.getElementById(countryCode);
+    if (!countryOnMap){
+        console.log('no country found for country code "%s"', countryCode);
+        return;
+    }
+    countryOnMap.classList.add('highlight-country');
 
     // position the highlighted country in center
     var svgViewBox = mapcanvas.getAttribute("viewBox").split(" ");
-    var worldDimen = mapcanvas.getClientRects()[0];
-    var countryDimen = mapDocument.querySelector("#"+countryCode).getClientRects()[0];
+    var worldDimen = mapcanvas.getBoundingClientRect();
+    var countryDimen = countryOnMap.getBoundingClientRect();
 
     var ratio = svgViewBox[2] / worldDimen.width;
     var worldCenter = {
@@ -102,8 +105,7 @@ function updateInfo(nodeName){
             if ( data.country_name !==  document.querySelector("#country").innerHTML ){
                 resetMap();
                 document.querySelector("#country").innerHTML = data.country_name;
-                var countryOnMap = document.querySelectorAll("svg #" + data.country_code.toLowerCase());
-                if ( countryOnMap ){ updateMap(data.country_code.toLowerCase()); }
+                updateMap(data.country_code.toLowerCase());
             }
         }
 
