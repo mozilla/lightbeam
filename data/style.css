@@ -476,8 +476,7 @@ h3 {
 /* SVG STYLES */
 
 text {
-    fill: #777;
-    font-family: Helvetica;
+    fill: #fff;
     font-size: 9px;
     font-variant: small-caps;
     text-anchor: middle;
@@ -536,10 +535,35 @@ text {
     visibility: hidden;
 }
 
+.clock-inner-curve{
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+}
+
+.clock-outer-curve{
+    fill: none;
+    stroke: #333;
+    stroke-width: 2;
+}
+
+.time-hand-label{
+    font-size: 13px;
+}
+
+.times-label{
+    font-size: 15px;
+}
+
+.times-am-pm-label{
+    fill: #555;
+    font-size: 9px;
+}
+
 .clock-time{
     font-size: 24px;
     font-weight: bold;
-    fill: #CCC;
+    fill: #4CC7E6;
     visibility: visible;
     stroke: none;
     font-variant: normal;
@@ -563,8 +587,8 @@ text {
 }
 
 #timerhand{
-    fill: rgba(79, 129, 85, .6);
-    stroke: rgba(79, 129, 85, .6);
+    fill: rgba(76, 199, 230, .6);
+    stroke: rgba(76, 199, 230, .6);
     strokewidth: 3px;
 }
 
