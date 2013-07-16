@@ -141,7 +141,6 @@ function switchVisualization(name){
 function resetAddtionalUI(){
     // toggle off info panel, settings page
     document.querySelector("#content").classList.remove("showinfo");
-    clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
     // toggle footer section accordingly
