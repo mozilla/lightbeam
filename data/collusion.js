@@ -149,7 +149,6 @@ function resetAddtionalUI(){
     document.querySelector(".list-footer").classList.add("hidden");
     var vizName = currentVisualization.name;
     document.querySelector("." + vizName + "-footer").classList.remove("hidden");
-    document.querySelector(".stage-header h1").textContent = initCap(vizName) + " View";
 }
 
 

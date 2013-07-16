@@ -54,7 +54,6 @@ function onRemove(){
 function initList(){
     var stage = document.querySelector('.stage');
     document.querySelector('.stage-stack').classList.add("list");
-    document.querySelector('.stage-header h1').textContent = 'List View';
 
     // list header
     var table = elem("div", {'class': 'list-table'}, [

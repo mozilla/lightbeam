@@ -511,15 +511,6 @@ h3 {
     overflow: hidden;
 }
 
-.stage-header{
-    flex: none;
-}
-.stage-header h1{
-    font-family:"Helvetica Neue", Arial, sans-serif;
-    letter-spacing:3px;
-    font-weight: 100;
-}
-
 .stage{
     flex: 1;
     margin: 20px 0px;
