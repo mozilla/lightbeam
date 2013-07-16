@@ -289,9 +289,13 @@ function saveToLocalStorage(key,value){
 */
 
 function updateStatsBar(){
-    document.querySelector(".top-bar .total-connections h3").innerHTML = allConnections.length;
-    document.querySelector(".top-bar .third-party-sites h3").innerHTML = aggregate.thirdnodes.length;
-    document.querySelector(".top-bar .first-party-sites h3").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    var dateSince = "just now";
+    if ( allConnections.length > 0 ){
+        dateSince = new Date(allConnections[0][2]).toDateString();
+    }
+    document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
+    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length;
+    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
     statsBarInitiated = true;
 }
 

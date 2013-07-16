@@ -293,24 +293,25 @@ h3 {
     height: 60px;
     background-color:#fff;
     flex:none;
-    padding-top:10px;
-    padding-left:40px;
+    padding: 10px;
+    font-size: 9px;
 }
 
 .stats-section{
     float: left;
-    /*border: 1px solid blue;*/
+    color: #707070;
+    width: 80%;
+    padding-top: 10px;
 }
 
 .sharing-section{
     float: right;
-    /*border: 1px solid red;*/
-    margin-right: 20px;
+    margin: 3px 5px 0 0;
+    width: calc( 20% - 5px );
 }
 
 .sharing-section .label{
     display: inline-block;
-    font-size: 9px;
     font-weight: bold;
     letter-spacing: 1px;
     color: #707070;
@@ -318,23 +319,16 @@ h3 {
 
 .sharing-section .share-btn{
     display: inline-block;
+    position: relative;
+    top: 8px;
 }
 
 .stat{
     display:inline-block;
-    margin-right:20px;
-}
-.stat h3{
-    display:inline-block;
     font-weight:bold;
     color:#38a9cb;
-    font-size:30px;
-}
-.stat span{
-    display:inline;
-    font-size:7pt;
-    font-weight:bold;
-    color:#707070;
+    font-size: 20px;
+    margin: 0 3px;
 }
 
 .info{
