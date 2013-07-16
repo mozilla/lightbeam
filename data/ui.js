@@ -332,17 +332,6 @@ document.querySelector(".stage").addEventListener("mouseleave",function(event){
 },false);
 
 
-/* Help Mode ========================= */
-document.querySelector(".help-mode").addEventListener("click", function(){
-    var theButton = document.querySelector(".help-mode").parentElement;
-    theButton.classList.toggle("active");
-    if( theButton.className.contains("active") ){
-        triggerHelp(document.querySelector("body"), "toggleOnHelp", currentVisualization.name);
-    }else{
-        triggerHelp(document.querySelector("body"), "toggleOffHelp", currentVisualization.name);
-    }
-});
-
 /* Clock View ===================================== */
 
 function highlightColludedNode(selection){
