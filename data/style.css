@@ -83,7 +83,7 @@ h3 {
     display: none !important;
 }
 
-/* Button Styling =============== */
+/* Button Styling ================================ */
 
 .btn a:hover,
 .square-button a:hover{
@@ -218,6 +218,56 @@ h3 {
     text-align: center;
 }
 
+.toggle-btn input{
+    display: none;
+}
+
+.toggle-btn .toggle-btn-innner{
+    display: inline-block;
+    background: #5F6771;
+    border-radius: 5px;
+    width: 55px;
+    height: 28px;
+    padding: 3px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.toggle-btn .toggle-btn-innner > * {
+    display: inline-block;
+}
+
+.toggle-btn .toggle-btn-innner .switch{
+    float: left;
+    width: 45%;
+    height: 100%;
+    background: #303539;
+    border-radius: 5px;
+}
+
+.toggle-btn .toggle-btn-innner .on-off-text{
+    float: right;
+    line-height: 20px;
+    font-size: 9px;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+.toggle-btn input + .toggle-btn-innner.checked{
+    background: #25292D;
+}
+
+.toggle-btn input + .toggle-btn-innner .switch.checked{
+    float: right;
+    background: #4CC7E6;
+}
+
+.toggle-btn input + .toggle-btn-innner .on-off-text.checked{
+    float: left;
+}
+
+/* Button Styling ends ================================ */
+
 
 #content{
     flex:1;
@@ -239,12 +289,35 @@ h3 {
     width:calc(100% - 170px);
 }
 
-.stats-bar{
+.top-bar{
     height: 60px;
     background-color:#fff;
     flex:none;
     padding-top:10px;
     padding-left:40px;
+}
+
+.stats-section{
+    float: left;
+    /*border: 1px solid blue;*/
+}
+
+.sharing-section{
+    float: right;
+    /*border: 1px solid red;*/
+    margin-right: 20px;
+}
+
+.sharing-section .label{
+    display: inline-block;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #707070;
+}
+
+.sharing-section .share-btn{
+    display: inline-block;
 }
 
 .stat{
@@ -451,7 +524,7 @@ text {
     position: absolute;
     background-color: #CCC;
     color: #010203;
-    padding: 10px;
+    padding: 5px;
 }
 #tooltip:after{
     content: '';

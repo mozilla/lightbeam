@@ -48,11 +48,6 @@
                 </div>
             </div>
             <div class="btn">
-                <a class="upload">
-                    <img src="image/collusion_icon_share.png" />Share
-                </a>
-            </div>
-            <div class="btn">
                 <a class="download">
                     <img src="image/collusion_icon_save.png" />Download
                 </a>
@@ -85,19 +80,32 @@
         </aside>
 
 		<div class="content-flex">
-			<div class="stats-bar">
-				<div class="stat total-connections">
-					<h3></h3>
-					<span>TOTAL CONNECTIONS</span>
-				</div>
-				<div class="stat third-party-sites">
-					<h3></h3>
-					<span>3RD PARTY</span>
-				</div>
-				<div class="stat first-party-sites">
-					<h3></h3>
-					<span>1ST PARTY</span>
-				</div>
+			<div class="top-bar">
+                <div class="stats-section">
+    				<div class="stat total-connections">
+    					<h3></h3>
+    					<span>TOTAL CONNECTIONS</span>
+    				</div>
+    				<div class="stat third-party-sites">
+    					<h3></h3>
+    					<span>3RD PARTY</span>
+    				</div>
+    				<div class="stat first-party-sites">
+    					<h3></h3>
+    					<span>1ST PARTY</span>
+    				</div>
+                </div>
+                <div class="sharing-section">
+                    <div class="label">SHARING DATA</div>
+                    <div class="toggle-btn share-btn">
+                        <label><input type="checkbox" name="" id="" />
+                            <div class="toggle-btn-innner">
+                                <div class="switch"></div>
+                                <div class="on-off-text">OFF</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
 			</div>
         <div id="content" class="">
             <aside class="info">
@@ -343,7 +351,7 @@
     <script src="tooltip.js"></script>
     <script src="ui.js"></script>
     <!-- Map -->
-    <script src="parseurl.js"></script>
+    <script src="parseuri.js"></script>
     <!-- Visualizations -->
     <script src="clock.js"></script>
     <script src="graph.js"></script>

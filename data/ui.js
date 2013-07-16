@@ -51,6 +51,54 @@ btnGroupArray.forEach(function(btnGroup){
 });
 
 
+/* Share Data Toggle */
+
+var shareDataToggle = document.querySelector(".toggle-btn.share-btn");
+
+document.querySelector(".toggle-btn.share-btn").addEventListener("click",function(event){
+    if ( event.target.mozMatchesSelector("input") ){
+        var checked = event.target.checked;
+        if ( checked ){
+            if ( startSharing() ){ // user confirmed action
+                toggleBtnOnEffect( document.querySelector(".share-btn") );
+            }else{
+                event.target.checked = false;
+            }
+        }else{
+            if ( stopSharing() ){ // user confirmed action
+                 toggleBtnOffEffect( document.querySelector(".share-btn") );
+            }else{
+                event.target.checked = true;
+            }
+        }
+    }
+});
+
+if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
+    var toggleBtn = document.querySelector(".share-btn");
+    toggleBtn.querySelector("input").checked = true;
+    toggleBtnOnEffect( toggleBtn );
+}
+
+
+function toggleBtnOnEffect(toggleBtn){
+    toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
+    toggleBtn.querySelector(".switch").classList.add("checked");
+    toggleBtn.querySelector(".on-off-text").classList.add("checked");
+    toggleBtn.querySelector(".on-off-text").innerHTML = "ON";
+}
+
+function toggleBtnOffEffect(toggleBtn){
+    toggleBtn.querySelector(".toggle-btn-innner").classList.remove("checked");
+    toggleBtn.querySelector(".switch").classList.remove("checked");
+    toggleBtn.querySelector(".on-off-text").classList.remove("checked");
+    toggleBtn.querySelector(".on-off-text").innerHTML = "OFF";
+}
+
+
+
+
+
 /* Toggle Info Panel */
 document.querySelector(".toggle-info-panel").addEventListener("click", function(){
     var infoShown = document.querySelector("#content").classList.contains("showinfo");
@@ -105,19 +153,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
 
     updateStatsBar();
     // FIXME: empty the data from current view too
-});
-
-var uploadButton = document.querySelector('.upload');
-if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
-    uploadButton.innerHTML = '<img src="image/collusion_icon_share.png" /> Stop Sharing';
-}
-
-uploadButton.addEventListener('click', function(){
-    if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
-        stopSharing();
-    }else{
-        startSharing();
-    }
 });
 
 // function handleDisclosureToggle(elem){

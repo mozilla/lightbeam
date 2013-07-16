@@ -204,20 +204,20 @@ function startSharing(){
                 'privacy policies are, please visit http://ItsOurData.com/privacy/.\n\nBy clicking Okay ' +
                 'you are agreeing to share your data under those terms.')){
         sharingData();
-        uploadButton.innerHTML = 'Stop Sharing';
         localStorage.userHasOptedIntoSharing = true;
+        return true;
     }
 }
 
 function stopSharing(){
     if (confirm('You are about to stop sharing data with the Mozilla Collusion server.\n\n' +
                     'By clicking Okay you will no longer be uploading data.')){
-        uploadButton.innerHTML = '<img src="image/collusion_icon_share.png" /></i>Share Data';
         localStorage.userHasOptedIntoSharing = false;
         if (uploadTimer){
             clearTimeout(uploadTimer);
             uploadTimer = null;
         }
+        return true;
     }
 }
 
@@ -289,9 +289,9 @@ function saveToLocalStorage(key,value){
 */
 
 function updateStatsBar(){
-    document.querySelector(".stats-bar .total-connections h3").innerHTML = allConnections.length;
-    document.querySelector(".stats-bar .third-party-sites h3").innerHTML = aggregate.thirdnodes.length;
-    document.querySelector(".stats-bar .first-party-sites h3").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    document.querySelector(".top-bar .total-connections h3").innerHTML = allConnections.length;
+    document.querySelector(".top-bar .third-party-sites h3").innerHTML = aggregate.thirdnodes.length;
+    document.querySelector(".top-bar .first-party-sites h3").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
     statsBarInitiated = true;
 }
 
