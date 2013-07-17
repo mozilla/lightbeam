@@ -14,7 +14,8 @@ document.querySelector('#content').addEventListener('click', function(event){
             node = node.parentElement;
         }
         // console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
-        updateInfo(node.dataset.name);
+        // updateInfo(node.dataset.name);
+        updateInfo(node.getAttribute("data-name"));
     }else{
         //console.log('does not match .node: %o', event.target);
     }
@@ -109,21 +110,25 @@ function updateInfo(nodeName){
             }
         }
 
-        var HTMLnode = document.querySelector('[data-name="'+nodeName+'"]');
-        document.querySelector('.info-first-access').textContent = getLongDate(HTMLnode.children[4].textContent);
-        document.querySelector('.info-last-access').textContent = getLongDate(HTMLnode.children[5].textContent);
-        
-
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
         var htmlList = "";
         var numConnectedSites = 0;
+        var firstAccess;
+        var lastAccess;
         for ( var key in nodeList ){
             if ( key != nodeName ){
                 htmlList = htmlList + "<li>" + key + "</li>";
                 numConnectedSites++;
+            }else{
+                firstAccess = getLongDate( nodeList[key].firstAccess.toLocaleDateString() );
+                lastAccess = getLongDate( nodeList[key].lastAccess.toLocaleDateString() );
             }
         }
+
+        document.querySelector('.info-first-access').textContent = firstAccess;
+        document.querySelector('.info-last-access').textContent = lastAccess;
+
         document.querySelector(".num-connected-sites").textContent = numConnectedSites;
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
