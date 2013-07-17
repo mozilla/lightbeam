@@ -164,6 +164,11 @@ mapcanvas.addEventListener("mouseleave",function(event){
     mapcanvas.style.cursor = "default";
 },false);
 
+mapDocument.addEventListener("wheel",function(event){
+    if ( event.target.mozMatchesSelector(".mapcanvas, .mapcanvas *") ){
+        zoomWithinLimit(event, mapcanvas, mapZoomInLimit, mapZoomOutLimit );
+    }
+},false);
 
 
 }

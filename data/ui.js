@@ -213,16 +213,10 @@ var mapZoomOutLimit    = { w:2711.3, h:1196.7 };
 document.querySelector(".stage").addEventListener("wheel",function(event){
     if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && currentVisualization.name != "list" ){
         if ( currentVisualization.name == "graph" ){
-            zoomWithinLimit(event,"vizcanvas", graphZoomInLimit, graphZoomOutLimit);
+            zoomWithinLimit(event, vizcanvas, graphZoomInLimit, graphZoomOutLimit);
         }else{ // clock view
-            zoomWithinLimit(event,"vizcanvas", clockZoomInLimit, clockZoomOutLimit);
+            zoomWithinLimit(event, vizcanvas, clockZoomInLimit, clockZoomOutLimit);
         }
-    }
-},false);
-
-document.querySelector(".world-map").addEventListener("wheel",function(event){
-    if ( event.target.mozMatchesSelector(".mapcanvas, .mapcanvas *") ){
-        zoomWithinLimit(event,"mapcanvas", mapZoomInLimit, mapZoomOutLimit );
     }
 },false);
 
@@ -252,41 +246,29 @@ function zoomWithinLimit(event, targetSvg, zoomInLimit, zoomOutLimit){
 
 // Apply zoom level
 function svgZooming(target,ratio){
-
-    function generateNewViewBox(target, box){
-        var oldWidth = box.w;
-        var newWidth = oldWidth / ratio;
-        var offsetX = ( newWidth - oldWidth ) / 2;
-
-        var oldHeight = box.h;
-        var newHeight = oldHeight / ratio;
-        var offsetY = ( newHeight - oldHeight ) / 2;
-
-        box.w = box.w / ratio;
-        box.h = box.h / ratio;
-        box.x = box.x - offsetX;
-
-        if ( target == "vizcanvas" ){
-            box.y = ( currentVisualization.name == "graph") ? (box.y - offsetY) : -1 * (box.h - 5);
-        }else{
-            box.y = box.y - offsetY;
-        }
-
-        return box;
-    }
-
-    if ( target == "vizcanvas" ){
-        var box = getZoom(vizcanvas);
-        var newViewBox = generateNewViewBox(target, box);
-        setZoom(newViewBox,vizcanvas);
-
-    }else{
-        var box = getZoom(mapcanvas);
-        var newViewBox = generateNewViewBox(target, box);
-        setZoom(newViewBox, mapcanvas);
-    }
-
+    var box = getZoom(target);
+    var newViewBox = generateNewViewBox(target,box,ratio);
+    setZoom(newViewBox, target);
 }
+
+function generateNewViewBox(target,box,ratio){
+    var oldWidth = box.w;
+    var newWidth = oldWidth / ratio;
+    var offsetX = ( newWidth - oldWidth ) / 2;
+
+    var oldHeight = box.h;
+    var newHeight = oldHeight / ratio;
+    var offsetY = ( newHeight - oldHeight ) / 2;
+
+    box.w = box.w / ratio;
+    box.h = box.h / ratio;
+    box.x = box.x - offsetX;
+    box.y = box.y - offsetY;
+
+    return box;
+}
+
+
 
 
 /* Pan by dragging ======================================== */

@@ -346,6 +346,7 @@ h3 {
     display: block;
     transform: translate(0px,-2px) rotate(-90deg);
     float: right;
+    z-index: 1000;
 }
 
 .info-panel-controls div{
