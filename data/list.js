@@ -229,7 +229,10 @@ function resort(table){
 
 function resetCanvas(){
     document.querySelector(".stage").classList.remove("list");
-    document.querySelector(".stage").removeChild( document.querySelector(".stage .list-table") );
+    var listTable = document.querySelector('.stage .list-table');
+    if (listTable){
+        listTable.parentElement.removeChild(listTable);
+    }
     vizcanvas.classList.remove("hide");
 }
 

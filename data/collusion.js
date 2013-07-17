@@ -2,6 +2,7 @@
 
 var visualizations = {};
 var currentVisualization;
+var currentFilter;
 var allConnections = [];
 var userSettings;
 try{
@@ -133,8 +134,79 @@ function switchVisualization(name){
     currentVisualization = visualizations[name];
 //    currentVisualization.emit('setFilter');
     resetAddtionalUI();
-
     addon.emit('uiready');
+}
+
+
+// filters
+var filters = {
+    daily: function daily(connections){
+        var now = Date.now();
+        var then = now - (24 * 60 * 60 * 1000);
+        console.log('then: %s and now: %s', then, now);
+        console.log('daily filter, before: %s', connections.length);
+        var filtered =  connections.filter(function(connection){
+            return connection[TIMESTAMP] > then;
+        });
+        console.log('daily filter, after: %s', filtered.length);
+        return filtered;
+    },
+    weekly: function weekly(connections){
+        var now = Date.now();
+        var then = now - (7 * 24 * 60 * 60 * 1000);
+        console.log('then: %s and now: %s', then, now);
+        console.log('weekly filter: before: %s', connections.length);
+        var filtered = connections.filter(function(connection){
+            return connection[TIMESTAMP] > then;
+        });
+        console.log('weekly filter: after: %s', connections.length);
+        return filtered;
+    },
+    last10sites: function last10sites(connections){
+        var indices = [];
+        for (var i = 0; i < connections.length; i++){
+            if (connections[i][SOURCE_VISITED]){
+                indices.push(i);
+            }
+        }
+        console.log('last10sites filter: before: %s', connections.length);
+        console.log('indices: %o', indices);
+        if (indices > 9){
+            var cutpoint = indices.slice(-10)[0];
+            return connections.slice(cutpoint);
+        }else{
+            return connections;
+        }
+    },
+    recent: function recent(connections){
+        var indices = [];
+        for (var i = 0; i < connections.length; i++){
+            if (connections[i][SOURCE_VISITED]){
+                indices.push(i);
+            }
+        }
+        console.log('recent filter: before: %s', connections.length);
+        console.log('indices: %o', indices);
+        if (indices > 0){
+            var cutpoint = indices.slice(-1)[0];
+            return connections.slice(cutpoint);
+        }else{
+            return connections;
+        }
+    }
+};
+var currentFilter = filters[localStorage.currentFilter || 'last24Hours'];
+
+function switchFilter(name){
+    console.log('switchFilter(' + name + ')');
+    if (currentFilter && currentFilter === filters[name]) return;
+    currentFilter = filters[name];
+    if (currentFilter){
+        localStorage.currentFilter = name;
+        aggregate.emit('filter', currentFilter);
+    }else{
+        console.log('unable to switch filter to %s', name);
+    }
 }
 
 

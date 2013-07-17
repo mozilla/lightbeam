@@ -69,8 +69,17 @@ aggregate.connectionAsObject = function(conn){
 
 }
 
+
+function applyFilter(filter){
+    resetData();
+    currentFilter = filter;
+    onLoad(allConnections);
+}
+
+aggregate.on('filter', applyFilter);
+
 function onLoad(connections){
-    connections.forEach(onConnection);
+    currentFilter(connections).forEach(onConnection);
 }
 
 aggregate.on('load', onLoad);

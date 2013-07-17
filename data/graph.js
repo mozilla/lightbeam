@@ -24,7 +24,7 @@ graph.on('setFilter', setFilter);
 
 function setFilter(){
     //addon.emit('setFilter', 'filterLastXSites', 5);
-    addon.emit('setFilter', 'filter24hours');
+    //addon.emit('setFilter', 'filter24hours');
 }
 
 function onInit(connections){
