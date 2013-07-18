@@ -363,6 +363,58 @@ function updateTime(){
 }
 
 
+/* Visual Effect ===================================== */
+
+/* ********************
+*   When a node in the clock visualization is clicked,
+*       all instances of the same node across the day should be highlighted
+*       all colluded nodes should also be highlighted (differently)
+*/
+document.querySelector('#content').addEventListener('click', function(event){
+    if ( currentVisualization.name == "clock" ){
+        // click could happen on .node or an element inside of .node
+        if (event.target.mozMatchesSelector('.node, .node *')){
+            var node = event.target;
+            while(node.mozMatchesSelector('.node *')){
+                node = node.parentElement;
+            }
+            console.log(node);
+            applyHighlightingEffect(node.getAttribute("data-name"));
+        }
+    }
+},false);
+
+function highlightColludedNode(selection){
+    selection.each(function(){
+        var colludedNode = d3.select(this);
+        if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
+            colludedNode.classed("colluded-source", true);
+        }
+        if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
+            colludedNode.classed("colluded-target", true);
+        }
+    });
+}
+
+function applyHighlightingEffect(clickedNodeName){
+    // reset styling effect
+    d3.selectAll("g.node").classed("clicked-node", false)
+                          .classed("colluded-source", false)
+                          .classed("colluded-target", false);
+
+    // highlight all instances of the clicked node(both source and target)
+    d3.selectAll("g[data-name='" + clickedNodeName +"']")
+            .classed("clicked-node", true);
+
+    // find all the colluded sites and highlight all instances of them
+    for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
+        if ( key != clickedNodeName ){
+            d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
+        }
+    }
+
+}
+
 
 /* for Highlighting and Colouring -------------------- */
 
