@@ -211,9 +211,8 @@ function switchFilter(name){
 
 
 function resetAddtionalUI(){
-    // toggle off info panel, settings page, help bubbles
+    // toggle off info panel, settings page
     document.querySelector("#content").classList.remove("showinfo");
-    clearAllBubbles();
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
     // toggle footer section accordingly
@@ -222,7 +221,6 @@ function resetAddtionalUI(){
     document.querySelector(".list-footer").classList.add("hidden");
     var vizName = currentVisualization.name;
     document.querySelector("." + vizName + "-footer").classList.remove("hidden");
-    document.querySelector(".stage-header h1").textContent = initCap(vizName) + " View";
 }
 
 
@@ -276,20 +274,20 @@ function startSharing(){
                 'privacy policies are, please visit http://ItsOurData.com/privacy/.\n\nBy clicking Okay ' +
                 'you are agreeing to share your data under those terms.')){
         sharingData();
-        uploadButton.innerHTML = 'Stop Sharing';
         localStorage.userHasOptedIntoSharing = true;
+        return true;
     }
 }
 
 function stopSharing(){
     if (confirm('You are about to stop sharing data with the Mozilla Collusion server.\n\n' +
                     'By clicking Okay you will no longer be uploading data.')){
-        uploadButton.innerHTML = '<img src="image/collusion_icon_share.png" /></i>Share Data';
         localStorage.userHasOptedIntoSharing = false;
         if (uploadTimer){
             clearTimeout(uploadTimer);
             uploadTimer = null;
         }
+        return true;
     }
 }
 
@@ -361,9 +359,13 @@ function saveToLocalStorage(key,value){
 */
 
 function updateStatsBar(){
-    document.querySelector(".stats-bar .total-connections h3").innerHTML = allConnections.length;
-    document.querySelector(".stats-bar .third-party-sites h3").innerHTML = aggregate.thirdnodes.length;
-    document.querySelector(".stats-bar .first-party-sites h3").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    var dateSince = "just now";
+    if ( allConnections.length > 0 ){
+        dateSince = new Date(allConnections[0][2]).toDateString();
+    }
+    document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
+    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length;
+    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
     statsBarInitiated = true;
 }
 

@@ -83,7 +83,7 @@ h3 {
     display: none !important;
 }
 
-/* Button Styling =============== */
+/* Button Styling ================================ */
 
 .btn a:hover,
 .square-button a:hover{
@@ -188,7 +188,7 @@ h3 {
 }
 
 .square-button:not(:last-child){
-    margin-right: 20px;
+    margin-right: 60px;
 }
 
 .square-button a{
@@ -218,6 +218,56 @@ h3 {
     text-align: center;
 }
 
+.toggle-btn input{
+    display: none;
+}
+
+.toggle-btn .toggle-btn-innner{
+    display: inline-block;
+    background: #5F6771;
+    border-radius: 5px;
+    width: 55px;
+    height: 28px;
+    padding: 3px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.toggle-btn .toggle-btn-innner > * {
+    display: inline-block;
+}
+
+.toggle-btn .toggle-btn-innner .switch{
+    float: left;
+    width: 45%;
+    height: 100%;
+    background: #303539;
+    border-radius: 5px;
+}
+
+.toggle-btn .toggle-btn-innner .on-off-text{
+    float: right;
+    line-height: 20px;
+    font-size: 9px;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+.toggle-btn input + .toggle-btn-innner.checked{
+    background: #25292D;
+}
+
+.toggle-btn input + .toggle-btn-innner .switch.checked{
+    float: right;
+    background: #4CC7E6;
+}
+
+.toggle-btn input + .toggle-btn-innner .on-off-text.checked{
+    float: left;
+}
+
+/* Button Styling ends ================================ */
+
 
 #content{
     flex:1;
@@ -239,29 +289,46 @@ h3 {
     width:calc(100% - 170px);
 }
 
-.stats-bar{
+.top-bar{
     height: 60px;
     background-color:#fff;
     flex:none;
-    padding-top:10px;
-    padding-left:40px;
+    padding: 10px;
+    font-size: 9px;
+}
+
+.stats-section{
+    float: left;
+    color: #707070;
+    width: 80%;
+    padding-top: 10px;
+}
+
+.sharing-section{
+    float: right;
+    margin: 3px 5px 0 0;
+    width: calc( 20% - 5px );
+}
+
+.sharing-section .label{
+    display: inline-block;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #707070;
+}
+
+.sharing-section .share-btn{
+    display: inline-block;
+    position: relative;
+    top: 8px;
 }
 
 .stat{
     display:inline-block;
-    margin-right:20px;
-}
-.stat h3{
-    display:inline-block;
     font-weight:bold;
     color:#38a9cb;
-    font-size:30px;
-}
-.stat span{
-    display:inline;
-    font-size:7pt;
-    font-weight:bold;
-    color:#707070;
+    font-size: 20px;
+    margin: 0 3px;
 }
 
 .info{
@@ -275,16 +342,43 @@ h3 {
     background: #404850;
 }
 
-.toggle-info-panel{
+.info-panel-controls{
     display: block;
-    float: right;
-    background: #404850;
-    border-radius: 10px 10px 0 0 ;
     transform: translate(0px,-2px) rotate(-90deg);
+    float: right;
+    z-index: 1000;
+}
+
+.info-panel-controls div{
+    width: 28px;
+    height: 28px;
+    margin-bottom: 10px;
+    position: relative;
+    bottom: 10px;
+}
+
+.info-panel-controls img{
+    width: 15px;
+    height: 15px;
+    position: relative;
+    bottom: 3px;
+    right: 3px;
+}
+
+.toggle-info-panel{
+    background: #404850;
+    border-radius: 5px 5px 0 0;
     padding: 5px 10px;
     font-size: 15px;
     cursor: pointer;
-    
+}
+
+.toggle-help{
+    transform: translate(0px,2px) rotate(90deg);
+    background: #25292D;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
 .info .holder{
@@ -418,15 +512,6 @@ h3 {
     overflow: hidden;
 }
 
-.stage-header{
-    flex: none;
-}
-.stage-header h1{
-    font-family:"Helvetica Neue", Arial, sans-serif;
-    letter-spacing:3px;
-    font-weight: 100;
-}
-
 .stage{
     flex: 1;
     margin: 20px 0px;
@@ -451,7 +536,7 @@ text {
     position: absolute;
     background-color: #CCC;
     color: #010203;
-    padding: 10px;
+    padding: 5px;
 }
 #tooltip:after{
     content: '';
@@ -769,45 +854,6 @@ text {
 }
 .body-table td:nth-child(7){
     width: 80px;
-}
-
-/* Help Mode */
-#help{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    pointer-events: none;
-}
-
-.highlighted-elm{
-    fill: white;
-    stroke: white;
-    stroke-width: 3;
-}
-
-.help-bubble{
-    position: absolute;
-    background: rgba(46,43,43,1);
-    color: white;
-    border: 3px solid #fff;
-    border-radius: 5px;
-    padding: 2px 5px;
-    min-width: 130px;
-    max-width: 160px;
-    font-size: 15px;
-}
-
-.help-bubble-line{
-    position: absolute;
-    stroke: rgb(255,255,255);
-    stroke-width: 3;
-}
-
-.help-bubble-pointer{
-    fill: #fff;
 }
 
 

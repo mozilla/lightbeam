@@ -13,7 +13,7 @@ function showTooltip(event){
     tooltip.innerHTML = event.target.getAttribute(["data-name"]);
     var rect = event.target.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
-    tooltip.style.top = (rect.top - 50) + 'px';
+    tooltip.style.top = (rect.top - 40) + 'px';
     tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
     return false;
 }
@@ -28,7 +28,7 @@ function d3ShowTooltip(node, idx){
     tooltip.innerHTML = node.name + '<span class="howMany">(&times;' + node.howMany + ')</span>';
     var rect = this.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
-    tooltip.style.top = (rect.top - 60) + 'px';
+    tooltip.style.top = (rect.top - 50) + 'px';
     tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
     return false;
 }

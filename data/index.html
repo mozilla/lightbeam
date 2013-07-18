@@ -48,11 +48,6 @@
                 </div>
             </div>
             <div class="btn">
-                <a class="upload">
-                    <img src="image/collusion_icon_share.png" />Share
-                </a>
-            </div>
-            <div class="btn">
                 <a class="download">
                     <img src="image/collusion_icon_save.png" />Download
                 </a>
@@ -62,14 +57,7 @@
                     <img src="image/collusion_icon_reset.png" />Reset
                 </a>
             </div>
-            <!-- <ul class="controls_options">
-                <li class="show-info-button"><a>Toggle Info Panel</a></li>
-            </ul> -->
             <div class="square-button-controls">
-                <div class="square-button">
-                    <a class="help-mode"><img src="image/collusion_icon_help.png" /></a>
-                    <div class="button-label">HELP</div>
-                </div>
                 <div class="square-button">
                     <a class="settings"><img src="image/collusion_icon_settings.png" /></a>
                     <div class="button-label">SETTINGS</div>
@@ -85,19 +73,30 @@
         </aside>
 
 		<div class="content-flex">
-			<div class="stats-bar">
-				<div class="stat total-connections">
-					<h3></h3>
-					<span>TOTAL CONNECTIONS</span>
-				</div>
-				<div class="stat third-party-sites">
-					<h3></h3>
-					<span>3RD PARTY</span>
-				</div>
-				<div class="stat first-party-sites">
-					<h3></h3>
-					<span>1ST PARTY</span>
-				</div>
+			<div class="top-bar">
+                <div class="stats-section">
+                    DATA HAS GATHERED SINCE 
+                    <div class="stat date-gathered">
+                    </div>
+                     AND YOU VISITED
+                    <div class="stat first-party-sites">
+                    </div>
+                     WEBSITES AND CONNECTED TO 
+    				<div class="stat third-party-sites">
+    				</div>
+                     THRID PARTY WEBSITES
+                </div>
+                <div class="sharing-section">
+                    <div class="label">SHARING DATA</div>
+                    <div class="toggle-btn share-btn">
+                        <label><input type="checkbox" name="" id="" />
+                            <div class="toggle-btn-innner">
+                                <div class="switch"></div>
+                                <div class="on-off-text">OFF</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
 			</div>
         <div id="content" class="">
             <aside class="info">
@@ -113,8 +112,7 @@
                         <!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
                         <object type="image/svg+xml" data="map.svg" class="world-map"></object>
                     </div>
-						<h3 class="connections-head dark-blue-text"><b class="blue-text num-connected-sites">17</b> Connection</h3>
-						<span>Made to/from this site</span>
+						<h3 class="connections-head dark-blue-text"><b class="blue-text num-connected-sites"></b> Connected Sites</h3>
 					</div>
                     <div class="connections-list">
                         <ul>
@@ -122,15 +120,13 @@
                     </div>
                 </div>
             </aside>
-            <div class="toggle-info-panel">
-                +
+            <div class="info-panel-controls">
+                <div class="toggle-help">
+                    <a class="help-mode"><img src="image/collusion_icon_help.png" /></a>
+                </div>
+                <div class="toggle-info-panel">+</div>
             </div>
             <div class="stage-stack">
-              <div class="stage-header">
-					  <h1>[current view]</h1>
-						  <span class="blue-text">DATA GATHERED SINCE</span>
-                  <span class="data-since">July 18, 2011</span>
-              </div><!-- stage-header -->
               <div class="stage">
                   <svg class="vizcanvas" width="100%" height="100%" viewBox="-350 -450 700 500">
                       <defs>
@@ -331,9 +327,6 @@
     </div>
     </div>
     <div id="tooltip"></div>
-    <div id="help">
-        <svg class="helpcanvas" width="100%" height="100%"></svg>
-    </div>
     <script src="d3.v2.js"></script>
     <script src="events.js"></script>
     <script src="infobar.js"></script>
@@ -343,12 +336,10 @@
     <script src="tooltip.js"></script>
     <script src="ui.js"></script>
     <!-- Map -->
-    <script src="parseurl.js"></script>
+    <script src="parseuri.js"></script>
     <!-- Visualizations -->
     <script src="clock.js"></script>
     <script src="graph.js"></script>
     <script src="list.js"></script>
-    <!-- Help Mode -->
-    <script src="help.js"></script>
 </body>
 </html>

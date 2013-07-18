@@ -57,6 +57,54 @@ btnGroupArray.forEach(function(btnGroup){
 });
 
 
+/* Share Data Toggle */
+
+var shareDataToggle = document.querySelector(".toggle-btn.share-btn");
+
+document.querySelector(".toggle-btn.share-btn").addEventListener("click",function(event){
+    if ( event.target.mozMatchesSelector("input") ){
+        var checked = event.target.checked;
+        if ( checked ){
+            if ( startSharing() ){ // user confirmed action
+                toggleBtnOnEffect( document.querySelector(".share-btn") );
+            }else{
+                event.target.checked = false;
+            }
+        }else{
+            if ( stopSharing() ){ // user confirmed action
+                 toggleBtnOffEffect( document.querySelector(".share-btn") );
+            }else{
+                event.target.checked = true;
+            }
+        }
+    }
+});
+
+if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
+    var toggleBtn = document.querySelector(".share-btn");
+    toggleBtn.querySelector("input").checked = true;
+    toggleBtnOnEffect( toggleBtn );
+}
+
+
+function toggleBtnOnEffect(toggleBtn){
+    toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
+    toggleBtn.querySelector(".switch").classList.add("checked");
+    toggleBtn.querySelector(".on-off-text").classList.add("checked");
+    toggleBtn.querySelector(".on-off-text").innerHTML = "ON";
+}
+
+function toggleBtnOffEffect(toggleBtn){
+    toggleBtn.querySelector(".toggle-btn-innner").classList.remove("checked");
+    toggleBtn.querySelector(".switch").classList.remove("checked");
+    toggleBtn.querySelector(".on-off-text").classList.remove("checked");
+    toggleBtn.querySelector(".on-off-text").innerHTML = "OFF";
+}
+
+
+
+
+
 /* Toggle Info Panel */
 document.querySelector(".toggle-info-panel").addEventListener("click", function(){
     var infoShown = document.querySelector("#content").classList.contains("showinfo");
@@ -111,19 +159,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
 
     updateStatsBar();
     // FIXME: empty the data from current view too
-});
-
-var uploadButton = document.querySelector('.upload');
-if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
-    uploadButton.innerHTML = '<img src="image/collusion_icon_share.png" /> Stop Sharing';
-}
-
-uploadButton.addEventListener('click', function(){
-    if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
-        stopSharing();
-    }else{
-        startSharing();
-    }
 });
 
 // function handleDisclosureToggle(elem){
@@ -189,16 +224,10 @@ var mapZoomOutLimit    = { w:2711.3, h:1196.7 };
 document.querySelector(".stage").addEventListener("wheel",function(event){
     if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && currentVisualization.name != "list" ){
         if ( currentVisualization.name == "graph" ){
-            zoomWithinLimit(event,"vizcanvas", graphZoomInLimit, graphZoomOutLimit);
+            zoomWithinLimit(event, vizcanvas, graphZoomInLimit, graphZoomOutLimit);
         }else{ // clock view
-            zoomWithinLimit(event,"vizcanvas", clockZoomInLimit, clockZoomOutLimit);
+            zoomWithinLimit(event, vizcanvas, clockZoomInLimit, clockZoomOutLimit);
         }
-    }
-},false);
-
-document.querySelector(".world-map").addEventListener("wheel",function(event){
-    if ( event.target.mozMatchesSelector(".mapcanvas, .mapcanvas *") ){
-        zoomWithinLimit(event,"mapcanvas", mapZoomInLimit, mapZoomOutLimit );
     }
 },false);
 
@@ -228,41 +257,29 @@ function zoomWithinLimit(event, targetSvg, zoomInLimit, zoomOutLimit){
 
 // Apply zoom level
 function svgZooming(target,ratio){
-
-    function generateNewViewBox(target, box){
-        var oldWidth = box.w;
-        var newWidth = oldWidth / ratio;
-        var offsetX = ( newWidth - oldWidth ) / 2;
-
-        var oldHeight = box.h;
-        var newHeight = oldHeight / ratio;
-        var offsetY = ( newHeight - oldHeight ) / 2;
-
-        box.w = box.w / ratio;
-        box.h = box.h / ratio;
-        box.x = box.x - offsetX;
-
-        if ( target == "vizcanvas" ){
-            box.y = ( currentVisualization.name == "graph") ? (box.y - offsetY) : -1 * (box.h - 5);
-        }else{
-            box.y = box.y - offsetY;
-        }
-
-        return box;
-    }
-
-    if ( target == "vizcanvas" ){
-        var box = getZoom(vizcanvas);
-        var newViewBox = generateNewViewBox(target, box);
-        setZoom(newViewBox,vizcanvas);
-
-    }else{
-        var box = getZoom(mapcanvas);
-        var newViewBox = generateNewViewBox(target, box);
-        setZoom(newViewBox, mapcanvas);
-    }
-
+    var box = getZoom(target);
+    var newViewBox = generateNewViewBox(target,box,ratio);
+    setZoom(newViewBox, target);
 }
+
+function generateNewViewBox(target,box,ratio){
+    var oldWidth = box.w;
+    var newWidth = oldWidth / ratio;
+    var offsetX = ( newWidth - oldWidth ) / 2;
+
+    var oldHeight = box.h;
+    var newHeight = oldHeight / ratio;
+    var offsetY = ( newHeight - oldHeight ) / 2;
+
+    box.w = box.w / ratio;
+    box.h = box.h / ratio;
+    box.x = box.x - offsetX;
+    box.y = box.y - offsetY;
+
+    return box;
+}
+
+
 
 
 /* Pan by dragging ======================================== */
@@ -307,17 +324,6 @@ document.querySelector(".stage").addEventListener("mouseleave",function(event){
     vizcanvas.style.cursor = "default";
 },false);
 
-
-/* Help Mode ========================= */
-document.querySelector(".help-mode").addEventListener("click", function(){
-    var theButton = document.querySelector(".help-mode").parentElement;
-    theButton.classList.toggle("active");
-    if( theButton.className.contains("active") ){
-        triggerHelp(document.querySelector("body"), "toggleOnHelp", currentVisualization.name);
-    }else{
-        triggerHelp(document.querySelector("body"), "toggleOffHelp", currentVisualization.name);
-    }
-});
 
 /* Clock View ===================================== */
 
