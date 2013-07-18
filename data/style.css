@@ -498,8 +498,7 @@ h3 {
     cursor: pointer;
 }
 
-.connections-list ul li:hover,
-.settings-page ul li:hover{
+.connections-list ul li:hover{
     background-color: #475B61;
 }
 
@@ -854,64 +853,6 @@ text {
 }
 .body-table td:nth-child(7){
     width: 80px;
-}
-
-
-
-/* Settings Page */
-
-.settings-page{
-    width: 100%;
-    padding: 30px 10px 0 50px;
-    color: #939393;
-}
-
-.page-header{
-    font-size: 22px;
-    margin-bottom: 25px;
-}
-
-.settings-page header{
-    color: #fff;
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-.settings-page section{
-    font-size: 15px;
-    margin-bottom: 40px;
-}
-
-.settings-page .num-sites{
-    color: #5A50F0;
-}
-
-.settings-page ul{
-    width: 400px;
-    list-style-type: none;
-    cursor: pointer;
-    overflow-y: auto;
-}
-
-.settings-page ul li{
-    padding: 1px 0;
-    clear: both;
-    overflow: auto;
-}
-
-.settings-page i{
-    float: left;
-    position: relative;
-    top: 2px;
-}
-
-.settings-page .site-url{
-    float: left;
-}
-.settings-page .settings-option{
-    font-size: 12px;
-    padding-left: 15px;
-    clear: both;
 }
 
 
