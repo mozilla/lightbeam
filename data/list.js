@@ -13,6 +13,7 @@ list.name = "list";
 list.on("init", onInit);
 list.on("conneciton", onConnection);
 list.on("remove", onRemove);
+list.on("reset", onReset);
 list.on('setFilter', setFilter);
 list.on("showFilteredTable", function(filter){
     showFilteredTable(filter);
@@ -48,6 +49,13 @@ function onRemove(){
     console.log('removing list');
     //aggregate.emit('reset');
     resetCanvas();
+}
+
+function onReset(){
+    onRemove();
+    vizcanvas.classList.add("hide"); 
+    initList();
+    initializeHandlers();
 }
 
 

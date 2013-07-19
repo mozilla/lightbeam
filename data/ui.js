@@ -185,7 +185,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     });
 
     updateStatsBar();
-    // FIXME: empty the data from current view too
 });
 
 // function handleDisclosureToggle(elem){

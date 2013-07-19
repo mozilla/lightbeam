@@ -26,6 +26,7 @@ clock.name = "clock";
 clock.on('init', onInit);
 clock.on('connection', onConnection);
 clock.on('remove', onRemove);
+clock.on('reset', onReset);
 clock.on('setFilter', setFilter);
 
 function setFilter(){
@@ -34,9 +35,18 @@ function setFilter(){
 
 function onInit(connections){
     console.log("= onInit = allConnections.length = %s" , allConnections.length);
-    // draw clock dial
     console.log('initializing clock from %s connections', connections.length);
-    aggregate.emit('init', connections);
+    drawClockFrame();
+    connections.forEach(function(connection){
+        onConnection(connection);
+    });
+    fadeEarlierTrackers(timeToBucket(new Date()));
+    if ( !statsBarInitiated ){  
+        updateStatsBar();
+    }
+};
+
+function drawClockFrame(){
     times = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     timeAmPmLabels = [ 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'AM' ]
     timeslots = {};
@@ -47,14 +57,7 @@ function onInit(connections){
     vizcanvas.setAttribute('viewBox', '-350 -515 700 530');
     drawTimes();
     updateTime();
-    connections.forEach(function(connection){
-        onConnection(connection);
-    });
-    fadeEarlierTrackers(timeToBucket(new Date()));
-    if ( !statsBarInitiated ){  
-        updateStatsBar();
-    }
-};
+}
 
 function onConnection(conn){
     console.log("= allConnections.length = %s" , allConnections.length);
@@ -183,7 +186,10 @@ function onRemove(){
     resetCanvas();
 };
 
-
+function onReset(){
+    onRemove();
+    drawClockFrame();
+}
 
 function svg(name, attrs, text){
     var node = document.createElementNS(SVG_NS, name);
