@@ -139,8 +139,12 @@ function switchVisualization(name){
 
 
 function resetAddtionalUI(){
-    // toggle off info panel, settings page
+    // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
+    // hide all help sections
+    document.querySelector(".help-content .graph-view-help").classList.add("hidden");
+    document.querySelector(".help-content .clock-view-help").classList.add("hidden");
+    document.querySelector(".help-content .list-view-help").classList.add("hidden");
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
     // toggle footer section accordingly

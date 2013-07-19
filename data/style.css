@@ -387,6 +387,79 @@ h3 {
     height:100%;
 }
 
+
+
+/* Help Sections */
+
+.help-content svg{
+    width: 15px;
+    height: 15px;
+    position: relative;
+    top: 2px;
+}
+
+.info .holder > div{
+    font-size: 12px;
+}
+
+.info .holder > div h4{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.info .holder > div h4 img{
+    width: 16px;
+    height: 16px;
+}
+
+.grey-label{
+    display: inline-block;
+    margin-right: 5px;
+    color: #777;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.blue-label{
+    margin-bottom: 10px;
+    color: #4CC7E6;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.info .holder section{
+    padding: 15px 0;
+}
+
+.info .holder section:not(:last-of-type){
+    border-bottom: 1px solid #303840;
+}
+
+.info .holder section p{
+    margin: 5px 0;
+}
+
+.info .holder section ul{
+    list-style-type: none;
+}
+
+.info .holder section ul img{
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.feature-name{
+    display: inline-block;
+    width: 120px;
+    font-weight: bold; 
+    text-transform: capitalize;
+}
+
+/* Info Panel(Profile) Sections */
+
 .map-section{
     margin: 10px 0 50px 0;
     font-size: 10px;
@@ -420,7 +493,7 @@ h3 {
 .info .holder{
     width: 300px;
     height: 100%;
-    padding: 15px 30px;
+    padding: 15px;
 }
 
 .info .holder .favicon{
@@ -689,16 +762,32 @@ text {
     stroke-width: 2;
 }
 
+.watch-text{
+    color: #268CB7;
+}
+
 .blockedSites{
     fill: #FFF;
     stroke: #FF0000;
     stroke-width: 2;
 }
 
+.block-text{
+    color: #FF0000;
+}
+
 .hiddenSites{
     fill: #FFF;
     stroke: #FA9828;
     stroke-width: 2;
+}
+
+.hide-text{
+    color: #FA9828;
+}
+
+.cookie-text{
+    color: #800080;
 }
 
 .edge{

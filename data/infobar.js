@@ -14,7 +14,6 @@ document.querySelector('#content').addEventListener('click', function(event){
             node = node.parentElement;
         }
         // console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
-        // updateInfo(node.dataset.name);
         updateInfo(node.getAttribute("data-name"));
     }else{
         //console.log('does not match .node: %o', event.target);
@@ -133,6 +132,8 @@ function updateInfo(nodeName){
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         document.querySelector("#content").classList.add("showinfo");
+        hideAllInfoPanelContentExcept( document.querySelector(".site-profile-content") );
+        changeInfoPanelIcon();
     });
 
 }
