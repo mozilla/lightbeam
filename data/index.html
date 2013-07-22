@@ -157,7 +157,6 @@
                                         <li><svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <line class="cookies" x1="14" y1="2" x2="2" y2="14" />
                                     </svg> <span class="cookie-text"><b>Cookies</b></span> means the site stored some data in your browser.</li>
-                                        <li><img src="icons/collusion_icon_hide.png" /><span class="hide-text">Hide</span> means they're not seen in the visualization.</li>
                                         <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
                                         <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
                                     </ul>
@@ -197,7 +196,6 @@
                                 <p>
                                     When you set your site preferecnes:
                                     <ul>
-                                        <li><img src="icons/collusion_icon_hide.png" /><span class="hide-text">Hide</span> means they're not seen in the visualization.</li>
                                         <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
                                         <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
                                     </ul>
@@ -235,7 +233,6 @@
                                 <p>
                                     When you set your site preferecnes:
                                     <ul>
-                                        <li><img src="icons/collusion_icon_hide.png" /><span class="hide-text">Hide</span> means they're not seen in the visualization.</li>
                                         <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
                                         <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
                                     </ul>
@@ -267,7 +264,7 @@
                     </section>
                     <section class="legend-controls">
                         <section class="column">
-                            <div class="btn toggle-visited active">
+                            <div class="btn legend-toggle-visited active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="visitedSites" cx="8" cy="8" r="6" />
@@ -275,7 +272,7 @@
                                     Visited Site
                                 </a>
                             </div>
-                            <div class="btn toggle-never-visited active">
+                            <div class="btn legend-toggle-never-visited active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <polygon class="unvisitedSites" points="0,14 7,2 14,14" />
@@ -283,7 +280,7 @@
                                     Never Visited Site
                                 </a>
                             </div>
-                            <div class="btn toggle-connections active">
+                            <div class="btn legend-toggle-connections active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <line class="connectionLine" x1="14" y1="2" x2="2" y2="14" />
@@ -293,7 +290,7 @@
                             </div>
                         </section>
                         <section class="column">
-                            <div class="btn">
+                            <div class="btn legend-toggle-watched">
                                 <a>
                                     <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="watchedSites" cx="8" cy="8" r="6" />
@@ -302,7 +299,7 @@
                                     Watched Sites
                                 </a>
                             </div>
-                            <div class="btn">
+                            <div class="btn legend-toggle-blocked">
                                 <a>
                                     <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="blockedSites" cx="8" cy="8" r="6" />
@@ -313,18 +310,9 @@
                                     Blocked Sites
                                 </a>
                             </div>
-                            <div class="btn">
-                                <a>
-                                    <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="hiddenSites" cx="8" cy="8" r="6" />
-                                        <polygon class="hiddenSites" points="18,14 25,2 32,14" />
-                                    </svg>
-                                    Hidden Sites
-                                </a>
-                            </div>
                         </section>
                         <section class="column">
-                            <div class="btn toggle-cookies">
+                            <div class="btn legend-toggle-cookies">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <line class="cookies" x1="14" y1="2" x2="2" y2="14" />
@@ -343,7 +331,7 @@
                     </section>
                     <section class="legend-controls">
                         <section class="column">
-                            <div class="btn toggle-visited active">
+                            <div class="btn legend-toggle-visited active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="sourceSites" cx="8" cy="8" r="6" />
@@ -351,7 +339,7 @@
                                     Visited Site("source")
                                 </a>
                             </div>
-                            <div class="btn toggle-target active">
+                            <div class="btn legend-toggle-target active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="targetSites" cx="8" cy="8" r="6" />
@@ -361,7 +349,7 @@
                             </div>
                         </section>
                         <section class="column">
-                            <div class="btn">
+                            <div class="btn legend-toggle-watched">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="watchedSites" cx="8" cy="8" r="6" />
@@ -369,24 +357,13 @@
                                     Watched Sites
                                 </a>
                             </div>
-                            <div class="btn">
-                                <a>
-                                	<img src="icons/collusion_icon_block.png" />
-                                    <!--<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="blockedSites" cx="8" cy="8" r="6" />
-                                        <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
-                                    </svg>-->
-                                    Blocked Sites
-                                </a>
-                            </div>
-                        </section>
-                        <section class="column">
-                            <div class="btn">
+                            <div class="btn legend-toggle-blocked">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="hiddenSites" cx="8" cy="8" r="6" />
+                                        <circle class="blockedSites" cx="8" cy="8" r="6" />
+                                        <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
                                     </svg>
-                                    Hidden Sites
+                                    Blocked Sites
                                 </a>
                             </div>
                         </section>

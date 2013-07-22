@@ -759,9 +759,7 @@ text {
 }
 
 .watchedSites{
-    fill: #FFF;
-    stroke: #268CB7;
-    stroke-width: 2;
+    fill: #268CB7 !important;
 }
 
 .watch-text{
@@ -769,23 +767,11 @@ text {
 }
 
 .blockedSites{
-    fill: #FFF;
-    stroke: #FF0000;
-    stroke-width: 2;
+    fill: #FF0000 !important;
 }
 
 .block-text{
     color: #FF0000;
-}
-
-.hiddenSites{
-    fill: #FFF;
-    stroke: #FA9828;
-    stroke-width: 2;
-}
-
-.hide-text{
-    color: #FA9828;
 }
 
 .cookie-text{

@@ -128,8 +128,8 @@ function initGraph(){
             .attr('x2', function(edge){ return edge.target.x; })
             .attr('y2', function(edge){ return edge.target.y; })
             .classed('cookieYes', function(edge){ return edge.cookieCount > 0; })
-            .classed('highlighted', function(edge){ return highlightConnections; })
-            .classed('coloured', function(edge){ return edge.cookieCount > 0 && highlightCookies; });
+            .classed('highlighted', function(edge){ return highlight.connections; })
+            .classed('coloured', function(edge){ return edge.cookieCount > 0 && highlight.cookies; });
         vis.selectAll('.node').call(updateNodes);
         var endDraw = Date.now();
         draws.push(endDraw - lastTick);
@@ -157,6 +157,9 @@ function updateGraph(){
         .classed('visitedYes', function(node){ return node.visitedCount/node.howMany === 1 })
         .classed('visitedNo', function(node){ return node.visitedCount/node.howMany === 0 })
         .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
+        .classed("watched", function(node){ return Object.keys(userSettings).indexOf(node.name) > -1 && userSettings[node.name].contains("watch") })
+        .classed("blocked", function(node){ return Object.keys(userSettings).indexOf(node.name) > -1 && userSettings[node.name].contains("block") })
+        .classed("hidden", function(node){ return Object.keys(userSettings).indexOf(node.name) > -1 && userSettings[node.name].contains("hide") })
         .call(addShape)
         .attr('data-name', function(node){ return node.name; })
         .on('mouseenter', tooltip.show)
@@ -221,17 +224,11 @@ function updateNodes(thenodes){
     .classed('visitedYes', function(node){ return node.visitedCount/node.howMany == 1 })
     .classed('visitedNo', function(node){ return node.visitedCount/node.howMany == 0 })
     .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
-    .classed('secureYes', function(node){ return node.secureCount/node.howMany == 1 })
-    .classed('secureNo', function(node){ return node.secureCount/node.howMany == 0 })
-    .classed('secureBoth', function(node){ return node.secureCount/node.howMany > 0 && node.secureCount/node.howMany < 1 })
-    // .classed('cookieYes', function(node){ return node.cookieCount/node.howMany == 1 })
-    // .classed('cookieNo', function(node){ return node.cookieCount/node.howMany == 0 })
-    // .classed('cookieBoth', function(node){ return node.cookieCount/node.howMany > 0 && node.cookieCount/node.howMany < 1 })
     .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); })
     .attr('visited-scale', function(node){ return node.visitedCount/node.howMany; })
     .attr('secure-scale', function(node){ return node.secureCount/node.howMany; })
     .attr('cookie-scale', function(node){ return node.cookieCount/node.howMany; })
-    .classed('highlighted', function(edge){ return ( edge.visitedCount > 0 ) ? highlightVisited : highlightNeverVisited; });
+    .classed('highlighted', function(edge){ return ( edge.visitedCount > 0 ) ? highlight.visited : highlight.neverVisited; });
     // change shape if needed
 }
 
@@ -248,37 +245,53 @@ function resetCanvas(){
 
 /* for Highlighting and Colouring -------------------- */
 
-var highlightVisited = true;
-var highlightNeverVisited = true;
-var highlightConnections = true;
-var highlightCookies = false;
+var highlight = {};
+highlight.visited = true;
+highlight.neverVisited = true;
+highlight.connections = true;
+highlight.cookies = false;
+highlight.watched = false;
+highlight.blocked = false;
 var graphLegend = document.querySelector(".graph-footer");
 
 legendBtnClickHandler(graphLegend);
 
-graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
     toggleVizElements(visited,"highlighted");
-    highlightVisited = !highlightVisited;
+    highlight.visited = !highlight.visited;
 });
 
-graphLegend.querySelector(".toggle-never-visited").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-never-visited").addEventListener("click", function(event){
     var neverVisited = document.querySelectorAll(".visitedNo");
     toggleVizElements(neverVisited,"highlighted");
-    highlightNeverVisited = !highlightNeverVisited;
+    highlight.neverVisited = !highlight.neverVisited;
 });
 
-graphLegend.querySelector(".toggle-connections").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-connections").addEventListener("click", function(event){
     var cookiesConnections = document.querySelectorAll(".edge");
     toggleVizElements(cookiesConnections,"highlighted");
-    highlightConnections = !highlightConnections;
+    highlight.connections = !highlight.connections;
 });
 
-graphLegend.querySelector(".toggle-cookies").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-cookies").addEventListener("click", function(event){
     var cookiesConnections = document.querySelectorAll(".cookieYes");
     toggleVizElements(cookiesConnections,"coloured");
-    highlightCookies = !highlightCookies;
+    highlight.cookies = !highlight.cookies;
 });
+
+graphLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
+    var watchedSites = document.querySelectorAll(".watched");
+    toggleVizElements(watchedSites,"watchedSites");
+    highlight.watched = !highlight.watched;
+});
+
+graphLegend.querySelector(".legend-toggle-blocked").addEventListener("click", function(event){
+    var blockedSites = document.querySelectorAll(".blocked");
+    toggleVizElements(blockedSites,"blockedSites");
+    highlight.blocked = !highlight.blocked;
+});
+
 
 graphLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
     toggleLegendSection(event.target,graphLegend);

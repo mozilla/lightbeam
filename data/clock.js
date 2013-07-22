@@ -123,11 +123,17 @@ function onConnection(conn){
 
 function appendNodeG(bucket,connection,nodeType){
     var classes = [ "node", nodeType ];
-    if ( nodeType == "source" && highlightSource ){
+    if ( nodeType == "source" && highlight.source ){
         classes.push("highlighted");
     }
-    if ( nodeType == "target" && highlightTarget ){
+    if ( nodeType == "target" && highlight.target ){
         classes.push("highlighted");
+    }
+    if ( Object.keys(userSettings).indexOf(connection[nodeType]) > -1 && userSettings[connection[nodeType]].contains("watch") ){
+        classes.push("watched");
+    }
+    if ( Object.keys(userSettings).indexOf(connection[nodeType]) > -1 && userSettings[connection[nodeType]].contains("block") ){
+        classes.push("blocked");
     }
 
     var g = svg('g', {
@@ -424,22 +430,36 @@ function applyHighlightingEffect(clickedNodeName){
 
 /* for Highlighting and Colouring -------------------- */
 
-var highlightSource = true;
-var highlightTarget = true;
+var highlight = {};
+highlight.source = true;
+highlight.target = true;
 var clockLegend = document.querySelector(".clock-footer");
 
 legendBtnClickHandler(clockLegend);
 
-clockLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
+clockLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".source");
     toggleVizElements(visited,"highlighted");
-    highlightSource = !highlightSource;
+    highlight.source = !highlight.source;
 });
 
-clockLegend.querySelector(".toggle-target").addEventListener("click", function(event){
+clockLegend.querySelector(".legend-toggle-target").addEventListener("click", function(event){
     var targets = document.querySelectorAll(".target");
     toggleVizElements(targets,"highlighted");
-    highlightTarget = !highlightTarget;
+    highlight.target = !highlight.target;
+});
+
+clockLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
+    var watchedSites = document.querySelectorAll(".watched");
+    console.log(watchedSites);
+    toggleVizElements(watchedSites,"watchedSites");
+    highlight.watched = !highlight.watched;
+});
+
+clockLegend.querySelector(".legend-toggle-blocked").addEventListener("click", function(event){
+    var blockedSites = document.querySelectorAll(".blocked");
+    toggleVizElements(blockedSites,"blockedSites");
+    highlight.blocked = !highlight.blocked;
 });
 
 clockLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
