@@ -26,7 +26,7 @@ function d3ShowTooltip(node, idx){
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
     // console.error(event, event.target, event.target.dataset);
-    tooltip.innerHTML = node.name + '<span class="howMany">(&times;' + node.howMany + ')</span>';
+    tooltip.innerHTML = node.name;
     var rect = this.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
     tooltip.style.top = (rect.top - 55) + 'px';

@@ -606,16 +606,18 @@ text {
 #tooltip{
     display: none;
     position: absolute;
-    background-color: #CCC;
+    background-color: #FFF;
     color: #010203;
-    padding: 5px;
+    padding: 5px 10px;
+    box-shadow: 0px 2px #4CC7E6;
+    border-radius: 5px;
 }
 #tooltip:after{
     content: '';
     width: 0;
     height: 0;
     border: 10px solid transparent;
-    border-top: 10px solid #CCC;
+    border-top: 10px solid #FFF;
     position: absolute;
     top: 100%;
     left: 50%;
