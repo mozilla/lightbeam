@@ -111,16 +111,17 @@ document.querySelector(".toggle-info-panel").addEventListener("click", function(
 });
 
 
-/* Help Sections */
+/* Toggle Help Sections */
 document.querySelector(".toggle-help").addEventListener("click", function(){
-    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
     var elmToShow = document.querySelector(".help-content ." + currentVisualization.name +"-view-help");
     hideAllInfoPanelContentExcept(elmToShow);
-    if ( !infoPanelOpen ){
-         document.querySelector("#content").classList.add("showinfo");
-         console.log("open and show");
-    }
-    changeInfoPanelIcon();
+});
+
+
+/* Toggle About */
+document.querySelector(".toggle-about").addEventListener("click", function(){
+    var elmToShow = document.querySelector(".about-content");
+    hideAllInfoPanelContentExcept(elmToShow);
 });
 
 
@@ -138,9 +139,15 @@ function hideAllInfoPanelContentExcept(elmToShow){
     document.querySelector(".help-content .graph-view-help").classList.add("hidden");
     document.querySelector(".help-content .clock-view-help").classList.add("hidden");
     document.querySelector(".help-content .list-view-help").classList.add("hidden");
+    document.querySelector(".about-content").classList.add("hidden");
     if (elmToShow){
         elmToShow.classList.remove("hidden");
     }
+    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
+    if ( !infoPanelOpen ){
+         document.querySelector("#content").classList.add("showinfo");
+    }
+    changeInfoPanelIcon();
 }
 
 
@@ -410,6 +417,3 @@ function legendBtnClickHandler(legendElm){
         }
     });
 }
-
-
-/* Help Section ===================================== */
