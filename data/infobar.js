@@ -131,12 +131,34 @@ function updateInfo(nodeName){
         document.querySelector(".num-connected-sites").textContent = numConnectedSites;
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
-        document.querySelector("#content").classList.add("showinfo");
-        hideAllInfoPanelContentExcept( document.querySelector(".site-profile-content") );
-        changeInfoPanelIcon();
+        // display site profile in Info Panel 
+        showSiteProfile();
     });
 
 }
+
+
+function showSiteProfile(){
+    var siteProfileTab = document.querySelector(".toggle-site-profile");
+    var contentToBeShown = document.querySelector(".site-profile-content");
+    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
+    var siteProfileTabActive = document.querySelector(".toggle-site-profile").classList.contains("active");
+    if( !infoPanelOpen ){
+        document.querySelector("#content").classList.add("showinfo");
+        showInfoPanelTab(siteProfileTab, contentToBeShown);
+    }
+
+    if( infoPanelOpen ){
+        if ( !siteProfileTabActive ){
+            // make the previously active tab inactive
+            deactivatePreviouslyActiveTab();
+            showInfoPanelTab(siteProfileTab, contentToBeShown);
+        }
+    }
+
+    document.querySelector(".toggle-site-profile").classList.remove("disabled");
+}
+
 
 /* mapcanvas events */
 mapcanvas.addEventListener("mousedown",function(event){
@@ -178,4 +200,87 @@ mapDocument.addEventListener("wheel",function(event){
 
 
 }
+
+
+/* Info Panel Tabs ======================================== */
+
+
+/* Toggle Site Profile */
+document.querySelector(".toggle-site-profile").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-site-profile");
+    if ( !tabClicked.classList.contains("disabled") ){
+        var contentToBeShown = document.querySelector(".site-profile-content");
+        toggleInfoPanelTab(tabClicked, contentToBeShown);
+    }
+});
+
+/* Toggle Help Sections */
+document.querySelector(".toggle-help").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-help");
+    var contentToBeShown = document.querySelector(".help-content ." + currentVisualization.name +"-view-help");
+    toggleInfoPanelTab(tabClicked, contentToBeShown);
+});
+
+
+/* Toggle About */
+document.querySelector(".toggle-about").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-about");
+    var contentToBeShown = document.querySelector(".about-content");
+    toggleInfoPanelTab(tabClicked, contentToBeShown);
+});
+
+
+function toggleInfoPanelTab(tabClicked, contentToBeShown){
+    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
+    var isActiveTab = tabClicked.classList.contains("active");
+    if( infoPanelOpen ){
+        if ( isActiveTab ){ // collapse info panel
+            document.querySelector("#content").classList.remove("showinfo");
+            tabClicked.classList.remove("active");
+            tabClicked.querySelector("img").classList.remove("hidden");
+            tabClicked.querySelector("i").classList.add("hidden");
+        }else{
+            // make the previously active tab inactive
+            deactivatePreviouslyActiveTab();
+            // make the selected tab active
+            showInfoPanelTab(tabClicked, contentToBeShown);
+        }
+    }else{
+        // open the info panel and make the selected tab active
+        document.querySelector("#content").classList.add("showinfo");
+        showInfoPanelTab(tabClicked, contentToBeShown);
+    }
+}
+
+
+function deactivatePreviouslyActiveTab(){
+    var previouslyActiveTab = document.querySelector(".info-panel-controls ul li.active");
+    if ( previouslyActiveTab ){
+        previouslyActiveTab.classList.remove("active");
+        previouslyActiveTab.querySelector("img").classList.remove("hidden");
+        previouslyActiveTab.querySelector("i").classList.add("hidden");
+    }
+}
+
+
+// make the selected tab active
+function showInfoPanelTab(tabClicked, contentToBeShown){
+    tabClicked.classList.add("active");
+    tabClicked.querySelector("img").classList.add("hidden");
+    tabClicked.querySelector("i").classList.remove("hidden");
+    hideAllInfoPanelContentExcept(contentToBeShown);
+}
+
+
+function hideAllInfoPanelContentExcept(elmToShow){
+    document.querySelector(".site-profile-content").classList.add("hidden");
+    document.querySelector(".help-content .graph-view-help").classList.add("hidden");
+    document.querySelector(".help-content .clock-view-help").classList.add("hidden");
+    document.querySelector(".help-content .list-view-help").classList.add("hidden");
+    document.querySelector(".about-content").classList.add("hidden");
+    if (elmToShow){
+        elmToShow.classList.remove("hidden");
+    }
+}
+
 

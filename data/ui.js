@@ -96,62 +96,6 @@ function toggleBtnOffEffect(toggleBtn){
 }
 
 
-
-
-
-/* Toggle Info Panel */
-document.querySelector(".toggle-info-panel").addEventListener("click", function(){
-    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
-    if ( infoPanelOpen ){
-        document.querySelector("#content").classList.remove("showinfo");
-    }else{
-        document.querySelector("#content").classList.add("showinfo");
-    }
-    changeInfoPanelIcon();
-});
-
-
-/* Toggle Help Sections */
-document.querySelector(".toggle-help").addEventListener("click", function(){
-    var elmToShow = document.querySelector(".help-content ." + currentVisualization.name +"-view-help");
-    hideAllInfoPanelContentExcept(elmToShow);
-});
-
-
-/* Toggle About */
-document.querySelector(".toggle-about").addEventListener("click", function(){
-    var elmToShow = document.querySelector(".about-content");
-    hideAllInfoPanelContentExcept(elmToShow);
-});
-
-
-function changeInfoPanelIcon(){
-    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
-    if ( infoPanelOpen ){
-        document.querySelector(".toggle-info-panel").innerHTML = "X";
-    }else{
-        document.querySelector(".toggle-info-panel").innerHTML = "+";
-    }
-}
-
-function hideAllInfoPanelContentExcept(elmToShow){
-    document.querySelector(".site-profile-content").classList.add("hidden");
-    document.querySelector(".help-content .graph-view-help").classList.add("hidden");
-    document.querySelector(".help-content .clock-view-help").classList.add("hidden");
-    document.querySelector(".help-content .list-view-help").classList.add("hidden");
-    document.querySelector(".about-content").classList.add("hidden");
-    if (elmToShow){
-        elmToShow.classList.remove("hidden");
-    }
-    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
-    if ( !infoPanelOpen ){
-         document.querySelector("#content").classList.add("showinfo");
-    }
-    changeInfoPanelIcon();
-}
-
-
-
 /* When a open dropdown list loses focus, collapse it. */
 window.addEventListener("click", function(e){
     var activeDropdown = document.querySelector(".active_dropdown");

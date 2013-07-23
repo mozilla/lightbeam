@@ -85,8 +85,7 @@ h3 {
 
 /* Button Styling ================================ */
 
-.btn a:hover,
-.square-button a:hover{
+.btn a:hover{
     background: #475B61;
 }
 
@@ -123,8 +122,7 @@ h3 {
     display: none;
 }
 
-.btn a,
-.square-button a{
+.btn a{
     border-radius: 5px;
     cursor: pointer;
 }
@@ -169,53 +167,10 @@ h3 {
     top: 3px;
 }
 
-.controls .square-button-controls{
-    position: fixed;
-    bottom: 30px;
-    margin-bottom: 20px;
-}
-
 .controls .collusion-url{
     position: fixed;
     bottom: 0;
     margin-bottom: 10px;
-}
-
-.square-button{
-    float: left;
-    cursor: pointer;
-    text-align: center;
-}
-
-.square-button:not(:last-child){
-    margin-right: 60px;
-}
-
-.square-button a{
-    display: block;
-    background: #25292D;
-    width: 18px;
-    height: 18px;
-    padding: 5px;
-    margin: 0 auto;
-}
-
-.square-button.active{
-    background: #5F6771;
-}
-
-.square-button img{
-    position: relative;
-    top: 2px;
-    width: 15px;
-    height: 15px;
-}
-
-.square-button .button-label{
-    font-size: 7pt;
-    color: #fff;
-    margin-top: 5px;
-    text-align: center;
 }
 
 .toggle-btn input{
@@ -344,41 +299,42 @@ h3 {
 
 .info-panel-controls{
     display: block;
-    transform: translate(0px,-2px) rotate(-90deg);
     float: right;
     z-index: 1000;
+    margin: 30px 0 0 0;
 }
 
-.info-panel-controls div{
+.info-panel-controls ul{
+    list-style-type: none;
+}
+
+.info-panel-controls ul li{
     width: 28px;
     height: 28px;
-    margin-bottom: 10px;
     position: relative;
     bottom: 10px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    background: #20272E;
+    border-radius: 2px 0 0 2px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.info-panel-controls ul li.active{
+    background: #404850;
 }
 
 .info-panel-controls img{
     width: 15px;
     height: 15px;
     position: relative;
-    bottom: 3px;
     right: 3px;
 }
 
-.toggle-info-panel{
-    background: #404850;
-    border-radius: 5px 5px 0 0;
-    padding: 5px 10px;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-.toggle-help{
-    transform: translate(0px,2px) rotate(90deg);
-    background: #25292D;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
+.toggle-site-profile.disabled{
+    cursor: default;
+    opacity: 0.2;
 }
 
 .info .holder{
@@ -816,6 +772,7 @@ text {
     border-collapse: collapse;
     font-size: 12px;
     height: 100%;
+    margin-right: 10px;
 }
 
 .list-table table{
@@ -939,7 +896,7 @@ text {
 .graph-footer,
 .clock-footer,
 .list-footer{
-    margin-right: 30px;
+    margin-right: 20px;
     flex: none;
 }
 
