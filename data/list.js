@@ -327,6 +327,29 @@ function initializeHandlers(){
             toggleHiddenSites(target);
         }
     }, false);
+
+    // highlight selected row
+    document.querySelector(".list-table").addEventListener("click",function(event){
+        var node = event.target;
+        // clicking on the cell where the checkbox locates can also trigger the checkbox clicking handler
+        if (node.mozMatchesSelector('tbody tr td:first-child, tbody tr td:first-child [type=checkbox]')){
+            var rowChecked;
+            if ( node.mozMatchesSelector('tbody tr td:first-child') ){
+                rowChecked = node.querySelector("[type=checkbox]").checked;
+            }else{
+                rowChecked = node.checked;
+            }
+            while(node.mozMatchesSelector('.node *')){
+                node = node.parentElement;
+            }
+            if (rowChecked){
+                node.classList.add("checked");
+            }else{
+                node.classList.remove("checked");
+            }
+        }
+    });
+
 }catch(e){
     console.log('Error: %o', e);
 }

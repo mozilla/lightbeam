@@ -97,18 +97,6 @@ function updateInfo(nodeName){
         var favicon = "<img src='http://"+ nodeName +"/favicon.ico' class='favicon'>";
         document.querySelector(".holder .title").innerHTML = favicon+nodeName;
 
-        if ( data == false || data.country_name === "Reserved" ){
-            document.querySelector("#country").innerHTML = "(Unable to find server location)";
-            resetMap();
-        }else{
-            // update country info only when it is different from the current one
-            if ( data.country_name !==  document.querySelector("#country").innerHTML ){
-                resetMap();
-                document.querySelector("#country").innerHTML = data.country_name;
-                updateMap(data.country_code.toLowerCase());
-            }
-        }
-
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
         var htmlList = "";
@@ -133,6 +121,19 @@ function updateInfo(nodeName){
 
         // display site profile in Info Panel 
         showSiteProfile();
+
+        // update map after we have loaded the SVG
+        if ( data == false || data.country_name === "Reserved" ){
+            document.querySelector("#country").innerHTML = "(Unable to find server location)";
+            resetMap();
+        }else{
+            // update country info only when it is different from the current one
+            if ( data.country_name !==  document.querySelector("#country").innerHTML ){
+                resetMap();
+                document.querySelector("#country").innerHTML = data.country_name;
+                updateMap(data.country_code.toLowerCase());
+            }
+        }
     });
 
 }

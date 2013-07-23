@@ -843,7 +843,8 @@ text {
     display: none;
 }
 
-.list-table tbody tr:hover{
+.list-table tbody tr:hover,
+.list-table tbody tr.checked{
     background: #33464d;
 }
 
