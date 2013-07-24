@@ -232,6 +232,7 @@ GraphNode.prototype.update = function(connection, isSource){
     if ( this.status.indexOf(connection.status) < 0 ){
         this.status.push(connection.status);
     }
+
     this.howMany++;
     if ( this.visitedCount/this.howMany == 1 ){
         this.nodeType = 'site';
@@ -254,12 +255,23 @@ function nodesSortedByDate(nodes){
         });
 }
 
-function edgesForNodes(nodes){
-    var edgemap = {};
-    nodes.forEach(function(node){
-        node.linkedFrom.forEach(function)
-    })
-}
+// function edgesForNodes(nodes){
+//     var edgemap = {};
+//     var edge;
+//     nodes.forEach(function(node){
+//         node.linkedFrom.forEach(function(linkname){
+//             edge = new GraphEdge(node, nodemap[linkname]);
+//             edgemap[edge.name] = edge;
+//         });
+//         node.linkedTo.forEach(function(linkname){
+//             edge = new GraphEdge(node, nodemap[linkname]);
+//             edgemap[edge.name] = edge;
+//         });
+//     });
+//     return Object.keys(edgemap).map(function(nodename){
+//         return edgemap[nodename];
+//     })
+// }
 
 function aggregateFromNodes(nodes){
     var localmap = {};
@@ -299,7 +311,7 @@ aggregate.filters = {
         // filter
         // find index where we go beyond date
         var i;
-        for (i = sortedNodes.length - 1; i > -1, i--){
+        for (i = sortedNodes.length - 1; i > -1; i--){
             if (sortedNodes[i].lastAccess < then){
                 break;
             }
@@ -317,7 +329,7 @@ aggregate.filters = {
         // filter
         // find index where we go beyond date
         var i;
-        for (i = sortedNodes.length - 1; i > -1, i--){
+        for (i = sortedNodes.length - 1; i > -1; i--){
             if (sortedNodes[i].lastAccess < then){
                 break;
             }
@@ -361,6 +373,9 @@ aggregate.filters = {
         return filtered;
     }
 };
+
+var currentFilter = aggregate.filters[localStorage.currentFilter || 'last24Hours'];
+
 
 
 })(this);

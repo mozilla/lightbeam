@@ -102,22 +102,6 @@ function toggleBtnOffEffect(toggleBtn){
 }
 
 
-
-
-
-/* Toggle Info Panel */
-document.querySelector(".toggle-info-panel").addEventListener("click", function(){
-    var infoShown = document.querySelector("#content").classList.contains("showinfo");
-    if ( infoShown ){
-        document.querySelector("#content").classList.remove("showinfo");
-        document.querySelector(".toggle-info-panel").innerHTML = "+";
-    }else{
-        document.querySelector("#content").classList.add("showinfo");
-        document.querySelector(".toggle-info-panel").innerHTML = "X";
-    }
-});
-
-
 /* When a open dropdown list loses focus, collapse it. */
 window.addEventListener("click", function(e){
     var activeDropdown = document.querySelector(".active_dropdown");
@@ -158,7 +142,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     });
 
     updateStatsBar();
-    // FIXME: empty the data from current view too
 });
 
 // function handleDisclosureToggle(elem){
@@ -216,7 +199,7 @@ function setZoom(box,canvas){
 */
 var graphZoomInLimit   = { x:300, y:300, w:200, h:300 };
 var graphZoomOutLimit  = { w:4000, h:4000 };
-var clockZoomInLimit   = { w:560, h:400 };
+var clockZoomInLimit   = { w:350, h:250 };
 var clockZoomOutLimit  = { w:2800, h:2800 };
 var mapZoomInLimit     = { w:(2711.3/5), h:(1196.7/5) };
 var mapZoomOutLimit    = { w:2711.3, h:1196.7 };
@@ -322,58 +305,6 @@ document.querySelector(".stage").addEventListener("mouseup",function(event){
 document.querySelector(".stage").addEventListener("mouseleave",function(event){
     onDragGraph = false;
     vizcanvas.style.cursor = "default";
-},false);
-
-
-/* Clock View ===================================== */
-
-function highlightColludedNode(selection){
-    selection.each(function(){
-        var colludedNode = d3.select(this);
-        if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
-            colludedNode.classed("colluded-source", true);
-        }
-        if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
-            colludedNode.classed("colluded-target", true);
-        }
-    });
-}
-
-function applyHighlightingEffect(clickedNodeName){
-    // reset styling effect
-    d3.selectAll("g.node").classed("clicked-node", false)
-                          .classed("colluded-source", false)
-                          .classed("colluded-target", false);
-
-    // highlight all instances of the clicked node(both source and target)
-    d3.selectAll("g[data-name='" + clickedNodeName +"']")
-            .classed("clicked-node", true);
-
-    // find all the colluded sites and highlight all instances of them
-    for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
-        if ( key != clickedNodeName ){
-            d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
-        }
-    }
-
-}
-
-document.querySelector('#content').addEventListener('click', function(event){
-    /*
-    *   When a node in the clock visualization is clicked,
-    *       all instances of the same node across the day should be highlighted
-    *       all colluded nodes should also be highlighted (differently)
-    */
-    if ( currentVisualization.name == "clock" ){
-        // click could happen on .node or an element inside of .node
-        if (event.target.mozMatchesSelector('.node, .node *')){
-            var node = event.target;
-            while(node.mozMatchesSelector('.node *')){
-                node = node.parentElement;
-            }
-            applyHighlightingEffect(node.getAttribute("data-name"));
-        }
-    }
 },false);
 
 

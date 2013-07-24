@@ -14,7 +14,6 @@ document.querySelector('#content').addEventListener('click', function(event){
             node = node.parentElement;
         }
         // console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
-        // updateInfo(node.dataset.name);
         updateInfo(node.getAttribute("data-name"));
     }else{
         //console.log('does not match .node: %o', event.target);
@@ -98,18 +97,6 @@ function updateInfo(nodeName){
         var favicon = "<img src='http://"+ nodeName +"/favicon.ico' class='favicon'>";
         document.querySelector(".holder .title").innerHTML = favicon+nodeName;
 
-        if ( data == false || data.country_name === "Reserved" ){
-            document.querySelector("#country").innerHTML = "(Unable to find server location)";
-            resetMap();
-        }else{
-            // update country info only when it is different from the current one
-            if ( data.country_name !==  document.querySelector("#country").innerHTML ){
-                resetMap();
-                document.querySelector("#country").innerHTML = data.country_name;
-                updateMap(data.country_code.toLowerCase());
-            }
-        }
-
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
         var htmlList = "";
@@ -132,10 +119,47 @@ function updateInfo(nodeName){
         document.querySelector(".num-connected-sites").textContent = numConnectedSites;
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
-        document.querySelector("#content").classList.add("showinfo");
+        // display site profile in Info Panel 
+        showSiteProfile();
+
+        // update map after we have loaded the SVG
+        if ( data == false || data.country_name === "Reserved" ){
+            document.querySelector("#country").innerHTML = "(Unable to find server location)";
+            resetMap();
+        }else{
+            // update country info only when it is different from the current one
+            if ( data.country_name !==  document.querySelector("#country").innerHTML ){
+                resetMap();
+                document.querySelector("#country").innerHTML = data.country_name;
+                updateMap(data.country_code.toLowerCase());
+            }
+        }
     });
 
 }
+
+
+function showSiteProfile(){
+    var siteProfileTab = document.querySelector(".toggle-site-profile");
+    var contentToBeShown = document.querySelector(".site-profile-content");
+    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
+    var siteProfileTabActive = document.querySelector(".toggle-site-profile").classList.contains("active");
+    if( !infoPanelOpen ){
+        document.querySelector("#content").classList.add("showinfo");
+        showInfoPanelTab(siteProfileTab, contentToBeShown);
+    }
+
+    if( infoPanelOpen ){
+        if ( !siteProfileTabActive ){
+            // make the previously active tab inactive
+            deactivatePreviouslyActiveTab();
+            showInfoPanelTab(siteProfileTab, contentToBeShown);
+        }
+    }
+
+    document.querySelector(".toggle-site-profile").classList.remove("disabled");
+}
+
 
 /* mapcanvas events */
 mapcanvas.addEventListener("mousedown",function(event){
@@ -177,4 +201,87 @@ mapDocument.addEventListener("wheel",function(event){
 
 
 }
+
+
+/* Info Panel Tabs ======================================== */
+
+
+/* Toggle Site Profile */
+document.querySelector(".toggle-site-profile").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-site-profile");
+    if ( !tabClicked.classList.contains("disabled") ){
+        var contentToBeShown = document.querySelector(".site-profile-content");
+        toggleInfoPanelTab(tabClicked, contentToBeShown);
+    }
+});
+
+/* Toggle Help Sections */
+document.querySelector(".toggle-help").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-help");
+    var contentToBeShown = document.querySelector(".help-content ." + currentVisualization.name +"-view-help");
+    toggleInfoPanelTab(tabClicked, contentToBeShown);
+});
+
+
+/* Toggle About */
+document.querySelector(".toggle-about").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-about");
+    var contentToBeShown = document.querySelector(".about-content");
+    toggleInfoPanelTab(tabClicked, contentToBeShown);
+});
+
+
+function toggleInfoPanelTab(tabClicked, contentToBeShown){
+    var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
+    var isActiveTab = tabClicked.classList.contains("active");
+    if( infoPanelOpen ){
+        if ( isActiveTab ){ // collapse info panel
+            document.querySelector("#content").classList.remove("showinfo");
+            tabClicked.classList.remove("active");
+            tabClicked.querySelector("img").classList.remove("hidden");
+            tabClicked.querySelector("i").classList.add("hidden");
+        }else{
+            // make the previously active tab inactive
+            deactivatePreviouslyActiveTab();
+            // make the selected tab active
+            showInfoPanelTab(tabClicked, contentToBeShown);
+        }
+    }else{
+        // open the info panel and make the selected tab active
+        document.querySelector("#content").classList.add("showinfo");
+        showInfoPanelTab(tabClicked, contentToBeShown);
+    }
+}
+
+
+function deactivatePreviouslyActiveTab(){
+    var previouslyActiveTab = document.querySelector(".info-panel-controls ul li.active");
+    if ( previouslyActiveTab ){
+        previouslyActiveTab.classList.remove("active");
+        previouslyActiveTab.querySelector("img").classList.remove("hidden");
+        previouslyActiveTab.querySelector("i").classList.add("hidden");
+    }
+}
+
+
+// make the selected tab active
+function showInfoPanelTab(tabClicked, contentToBeShown){
+    tabClicked.classList.add("active");
+    tabClicked.querySelector("img").classList.add("hidden");
+    tabClicked.querySelector("i").classList.remove("hidden");
+    hideAllInfoPanelContentExcept(contentToBeShown);
+}
+
+
+function hideAllInfoPanelContentExcept(elmToShow){
+    document.querySelector(".site-profile-content").classList.add("hidden");
+    document.querySelector(".help-content .graph-view-help").classList.add("hidden");
+    document.querySelector(".help-content .clock-view-help").classList.add("hidden");
+    document.querySelector(".help-content .list-view-help").classList.add("hidden");
+    document.querySelector(".about-content").classList.add("hidden");
+    if (elmToShow){
+        elmToShow.classList.remove("hidden");
+    }
+}
+
 

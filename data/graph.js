@@ -123,8 +123,8 @@ function initGraph(){
             .attr('x2', function(edge){ return edge.target.x; })
             .attr('y2', function(edge){ return edge.target.y; })
             .classed('cookieYes', function(edge){ return edge.cookieCount > 0; })
-            .classed('highlighted', function(edge){ return highlightConnections; })
-            .classed('coloured', function(edge){ return edge.cookieCount > 0 && highlightCookies; });
+            .classed('highlighted', function(edge){ return highlight.connections; })
+            .classed('coloured', function(edge){ return edge.cookieCount > 0 && highlight.cookies; });
         vis.selectAll('.node').call(updateNodes);
         var endDraw = Date.now();
         draws.push(endDraw - lastTick);
@@ -204,8 +204,7 @@ function updateNodes(thenodes){
     .classed('secureYes', function(node){ return node.secureCount > 0 })
     .classed('secureNo', function(node){ return node.secureCount == 0 })
     .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); })
-    .classed('highlighted', function(edge){ return ( edge.visitedCount > 0 ) ? highlightVisited : highlightNeverVisited; });
-    // change shape if needed
+    .classed('highlighted', function(edge){ return ( edge.visitedCount > 0 ) ? highlightVisited : highlightNeverVisited; });    // change shape if needed
 }
 
 // FIXME: Move this out of visualization so multiple visualizations can use it.
@@ -221,10 +220,13 @@ function resetCanvas(){
 
 /* for Highlighting and Colouring -------------------- */
 
-var highlightVisited = true;
-var highlightNeverVisited = true;
-var highlightConnections = true;
-var highlightCookies = false;
+var highlight = {};
+highlight.visited = true;
+highlight.neverVisited = true;
+highlight.connections = true;
+highlight.cookies = false;
+highlight.watched = false;
+highlight.blocked = false;
 var graphLegend = document.querySelector(".graph-footer");
 
 legendBtnClickHandler(graphLegend);
@@ -232,26 +234,39 @@ legendBtnClickHandler(graphLegend);
 graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".visitedYes");
     toggleVizElements(visited,"highlighted");
-    highlightVisited = !highlightVisited;
+    highlight.visited = !highlight.visited;
 });
 
-graphLegend.querySelector(".toggle-never-visited").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-never-visited").addEventListener("click", function(event){
     var neverVisited = document.querySelectorAll(".visitedNo");
     toggleVizElements(neverVisited,"highlighted");
-    highlightNeverVisited = !highlightNeverVisited;
+    highlight.neverVisited = !highlight.neverVisited;
 });
 
-graphLegend.querySelector(".toggle-connections").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-connections").addEventListener("click", function(event){
     var cookiesConnections = document.querySelectorAll(".edge");
     toggleVizElements(cookiesConnections,"highlighted");
-    highlightConnections = !highlightConnections;
+    highlight.connections = !highlight.connections;
 });
 
-graphLegend.querySelector(".toggle-cookies").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-cookies").addEventListener("click", function(event){
     var cookiesConnections = document.querySelectorAll(".cookieYes");
     toggleVizElements(cookiesConnections,"coloured");
-    highlightCookies = !highlightCookies;
+    highlight.cookies = !highlight.cookies;
 });
+
+graphLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
+    var watchedSites = document.querySelectorAll(".watched");
+    toggleVizElements(watchedSites,"watchedSites");
+    highlight.watched = !highlight.watched;
+});
+
+graphLegend.querySelector(".legend-toggle-blocked").addEventListener("click", function(event){
+    var blockedSites = document.querySelectorAll(".blocked");
+    toggleVizElements(blockedSites,"blockedSites");
+    highlight.blocked = !highlight.blocked;
+});
+
 
 graphLegend.querySelector(".legend-toggle").addEventListener("click", function(event){
     toggleLegendSection(event.target,graphLegend);

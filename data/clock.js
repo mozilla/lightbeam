@@ -29,9 +29,18 @@ clock.on('remove', onRemove);
 
 function onInit(connections){
     console.log("= onInit = allConnections.length = %s" , allConnections.length);
-    // draw clock dial
     console.log('initializing clock from %s connections', connections.length);
-    aggregate.emit('init', connections);
+    drawClockFrame();
+    connections.forEach(function(connection){
+        onConnection(connection);
+    });
+    fadeEarlierTrackers(timeToBucket(new Date()));
+    if ( !statsBarInitiated ){  
+        updateStatsBar();
+    }
+};
+
+function drawClockFrame(){
     times = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     timeAmPmLabels = [ 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'AM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'PM', 'AM' ]
     timeslots = {};
@@ -42,14 +51,7 @@ function onInit(connections){
     vizcanvas.setAttribute('viewBox', '-350 -515 700 530');
     drawTimes();
     updateTime();
-    connections.forEach(function(connection){
-        onConnection(connection);
-    });
-    fadeEarlierTrackers(timeToBucket(new Date()));
-    if ( !statsBarInitiated ){  
-        updateStatsBar();
-    }
-};
+}
 
 function onConnection(conn){
     console.log("= allConnections.length = %s" , allConnections.length);
@@ -115,11 +117,17 @@ function onConnection(conn){
 
 function appendNodeG(bucket,connection,nodeType){
     var classes = [ "node", nodeType ];
-    if ( nodeType == "source" && highlightSource ){
+    if ( nodeType == "source" && highlight.source ){
         classes.push("highlighted");
     }
-    if ( nodeType == "target" && highlightTarget ){
+    if ( nodeType == "target" && highlight.target ){
         classes.push("highlighted");
+    }
+    if ( Object.keys(userSettings).indexOf(connection[nodeType]) > -1 && userSettings[connection[nodeType]].contains("watch") ){
+        classes.push("watched");
+    }
+    if ( Object.keys(userSettings).indexOf(connection[nodeType]) > -1 && userSettings[connection[nodeType]].contains("block") ){
+        classes.push("blocked");
     }
 
     var g = svg('g', {
@@ -177,7 +185,6 @@ function onRemove(){
     clock.timeslots = new Array(96);
     resetCanvas();
 };
-
 
 
 function svg(name, attrs, text){
@@ -358,25 +365,91 @@ function updateTime(){
 }
 
 
+/* Visual Effect ===================================== */
+
+/* ********************
+*   When a node in the clock visualization is clicked,
+*       all instances of the same node across the day should be highlighted
+*       all colluded nodes should also be highlighted (differently)
+*/
+document.querySelector('#content').addEventListener('click', function(event){
+    if ( currentVisualization.name == "clock" ){
+        // click could happen on .node or an element inside of .node
+        if (event.target.mozMatchesSelector('.node, .node *')){
+            var node = event.target;
+            while(node.mozMatchesSelector('.node *')){
+                node = node.parentElement;
+            }
+            console.log(node);
+            applyHighlightingEffect(node.getAttribute("data-name"));
+        }
+    }
+},false);
+
+function highlightColludedNode(selection){
+    selection.each(function(){
+        var colludedNode = d3.select(this);
+        if ( colludedNode.classed("source") ){  // this instance of colluded node is a source node
+            colludedNode.classed("colluded-source", true);
+        }
+        if ( colludedNode.classed("target") ){ // this instance of colluded node is a target node
+            colludedNode.classed("colluded-target", true);
+        }
+    });
+}
+
+function applyHighlightingEffect(clickedNodeName){
+    // reset styling effect
+    d3.selectAll("g.node").classed("clicked-node", false)
+                          .classed("colluded-source", false)
+                          .classed("colluded-target", false);
+
+    // highlight all instances of the clicked node(both source and target)
+    d3.selectAll("g[data-name='" + clickedNodeName +"']")
+            .classed("clicked-node", true);
+
+    // find all the colluded sites and highlight all instances of them
+    for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
+        if ( key != clickedNodeName ){
+            d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
+        }
+    }
+
+}
+
 
 /* for Highlighting and Colouring -------------------- */
 
-var highlightSource = true;
-var highlightTarget = true;
+var highlight = {};
+highlight.source = true;
+highlight.target = true;
 var clockLegend = document.querySelector(".clock-footer");
 
 legendBtnClickHandler(clockLegend);
 
-clockLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
+clockLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".source");
     toggleVizElements(visited,"highlighted");
-    highlightSource = !highlightSource;
+    highlight.source = !highlight.source;
 });
 
-clockLegend.querySelector(".toggle-target").addEventListener("click", function(event){
+clockLegend.querySelector(".legend-toggle-target").addEventListener("click", function(event){
     var targets = document.querySelectorAll(".target");
     toggleVizElements(targets,"highlighted");
-    highlightTarget = !highlightTarget;
+    highlight.target = !highlight.target;
+});
+
+clockLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
+    var watchedSites = document.querySelectorAll(".watched");
+    console.log(watchedSites);
+    toggleVizElements(watchedSites,"watchedSites");
+    highlight.watched = !highlight.watched;
+});
+
+clockLegend.querySelector(".legend-toggle-blocked").addEventListener("click", function(event){
+    var blockedSites = document.querySelectorAll(".blocked");
+    toggleVizElements(blockedSites,"blockedSites");
+    highlight.blocked = !highlight.blocked;
 });
 
 clockLegend.querySelector(".legend-toggle").addEventListener("click", function(event){

@@ -137,8 +137,6 @@ function switchVisualization(name){
 }
 
 
-var currentFilter = aggregate.filters[localStorage.currentFilter || 'last24Hours'];
-
 function switchFilter(name){
     console.log('switchFilter(' + name + ')');
     if (currentFilter && currentFilter === filters[name]) return;
@@ -153,8 +151,18 @@ function switchFilter(name){
 
 
 function resetAddtionalUI(){
-    // toggle off info panel, settings page
+    // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
+    var activeTab = document.querySelector(".info-panel-controls ul li.active");
+    if ( activeTab ){ // make the active tab inactive, if any
+        activeTab.classList.remove("active");
+        activeTab.querySelector("img").classList.remove("hidden");
+        activeTab.querySelector("i").classList.add("hidden");
+    }
+    // hide all help sections
+    document.querySelector(".help-content .graph-view-help").classList.add("hidden");
+    document.querySelector(".help-content .clock-view-help").classList.add("hidden");
+    document.querySelector(".help-content .list-view-help").classList.add("hidden");
     // show vizcanvas again in case it is hidden
     document.querySelector(".vizcanvas").classList.remove("hide");
     // toggle footer section accordingly

@@ -85,8 +85,7 @@ h3 {
 
 /* Button Styling ================================ */
 
-.btn a:hover,
-.square-button a:hover{
+.btn a:hover{
     background: #475B61;
 }
 
@@ -123,8 +122,7 @@ h3 {
     display: none;
 }
 
-.btn a,
-.square-button a{
+.btn a{
     border-radius: 5px;
     cursor: pointer;
 }
@@ -169,53 +167,10 @@ h3 {
     top: 3px;
 }
 
-.controls .square-button-controls{
-    position: fixed;
-    bottom: 30px;
-    margin-bottom: 20px;
-}
-
 .controls .collusion-url{
     position: fixed;
     bottom: 0;
     margin-bottom: 10px;
-}
-
-.square-button{
-    float: left;
-    cursor: pointer;
-    text-align: center;
-}
-
-.square-button:not(:last-child){
-    margin-right: 60px;
-}
-
-.square-button a{
-    display: block;
-    background: #25292D;
-    width: 18px;
-    height: 18px;
-    padding: 5px;
-    margin: 0 auto;
-}
-
-.square-button.active{
-    background: #5F6771;
-}
-
-.square-button img{
-    position: relative;
-    top: 2px;
-    width: 15px;
-    height: 15px;
-}
-
-.square-button .button-label{
-    font-size: 7pt;
-    color: #fff;
-    margin-top: 5px;
-    text-align: center;
 }
 
 .toggle-btn input{
@@ -344,41 +299,42 @@ h3 {
 
 .info-panel-controls{
     display: block;
-    transform: translate(0px,-2px) rotate(-90deg);
     float: right;
     z-index: 1000;
+    margin: 30px 0 0 0;
 }
 
-.info-panel-controls div{
+.info-panel-controls ul{
+    list-style-type: none;
+}
+
+.info-panel-controls ul li{
     width: 28px;
     height: 28px;
-    margin-bottom: 10px;
     position: relative;
     bottom: 10px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    background: #20272E;
+    border-radius: 2px 0 0 2px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.info-panel-controls ul li.active{
+    background: #404850;
 }
 
 .info-panel-controls img{
     width: 15px;
     height: 15px;
     position: relative;
-    bottom: 3px;
     right: 3px;
 }
 
-.toggle-info-panel{
-    background: #404850;
-    border-radius: 5px 5px 0 0;
-    padding: 5px 10px;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-.toggle-help{
-    transform: translate(0px,2px) rotate(90deg);
-    background: #25292D;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
+.toggle-site-profile.disabled{
+    cursor: default;
+    opacity: 0.2;
 }
 
 .info .holder{
@@ -386,6 +342,79 @@ h3 {
     flex-direction:column;
     height:100%;
 }
+
+
+
+/* Help Sections */
+
+.help-content svg{
+    width: 15px;
+    height: 15px;
+    position: relative;
+    top: 2px;
+}
+
+.info .holder > div{
+    font-size: 12px;
+}
+
+.info .holder > div h4{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.info .holder > div h4 img{
+    width: 16px;
+    height: 16px;
+}
+
+.grey-label{
+    display: inline-block;
+    margin-right: 5px;
+    color: #777;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.blue-label{
+    margin-bottom: 10px;
+    color: #4CC7E6;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.info .holder section{
+    padding: 15px 0;
+}
+
+.info .holder section:not(:last-of-type){
+    border-bottom: 1px solid #303840;
+}
+
+.info .holder section p{
+    margin: 5px 0;
+}
+
+.info .holder section ul{
+    list-style-type: none;
+}
+
+.info .holder section ul img{
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.feature-name{
+    display: inline-block;
+    width: 120px;
+    font-weight: bold; 
+    text-transform: capitalize;
+}
+
+/* Info Panel(Profile) Sections */
 
 .map-section{
     margin: 10px 0 50px 0;
@@ -420,7 +449,7 @@ h3 {
 .info .holder{
     width: 300px;
     height: 100%;
-    padding: 15px 30px;
+    padding: 15px;
 }
 
 .info .holder .favicon{
@@ -498,8 +527,7 @@ h3 {
     cursor: pointer;
 }
 
-.connections-list ul li:hover,
-.settings-page ul li:hover{
+.connections-list ul li:hover{
     background-color: #475B61;
 }
 
@@ -534,16 +562,18 @@ text {
 #tooltip{
     display: none;
     position: absolute;
-    background-color: #CCC;
+    background-color: #FFF;
     color: #010203;
-    padding: 5px;
+    padding: 5px 10px;
+    box-shadow: 0px 2px #4CC7E6;
+    border-radius: 5px;
 }
 #tooltip:after{
     content: '';
     width: 0;
     height: 0;
     border: 10px solid transparent;
-    border-top: 10px solid #CCC;
+    border-top: 10px solid #FFF;
     position: absolute;
     top: 100%;
     left: 50%;
@@ -685,21 +715,23 @@ text {
 }
 
 .watchedSites{
-    fill: #FFF;
-    stroke: #268CB7;
-    stroke-width: 2;
+    fill: #268CB7 !important;
+}
+
+.watch-text{
+    color: #268CB7;
 }
 
 .blockedSites{
-    fill: #FFF;
-    stroke: #FF0000;
-    stroke-width: 2;
+    fill: #FF0000 !important;
 }
 
-.hiddenSites{
-    fill: #FFF;
-    stroke: #FA9828;
-    stroke-width: 2;
+.block-text{
+    color: #FF0000;
+}
+
+.cookie-text{
+    color: #800080;
 }
 
 .edge{
@@ -740,6 +772,7 @@ text {
     border-collapse: collapse;
     font-size: 12px;
     height: 100%;
+    margin-right: 10px;
 }
 
 .list-table table{
@@ -810,7 +843,8 @@ text {
     display: none;
 }
 
-.list-table tbody tr:hover{
+.list-table tbody tr:hover,
+.list-table tbody tr.checked{
     background: #33464d;
 }
 
@@ -858,70 +892,12 @@ text {
 
 
 
-/* Settings Page */
-
-.settings-page{
-    width: 100%;
-    padding: 30px 10px 0 50px;
-    color: #939393;
-}
-
-.page-header{
-    font-size: 22px;
-    margin-bottom: 25px;
-}
-
-.settings-page header{
-    color: #fff;
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-.settings-page section{
-    font-size: 15px;
-    margin-bottom: 40px;
-}
-
-.settings-page .num-sites{
-    color: #5A50F0;
-}
-
-.settings-page ul{
-    width: 400px;
-    list-style-type: none;
-    cursor: pointer;
-    overflow-y: auto;
-}
-
-.settings-page ul li{
-    padding: 1px 0;
-    clear: both;
-    overflow: auto;
-}
-
-.settings-page i{
-    float: left;
-    position: relative;
-    top: 2px;
-}
-
-.settings-page .site-url{
-    float: left;
-}
-.settings-page .settings-option{
-    font-size: 12px;
-    padding-left: 15px;
-    clear: both;
-}
-
-
-
 /* Legend for Graph and Clock and Site Preferences for List*/
 
 .graph-footer,
 .clock-footer,
 .list-footer{
-    margin-right: 30px;
+    margin-right: 20px;
     flex: none;
 }
 

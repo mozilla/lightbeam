@@ -12,7 +12,7 @@
         <aside class="controls">
             <header>
                 <div class="collusion-icon"></div>
-                <img class="logo" src="icons/collusion_wordmark_temp.png" />
+                <img class="logo" src="icons/Collusion---Wordmark-Beta.png" />
             </header>
             <div class="btn_group visualization">
                 <div data-view class="dropdown_button">
@@ -49,23 +49,13 @@
             </div>
             <div class="btn">
                 <a class="download">
-                    <img src="image/collusion_icon_save.png" />Download
+                    <img src="image/collusion_icon_download2.png" />Download
                 </a>
             </div>
             <div class="btn">
                 <a class="reset-data">
                     <img src="image/collusion_icon_reset.png" />Reset
                 </a>
-            </div>
-            <div class="square-button-controls">
-                <div class="square-button">
-                    <a class="settings"><img src="image/collusion_icon_settings.png" /></a>
-                    <div class="button-label">SETTINGS</div>
-                </div>
-                <div class="square-button">
-                    <a class="about"><img src="image/collusion_icon_about.png" /></a>
-                    <div class="button-label">ABOUT</div>
-                </div>
             </div>
             <div class="collusion-url">
                 <a href="http://www.mozilla.org/collusion" target="_blank">www.mozilla.org/collusion</a>
@@ -98,33 +88,202 @@
                     </div>
                 </div>
 			</div>
-        <div id="content" class="">
+        <div id="content">
             <aside class="info">
                 <div class="holder">
-					<div>
-						<h2 class="title"></h2>
-						<!--span class="blue-text">You are currently browsing this site</span-->
-						<span class="blue-text"><b>First Access </b></span><span class="info-first-access">Date</span><br>
-						<span class="blue-text"><b>Last Access </b></span><span class="info-last-access">Date</span>
-                    <div class="map-section">
-                        <h3 class="blue-text">Server Location</h3>
-                        <div><span id="country">&nbsp;</span></div>
-                        <!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
-                        <object type="image/svg+xml" data="map.svg" class="world-map"></object>
+                <!-- Site Profile starts ================================= -->
+                    <div class="site-profile-content hidden">
+    					<div>
+    						<h2 class="title"></h2>
+    						<!--span class="blue-text">You are currently browsing this site</span-->
+    						<span class="blue-text"><b>First Access </b></span><span class="info-first-access">Date</span><br>
+    						<span class="blue-text"><b>Last Access </b></span><span class="info-last-access">Date</span>
+                        <div class="map-section">
+                            <h3 class="blue-text">Server Location</h3>
+                            <div><span id="country">&nbsp;</span></div>
+                            <!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
+                            <object type="image/svg+xml" data="map.svg" class="world-map"></object>
+                        </div>
+    						<h3 class="connections-head dark-blue-text"><b class="blue-text num-connected-sites"></b> Connected Sites</h3>
+    					</div>
+                        <div class="connections-list">
+                            <ul>
+                            </ul>
+                        </div>
                     </div>
-						<h3 class="connections-head dark-blue-text"><b class="blue-text num-connected-sites"></b> Connected Sites</h3>
-					</div>
-                    <div class="connections-list">
-                        <ul>
-                        </ul>
+                <!-- Site Profile ends ================================= -->
+                <!-- Help Sections starts ================================= -->
+                    <div class="help-content">
+                    <!-- Graph View Help -->
+                        <div class="graph-view-help hidden">
+                            <h4><img src="image/collusion_icon_help.png" /> Visualization Help</h4>
+                            <div>
+                                <div class="grey-label">VISUALIZATION</div> Graph View</br>
+                                <div class="grey-label">BEST for</div> Seeing site relationships</br>
+                            </div>
+                            <section>
+                                <div class="blue-label">DESCRIPTION</div>
+                                <p>
+                                    In this graph visualization, you can see <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle class="visitedSites" cx="8" cy="8" r="6" /></svg> <b>circular nodes</b> that are websites you have visited, <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="unvisitedSites" points="0,14 7,2 14,14" /></svg> <b>triangular nodes</b> are third party site and <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><line class="connectionLine" x1="14" y1="2" x2="2" y2="14" /></svg> <b>connections</b> between them.
+                                    Over time, this graph will become a network of connecitons and nodes to visualize your relationship with the web.
+                                </p>
+                                <p>
+                                    This graph may get complex quickly and to reduce the amount of info displayed use  <b>SESSIONS</b> to help focus on a set of data.
+                                </p>
+                            </section>
+                            <section>
+                                <div class="blue-label">FEATURES</div>
+                                <div>
+                                    <div><span class="feature-name">Zoom In + Out</span> - on scroll</div>
+                                    <div><span class="feature-name">Pan</span> - on click + drag</div>
+                                    <div><span class="feature-name">Tooltips</span> - on hover</div>
+                                    <div><span class="feature-name">Website Profile</span> - on click</div>
+                                </div>
+                            </section>
+                            <section>
+                                <div class="blue-label">LEGENDS AND CONTROLS</div>
+                                <p>
+                                    These buttons serve as toggles to help identify various elements on the graph.
+                                </p>
+                                <p>
+                                    When you set your site preferecnes:
+                                    <ul>
+                                        <li><svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <line class="cookies" x1="14" y1="2" x2="2" y2="14" />
+                                    </svg> <span class="cookie-text"><b>Cookies</b></span> means the site stored some data in your browser.</li>
+                                        <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
+                                        <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
+                                    </ul>
+                                </p>
+                            </section>
+                        </div>
+                    <!-- Clock View Help -->
+                        <div class="clock-view-help hidden">
+                            <h4><img src="image/collusion_icon_help.png" /> Visualization Help</h4>
+                            <div>
+                                <div class="grey-label">VISUALIZATION</div> Clock View</br>
+                                <div class="grey-label">BEST for</div> Seeing site patterns with time</br>
+                            </div>
+                            <section>
+                                <div class="blue-label">DESCRIPTION</div>
+                                <p>
+                                    In this clock visualization, you can see <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle class="visitedSites" cx="8" cy="8" r="6" /></svg> <b>circular nodes</b> in <span style="color:#72AC45"><b>green</b></span> represents websites you have visited and <span style="color:#968BCD"><b>purple</b></span> nodes that are sites you have not but still connected to you and the connecitons between them.  Over time, this view reveals patterns across the arch that represent your browsing behavirous according to time and your relationship with the web.
+                                </p>
+                                <p>
+                                    This visualization becomes populated as 15 minutes increments on the arc and the previous (24 hour) session is seen faded to compare data from the previous day.
+                                </p>
+                            </section>
+                            <section>
+                                <div class="blue-label">FEATURES</div>
+                                <div>
+                                    <div><span class="feature-name">Zoom In + Out</span> - on scroll</div>
+                                    <div><span class="feature-name">Pan</span> - on click + drag</div>
+                                    <div><span class="feature-name">Tooltips</span> - on hover</div>
+                                    <div><span class="feature-name">Website Profile</span> - on click</div>
+                                </div>
+                            </section>
+                            <section>
+                                <div class="blue-label">LEGENDS AND CONTROLS</div>
+                                <p>
+                                    These buttons serve as toggles to help identify various elements on the graph.
+                                </p>
+                                <p>
+                                    When you set your site preferecnes:
+                                    <ul>
+                                        <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
+                                        <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
+                                    </ul>
+                                </p>
+                            </section>
+                        </div>
+                    <!-- List View Help -->
+                        <div class="list-view-help hidden">
+                            <h4><img src="image/collusion_icon_help.png" /> Visualization Help</h4>
+                            <div>
+                                <div class="grey-label">VISUALIZATION</div> List View</br>
+                                <div class="grey-label">BEST for</div> Seeing a text database</br>
+                            </div>
+                            <section>
+                                <div class="blue-label">DESCRIPTION</div>
+                                <p>
+                                    In this list visualization, you can see al ist of all websites you have visited and sites you have not visited but still connect to you.  This view assists with sorting and filtering large numbers of sites.
+                                </p>
+                                <p>
+                                    This list may get quite extensive and to reduce the amount of information displayed use <b>SESSIONS</b> to help you focus on a set list of data.
+                                </p>
+                            </section>
+                            <section>
+                                <div class="blue-label">FEATURES</div>
+                                <div>
+                                    <div><span class="feature-name">(_icon_) Checkboxes</span> - click + apply site preference</div>
+                                    <div><span class="feature-name">(_icon_) _SORT BY_</span> - Type, Preference, WEbsite(A-Z), Date</div>
+                                </div>
+                            </section>
+                            <section>
+                                <div class="blue-label">LEGENDS AND CONTROLS</div>
+                                <p>
+                                    These buttons serve as toggles to help identify various elements on the graph.
+                                </p>
+                                <p>
+                                    When you set your site preferecnes:
+                                    <ul>
+                                        <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
+                                        <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
+                                    </ul>
+                                </p>
+                            </section>
+                        </div>
                     </div>
+                <!-- Help Sections ends ================================= -->
+                <!-- About Section starts ================================= -->
+                    <div class="about-content">
+                        <div class="graph-view-help">
+                            <h4><img src="image/collusion_icon_about.png" /> About Collusion</h4>
+                            <div>
+                                <div class="grey-label">VERSION</div> v1.0</br>
+                                <div class="grey-label">BY</div> ____</br>
+                            </div>
+                            <section>
+                                <div class="blue-label">ABOUT THIS ADD-ON</div>
+                                <p>
+                                    Collusion is an experimental add-on for Firefox that allows you to see which sites are suing third-party cookies to track your movements across the Web.  It shows, in realtime, how that data creates a spiderwed of interaction between companies and other trackers.
+                                </p>
+                            </section>
+                            <section>
+                                <div class="blue-label">MISSION STATEMENT</div>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel lectus eu quam consectetur vestibulum. Vivamus elementum faucibus commodo. Nullam bibendum ac justo in convallis. Ut ac lacinia nibh. Suspendisse ac eleifend enim. Donec ornare, metus eu suscipit tempor, nisl leo bibendum quam, ac fermentum eros est a mi.
+                                </p>
+                            </section>
+                            <section>
+                                <div class="blue-label">Privacy Policy</div>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel lectus eu quam consectetur vestibulum. Vivamus elementum faucibus commodo. Nullam bibendum ac justo in convallis. Ut ac lacinia nibh. Suspendisse ac eleifend enim. Donec ornare, metus eu suscipit tempor, nisl leo bibendum quam, ac fermentum eros est a mi.
+                                </p>
+                            </section>
+                            <section>
+                                <div class="blue-label">CONTACT</div>
+                                <p>
+                                    <i>You can contact us at:</i>
+                                </p>
+                            </section>
+                            <section>
+                                <div class="blue-label">WEBSITE</div>
+                                <p>
+                                    <i>For more information please visit: <a href="www.mozilla.org/collusion" target="_blank">www.mozilla.org/collusion/</a></i>
+                                </p>
+                            </section>
+                        </div>
+                    </div>
+                <!-- About Section starts ================================= -->
                 </div>
             </aside>
             <div class="info-panel-controls">
-                <div class="toggle-help">
-                    <a class="help-mode"><img src="image/collusion_icon_help.png" /></a>
-                </div>
-                <div class="toggle-info-panel">+</div>
+                <ul>
+                    <li class="toggle-site-profile disabled"><img src="image/collusion_icon_website.png" /><i class="icon-chevron-right hidden"></i></li>
+                    <li class="toggle-help"><a class="help"><img src="image/collusion_icon_help.png" /><i class="icon-chevron-right hidden"></i></a></li>
+                    <li class="toggle-about"><a class="about"><img src="image/collusion_icon_about.png" /></a><i class="icon-chevron-right hidden"></i></li>
+                </ul>
             </div>
             <div class="stage-stack">
               <div class="stage">
@@ -141,7 +300,7 @@
                     </section>
                     <section class="legend-controls">
                         <section class="column">
-                            <div class="btn toggle-visited active">
+                            <div class="btn legend-toggle-visited active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="visitedSites" cx="8" cy="8" r="6" />
@@ -149,7 +308,7 @@
                                     Visited Site
                                 </a>
                             </div>
-                            <div class="btn toggle-never-visited active">
+                            <div class="btn legend-toggle-never-visited active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <polygon class="unvisitedSites" points="0,14 7,2 14,14" />
@@ -157,7 +316,7 @@
                                     Never Visited Site
                                 </a>
                             </div>
-                            <div class="btn toggle-connections active">
+                            <div class="btn legend-toggle-connections active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <line class="connectionLine" x1="14" y1="2" x2="2" y2="14" />
@@ -167,7 +326,7 @@
                             </div>
                         </section>
                         <section class="column">
-                            <div class="btn">
+                            <div class="btn legend-toggle-watched">
                                 <a>
                                     <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="watchedSites" cx="8" cy="8" r="6" />
@@ -176,7 +335,7 @@
                                     Watched Sites
                                 </a>
                             </div>
-                            <div class="btn">
+                            <div class="btn legend-toggle-blocked">
                                 <a>
                                     <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="blockedSites" cx="8" cy="8" r="6" />
@@ -187,18 +346,9 @@
                                     Blocked Sites
                                 </a>
                             </div>
-                            <div class="btn">
-                                <a>
-                                    <svg class="legend-canvas-large" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="hiddenSites" cx="8" cy="8" r="6" />
-                                        <polygon class="hiddenSites" points="18,14 25,2 32,14" />
-                                    </svg>
-                                    Hidden Sites
-                                </a>
-                            </div>
                         </section>
                         <section class="column">
-                            <div class="btn toggle-cookies">
+                            <div class="btn legend-toggle-cookies">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <line class="cookies" x1="14" y1="2" x2="2" y2="14" />
@@ -217,7 +367,7 @@
                     </section>
                     <section class="legend-controls">
                         <section class="column">
-                            <div class="btn toggle-visited active">
+                            <div class="btn legend-toggle-visited active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="sourceSites" cx="8" cy="8" r="6" />
@@ -225,7 +375,7 @@
                                     Visited Site("source")
                                 </a>
                             </div>
-                            <div class="btn toggle-target active">
+                            <div class="btn legend-toggle-target active">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="targetSites" cx="8" cy="8" r="6" />
@@ -235,7 +385,7 @@
                             </div>
                         </section>
                         <section class="column">
-                            <div class="btn">
+                            <div class="btn legend-toggle-watched">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <circle class="watchedSites" cx="8" cy="8" r="6" />
@@ -243,24 +393,13 @@
                                     Watched Sites
                                 </a>
                             </div>
-                            <div class="btn">
-                                <a>
-                                	<img src="icons/collusion_icon_block.png" />
-                                    <!--<svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="blockedSites" cx="8" cy="8" r="6" />
-                                        <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
-                                    </svg>-->
-                                    Blocked Sites
-                                </a>
-                            </div>
-                        </section>
-                        <section class="column">
-                            <div class="btn">
+                            <div class="btn legend-toggle-blocked">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="hiddenSites" cx="8" cy="8" r="6" />
+                                        <circle class="blockedSites" cx="8" cy="8" r="6" />
+                                        <line class="blockedSites" x1="11" y1="3" x2="4.5" y2="14" />
                                     </svg>
-                                    Hidden Sites
+                                    Blocked Sites
                                 </a>
                             </div>
                         </section>
