@@ -26,11 +26,6 @@ clock.name = "clock";
 clock.on('init', onInit);
 clock.on('connection', onConnection);
 clock.on('remove', onRemove);
-clock.on('setFilter', setFilter);
-
-function setFilter(){
-    addon.emit('setFilter', 'filter24hours');
-}
 
 function onInit(connections){
     console.log("= onInit = allConnections.length = %s" , allConnections.length);

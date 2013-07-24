@@ -11,6 +11,7 @@ visualizations.graph = graph;
 graph.name = "graph";
 var width = 1000, height = 1000;
 var force, vis;
+var filteredAggregate;
 
 // There are three phases for a visualization life-cycle:
 // init does initialization and receives the existing set of connections
@@ -20,12 +21,6 @@ graph.on('init', onInit);
 graph.on('connection', onConnection);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
-graph.on('setFilter', setFilter);
-
-function setFilter(){
-    //addon.emit('setFilter', 'filterLastXSites', 5);
-    //addon.emit('setFilter', 'filter24hours');
-}
 
 function onInit(connections){
     console.log("= onInit = allConnections.length = %s" , allConnections.length);
@@ -97,7 +92,7 @@ function polygonAsString(points, size){
 function initGraph(){
     // Initialize D3 layout and bind data
     force = d3.layout.force()
-        .nodes(aggregate.allnodes)
+        .nodes(aggregate.nodes)
         .links(aggregate.edges)
         .charge(-500)
         .size([width,height])
@@ -149,21 +144,18 @@ function updateGraph(){
         .remove();
 
     var nodes = vis.selectAll('.node')
-	    .data(aggregate.allnodes, function(node){ return node.name; });
+	    .data(aggregate.nodes, function(node){ return node.name; });
 
     nodes.call(force.drag);
 
 	nodes.enter().append('g')
         .classed('visitedYes', function(node){ return node.visitedCount/node.howMany === 1 })
         .classed('visitedNo', function(node){ return node.visitedCount/node.howMany === 0 })
-        .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
         .call(addShape)
         .attr('data-name', function(node){ return node.name; })
         .on('mouseenter', tooltip.show)
         .on('mouseleave', tooltip.hide)
         .classed('node', true);
-
-
 
     nodes.exit()
         .remove();
@@ -175,7 +167,7 @@ window.updategGraph = updateGraph;
 function addFavicon(selection){
     selection.append("svg:image")
           .attr("class", "favicon")
-          .attr("width", "16")
+          .attr("width", "16") // move these to the favicon class in css
           .attr("height", "16")
           .attr("x", "-8") // offset to make 16x16 favicon appear centered
           .attr("y", "-8")
@@ -194,8 +186,6 @@ function addCircle(selection){
 function addShape(selection){
     selection.filter('.visitedYes').call(addCircle).call(addFavicon);
     selection.filter('.visitedNo').call(addTriangle).call(addFavicon);
-    selection.filter('.visitedBoth').call(addCircle).call(addFavicon);
-    // selection.filter('.visitedBoth').call(addSquare).call(addFavicon);
 }
 
 function addTriangle(selection){
@@ -205,32 +195,15 @@ function addTriangle(selection){
         .attr('data-name', function(node){ return node.name; });
 }
 
-// function addSquare(selection){
-//     selection
-// 	    .append('rect')
-// 	    .attr('x', -9)
-// 	    .attr('y', -9)
-// 	    .attr('width', 18)
-// 	    .attr('height', 18);
-// }
-
 
 function updateNodes(thenodes){
     thenodes
-	.attr('transform', function(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .03 * node.weight) + ')'; })
-    .classed('visitedYes', function(node){ return node.visitedCount/node.howMany == 1 })
-    .classed('visitedNo', function(node){ return node.visitedCount/node.howMany == 0 })
-    .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
-    .classed('secureYes', function(node){ return node.secureCount/node.howMany == 1 })
-    .classed('secureNo', function(node){ return node.secureCount/node.howMany == 0 })
-    .classed('secureBoth', function(node){ return node.secureCount/node.howMany > 0 && node.secureCount/node.howMany < 1 })
-    // .classed('cookieYes', function(node){ return node.cookieCount/node.howMany == 1 })
-    // .classed('cookieNo', function(node){ return node.cookieCount/node.howMany == 0 })
-    // .classed('cookieBoth', function(node){ return node.cookieCount/node.howMany > 0 && node.cookieCount/node.howMany < 1 })
+	.attr('transform', function(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .05 * node.weight) + ')'; })
+    .classed('visitedYes', function(node){ return node.visitedCount > 0 })
+    .classed('visitedNo', function(node){ return node.visitedCount == 0 })
+    .classed('secureYes', function(node){ return node.secureCount > 0 })
+    .classed('secureNo', function(node){ return node.secureCount == 0 })
     .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); })
-    .attr('visited-scale', function(node){ return node.visitedCount/node.howMany; })
-    .attr('secure-scale', function(node){ return node.secureCount/node.howMany; })
-    .attr('cookie-scale', function(node){ return node.cookieCount/node.howMany; })
     .classed('highlighted', function(edge){ return ( edge.visitedCount > 0 ) ? highlightVisited : highlightNeverVisited; });
     // change shape if needed
 }
@@ -257,7 +230,7 @@ var graphLegend = document.querySelector(".graph-footer");
 legendBtnClickHandler(graphLegend);
 
 graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
-    var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
+    var visited = document.querySelectorAll(".visitedYes");
     toggleVizElements(visited,"highlighted");
     highlightVisited = !highlightVisited;
 });

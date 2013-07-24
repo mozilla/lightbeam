@@ -13,15 +13,9 @@ list.name = "list";
 list.on("init", onInit);
 list.on("conneciton", onConnection);
 list.on("remove", onRemove);
-list.on('setFilter', setFilter);
 list.on("showFilteredTable", function(filter){
     showFilteredTable(filter);
 });
-
-function setFilter(){
-    addon.emit('setFilter', 'filterNothing');
-}
-
 
 function onInit(connections){
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
