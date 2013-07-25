@@ -9,6 +9,7 @@
 var list = new Emitter();
 var breadcrumbList = [ "All Sites" ];
 var currentState = {};
+var pathToListIcon = "icons/collusion_icon_list.png";
 visualizations.list = list;
 list.name = "list";
 
@@ -214,6 +215,7 @@ window.addEventListener("popstate", function(e){
 
 function showFilteredTable(filter){
     pushUrlToHistory(filter);
+    pathToListIcon =  filter ? "../icons/collusion_icon_list.png" : "icons/collusion_icon_list.png";
     // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");
     var tbody = table.querySelector('.list-body');
@@ -259,7 +261,7 @@ function nodeToRow(node){
         elem('td', {'data-sort-key': node.nodeType}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
         elem('td', {'class': 'preferences', 'data-sort-key': settings}, '\u00A0'),
         elem('td', {'data-sort-key': node.name}, [
-                elem('img', {'src': 'icons/collusion_icon_list.png', 'class': 'update-table'}),
+                elem('img', {'src': pathToListIcon, 'class': 'update-table'}),
                 node.name
             ]),
         elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10)}, node.firstAccess.toLocaleDateString()),
