@@ -767,6 +767,33 @@ text {
     height: 0;
 }
 
+.breadcrumb{
+    display: inline-block;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.breadcrumb .breadcrumb-chunk{
+    float: left;
+    cursor: pointer;
+    color: #555;
+}
+
+.breadcrumb .breadcrumb-chunk.no-click{
+    cursor: default;
+    color: #4CC7E6;
+}
+
+.breadcrumb .arrow-left {
+    float: left;
+    width: 0; 
+    height: 0; 
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent; 
+    border-right:10px solid #303539; 
+    margin: 7px 10px 0 10px;
+}
+
 
 .list-table{
     border-collapse: collapse;

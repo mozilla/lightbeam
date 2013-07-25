@@ -139,6 +139,8 @@ function switchVisualization(name){
 
 
 function resetAddtionalUI(){
+    // reset Collusion url to root 
+    history.replaceState(null, null, generateCollusionPageUrl().join("/"));
     // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
     var activeTab = document.querySelector(".info-panel-controls ul li.active");
@@ -307,3 +309,18 @@ function updateStatsBar(){
     statsBarInitiated = true;
 }
 
+
+/****************************************
+*   Generate Collusion Page Url
+*/
+function generateCollusionPageUrl(siteUrl){
+    var href = window.location.href.split("/");
+    if ( href[href.length-1] != "index.html" ){
+        href = href.slice(0,href.length-1);
+    }
+    if ( siteUrl ){
+        href.push(siteUrl);
+    }
+    console.log(href);
+    return href;
+}
