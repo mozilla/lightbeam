@@ -167,11 +167,17 @@ h3 {
     top: 3px;
 }
 
-.controls .collusion-url{
+.controls .links{
     position: fixed;
     bottom: 0;
     margin-bottom: 10px;
 }
+
+.controls .links img{
+    width: 15px;
+    height: 15px;
+}
+
 
 .toggle-btn input{
     display: none;
