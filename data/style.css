@@ -251,18 +251,26 @@ h3 {
 }
 
 .top-bar{
-    height: 60px;
     background-color:#fff;
     flex:none;
     padding: 10px;
-    font-size: 9px;
+    font-size: 10px;
 }
 
 .stats-section{
     float: left;
     color: #707070;
     width: 80%;
-    padding-top: 10px;
+}
+
+.stats-section section{
+    float: left;
+    margin-right: 20px;
+}
+
+.stats-section .context-label{
+    display: block;
+    font-weight: bold;
 }
 
 .sharing-section{
@@ -548,7 +556,7 @@ h3 {
 
 .stage{
     flex: 1;
-    margin: 20px 0px;
+    /*margin: 20px 0px;*/
 }
 .showinfo .stage-stack{
     /*margin-right: 300px;*/
@@ -776,7 +784,7 @@ text {
 .breadcrumb{
     display: inline-block;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .breadcrumb .breadcrumb-chunk{
@@ -932,6 +940,10 @@ text {
 .list-footer{
     margin-right: 20px;
     flex: none;
+}
+
+.list-footer{
+    margin-top: 50px;
 }
 
 .legend-header{

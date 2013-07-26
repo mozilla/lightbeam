@@ -304,8 +304,8 @@ function updateStatsBar(){
         dateSince = new Date(allConnections[0][2]).toDateString();
     }
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
-    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length;
-    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length + " THIRD PARTY SITES"; 
+    document.querySelector(".top-bar .first-party-sites").innerHTML = (aggregate.allnodes.length - aggregate.thirdnodes.length) + " SITES";
     statsBarInitiated = true;
 }
 
@@ -321,6 +321,5 @@ function generateCollusionPageUrl(siteUrl){
     if ( siteUrl ){
         href.push(siteUrl);
     }
-    console.log(href);
     return href;
 }
