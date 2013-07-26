@@ -168,9 +168,7 @@ h3 {
 }
 
 .controls .links{
-    position: fixed;
-    bottom: 0;
-    margin-bottom: 10px;
+    line-height: 30px;
 }
 
 .controls .links img{
