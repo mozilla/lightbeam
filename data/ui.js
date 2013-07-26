@@ -299,12 +299,16 @@ document.querySelector(".stage").addEventListener("mouseleave",function(event){
 
 /* Export ========== */
 
-function exportFormat(connections){
+function exportFormat(connections, roundOff){
+    var tempConnections = excludePrivateConnection(connections).slice(0);
+    if ( roundOff ){
+        tempConnections = roundOffTimestamp(tempConnections);
+    }
     return JSON.stringify({
         format: 'Collusion Save File',
         version: '1.1',
         token: localStorage.collusionToken,
-        connections: excludePrivateConnection(connections)
+        connections: tempConnections
     });
 }
 
@@ -314,6 +318,15 @@ function excludePrivateConnection(connections){
         return (connection[FROM_PRIVATE_MODE] == null);
     })
 }
+
+function roundOffTimestamp(connections){
+    return  connections.map(function(conn){
+                var tempConn = conn.slice(0);
+                tempConn[TIMESTAMP] -= ( tempConn[TIMESTAMP] % roundOffFactor );
+                return tempConn; 
+            });
+}
+
 
 /* Info Panel Connections List ===================================== */
 

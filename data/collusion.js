@@ -1,5 +1,6 @@
 'use strict';
 
+const roundOffFactor = 5*60*1000; // in milliseconds
 var visualizations = {};
 var currentVisualization;
 var allConnections = [];
@@ -237,7 +238,7 @@ function sharingData(){
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
     });
-    var data = exportFormat(connections);
+    var data = exportFormat(connections,true); // round off timestamp
     var request = new XMLHttpRequest();
     request.open("POST", uploadServer, true);
     request.setRequestHeader("Collusion-Share-Data","collusion");
