@@ -80,7 +80,7 @@ function initList(){
                     elem('th', 'Website'),
                     elem('th', 'First Access'),
                     elem('th', 'Last Access'),
-                    elem('th', {'class': 'sort-numeric'}, 'Connections')
+                    elem('th', {'class': 'sort-numeric'}, 'Sites Connected')
                 ])
             ]),
         ]),
@@ -266,7 +266,7 @@ function nodeToRow(node){
             ]),
         elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10)}, node.firstAccess.toLocaleDateString()),
         elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10)}, node.lastAccess.toLocaleDateString()),
-        elem('td', {'data-sort-key': node.howMany}, '' + node.howMany)
+        elem('td', {'data-sort-key': node.howMany}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
     ]);
 }
 
