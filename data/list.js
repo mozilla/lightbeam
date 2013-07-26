@@ -266,7 +266,7 @@ function nodeToRow(node){
             ]),
         elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10)}, node.firstAccess.toLocaleDateString()),
         elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10)}, node.lastAccess.toLocaleDateString()),
-        elem('td', {'data-sort-key': node.howMany}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
+        elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
     ]);
 }
 
