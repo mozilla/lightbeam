@@ -5,7 +5,7 @@
 (function(global){
 "use strict";
 
-var nodemap, edgemap;
+var nodemap = {}, edgemap = {};
 
 var aggregate = new Emitter();
 global.aggregate = aggregate;
@@ -70,7 +70,7 @@ aggregate.on('filter', applyFilter);
 function onLoad(connections){
     console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
-    currentFilter();
+    filteredAggregate = currentFilter();
     currentVisualization.emit('init');
     console.log('aggregate::onLoad end')
 }
@@ -139,9 +139,13 @@ aggregate.on('connection', onConnection);
 
 
 function GraphEdge(source, target, connection){
+    var name = source.name + '->' + target.name;
+    if (edgemap[name]){
+        return edgemap[name];
+    }
     this.source = source;
     this.target = target;
-    this.name = source.name + '->' + target.name;
+    this.name = name;
     if (connection){ 
         this.cookieCount = connection.cookie ? 1 : 0;
     }
@@ -248,24 +252,6 @@ function nodesSortedByDate(nodes){
             return arr[1];
         });
 }
-
-// function edgesForNodes(nodes){
-//     var edgemap = {};
-//     var edge;
-//     nodes.forEach(function(node){
-//         node.linkedFrom.forEach(function(linkname){
-//             edge = new GraphEdge(node, nodemap[linkname]);
-//             edgemap[edge.name] = edge;
-//         });
-//         node.linkedTo.forEach(function(linkname){
-//             edge = new GraphEdge(node, nodemap[linkname]);
-//             edgemap[edge.name] = edge;
-//         });
-//     });
-//     return Object.keys(edgemap).map(function(nodename){
-//         return edgemap[nodename];
-//     })
-// }
 
 function aggregateFromNodes(nodes){
     var localmap = {};

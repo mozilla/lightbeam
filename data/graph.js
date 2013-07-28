@@ -11,19 +11,19 @@ visualizations.graph = graph;
 graph.name = "graph";
 var width = 1000, height = 1000;
 var force, vis;
+var edges, nodes;
 
 // There are three phases for a visualization life-cycle:
 // init does initialization and receives the existing set of connections
 // connection notifies of a new connection that matches existing filter
 // remove lets the visualization know it is about to be switched out so it can clean up
 graph.on('init', onInit);
-graph.on('connection', onConnection);
+// graph.on('connection', onConnection);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
 
 function onInit(){
-    console.log("graph::onInit() allConnections.length = %s" , allConnections.length);
-    console.log('initializing graph from %s connections', connections.nodes.length);
+    console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     // This binds our data to the D3 visualization and sets up the callbacks
@@ -42,14 +42,14 @@ function onInit(){
     console.log('graph::onInit end');
 };
 
-function onConnection(connection){
-    console.log("= allConnections.length = %s" , allConnections.length);
-    updateGraph();
-    if (force){
-        force.start();
-    }
-    updateStatsBar();
-}
+// function onConnection(connection){
+//     console.log("= allConnections.length = %s" , allConnections.length);
+//     updateGraph();
+//     if (force){
+//         force.start();
+//     }
+//     updateStatsBar();
+// }
 
 function onRemove(){
     if (force){
@@ -84,14 +84,34 @@ function polygonAsString(points, size){
     return poly.map(function(pair){return pair.join(',');}).join(' ');
 }
 
+// ACCESSOR FUNCTIONS
+
+function scaleNode(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .05 * node.weight) + ')'; }
+function visited(node){ return !!node.visitedCount; }
+function notVisited(node){ return !node.visitedCount; }
+function timestamp(node){ return node.lastAccess.toISOString(); }
+function nodeHighlight(node){ return ( node.visitedCount > 0 ) ? highlight.highlightVisited : highlight.highlightNeverVisited; }
+function sourceX(edge){ return edge.source.x; }
+function sourceY(edge){ return edge.source.y; }
+function targetX(edge){ return edge.target.x; }
+function targetY(edge){ return edge.target.y; }
+function edgeCookie(edge){ return edge.cookieCount > 0; }
+function edgeHighlight(edge){ return highlight.connections; }
+function edgeColoured(edge){ return edge.cookieCount > 0 && highlight.cookies; }
+function nodeName(node){ return node.name; }
+
 // SET UP D3 HANDLERS
+
+var ticking = false;
 
 function initGraph(){
     // Initialize D3 layout and bind data
+    console.log('initGraph()');
     force = d3.layout.force()
-        .nodes(aggregate.nodes)
-        .links(aggregate.edges)
+        .nodes(filteredAggregate.nodes)
+        .links(filteredAggregate.edges)
         .charge(-500)
+        .alpha(0.01)
         .size([width,height])
         .start();
     updateGraph();
@@ -100,56 +120,70 @@ function initGraph(){
     var lastUpdate, lastTick;
     lastUpdate = lastTick = Date.now();
     var draws = [];
-    var ticks = [];
-    const minute = 60 * 1000;
-    force.on('tick', function(){
+    var ticks = 0;
+    const second = 1000;
+    const minute = 60 * second;
+    force.on('tick', function ontick(evt){
         // find a way to report how often tick() is called, and how long it takes to run
         // without trying to console.log() every 5 milliseconds...
+        if (ticking){
+            console.log('overlapping tick!');
+            return;
+        }
+        ticking = true;
         var nextTick = Date.now();
-        ticks.push(nextTick - lastTick);
+        ticks++;
         lastTick = nextTick;
-        if ((lastUpdate - lastTick) > minute){
-            console.log('%s ticks per minute, each draw takes %s milliseconds', ticks.length, d3.mean(draws));
+        if ((lastTick - lastUpdate) > second){
+            console.log('%s ticks per second, each draw takes %s milliseconds', ticks, d3.mean(draws));
             lastUpdate = lastTick;
             draws = [];
-            ticks = [];
+            ticks = 0;
         }
-        vis.selectAll('.edge')
-            .attr('x1', function(edge){ return edge.source.x; })
-            .attr('y1', function(edge){ return edge.source.y; })
-            .attr('x2', function(edge){ return edge.target.x; })
-            .attr('y2', function(edge){ return edge.target.y; })
-            .classed('cookieYes', function(edge){ return edge.cookieCount > 0; })
-            .classed('highlighted', function(edge){ return highlight.connections; })
-            .classed('coloured', function(edge){ return edge.cookieCount > 0 && highlight.cookies; });
-        vis.selectAll('.node').call(updateNodes);
+        edges
+            .attr('x1', sourceX )
+            .attr('y1', sourceY )
+            .attr('x2', targetX )
+            .attr('y2', targetY )
+            .classed('cookieYes', edgeCookie )
+            .classed('highlighted', edgeHighlight )
+            .classed('coloured', edgeColoured );
+        nodes
+            .attr('transform', scaleNode)
+            .classed('visitedYes', visited)
+            .classed('visitedNo', notVisited)
+            .attr('data-timestamp', timestamp)
+            .classed('highlighted', nodeHighlight);
+
         var endDraw = Date.now();
         draws.push(endDraw - lastTick);
+        nodes.call(force.drag);
+
+        ticking = false;
     });
 }
 
 function updateGraph(){
-
+    console.log('updateGraph()');
         // Data binding for links
-    var lines = vis.selectAll('.edge')
-        .data(filtered.edges, function(edge){ return edge.name; });
+    edges = vis.selectAll('.edge')
+        .data(filteredAggregate.edges, nodeName );
 
-    lines.enter().insert('line', ':first-child')
+    edges.enter().insert('line', ':first-child')
         .classed('edge', true);
 
-    lines.exit()
+    edges.exit()
         .remove();
 
-    var nodes = vis.selectAll('.node')
-	    .data(filtered.nodes, function(node){ return node.name; });
+    nodes = vis.selectAll('.node')
+	    .data(filteredAggregate.nodes, nodeName );
 
-    nodes.call(force.drag);
 
 	nodes.enter().append('g')
-        .classed('visitedYes', function(node){ return node.visitedCount/node.howMany === 1 })
-        .classed('visitedNo', function(node){ return node.visitedCount/node.howMany === 0 })
+        .classed('visitedYes', visited )
+        .classed('visitedNo', notVisited)
         .call(addShape)
-        .attr('data-name', function(node){ return node.name; })
+        .attr('data-name', nodeName)
         .on('mouseenter', tooltip.show)
         .on('mouseleave', tooltip.hide)
         .classed('node', true);
@@ -158,8 +192,6 @@ function updateGraph(){
         .remove();
 
 }
-
-window.updategGraph = updateGraph;
 
 function addFavicon(selection){
     selection.append("svg:image")
@@ -193,16 +225,6 @@ function addTriangle(selection){
 }
 
 
-function updateNodes(thenodes){
-    thenodes
-	.attr('transform', function(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .05 * node.weight) + ')'; })
-    .classed('visitedYes', function(node){ return node.visitedCount > 0 })
-    .classed('visitedNo', function(node){ return node.visitedCount == 0 })
-    .classed('secureYes', function(node){ return node.secureCount > 0 })
-    .classed('secureNo', function(node){ return node.secureCount == 0 })
-    .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); })
-    .classed('highlighted', function(edge){ return ( edge.visitedCount > 0 ) ? highlightVisited : highlightNeverVisited; });    // change shape if needed
-}
 
 // FIXME: Move this out of visualization so multiple visualizations can use it.
 function resetCanvas(){

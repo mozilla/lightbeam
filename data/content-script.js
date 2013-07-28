@@ -7,11 +7,11 @@ self.port.on('log', function log(arguments){
 });
 
 self.port.on('connection', function(connection){
-    if (unsafeWindow && unsafeWindow.currentVisualization){
+    if (unsafeWindow && unsafeWindow.aggregate){
         unsafeWindow.allConnections.push(connection);
-        unsafeWindow.currentVisualization.emit('connection', connection);
+        unsafeWindow.aggregate.emit('connection', connection);
     }else{
-        console.log('cannot call unsafeWindow.currentVisualization: '  + unsafeWindow);
+        console.log('cannot call unsafeWindow.aggregate: '  + unsafeWindow);
     }
 });
 
@@ -19,11 +19,11 @@ self.port.on('init', function(collusionToken){
     console.error('content-script::init()');
     localStorage.collusionToken = collusionToken;
     
-    if (unsafeWindow && unsafeWindow.currentVisualization){
+    if (unsafeWindow && unsafeWindow.aggregate){
         unsafeWindow.allConnections = getAllConnections();
-        unsafeWindow.currentVisualization.emit('init', unsafeWindow.allConnections);
+        unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     }else{
-        console.error('cannot call unsafeWindow.currentVisualization: ' + unsafeWindow);
+        console.error('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
     }
 });
 
