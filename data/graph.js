@@ -11,7 +11,6 @@ visualizations.graph = graph;
 graph.name = "graph";
 var width = 1000, height = 1000;
 var force, vis;
-var filteredAggregate;
 
 // There are three phases for a visualization life-cycle:
 // init does initialization and receives the existing set of connections
@@ -22,12 +21,11 @@ graph.on('connection', onConnection);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
 
-function onInit(connections){
-    console.log("= onInit = allConnections.length = %s" , allConnections.length);
-    console.log('initializing graph from %s connections', connections.length);
+function onInit(){
+    console.log("graph::onInit() allConnections.length = %s" , allConnections.length);
+    console.log('initializing graph from %s connections', connections.nodes.length);
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
-    aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
     initGraph();
     aggregate.on('updated', function(){
@@ -41,11 +39,11 @@ function onInit(connections){
     if ( !statsBarInitiated ){  
         updateStatsBar();
     }
+    console.log('graph::onInit end');
 };
 
 function onConnection(connection){
     console.log("= allConnections.length = %s" , allConnections.length);
-    aggregate.emit('connection', connection);
     updateGraph();
     if (force){
         force.start();
@@ -54,7 +52,6 @@ function onConnection(connection){
 }
 
 function onRemove(){
-    aggregate.emit('reset');
     if (force){
         force.stop();
         force = null;
@@ -135,7 +132,7 @@ function updateGraph(){
 
         // Data binding for links
     var lines = vis.selectAll('.edge')
-        .data(aggregate.edges, function(edge){ return edge.name; });
+        .data(filtered.edges, function(edge){ return edge.name; });
 
     lines.enter().insert('line', ':first-child')
         .classed('edge', true);
@@ -144,7 +141,7 @@ function updateGraph(){
         .remove();
 
     var nodes = vis.selectAll('.node')
-	    .data(aggregate.nodes, function(node){ return node.name; });
+	    .data(filtered.nodes, function(node){ return node.name; });
 
     nodes.call(force.drag);
 
@@ -231,7 +228,7 @@ var graphLegend = document.querySelector(".graph-footer");
 
 legendBtnClickHandler(graphLegend);
 
-graphLegend.querySelector(".toggle-visited").addEventListener("click", function(event){
+graphLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".visitedYes");
     toggleVizElements(visited,"highlighted");
     highlight.visited = !highlight.visited;

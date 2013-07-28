@@ -27,13 +27,9 @@ clock.on('init', onInit);
 clock.on('connection', onConnection);
 clock.on('remove', onRemove);
 
-function onInit(connections){
+function onInit(){
     console.log("= onInit = allConnections.length = %s" , allConnections.length);
-    console.log('initializing clock from %s connections', connections.length);
     drawClockFrame();
-    connections.forEach(function(connection){
-        onConnection(connection);
-    });
     fadeEarlierTrackers(timeToBucket(new Date()));
     if ( !statsBarInitiated ){  
         updateStatsBar();

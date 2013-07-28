@@ -48,7 +48,7 @@ btnGroupArray.forEach(function(btnGroup){
             case 'last10sites':
             case 'daily':
             case 'weekly':
-                switchFilter(val);
+                aggregate.switchFilter(val);
                 break;
             default:
                 console.log("selected val=" + val);

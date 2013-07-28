@@ -137,17 +137,6 @@ function switchVisualization(name){
 }
 
 
-function switchFilter(name){
-    console.log('switchFilter(' + name + ')');
-    if (currentFilter && currentFilter === filters[name]) return;
-    currentFilter = filters[name];
-    if (currentFilter){
-        localStorage.currentFilter = name;
-        aggregate.emit('filter', currentFilter);
-    }else{
-        console.log('unable to switch filter to %s', name);
-    }
-}
 
 
 function resetAddtionalUI(){
@@ -314,8 +303,9 @@ function updateStatsBar(){
         dateSince = new Date(allConnections[0][2]).toDateString();
     }
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
-    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length;
-    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    // FIXME: Not worth keeping these structures around just for this count to display
+    // document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length;
+    // document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
     statsBarInitiated = true;
 }
 

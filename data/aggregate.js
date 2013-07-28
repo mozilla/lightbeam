@@ -17,14 +17,6 @@ global.filteredAggregate = {
 aggregate.nodes = [];
 aggregate.edges = [];
 
-function resetData(){
-    aggregate.nodes.length = 0;
-    nodemap = {};
-    edgemap = {};
-    aggregate.edges.length = 0;
-}
-resetData();
-aggregate.on('reset', resetData);
 aggregate.nodeForKey = function(key){
     var result = {};
     var linkedNodes = new Array();
@@ -76,9 +68,11 @@ function applyFilter(filter){
 aggregate.on('filter', applyFilter);
 
 function onLoad(connections){
+    console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
     currentFilter();
-    currentVisualization.emit('init', filteredAggregate);
+    currentVisualization.emit('init');
+    console.log('aggregate::onLoad end')
 }
 
 aggregate.on('load', onLoad);
@@ -303,7 +297,7 @@ function aggregateFromNodes(nodes){
 
 // filters
 aggregate.filters = {
-    daily: function daily(connections){
+    daily: function daily(){
         var now = Date.now();
         var then = now - (24 * 60 * 60 * 1000);
         var sortedNodes = nodesSortedByDate(aggregate.nodes);
@@ -321,7 +315,7 @@ aggregate.filters = {
         console.log('daily filter after: %s', filteredNodes.length);
         return aggregateFromNodes(filteredNodes);
     },
-    weekly: function weekly(connections){
+    weekly: function weekly(){
         var now = Date.now();
         var then = now - (7 * 24 * 60 * 60 * 1000);
         var sortedNodes = nodesSortedByDate(aggregate.nodes);
@@ -338,44 +332,37 @@ aggregate.filters = {
         console.log('weekly filter after: %s', filteredNodes.length);
         return aggregateFromNodes(filteredNodes);
     },
-    last10sites: function last10sites(connections){
-        var indices = [];
-        for (var i = 0; i < connections.length; i++){
-            if (connections[i][SOURCE_VISITED]){
-                indices.push(i);
-            }
-        }
-        console.log('last10sites filter before: %s', connections.length);
-        console.log('indices: %o', indices);
-        var filtered = connections;
-        if (indices.length > 9){
-            var cutpoint = indices.slice(-10)[0];
-            filtered =  connections.slice(cutpoint);
-        }
-        console.log('last10sites filter after: %s', filtered.length)
-        return filtered;
+    last10sites: function last10sites(){
+        var sortedNodes = nodesSortedByDate(aggregate.nodes);
+        console.log('last10sites filter before: %s', sortedNodes.length);
+        var filteredNodes = sortedNodes.slice(-10);
+        console.log('last10sites filter after: %s', filteredNodes.length)
+        return aggregateFromNodes(filteredNodes);
     },
-    recent: function recent(connections){
-        var indices = [];
-        for (var i = 0; i < connections.length; i++){
-            if (connections[i][SOURCE_VISITED]){
-                indices.push(i);
-            }
-        }
-        console.log('recent filter before: %s', connections.length);
-        console.log('indices: %o', indices);
-        var filtered = connections;
-        if (indices.length > 0){
-            var cutpoint = indices.slice(-1)[0];
-            filtered =  connections.slice(cutpoint);
-        }
-        console.log('recent filter after: %s', filtered.length)
-        return filtered;
+    recent: function recent(){
+        var sortedNodes = nodesSortedByDate(aggregate.nodes);
+        console.log('recent filter before: %s', sortedNodes.length);
+        var filteredNodes = sortedNodes.slice(-1);
+        console.log('recent filter after: %s', filteredNodes.length)
+        return aggregateFromNodes(filteredNodes);
     }
 };
 
 var currentFilter = aggregate.filters[localStorage.currentFilter || 'last24Hours'];
 
+function switchFilter(name){
+    console.log('switchFilter(' + name + ')');
+    if (currentFilter && currentFilter === aggregate.filters[name]) return;
+    currentFilter = aggregate.filters[name];
+    if (currentFilter){
+        localStorage.currentFilter = name;
+        aggregate.emit('filter', currentFilter);
+    }else{
+        console.log('unable to switch filter to %s', name);
+    }
+    global.filteredAggregate = currentFilter(aggregate);
+}
 
+aggregate.switchFilter = switchFilter;
 
 })(this);
