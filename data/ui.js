@@ -114,18 +114,23 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 });
 
 document.querySelector('.reset-data').addEventListener('click', function(){
-    addon.emit('reset');
-    aggregate.emit('reset');
-    currentVisualization.emit('reset');
-    allConnections = [];
-
-    Object.keys(localStorage).sort().forEach(function(key){
-        if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
-            delete localStorage[key];;
-        }
-    });
-
-    updateStatsBar();
+    dialog( {   "title": "Reset Data", 
+                "message": "Are you sure you want to reset your data?" },
+            function(confirmed){
+                if ( confirmed ){
+                    addon.emit('reset');
+                    aggregate.emit('reset');
+                    currentVisualization.emit('reset');
+                    allConnections = [];
+                    Object.keys(localStorage).sort().forEach(function(key){
+                        if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
+                            delete localStorage[key];;
+                        }
+                    });
+                    updateStatsBar();
+                }
+            }
+    );
 });
 
 // function handleDisclosureToggle(elem){
