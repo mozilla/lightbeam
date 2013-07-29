@@ -11,7 +11,7 @@ visualizations.list = list;
 list.name = "list";
 
 list.on("init", onInit);
-list.on("conneciton", onConnection);
+// list.on("connection", onConnection);
 list.on("remove", onRemove);
 list.on("showFilteredTable", function(filter){
     showFilteredTable(filter);
@@ -20,7 +20,6 @@ list.on("showFilteredTable", function(filter){
 function onInit(connections){
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
-    aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
     initList();
     initializeHandlers();
@@ -107,7 +106,7 @@ function showFilteredTable(filter){
 
 function getNodes(filter){
     if( !filter ){ // if no filter, show all
-        return aggregate.allnodes;
+        return aggregate.nodes;
     }else{
         var nodeMap = aggregate.nodeForKey(filter);
         return Object.keys(nodeMap).map(function(key){ return nodeMap[key]; });

@@ -22,18 +22,27 @@ graph.on('init', onInit);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
 
+function onUpdate(){
+    // new nodes, reheat graph simulation
+    if (force){
+        console.log('restarting graph due to update');
+        force.stop();
+        force.nodes(filteredAggregate.nodes);
+        force.links(filteredAggregate.edges)
+        force.start();
+        updateGraph();
+    }else{
+        console.log('the force is not with us');
+    }    
+}
+
 function onInit(){
     console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     // This binds our data to the D3 visualization and sets up the callbacks
     initGraph();
-    aggregate.on('updated', function(){
-        // new nodes, reheat graph simulation
-        if (force){
-            force.start();
-        }
-    });
+    aggregate.on('updated', onUpdate);
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
     if ( !statsBarInitiated ){  
@@ -111,7 +120,6 @@ function initGraph(){
         .nodes(filteredAggregate.nodes)
         .links(filteredAggregate.edges)
         .charge(-500)
-        .alpha(0.01)
         .size([width,height])
         .start();
     updateGraph();
@@ -135,26 +143,52 @@ function initGraph(){
         ticks++;
         lastTick = nextTick;
         if ((lastTick - lastUpdate) > second){
-            console.log('%s ticks per second, each draw takes %s milliseconds', ticks, d3.mean(draws));
+            console.log('%s ticks per second, each draw takes %s milliseconds', ticks, Math.floor(d3.mean(draws)));
             lastUpdate = lastTick;
             draws = [];
             ticks = 0;
         }
-        edges
-            .attr('x1', sourceX )
-            .attr('y1', sourceY )
-            .attr('x2', targetX )
-            .attr('y2', targetY )
-            .classed('cookieYes', edgeCookie )
-            .classed('highlighted', edgeHighlight )
-            .classed('coloured', edgeColoured );
-        nodes
-            .attr('transform', scaleNode)
-            .classed('visitedYes', visited)
-            .classed('visitedNo', notVisited)
-            .attr('data-timestamp', timestamp)
-            .classed('highlighted', nodeHighlight);
-
+        edges.each(function(d, i){
+            // `this` is the DOM node
+            this.setAttribute('x1', d.source.x);
+            this.setAttribute('y1', d.source.y);
+            this.setAttribute('x2', d.target.x);
+            this.setAttribute('y2', d.target.y);
+            if (d.cookieCount){
+                this.classList.add('cookieYes');
+            }else{
+                this.classList.remove('cookieYes');
+            }
+            if (highlight.connections){
+                this.classList.add('highlighted');
+            }else{
+                this.classList.remove('highlighted');
+            }
+            if (d.cookieCount > 0 && highlight.cookies){
+                this.classList.add('coloured');
+            }else{
+                this.classList.remove('coloured');
+            }
+        });
+        nodes.each(function(d,i){
+            // `this` is the DOM node
+            this.setAttribute('transform', 'translate(' + d.x + ',' + d.y + ') scale(' + (1 + .05 * d.weight) + ')');
+            this.setAttribute('data-timestamp', d.lastAccess.toISOString());
+            if (d.visitedCount){
+                this.classList.add('visitedYes');
+                this.classList.remove('visitedNo');
+            }else{
+                this.classList.add('visitedNo');
+                this.classList.remove('visitedYes');
+            }
+            if (d.visitedCount && highlight.highlightVisited){
+                this.classList.add('highlighted');
+            }else if((!d.visitedCount) &&highlight.highlightNeverVisited){
+                this.classList.add('highlighted');
+            }else{
+                this.classList.remove('highlighted');
+            }
+        });
         var endDraw = Date.now();
         draws.push(endDraw - lastTick);
         nodes.call(force.drag);
@@ -233,6 +267,7 @@ function resetCanvas(){
     var newcanvas = vizcanvas.cloneNode(false);
     parent.replaceChild(newcanvas, vizcanvas);
     vizcanvas = newcanvas;
+    aggregate.off('updated', onUpdate);
 }
 
 

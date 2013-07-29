@@ -24,7 +24,7 @@ visualizations.clock = clock;
 clock.name = "clock";
 
 clock.on('init', onInit);
-clock.on('connection', onConnection);
+aggregate.on('connection', onConnection);
 clock.on('remove', onRemove);
 
 function onInit(){
@@ -54,7 +54,7 @@ function onConnection(conn){
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
     var connection = aggregate.connectionAsObject(conn);
-    aggregate.emit('connection', connection);
+    // aggregate.emit('connection', connection);
     var bucketIdx = timeToBucket(connection.timestamp);
     
     if (! clock.timeslots[bucketIdx]){

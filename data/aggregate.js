@@ -347,6 +347,7 @@ function switchFilter(name){
         console.log('unable to switch filter to %s', name);
     }
     global.filteredAggregate = currentFilter(aggregate);
+    aggregate.emit('updated');
 }
 
 aggregate.switchFilter = switchFilter;

@@ -49,6 +49,7 @@ function getAllConnections(){
             allConnectionsAsArray = allConnectionsAsArray.concat(conns);
         }
     });
+    console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
     return allConnectionsAsArray;
 }
 
