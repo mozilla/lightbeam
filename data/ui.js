@@ -56,23 +56,36 @@ btnGroupArray.forEach(function(btnGroup){
 var shareDataToggle = document.querySelector(".toggle-btn.share-btn");
 
 document.querySelector(".toggle-btn.share-btn").addEventListener("click",function(event){
-    if ( event.target.mozMatchesSelector("input") ){
-        var checked = event.target.checked;
-        if ( checked ){
-            if ( startSharing() ){ // user confirmed action
-                toggleBtnOnEffect( document.querySelector(".share-btn") );
-            }else{
-                event.target.checked = false;
-            }
+    var elmClicked = event.target;
+    if ( elmClicked.mozMatchesSelector("input") ){
+        if ( elmClicked.checked ){
+            confirmStartSharing(elmClicked);
         }else{
-            if ( stopSharing() ){ // user confirmed action
-                 toggleBtnOffEffect( document.querySelector(".share-btn") );
-            }else{
-                event.target.checked = true;
-            }
+            confirmStopSharing(elmClicked);
         }
     }
 });
+
+function confirmStartSharing(elmClicked){
+    startSharing(function(confirmed){
+        if ( confirmed ){ 
+            toggleBtnOnEffect( document.querySelector(".share-btn") );
+        }else{
+            elmClicked.checked = false;
+        }
+    });
+}
+
+function confirmStopSharing(elmClicked){
+     stopSharing(function(confirmed){
+        if ( confirmed ){ 
+            toggleBtnOffEffect( document.querySelector(".share-btn") );
+        }else{
+           elmClicked.checked = true;
+        }
+    });
+}
+
 
 if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
     var toggleBtn = document.querySelector(".share-btn");
@@ -115,8 +128,8 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 
 document.querySelector('.reset-data').addEventListener('click', function(){
     dialog( {   "title": "Reset Data", 
-                "message": "Are you sure you want to reset your data?" },
-            function(confirmed){
+                "message": "Are you sure you want to reset your data?" 
+            },function(confirmed){
                 if ( confirmed ){
                     addon.emit('reset');
                     aggregate.emit('reset');
@@ -373,6 +386,7 @@ function legendBtnClickHandler(legendElm){
 
 /* Dialog / Popup ===================================== */
 
+// options: name, title, message, type, oneTime
 function dialog(options,callback){
     var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
     var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
@@ -385,12 +399,16 @@ function dialog(options,callback){
         content: titleBar + messageBody + controls,
         closeButton: false,
         overlayClose: false,
-        width: 400,
+        // width: 400,
         overlayStyles: {
             backgroundColor: "#000",
             opacity: 0.75
         }
     });
+
+    if ( options.type == "alert" ){
+        document.querySelector(".dialog-cancel").classList.add("hidden");
+    }
 
     toArray(document.querySelectorAll(".pico-close")).forEach(function(btn){
         btn.addEventListener("click", function(event){

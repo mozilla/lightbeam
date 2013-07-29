@@ -109,9 +109,22 @@ window.addEventListener('beforeunload', function(){
 addon.on("isPrivateWindow", function(isPrivate){
     if ( !localStorage.privateBrowsingMsgShown ){
         if ( isPrivate ){
-            alert("You've launched Collusion in a Private Browsing Window. Data collected under Private Browsing Windows will not be perserved or stored. It will not appear again once the Window is close.");
+            dialog( {   "type": "alert",
+                        "title": "Data Collected while Private Browsing", 
+                        "message": 
+                            "You've launched Collusion in a Private Browsing Window. " +
+                            "Data collected under Private Browsing Windows will not be perserved or stored. " + 
+                            "It will not appear again once the Window is close."
+                    }
+            );
         }else{
-            alert("Data collected under Private Browsing Windows will not be perserved or stored. It will not appear again once the Collusion tab is close.");
+            dialog( {   "type": "alert",
+                        "title": "Data Collected while Private Browsing", 
+                        "message": 
+                            "Data collected under Private Browsing Windows will not be perserved or stored. " + 
+                            "It will not appear again once the Window is close."
+                    }
+            );
         }
     }
 
@@ -208,28 +221,43 @@ function dateAsKey(timestamp){
 *   Upload data
 */
 
-function startSharing(){
-    if (confirm('You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
-                'Your data will continue to be uploaded periodically until you turn off sharing. ' +
-                'For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
-                'privacy policies are, please visit http://ItsOurData.com/privacy/.\n\nBy clicking Okay ' +
-                'you are agreeing to share your data under those terms.')){
-        sharingData();
-        localStorage.userHasOptedIntoSharing = true;
-        return true;
-    }
+function startSharing(callback){
+    dialog( {   "title": "Upload Data", 
+                "message": 
+                    'You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
+                    'Your data will continue to be uploaded periodically until you turn off sharing. </br>' +
+                    'For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
+                    'privacy policies are, please visit http://ItsOurData.com/privacy/. </br>' + 
+                    'By clicking OK you are agreeing to share your data under those terms.'
+            },
+            function(confirmed){
+                if ( confirmed ){
+                    sharingData();
+                    localStorage.userHasOptedIntoSharing = true;
+                }
+                callback(confirmed);
+            }
+    );
 }
 
-function stopSharing(){
-    if (confirm('You are about to stop sharing data with the Mozilla Collusion server.\n\n' +
-                    'By clicking Okay you will no longer be uploading data.')){
-        localStorage.userHasOptedIntoSharing = false;
-        if (uploadTimer){
-            clearTimeout(uploadTimer);
-            uploadTimer = null;
-        }
-        return true;
-    }
+function stopSharing(callback){
+    dialog( {   "title": "Stop Uploading Data", 
+                "message": 
+                    'You are about to stop sharing data with the Mozilla Collusion server.</br>' +
+                    'By clicking OK you will no longer be uploading data.'
+            },
+            function(confirmed){
+                console.log(confirmed);
+                if ( confirmed ){
+                    localStorage.userHasOptedIntoSharing = false;
+                    if (uploadTimer){
+                        clearTimeout(uploadTimer);
+                        uploadTimer = null;
+                    }
+                }
+                callback(confirmed);
+            }
+    );
 }
 
 function sharingData(){
