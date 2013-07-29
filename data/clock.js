@@ -28,18 +28,18 @@ aggregate.on('connection', onConnection);
 clock.on('remove', onRemove);
 
 function onInit(){
-    console.log("= onInit = allConnections.length = %s" , allConnections.length);
+    // console.log("= onInit = allConnections.length = %s" , allConnections.length);
     drawClockFrame();
-    fadeEarlierTrackers(timeToBucket(new Date()));
-    if ( !statsBarInitiated ){  
-        updateStatsBar();
-    }
     var oneDayAgo = Date.now() - (24 *  60 * 60 * 1000);
     allConnections.forEach(function(connection){
         if (connection[TIMESTAMP] > oneDayAgo){
             onConnection(connection);
         }
     });
+    fadeEarlierTrackers(timeToBucket(new Date()));
+    if ( !statsBarInitiated ){  
+        updateStatsBar();
+    }
 };
 
 function drawClockFrame(){
@@ -56,7 +56,6 @@ function drawClockFrame(){
 }
 
 function onConnection(conn){
-    console.log("= allConnections.length = %s" , allConnections.length);
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
     var connection = aggregate.connectionAsObject(conn);
