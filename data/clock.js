@@ -34,6 +34,12 @@ function onInit(){
     if ( !statsBarInitiated ){  
         updateStatsBar();
     }
+    var oneDayAgo = Date.now() - (24 *  60 * 60 * 1000);
+    allConnections.forEach(function(connection){
+        if (connection[TIMESTAMP] > oneDayAgo){
+            onConnection(connection);
+        }
+    });
 };
 
 function drawClockFrame(){
@@ -180,6 +186,7 @@ function onRemove(){
     clearTimeout(clockTimer);
     clock.timeslots = new Array(96);
     resetCanvas();
+    aggregate.off('connection', onConnection);
 };
 
 
