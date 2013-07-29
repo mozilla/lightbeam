@@ -83,6 +83,48 @@ h3 {
     display: none !important;
 }
 
+/* Dialog/Popup Styling ================================ */
+
+.pico-content{
+    color: #000;
+    border-radius: 3px;
+    box-shadow: 5px 5px #555;
+    margin-top: 200px !important;
+}
+
+.pico-content .dialog-title{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-transform: uppercase;
+    line-height: 35px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #fff;
+    background: #4CC7E6;
+    border-radius: 3px 3px 0 0;
+    padding-left: 20px;
+}
+
+.pico-content .dialog-message{
+    margin-top: 30px;
+}
+
+.pico-content .dialog-ok,
+.pico-content .dialog-cancel{
+    display: inline-block;
+    float: right;
+    background: #4CC7E6;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 3px;
+    padding: 5px 25px;
+    margin: 10px 0 0 10px;
+    cursor: pointer;
+}
+
 /* Button Styling ================================ */
 
 .btn a:hover{

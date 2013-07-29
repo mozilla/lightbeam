@@ -96,16 +96,6 @@ function toggleBtnOffEffect(toggleBtn){
 }
 
 
-/* When a open dropdown list loses focus, collapse it. */
-window.addEventListener("click", function(e){
-    var activeDropdown = document.querySelector(".active_dropdown");
-    if ( activeDropdown && !activeDropdown.contains(e.target) ){
-            activeDropdown.querySelector(".dropdown_options").classList.add("collapsed");
-            activeDropdown.classList.remove("active_dropdown");
-    }
-}, true);
-
-
 document.querySelector(".download").addEventListener('click', function(evt) {
     console.log('received export data');
     var file = new Blob([exportFormat(allConnections)], {type: 'application/json'});
@@ -374,3 +364,34 @@ function legendBtnClickHandler(legendElm){
         }
     });
 }
+
+
+/* Dialog / Popup ===================================== */
+
+function dialog(options,callback){
+    var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
+    var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
+    var controls = "<div class='dialog-controls'>"+
+                        "<div class='pico-close dialog-cancel'>Cancel</div>" + 
+                        "<div class='pico-close dialog-ok'>OK</div>" +
+                    "</div>";
+
+    var modal = picoModal({
+        content: titleBar + messageBody + controls,
+        closeButton: false,
+        overlayClose: false,
+        width: 400,
+        overlayStyles: {
+            backgroundColor: "#000",
+            opacity: 0.75
+        }
+    });
+
+    toArray(document.querySelectorAll(".pico-close")).forEach(function(btn){
+        btn.addEventListener("click", function(event){
+            modal.close();
+            callback( (event.target.innerHTML == "OK") ? true : false );
+        });
+    });
+}
+
