@@ -426,7 +426,14 @@ function initializeHandlers(){
     document.querySelector('.stage-stack').addEventListener('click', function(event){
         var target = event.target;
         if(target.mozMatchesSelector('.block-pref a')){
-            setPreferences('block');
+            dialog( {   "title": "Block Sites", 
+                        "message": "This will prevent you from connecting to the selected website(s) and can possibly break the web." },
+                    function(confirmed){
+                        if ( confirmed ){
+                            setPreferences('block');
+                        }
+                    }
+            );
         }else if (target.mozMatchesSelector('.hide-pref a')){
             setPreferences('hide');
         }else if (target.mozMatchesSelector('.watch-pref a')){
