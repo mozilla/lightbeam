@@ -14,23 +14,15 @@ visualizations.list = list;
 list.name = "list";
 
 list.on("init", onInit);
-list.on("conneciton", onConnection);
+// list.on("connection", onConnection);
 list.on("remove", onRemove);
-list.on("reset", onReset);
-list.on('setFilter', setFilter);
 list.on("showFilteredTable", function(filter){
     showFilteredTable(filter);
 });
 
-function setFilter(){
-    addon.emit('setFilter', 'filterNothing');
-}
-
-
 function onInit(connections){
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
-    aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
     initList();
     initializeHandlers();
@@ -49,16 +41,9 @@ function onConnection(conn){
 
 
 function onRemove(){
-    console.log('removing list');
+    // console.log('removing list');
     //aggregate.emit('reset');
     resetCanvas();
-}
-
-function onReset(){
-    onRemove();
-    vizcanvas.classList.add("hide"); 
-    initList();
-    initializeHandlers();
 }
 
 
@@ -208,7 +193,7 @@ window.addEventListener("popstate", function(e){
         var filter = previousNowCurrent.site;
         history.replaceState(previousNowCurrent.prevState, null, generateCollusionPageUrl(filter).join("/"));
     }catch(e){
-        console.log("Show 'All Sites' List");
+        // console.log("Show 'All Sites' List");
     }
     showFilteredTable(filter);
 });
@@ -229,7 +214,7 @@ function showFilteredTable(filter){
 
 function getNodes(filter){
     if( !filter ){ // if no filter, show all
-        return aggregate.allnodes;
+        return aggregate.nodes;
     }else{
         var nodeMap = aggregate.nodeForKey(filter);
         return Object.keys(nodeMap).map(function(key){ return nodeMap[key]; });
@@ -344,8 +329,14 @@ function resort(table){
 
 function resetCanvas(){
     document.querySelector(".stage").classList.remove("list");
-    document.querySelector(".stage").removeChild( document.querySelector(".stage .list-table") );
-    document.querySelector(".stage").removeChild( document.querySelector(".stage .breadcrumb") );
+    var listTable = document.querySelector('.stage .list-table');
+    if (listTable){
+        listTable.parentElement.removeChild(listTable);
+    }
+    var breadcrumb = document.querySelector('.stage .breadcrumb');
+    if (breadcrumb){
+        breadcrumb.parentElement.removeChild(breadcrumb);
+    }
     breadcrumbList = [];
     vizcanvas.classList.remove("hide");
 }

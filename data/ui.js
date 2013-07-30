@@ -33,6 +33,9 @@ function dropdownGroup(btnGroup, callback){
     });
 }
 
+// Default selections
+document.querySelector('a[data-value=' + (localStorage.currentFilter || 'daily') + ']').dataset.selected = true;
+
 /* Bind click event listener to each of the btn_group memebers */
 var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
 btnGroupArray.forEach(function(btnGroup){
@@ -43,6 +46,12 @@ btnGroupArray.forEach(function(btnGroup){
             case 'graph':
             case 'list':
                 switchVisualization(val);
+                break;
+            case 'recent':
+            case 'last10sites':
+            case 'daily':
+            case 'weekly':
+                aggregate.switchFilter(val);
                 break;
             default:
                 console.log("selected val=" + val);
@@ -110,7 +119,7 @@ function toggleBtnOffEffect(toggleBtn){
 
 
 document.querySelector(".download").addEventListener('click', function(evt) {
-    console.log('received export data');
+    // console.log('received export data');
     var file = new Blob([exportFormat(allConnections)], {type: 'application/json'});
     var reader = new FileReader();
     var a = document.createElement('a');
@@ -175,10 +184,15 @@ document.querySelector('.reset-data').addEventListener('click', function(){
 
 
 function getZoom(canvas){
+    try{
     var box = canvas.getAttribute('viewBox')
                     .split(/\s/)
                     .map(function(i){ return parseInt(i, 10); });
     return {x: box[0], y: box[1], w: box[2], h: box[3]};
+    }catch(e){
+        console.log('error in getZoom, called with %o instead of an element');
+        console.log('Caller: %o', caller);
+    }
 }
 
 function setZoom(box,canvas){

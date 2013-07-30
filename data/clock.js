@@ -24,21 +24,17 @@ visualizations.clock = clock;
 clock.name = "clock";
 
 clock.on('init', onInit);
-clock.on('connection', onConnection);
+aggregate.on('connection', onConnection);
 clock.on('remove', onRemove);
-clock.on('reset', onReset);
-clock.on('setFilter', setFilter);
 
-function setFilter(){
-    addon.emit('setFilter', 'filter24hours');
-}
-
-function onInit(connections){
-    console.log("= onInit = allConnections.length = %s" , allConnections.length);
-    console.log('initializing clock from %s connections', connections.length);
+function onInit(){
+    // console.log("= onInit = allConnections.length = %s" , allConnections.length);
     drawClockFrame();
-    connections.forEach(function(connection){
-        onConnection(connection);
+    var oneDayAgo = Date.now() - (24 *  60 * 60 * 1000);
+    allConnections.forEach(function(connection){
+        if (connection[TIMESTAMP] > oneDayAgo){
+            onConnection(connection);
+        }
     });
     fadeEarlierTrackers(timeToBucket(new Date()));
     if ( !statsBarInitiated ){  
@@ -60,11 +56,10 @@ function drawClockFrame(){
 }
 
 function onConnection(conn){
-    console.log("= allConnections.length = %s" , allConnections.length);
     // A connection has the following keys:
     // source (url), target (url), timestamp (int), contentType (str), cookie (bool), sourceVisited (bool), secure(bool), sourcePathDepth (int), sourceQueryDepth(int)
     var connection = aggregate.connectionAsObject(conn);
-    aggregate.emit('connection', connection);
+    // aggregate.emit('connection', connection);
     var bucketIdx = timeToBucket(connection.timestamp);
     
     if (! clock.timeslots[bucketIdx]){
@@ -190,12 +185,9 @@ function onRemove(){
     clearTimeout(clockTimer);
     clock.timeslots = new Array(96);
     resetCanvas();
+    aggregate.off('connection', onConnection);
 };
 
-function onReset(){
-    onRemove();
-    drawClockFrame();
-}
 
 function svg(name, attrs, text){
     var node = document.createElementNS(SVG_NS, name);
@@ -390,7 +382,7 @@ document.querySelector('#content').addEventListener('click', function(event){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
-            console.log(node);
+            // console.log(node);
             applyHighlightingEffect(node.getAttribute("data-name"));
         }
     }
@@ -451,7 +443,7 @@ clockLegend.querySelector(".legend-toggle-target").addEventListener("click", fun
 
 clockLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
     var watchedSites = document.querySelectorAll(".watched");
-    console.log(watchedSites);
+    // console.log(watchedSites);
     toggleVizElements(watchedSites,"watchedSites");
     highlight.watched = !highlight.watched;
 });

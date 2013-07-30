@@ -11,55 +11,56 @@ visualizations.graph = graph;
 graph.name = "graph";
 var width = 1000, height = 1000;
 var force, vis;
+var edges, nodes;
 
 // There are three phases for a visualization life-cycle:
 // init does initialization and receives the existing set of connections
 // connection notifies of a new connection that matches existing filter
 // remove lets the visualization know it is about to be switched out so it can clean up
 graph.on('init', onInit);
-graph.on('connection', onConnection);
+// graph.on('connection', onConnection);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
-graph.on('setFilter', setFilter);
 
-function setFilter(){
-    //addon.emit('setFilter', 'filterLastXSites', 5);
-    addon.emit('setFilter', 'filter24hours');
+function onUpdate(){
+    // new nodes, reheat graph simulation
+    if (force){
+        // console.log('restarting graph due to update');
+        force.stop();
+        force.nodes(filteredAggregate.nodes);
+        force.links(filteredAggregate.edges);
+        force.start();
+        updateGraph();
+    }else{
+        console.log('the force is not with us');
+    }    
 }
 
-function onInit(connections){
-    console.log("= onInit = allConnections.length = %s" , allConnections.length);
-    console.log('initializing graph from %s connections', connections.length);
+function onInit(){
+    // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
-    aggregate.emit('load', connections);
     // This binds our data to the D3 visualization and sets up the callbacks
     initGraph();
-    aggregate.on('updated', function(){
-        // new nodes, reheat graph simulation
-        if (force){
-            force.start();
-        }
-    });
+    aggregate.on('update', onUpdate);
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
     if ( !statsBarInitiated ){  
         updateStatsBar();
     }
+    // console.log('graph::onInit end');
 };
 
-function onConnection(connection){
-    console.log("= allConnections.length = %s" , allConnections.length);
-    aggregate.emit('connection', connection);
-    updateGraph();
-    if (force){
-        force.start();
-    }
-    updateStatsBar();
-}
+// function onConnection(connection){
+//     console.log("= allConnections.length = %s" , allConnections.length);
+//     updateGraph();
+//     if (force){
+//         force.start();
+//     }
+//     updateStatsBar();
+// }
 
 function onRemove(){
-    aggregate.emit('reset');
     if (force){
         force.stop();
         force = null;
@@ -92,13 +93,39 @@ function polygonAsString(points, size){
     return poly.map(function(pair){return pair.join(',');}).join(' ');
 }
 
+// ACCESSOR FUNCTIONS
+
+function scaleNode(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .05 * node.weight) + ')'; }
+function visited(node){ return !!node.visitedCount; }
+function notVisited(node){ return !node.visitedCount; }
+function timestamp(node){ return node.lastAccess.toISOString(); }
+function nodeHighlight(node){ return ( node.visitedCount > 0 ) ? highlight.highlightVisited : highlight.highlightNeverVisited; }
+function sourceX(edge){ return edge.source.x; }
+function sourceY(edge){ return edge.source.y; }
+function targetX(edge){ return edge.target.x; }
+function targetY(edge){ return edge.target.y; }
+function edgeCookie(edge){ return edge.cookieCount > 0; }
+function edgeHighlight(edge){ return highlight.connections; }
+function edgeColoured(edge){ return edge.cookieCount > 0 && highlight.cookies; }
+function nodeName(node){ 
+    try{
+        return node.name; 
+    }catch(e){
+        console.trace(e);
+        console.log('node: %o, error: %o', node, e);
+    }
+}
+
 // SET UP D3 HANDLERS
+
+var ticking = false;
 
 function initGraph(){
     // Initialize D3 layout and bind data
+    // console.log('initGraph()');
     force = d3.layout.force()
-        .nodes(aggregate.allnodes)
-        .links(aggregate.edges)
+        .nodes(filteredAggregate.nodes)
+        .links(filteredAggregate.edges)
         .charge(-500)
         .size([width,height])
         .start();
@@ -108,77 +135,109 @@ function initGraph(){
     var lastUpdate, lastTick;
     lastUpdate = lastTick = Date.now();
     var draws = [];
-    var ticks = [];
-    const minute = 60 * 1000;
-    force.on('tick', function(){
+    var ticks = 0;
+    const second = 1000;
+    const minute = 60 * second;
+    force.on('tick', function ontick(evt){
         // find a way to report how often tick() is called, and how long it takes to run
         // without trying to console.log() every 5 milliseconds...
+        if (ticking){
+            console.log('overlapping tick!');
+            return;
+        }
+        ticking = true;
         var nextTick = Date.now();
-        ticks.push(nextTick - lastTick);
+        ticks++;
         lastTick = nextTick;
-        if ((lastUpdate - lastTick) > minute){
-            console.log('%s ticks per minute, each draw takes %s milliseconds', ticks.length, d3.mean(draws));
+        if ((lastTick - lastUpdate) > second){
+            // console.log('%s ticks per second, each draw takes %s milliseconds', ticks, Math.floor(d3.mean(draws)));
             lastUpdate = lastTick;
             draws = [];
-            ticks = [];
+            ticks = 0;
         }
-        vis.selectAll('.edge')
-            .attr('x1', function(edge){ return edge.source.x; })
-            .attr('y1', function(edge){ return edge.source.y; })
-            .attr('x2', function(edge){ return edge.target.x; })
-            .attr('y2', function(edge){ return edge.target.y; })
-            .classed('cookieYes', function(edge){ return edge.cookieCount > 0; })
-            .classed('highlighted', function(edge){ return highlight.connections; })
-            .classed('coloured', function(edge){ return edge.cookieCount > 0 && highlight.cookies; });
-        vis.selectAll('.node').call(updateNodes);
+        edges.each(function(d, i){
+            // `this` is the DOM node
+            this.setAttribute('x1', d.source.x);
+            this.setAttribute('y1', d.source.y);
+            this.setAttribute('x2', d.target.x);
+            this.setAttribute('y2', d.target.y);
+            if (d.cookieCount){
+                this.classList.add('cookieYes');
+            }else{
+                this.classList.remove('cookieYes');
+            }
+            if (highlight.connections){
+                this.classList.add('highlighted');
+            }else{
+                this.classList.remove('highlighted');
+            }
+            if (d.cookieCount > 0 && highlight.cookies){
+                this.classList.add('coloured');
+            }else{
+                this.classList.remove('coloured');
+            }
+        });
+        nodes.each(function(d,i){
+            // `this` is the DOM node
+            this.setAttribute('transform', 'translate(' + d.x + ',' + d.y + ') scale(' + (1 + .05 * d.weight) + ')');
+            this.setAttribute('data-timestamp', d.lastAccess.toISOString());
+            if (d.visitedCount){
+                this.classList.add('visitedYes');
+                this.classList.remove('visitedNo');
+            }else{
+                this.classList.add('visitedNo');
+                this.classList.remove('visitedYes');
+            }
+            if (d.visitedCount && highlight.highlightVisited){
+                this.classList.add('highlighted');
+            }else if((!d.visitedCount) &&highlight.highlightNeverVisited){
+                this.classList.add('highlighted');
+            }else{
+                this.classList.remove('highlighted');
+            }
+        });
         var endDraw = Date.now();
         draws.push(endDraw - lastTick);
+        nodes.call(force.drag);
+
+        ticking = false;
     });
 }
 
 function updateGraph(){
-
+    // console.log('updateGraph()');
         // Data binding for links
-    var lines = vis.selectAll('.edge')
-        .data(aggregate.edges, function(edge){ return edge.name; });
+    edges = vis.selectAll('.edge')
+        .data(filteredAggregate.edges, nodeName );
 
-    lines.enter().insert('line', ':first-child')
+    edges.enter().insert('line', ':first-child')
         .classed('edge', true);
 
-    lines.exit()
+    edges.exit()
         .remove();
 
-    var nodes = vis.selectAll('.node')
-	    .data(aggregate.allnodes, function(node){ return node.name; });
+    nodes = vis.selectAll('.node')
+	    .data(filteredAggregate.nodes, nodeName );
 
-    nodes.call(force.drag);
 
 	nodes.enter().append('g')
-        .classed('visitedYes', function(node){ return node.visitedCount/node.howMany === 1 })
-        .classed('visitedNo', function(node){ return node.visitedCount/node.howMany === 0 })
-        .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
-        .classed("watched", function(node){ return Object.keys(userSettings).indexOf(node.name) > -1 && userSettings[node.name].contains("watch") })
-        .classed("blocked", function(node){ return Object.keys(userSettings).indexOf(node.name) > -1 && userSettings[node.name].contains("block") })
-        .classed("hidden", function(node){ return Object.keys(userSettings).indexOf(node.name) > -1 && userSettings[node.name].contains("hide") })
+        .classed('visitedYes', visited )
+        .classed('visitedNo', notVisited)
         .call(addShape)
-        .attr('data-name', function(node){ return node.name; })
+        .attr('data-name', nodeName)
         .on('mouseenter', tooltip.show)
         .on('mouseleave', tooltip.hide)
         .classed('node', true);
-
-
 
     nodes.exit()
         .remove();
 
 }
 
-window.updategGraph = updateGraph;
-
 function addFavicon(selection){
     selection.append("svg:image")
           .attr("class", "favicon")
-          .attr("width", "16")
+          .attr("width", "16") // move these to the favicon class in css
           .attr("height", "16")
           .attr("x", "-8") // offset to make 16x16 favicon appear centered
           .attr("y", "-8")
@@ -197,8 +256,6 @@ function addCircle(selection){
 function addShape(selection){
     selection.filter('.visitedYes').call(addCircle).call(addFavicon);
     selection.filter('.visitedNo').call(addTriangle).call(addFavicon);
-    selection.filter('.visitedBoth').call(addCircle).call(addFavicon);
-    // selection.filter('.visitedBoth').call(addSquare).call(addFavicon);
 }
 
 function addTriangle(selection){
@@ -208,29 +265,7 @@ function addTriangle(selection){
         .attr('data-name', function(node){ return node.name; });
 }
 
-// function addSquare(selection){
-//     selection
-// 	    .append('rect')
-// 	    .attr('x', -9)
-// 	    .attr('y', -9)
-// 	    .attr('width', 18)
-// 	    .attr('height', 18);
-// }
 
-
-function updateNodes(thenodes){
-    thenodes
-	.attr('transform', function(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .03 * node.weight) + ')'; })
-    .classed('visitedYes', function(node){ return node.visitedCount/node.howMany == 1 })
-    .classed('visitedNo', function(node){ return node.visitedCount/node.howMany == 0 })
-    .classed('visitedBoth', function(node){ return node.visitedCount/node.howMany > 0 && node.visitedCount/node.howMany < 1 })
-    .attr('data-timestamp', function(node){ return node.lastAccess.toISOString(); })
-    .attr('visited-scale', function(node){ return node.visitedCount/node.howMany; })
-    .attr('secure-scale', function(node){ return node.secureCount/node.howMany; })
-    .attr('cookie-scale', function(node){ return node.cookieCount/node.howMany; })
-    .classed('highlighted', function(edge){ return ( edge.visitedCount > 0 ) ? highlight.visited : highlight.neverVisited; });
-    // change shape if needed
-}
 
 // FIXME: Move this out of visualization so multiple visualizations can use it.
 function resetCanvas(){
@@ -239,6 +274,7 @@ function resetCanvas(){
     var newcanvas = vizcanvas.cloneNode(false);
     parent.replaceChild(newcanvas, vizcanvas);
     vizcanvas = newcanvas;
+    aggregate.off('update', onUpdate);
 }
 
 
@@ -257,7 +293,7 @@ var graphLegend = document.querySelector(".graph-footer");
 legendBtnClickHandler(graphLegend);
 
 graphLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
-    var visited = document.querySelectorAll(".visitedYes, .visitedBoth");
+    var visited = document.querySelectorAll(".visitedYes");
     toggleVizElements(visited,"highlighted");
     highlight.visited = !highlight.visited;
 });

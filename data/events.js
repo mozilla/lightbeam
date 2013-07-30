@@ -20,7 +20,7 @@ Emitter.prototype.once = function once(eventName, listener){
     this.on(eventName, wrapped);
 };
 
-Emitter.prototype.removeListener = function removeListener(eventName, listener){
+Emitter.prototype.off = function off(eventName, listener){
     if (!this._listeners[eventName]) return;
     var listenerIndex = this._listeners[eventName].indexOf(listener);
     if (listenerIndex < 0) return;
