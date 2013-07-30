@@ -3,6 +3,7 @@
 const roundOffFactor = 5*60*1000; // in milliseconds
 var visualizations = {};
 var currentVisualization;
+var currentFilter;
 var allConnections = [];
 var userSettings;
 try{
@@ -137,7 +138,7 @@ function initCap(str){
 
 
 function switchVisualization(name){
-    console.log('switchVisualizations(' + name + ')');
+    // console.log('switchVisualizations(' + name + ')');
     saveConnections(allConnections);
     if (currentVisualization){
         if (currentVisualization === visualizations[name]) return;
@@ -145,11 +146,11 @@ function switchVisualization(name){
     }
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
-//    currentVisualization.emit('setFilter');
     resetAddtionalUI();
-
     addon.emit('uiready');
 }
+
+
 
 
 function resetAddtionalUI(){
@@ -261,7 +262,7 @@ function stopSharing(callback){
 }
 
 function sharingData(){
-    console.log("Beginning Upload...");
+    // console.log("Beginning Upload...");
     var lastUpload = localStorage.lastUpload || 0;
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
@@ -333,8 +334,8 @@ function updateStatsBar(){
         dateSince = new Date(allConnections[0][2]).toDateString();
     }
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
-    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length + " THIRD PARTY SITES"; 
-    document.querySelector(".top-bar .first-party-sites").innerHTML = (aggregate.allnodes.length - aggregate.thirdnodes.length) + " SITES";
+    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " THIRD PARTY SITES"; 
+    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " SITES";
     statsBarInitiated = true;
 }
 

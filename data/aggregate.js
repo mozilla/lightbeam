@@ -5,28 +5,20 @@
 (function(global){
 "use strict";
 
-var nodemap, edgemap;
+var nodemap = {}, edgemap = {};
 
 var aggregate = new Emitter();
 global.aggregate = aggregate;
+global.filteredAggregate = {
+    nodes: [],
+    edges: []
+};
 
-aggregate.allnodes = [];
-aggregate.sitenodes = [];
-aggregate.thirdnodes = [];
-aggregate.bothnodes = [];
+aggregate.trackerCount = 0;
+aggregate.siteCount = 0;
+aggregate.nodes = [];
 aggregate.edges = [];
 
-function resetData(){
-    aggregate.allnodes.length = 0;
-    nodemap = {};
-    aggregate.sitenodes.length = 0;
-    aggregate.thirdnodes.length = 0;
-    aggregate.bothnodes.length = 0;
-    edgemap = {};
-    aggregate.edges.length = 0;
-}
-resetData();
-aggregate.on('reset', resetData);
 aggregate.nodeForKey = function(key){
     var result = {};
     var linkedNodes = new Array();
@@ -69,8 +61,20 @@ aggregate.connectionAsObject = function(conn){
 
 }
 
+
+function applyFilter(filter){
+    currentFilter = filter;
+
+}
+
+aggregate.on('filter', applyFilter);
+
 function onLoad(connections){
+    // console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
+    filteredAggregate = currentFilter();
+    currentVisualization.emit('init');
+    // console.log('aggregate::onLoad end')
 }
 
 aggregate.on('load', onLoad);
@@ -103,34 +107,32 @@ function onConnection(conn){
     var sourcenode, targetnode, edge, nodelist, updated = false;
     if (nodemap[connection.source]){
         sourcenode = nodemap[connection.source];
-        var oldNodeType = sourcenode.nodeType;
         sourcenode.update(connection, true);
-        if (oldNodeType !== sourcenode.nodeType){
-            moveNode(sourcenode, oldNodeType);
-            updated = true;
-        }
     }else{
         sourcenode = new GraphNode(connection, true);
         nodemap[connection.source] = sourcenode;
-        nodelist = getNodeList(sourcenode.nodeType);
-        nodelist.push(sourcenode);
-        aggregate.allnodes.push(sourcenode);
+        aggregate.nodes.push(sourcenode);
+        if (connection.sourceVisited){
+            aggregate.siteCount++;
+        }else{
+            aggregate.trackerCount++;
+        }
+        console.log('new source: %s, now %s nodes', sourcenode.name, aggregate.nodes.length);
         updated = true;
     }
     if (nodemap[connection.target]){
         targetnode = nodemap[connection.target];
-        var oldNodeType = targetnode.nodeType;
         targetnode.update(connection, false);
-        if (oldNodeType !== targetnode.nodeType){
-            moveNode(targetnode, oldNodeType);
-            updated = true;
-        }
     }else{
         targetnode = new GraphNode(connection, false);
         nodemap[connection.target] = targetnode;
-        nodelist = getNodeList(targetnode.nodeType);
-        nodelist.push(targetnode);
-        aggregate.allnodes.push(targetnode); // all nodes
+        aggregate.nodes.push(targetnode); // all nodes
+        if (connection.sourceVisited){
+            aggregate.siteCount++; // Can this ever be true?
+        }else{
+            aggregate.trackerCount++;
+        }
+        console.log('new target: %s, now %s nodes', targetnode.name, aggregate.nodes.length);
         updated = true
     }
     if (edgemap[connection.source + '->' + connection.target]){
@@ -143,34 +145,24 @@ function onConnection(conn){
         updated = true;
     }
     if (updated){
-        aggregate.emit('updated'); // tell listeners there are new node(s)
+        aggregate.update();
     }
 }
 
 aggregate.on('connection', onConnection);
 
-function getNodeList(nodeType){
-    switch(nodeType){
-        case 'site': return aggregate.sitenodes;
-        case 'thirdparty': return aggregate.thirdnodes;
-        case 'both': return aggregate.bothnodes;
-        default: throw new Error('It has to be one of the choices above');
-    }
-}
-
-function moveNode(node, oldNodeType){
-    var oldlist = getNodeList(oldNodeType);
-    var newlist = getNodeList(node.nodeType);
-    oldlist.splice(oldlist.indexOf(node), 1);
-    newlist.push(node);
-}
-
 
 function GraphEdge(source, target, connection){
+    var name = source.name + '->' + target.name;
+    if (edgemap[name]){
+        return edgemap[name];
+    }
     this.source = source;
     this.target = target;
-    this.name = source.name + '->' + target.name;
-    this.cookieCount = connection.cookie ? 1 : 0;
+    this.name = name;
+    if (connection){ 
+        this.cookieCount = connection.cookie ? 1 : 0;
+    }
     // console.log('edge: %s', this.name);
 }
 GraphEdge.prototype.lastAccess = function(){
@@ -252,6 +244,7 @@ GraphNode.prototype.update = function(connection, isSource){
     if ( this.status.indexOf(connection.status) < 0 ){
         this.status.push(connection.status);
     }
+
     this.howMany++;
     if ( this.visitedCount/this.howMany == 1 ){
         this.nodeType = 'site';
@@ -260,9 +253,127 @@ GraphNode.prototype.update = function(connection, isSource){
     }else{
         this.nodeType = 'both';
     }
-
     return this;
 };
 
+// Filtering
+
+function sitesSortedByDate(nodes){
+    return nodes.filter(function(node){
+        return !!node.visitedCount;
+    }).map(function(node){
+        return [node.lastAccess.toISOString(), node];
+    }).sort().map(function(arr){ 
+        return arr[1];
+    });
+}
+aggregate.sitesSortedByDate = sitesSortedByDate;
+
+function aggregateFromNodes(nodes){
+    var localmap = {};
+    var edgemap = {};
+    nodes.forEach(function(node){
+        localmap[node.name] = node;
+        node.linkedFrom.forEach(function(nodename){
+            var linkedNode = nodemap[nodename];
+            var edge = new GraphEdge(node, linkedNode);
+            edgemap[edge.name] = edge;
+            localmap[nodename] = linkedNode;
+        });
+        node.linkedTo.forEach(function(nodename){
+            var linkedNode = nodemap[nodename];
+            var edge = new GraphEdge(node, linkedNode);
+            edgemap[edge.name] = edge;
+            localmap[nodename] = linkedNode;
+        });
+    });
+    return {
+        nodes: Object.keys(localmap).map(function(name){
+            return localmap[name];
+        }),
+        edges: Object.keys(edgemap).map(function(name){
+            return edgemap[name];
+        })
+    };
+}
+
+// filters
+aggregate.filters = {
+    daily: function daily(){
+        var now = Date.now();
+        var then = now - (24 * 60 * 60 * 1000);
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        // console.log('daily filter before: %s', aggregate.nodes.length);
+        // filter
+        // find index where we go beyond date
+        var i;
+        for (i = sortedNodes.length - 1; i > -1; i--){
+            if (sortedNodes[i].lastAccess < then){
+                break;
+            }
+        }
+        var filteredNodes = sortedNodes.slice(i);
+        // Done filtering
+        // console.log('daily filter after: %s', filteredNodes.length);
+        return aggregateFromNodes(filteredNodes);
+    },
+    weekly: function weekly(){
+        var now = Date.now();
+        var then = now - (7 * 24 * 60 * 60 * 1000);
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        // console.log('weekly filter before: %s', sortedNodes.length);
+        // filter
+        // find index where we go beyond date
+        var i;
+        for (i = sortedNodes.length - 1; i > -1; i--){
+            if (sortedNodes[i].lastAccess < then){
+                break;
+            }
+        }
+        var filteredNodes = sortedNodes.slice(i);
+        // console.log('weekly filter after: %s', filteredNodes.length);
+        return aggregateFromNodes(filteredNodes);
+    },
+    last10sites: function last10sites(){
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        console.log('last10sites filter before: %s', sortedNodes.length);
+        var filteredNodes = sortedNodes.slice(-10);
+        console.log('last10sites filter after: %s', filteredNodes.length)
+        console.log('last 10 sites before joining with linked nodes:');
+        console.log('\t%o', filteredNodes.map(function(node){return node.name}));
+        return aggregateFromNodes(filteredNodes);
+    },
+    recent: function recent(){
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        console.log('recent filter before: %s', sortedNodes.length);
+        var filteredNodes = sortedNodes.slice(-1);
+        console.log('recent filter after: %s', filteredNodes.length);
+        console.log('recent nodes before joining with linked nodes:');
+        console.log('\t%o', filteredNodes.map(function(node){return node.name;}));
+        return aggregateFromNodes(filteredNodes);
+    }
+};
+
+var currentFilter = aggregate.filters[localStorage.currentFilter || 'last24Hours'];
+
+function switchFilter(name){
+    console.log('switchFilter(' + name + ')');
+    if (currentFilter && currentFilter === aggregate.filters[name]) return;
+    currentFilter = aggregate.filters[name];
+    if (currentFilter){
+        localStorage.currentFilter = name;
+        aggregate.emit('filter', currentFilter);
+    }else{
+        console.log('unable to switch filter to %s', name);
+    }
+    aggregate.update();
+}
+
+aggregate.switchFilter = switchFilter;
+
+aggregate.update = function update(){
+    global.filteredAggregate = currentFilter();
+    aggregate.emit('update');
+}
 
 })(this);
