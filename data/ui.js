@@ -11,18 +11,6 @@ function toArray(nl){
 
 function dropdownGroup(btnGroup, callback){
     callback = callback || function(){};
-
-    var arrow = btnGroup.querySelector(".arrow");
-    arrow.addEventListener("click", function(event){
-        var otherOptions = btnGroup.querySelectorAll(".dropdown_options a:not([data-selected])");
-        arrow.querySelector(".icon-sort-down").classList.toggle("hidden");
-        arrow.querySelector(".icon-sort-up").classList.toggle("hidden");
-        btnGroup.querySelector(".dropdown_options").classList.toggle("expanded");
-        toArray(otherOptions).forEach(function(option){
-            option.classList.toggle("collapsed");
-        });
-    }, false);
-
     var allOptions = btnGroup.querySelectorAll(".dropdown_options a");
     toArray(allOptions).forEach(function(option){
         option.addEventListener("click", function(e){

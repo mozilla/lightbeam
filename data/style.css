@@ -50,7 +50,6 @@ h3 {
     z-index: 5;
     height: 100%;
     font-size: 12px;
-    font-weight: bold;
     overflow-x: hidden;
     overflow-y: auto;
     background: #404850;
@@ -81,6 +80,13 @@ h3 {
 
 .hidden{
     display: none !important;
+}
+
+.controls .section-header{
+    display: block;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 15px 0 5px 5px;
 }
 
 /* Dialog/Popup Styling ================================ */
@@ -131,24 +137,18 @@ h3 {
 
 /* Button Styling ================================ */
 
-.btn a:hover{
-    background: #475B61;
+.btn a:hover,
+.btn_group .dropdown_options a:hover{
+    background: #6FC3E5;
+    cursor: pointer;
 }
 
-.btn_group, 
 .btn{
-    margin-bottom: 15px;
-    background: #25292D;
+    margin-bottom: 5px;
+    background: #171E25;
     font-size: 7pt;
     letter-spacing: 1px;
     border-radius: 5px;
-}
-
-.btn_group .dropdown_button{
-    height: 32px;
-    line-height: 30px;
-    border-radius: 5px 0 0 0;
-    padding-left: 10px;
 }
 
 .btn_group a.selected_time,
@@ -156,20 +156,12 @@ h3 {
     color: #EAEAEA;
 }
 
-.btn_group .arrow{
-    float: right;
-    padding: 0 10px;
-    background: #12181B;
-    border-radius: 0 5px 0 0;
-    cursor: pointer;
-}
-
 .collapsed {
     display: none;
 }
 
 .btn a{
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
 }
 
@@ -178,26 +170,40 @@ h3 {
     margin: 0;
     display: block;
     padding-left: 10px;
-    background: #303539;
+    background: #171E25;
     line-height: 28px;
+    text-transform: capitalize;
 }
 
-.btn_group .dropdown_options.expanded a:hover{
-    cursor: pointer;
-    background: #475B61;
+.btn_group .dropdown_options a{
+    border-radius: 0;
+    border-top: 2px solid #12181B;
 }
 
 .btn_group .dropdown_options a[data-selected]{
-    border-radius: 0 0 5px 5px;
-    background: #5F6771;
+    background: #73A4B8;
+    margin: 0 2px;
+    border-top: 2px solid #6FC3E5;
 }
 
-.btn_group .dropdown_options.expanded a{
-    border-radius: 0;
+.btn_group .dropdown_options a:first-child[data-selected]{
+    box-shadow: 0 -2px #6FC3E5;
 }
 
-.btn_group .dropdown_options.expanded a:last-child{
-    border-radius: 0 0 5px 5px;
+.btn_group .dropdown_options a:last-child[data-selected]{
+    box-shadow: none;
+    border-top: 2px solid #6FC3E5;
+}
+
+
+.btn_group .dropdown_options a:first-child{
+    border-radius: 3px 3px 0 0;
+    border-top: none;
+}
+
+.btn_group .dropdown_options a:last-child{
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 5px #12181B;
 }
 
 .btn_group .dropdown_options a.collapsed{
