@@ -325,13 +325,27 @@ function saveToLocalStorage(key,value){
 
 
 /****************************************
+*   Format date string
+*/
+function formattedDate(date,format){
+    var d = ( typeof date == "number" ) ? new Date(date) : date;
+    var month = [ "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" ][d.getMonth()];
+    var formatted = month + " " + d.getDate() + ", " + d.getFullYear();
+    if ( format == "long" ){
+        var dayInWeek = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ][d.getDay()];
+        formatted = dayInWeek + ", " + formatted + " " +  ( (d.getHours() == 12) ? 12 : (d.getHours() % 12) ) + ':' + d.toLocaleFormat('%M') + ['AM','PM'][Math.floor(d.getHours() / 12)];
+    }
+    return formatted;
+}
+
+
+/****************************************
 *   update Stats Bar
 */
-
 function updateStatsBar(){
     var dateSince = "just now";
     if ( allConnections.length > 0 ){
-        dateSince = new Date(allConnections[0][2]).toDateString();
+        dateSince = formattedDate(allConnections[0][2]);
     }
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
     document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " THIRD PARTY SITES"; 

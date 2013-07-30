@@ -293,11 +293,11 @@ function drawText(){
 
 function timeNow(){
     var d = new Date();
-    return (d.getHours() % 12) + ':' + d.toLocaleFormat('%M') + ['am','pm'][Math.floor(d.getHours() / 12)];
+    return ( (d.getHours() == 12) ? 12 : (d.getHours() % 12) ) + ':' + d.toLocaleFormat('%M') + ['AM','PM'][Math.floor(d.getHours() / 12)];
 }
 
 function dateNow(){
-    return new Date().toLocaleFormat('%e %B %Y').trim();
+    return formattedDate(new Date());
 }
 
 
