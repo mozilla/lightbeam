@@ -167,11 +167,15 @@ h3 {
     top: 3px;
 }
 
-.controls .collusion-url{
-    position: fixed;
-    bottom: 0;
-    margin-bottom: 10px;
+.controls .links{
+    line-height: 30px;
 }
+
+.controls .links img{
+    width: 15px;
+    height: 15px;
+}
+
 
 .toggle-btn input{
     display: none;
@@ -181,7 +185,7 @@ h3 {
     display: inline-block;
     background: #5F6771;
     border-radius: 5px;
-    width: 55px;
+    width: 60px;
     height: 28px;
     padding: 3px;
     font-size: 12px;
@@ -245,18 +249,26 @@ h3 {
 }
 
 .top-bar{
-    height: 60px;
     background-color:#fff;
     flex:none;
     padding: 10px;
-    font-size: 9px;
+    font-size: 10px;
 }
 
 .stats-section{
     float: left;
     color: #707070;
     width: 80%;
-    padding-top: 10px;
+}
+
+.stats-section section{
+    float: left;
+    margin-right: 20px;
+}
+
+.stats-section .context-label{
+    display: block;
+    font-weight: bold;
 }
 
 .sharing-section{
@@ -542,7 +554,7 @@ h3 {
 
 .stage{
     flex: 1;
-    margin: 20px 0px;
+    /*margin: 20px 0px;*/
 }
 .showinfo .stage-stack{
     /*margin-right: 300px;*/
@@ -767,6 +779,33 @@ text {
     height: 0;
 }
 
+.breadcrumb{
+    display: inline-block;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.breadcrumb .breadcrumb-chunk{
+    float: left;
+    cursor: pointer;
+    color: #555;
+}
+
+.breadcrumb .breadcrumb-chunk.no-click{
+    cursor: default;
+    color: #4CC7E6;
+}
+
+.breadcrumb .arrow-left {
+    float: left;
+    width: 0; 
+    height: 0; 
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent; 
+    border-right:10px solid #303539; 
+    margin: 7px 10px 0 10px;
+}
+
 
 .list-table{
     border-collapse: collapse;
@@ -884,10 +923,10 @@ text {
 }
 
 .header-table th:nth-child(7){
-    width: 95px;
+    width: 130px;
 }
 .body-table td:nth-child(7){
-    width: 80px;
+    width: 115px;
 }
 
 
@@ -899,6 +938,10 @@ text {
 .list-footer{
     margin-right: 20px;
     flex: none;
+}
+
+.list-footer{
+    margin-top: 50px;
 }
 
 .legend-header{

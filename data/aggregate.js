@@ -14,6 +14,8 @@ global.filteredAggregate = {
     edges: []
 };
 
+aggregate.trackerCount = 0;
+aggregate.siteCount = 0;
 aggregate.nodes = [];
 aggregate.edges = [];
 
@@ -68,11 +70,11 @@ function applyFilter(filter){
 aggregate.on('filter', applyFilter);
 
 function onLoad(connections){
-    console.log('aggregate::onLoad with %s connections', connections.length);
+    // console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
     filteredAggregate = currentFilter();
     currentVisualization.emit('init');
-    console.log('aggregate::onLoad end')
+    // console.log('aggregate::onLoad end')
 }
 
 aggregate.on('load', onLoad);
@@ -110,6 +112,12 @@ function onConnection(conn){
         sourcenode = new GraphNode(connection, true);
         nodemap[connection.source] = sourcenode;
         aggregate.nodes.push(sourcenode);
+        if (connection.sourceVisited){
+            aggregate.siteCount++;
+        }else{
+            aggregate.trackerCount++;
+        }
+        console.log('new source: %s, now %s nodes', sourcenode.name, aggregate.nodes.length);
         updated = true;
     }
     if (nodemap[connection.target]){
@@ -119,6 +127,12 @@ function onConnection(conn){
         targetnode = new GraphNode(connection, false);
         nodemap[connection.target] = targetnode;
         aggregate.nodes.push(targetnode); // all nodes
+        if (connection.sourceVisited){
+            aggregate.siteCount++; // Can this ever be true?
+        }else{
+            aggregate.trackerCount++;
+        }
+        console.log('new target: %s, now %s nodes', targetnode.name, aggregate.nodes.length);
         updated = true
     }
     if (edgemap[connection.source + '->' + connection.target]){
@@ -131,7 +145,7 @@ function onConnection(conn){
         updated = true;
     }
     if (updated){
-        aggregate.emit('updated'); // tell listeners there are new node(s)
+        aggregate.update();
     }
 }
 
@@ -239,19 +253,21 @@ GraphNode.prototype.update = function(connection, isSource){
     }else{
         this.nodeType = 'both';
     }
-
     return this;
 };
 
 // Filtering
 
-function nodesSortedByDate(nodes){
-    return nodes.map(function(node){
-            return [node.lastAccess, node];
-        }).sort().map(function(arr){ 
-            return arr[1];
-        });
+function sitesSortedByDate(nodes){
+    return nodes.filter(function(node){
+        return !!node.visitedCount;
+    }).map(function(node){
+        return [node.lastAccess.toISOString(), node];
+    }).sort().map(function(arr){ 
+        return arr[1];
+    });
 }
+aggregate.sitesSortedByDate = sitesSortedByDate;
 
 function aggregateFromNodes(nodes){
     var localmap = {};
@@ -286,8 +302,8 @@ aggregate.filters = {
     daily: function daily(){
         var now = Date.now();
         var then = now - (24 * 60 * 60 * 1000);
-        var sortedNodes = nodesSortedByDate(aggregate.nodes);
-        console.log('daily filter before: %s', aggregate.nodes.length);
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        // console.log('daily filter before: %s', aggregate.nodes.length);
         // filter
         // find index where we go beyond date
         var i;
@@ -298,14 +314,14 @@ aggregate.filters = {
         }
         var filteredNodes = sortedNodes.slice(i);
         // Done filtering
-        console.log('daily filter after: %s', filteredNodes.length);
+        // console.log('daily filter after: %s', filteredNodes.length);
         return aggregateFromNodes(filteredNodes);
     },
     weekly: function weekly(){
         var now = Date.now();
         var then = now - (7 * 24 * 60 * 60 * 1000);
-        var sortedNodes = nodesSortedByDate(aggregate.nodes);
-        console.log('weekly filter before: %s', sortedNodes.length);
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        // console.log('weekly filter before: %s', sortedNodes.length);
         // filter
         // find index where we go beyond date
         var i;
@@ -315,21 +331,25 @@ aggregate.filters = {
             }
         }
         var filteredNodes = sortedNodes.slice(i);
-        console.log('weekly filter after: %s', filteredNodes.length);
+        // console.log('weekly filter after: %s', filteredNodes.length);
         return aggregateFromNodes(filteredNodes);
     },
     last10sites: function last10sites(){
-        var sortedNodes = nodesSortedByDate(aggregate.nodes);
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
         console.log('last10sites filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-10);
         console.log('last10sites filter after: %s', filteredNodes.length)
+        console.log('last 10 sites before joining with linked nodes:');
+        console.log('\t%o', filteredNodes.map(function(node){return node.name}));
         return aggregateFromNodes(filteredNodes);
     },
     recent: function recent(){
-        var sortedNodes = nodesSortedByDate(aggregate.nodes);
+        var sortedNodes = sitesSortedByDate(aggregate.nodes);
         console.log('recent filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-1);
-        console.log('recent filter after: %s', filteredNodes.length)
+        console.log('recent filter after: %s', filteredNodes.length);
+        console.log('recent nodes before joining with linked nodes:');
+        console.log('\t%o', filteredNodes.map(function(node){return node.name;}));
         return aggregateFromNodes(filteredNodes);
     }
 };
@@ -346,10 +366,14 @@ function switchFilter(name){
     }else{
         console.log('unable to switch filter to %s', name);
     }
-    global.filteredAggregate = currentFilter(aggregate);
-    aggregate.emit('updated');
+    aggregate.update();
 }
 
 aggregate.switchFilter = switchFilter;
+
+aggregate.update = function update(){
+    global.filteredAggregate = currentFilter();
+    aggregate.emit('update');
+}
 
 })(this);

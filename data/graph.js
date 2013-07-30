@@ -25,10 +25,10 @@ graph.on('reset', onReset);
 function onUpdate(){
     // new nodes, reheat graph simulation
     if (force){
-        console.log('restarting graph due to update');
+        // console.log('restarting graph due to update');
         force.stop();
         force.nodes(filteredAggregate.nodes);
-        force.links(filteredAggregate.edges)
+        force.links(filteredAggregate.edges);
         force.start();
         updateGraph();
     }else{
@@ -37,18 +37,18 @@ function onUpdate(){
 }
 
 function onInit(){
-    console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
+    // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     // This binds our data to the D3 visualization and sets up the callbacks
     initGraph();
-    aggregate.on('updated', onUpdate);
+    aggregate.on('update', onUpdate);
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
     if ( !statsBarInitiated ){  
         updateStatsBar();
     }
-    console.log('graph::onInit end');
+    // console.log('graph::onInit end');
 };
 
 // function onConnection(connection){
@@ -107,7 +107,14 @@ function targetY(edge){ return edge.target.y; }
 function edgeCookie(edge){ return edge.cookieCount > 0; }
 function edgeHighlight(edge){ return highlight.connections; }
 function edgeColoured(edge){ return edge.cookieCount > 0 && highlight.cookies; }
-function nodeName(node){ return node.name; }
+function nodeName(node){ 
+    try{
+        return node.name; 
+    }catch(e){
+        console.trace(e);
+        console.log('node: %o, error: %o', node, e);
+    }
+}
 
 // SET UP D3 HANDLERS
 
@@ -115,7 +122,7 @@ var ticking = false;
 
 function initGraph(){
     // Initialize D3 layout and bind data
-    console.log('initGraph()');
+    // console.log('initGraph()');
     force = d3.layout.force()
         .nodes(filteredAggregate.nodes)
         .links(filteredAggregate.edges)
@@ -143,7 +150,7 @@ function initGraph(){
         ticks++;
         lastTick = nextTick;
         if ((lastTick - lastUpdate) > second){
-            console.log('%s ticks per second, each draw takes %s milliseconds', ticks, Math.floor(d3.mean(draws)));
+            // console.log('%s ticks per second, each draw takes %s milliseconds', ticks, Math.floor(d3.mean(draws)));
             lastUpdate = lastTick;
             draws = [];
             ticks = 0;
@@ -198,7 +205,7 @@ function initGraph(){
 }
 
 function updateGraph(){
-    console.log('updateGraph()');
+    // console.log('updateGraph()');
         // Data binding for links
     edges = vis.selectAll('.edge')
         .data(filteredAggregate.edges, nodeName );
@@ -267,7 +274,7 @@ function resetCanvas(){
     var newcanvas = vizcanvas.cloneNode(false);
     parent.replaceChild(newcanvas, vizcanvas);
     vizcanvas = newcanvas;
-    aggregate.off('updated', onUpdate);
+    aggregate.off('update', onUpdate);
 }
 
 

@@ -1,5 +1,6 @@
 'use strict';
 
+const roundOffFactor = 5*60*1000; // in milliseconds
 var visualizations = {};
 var currentVisualization;
 var currentFilter;
@@ -124,7 +125,7 @@ function initCap(str){
 
 
 function switchVisualization(name){
-    console.log('switchVisualizations(' + name + ')');
+    // console.log('switchVisualizations(' + name + ')');
     saveConnections(allConnections);
     if (currentVisualization){
         if (currentVisualization === visualizations[name]) return;
@@ -140,6 +141,8 @@ function switchVisualization(name){
 
 
 function resetAddtionalUI(){
+    // reset Collusion url to root 
+    history.replaceState(null, null, generateCollusionPageUrl().join("/"));
     // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
     var activeTab = document.querySelector(".info-panel-controls ul li.active");
@@ -231,12 +234,12 @@ function stopSharing(){
 }
 
 function sharingData(){
-    console.log("Beginning Upload...");
+    // console.log("Beginning Upload...");
     var lastUpload = localStorage.lastUpload || 0;
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
     });
-    var data = exportFormat(connections);
+    var data = exportFormat(connections,true); // round off timestamp
     var request = new XMLHttpRequest();
     request.open("POST", uploadServer, true);
     request.setRequestHeader("Collusion-Share-Data","collusion");
@@ -303,9 +306,22 @@ function updateStatsBar(){
         dateSince = new Date(allConnections[0][2]).toDateString();
     }
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
-    // FIXME: Not worth keeping these structures around just for this count to display
-    // document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.thirdnodes.length;
-    // document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.allnodes.length - aggregate.thirdnodes.length;
+    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " THIRD PARTY SITES"; 
+    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " SITES";
     statsBarInitiated = true;
 }
 
+
+/****************************************
+*   Generate Collusion Page Url
+*/
+function generateCollusionPageUrl(siteUrl){
+    var href = window.location.href.split("/");
+    if ( href[href.length-1] != "index.html" ){
+        href = href.slice(0,href.length-1);
+    }
+    if ( siteUrl ){
+        href.push(siteUrl);
+    }
+    return href;
+}

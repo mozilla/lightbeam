@@ -382,7 +382,7 @@ document.querySelector('#content').addEventListener('click', function(event){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
-            console.log(node);
+            // console.log(node);
             applyHighlightingEffect(node.getAttribute("data-name"));
         }
     }
@@ -443,7 +443,7 @@ clockLegend.querySelector(".legend-toggle-target").addEventListener("click", fun
 
 clockLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
     var watchedSites = document.querySelectorAll(".watched");
-    console.log(watchedSites);
+    // console.log(watchedSites);
     toggleVizElements(watchedSites,"watchedSites");
     highlight.watched = !highlight.watched;
 });

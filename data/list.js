@@ -7,6 +7,9 @@
 (function(visualizations){
 
 var list = new Emitter();
+var breadcrumbList = [ "All Sites" ];
+var currentState = {};
+var pathToListIcon = "icons/collusion_icon_list.png";
 visualizations.list = list;
 list.name = "list";
 
@@ -38,7 +41,7 @@ function onConnection(conn){
 
 
 function onRemove(){
-    console.log('removing list');
+    // console.log('removing list');
     //aggregate.emit('reset');
     resetCanvas();
 }
@@ -47,6 +50,9 @@ function onRemove(){
 function initList(){
     var stage = document.querySelector('.stage');
     document.querySelector('.stage-stack').classList.add("list");
+
+    // breadcrumb
+    initBreadcrumb();
 
     // list header
     var table = elem("div", {'class': 'list-table'}, [
@@ -59,7 +65,7 @@ function initList(){
                     elem('th', 'Website'),
                     elem('th', 'First Access'),
                     elem('th', 'Last Access'),
-                    elem('th', {'class': 'sort-numeric'}, 'Connections')
+                    elem('th', {'class': 'sort-numeric'}, 'Sites Connected')
                 ])
             ]),
         ]),
@@ -92,7 +98,109 @@ function initList(){
     showFilteredTable(); // showing all data so no filter param is passed here
 }
 
+
+var breadcrumbClickHandler = function(event){
+    var url = event.target.getAttribute("site-url");
+    if ( url != breadcrumbList[0] ){
+        history.back();
+    }else{
+        history.pushState({"site":currentState.site,"prevState":currentState}, null, generateCollusionPageUrl(currentState.site).join("/"));
+        history.replaceState(null, null, generateCollusionPageUrl().join("/"));
+        showFilteredTable();
+    }
+};
+
+function initBreadcrumb(){
+    var stage = document.querySelector('.stage');
+    breadcrumbList.push("All Sites");
+    var breadcrumb = elem("div", {"class": "breadcrumb"}, [
+            elem("div", {"class": "breadcrumb-chunk"}),
+            elem("div", {"class": "arrow-left hidden"}),
+            elem("div", {"class": "breadcrumb-chunk hidden"}),
+            elem("div", {"class": "arrow-left hidden"}),
+            elem("div", {"class": "breadcrumb-chunk hidden"})
+        ]);
+    stage.appendChild(breadcrumb);
+    document.querySelector(".breadcrumb-chunk").innerHTML = breadcrumbList[0]; // Show "All Sites" 
+    document.querySelector(".breadcrumb-chunk").addEventListener("click",breadcrumbClickHandler);
+}
+
+function mapBreadcrumb(){
+    resetBreadcrumbByHide();
+    var chunks = toArray( document.querySelectorAll(".breadcrumb-chunk") );
+    breadcrumbList.forEach(function(siteUrl,i){
+        // show and update breadcrumb chunk 
+        chunks[i].classList.remove("hidden");
+        chunks[i].innerHTML = siteUrl;
+        chunks[i].setAttribute("site-url", siteUrl);
+        // show arrow accordingly
+        var hiddenArrows = toArray(document.querySelectorAll(".arrow-left.hidden"));
+        var numArrowShown = 2 - hiddenArrows.length;
+        var numTier = breadcrumbList.length;
+        if ( (numTier-1) > numArrowShown ){
+            hiddenArrows[0].classList.remove("hidden");
+        }
+        // add click handler if the breadcrumb chunk is not on the last tier(current)
+        if ( i <= (breadcrumbList.length-2) ){
+            chunks[i].addEventListener("click",breadcrumbClickHandler);
+        }else{
+            chunks[i].classList.add("no-click");
+        }
+    });
+}
+
+// Reset the breadcrumb
+function resetBreadcrumbByHide(){
+    var chunks = document.querySelectorAll(".breadcrumb-chunk");
+    for (var i=0; i<chunks.length; i++ ){
+        chunks[i].classList.add("hidden");
+        chunks[i].classList.remove("no-click");
+    }
+    var allArrows = toArray(document.querySelectorAll(".arrow-left"));
+    for (var i=0; i<allArrows.length; i++ ){
+        allArrows[i].classList.add("hidden");
+    }
+}
+
+// Push State to Browser History
+// FIXME: should this be global?
+function pushUrlToHistory(siteUrl){
+    var tempList = [ "All Sites" ];
+    var href = generateCollusionPageUrl(siteUrl);
+    if (siteUrl){
+        if ( href[href.length-1] != "index.html" ){
+            currentState.site = href[href.length-1];
+            currentState.prevState = history.state;
+        }
+        history.pushState({"site": siteUrl, "prevState":currentState}, null, href.join("/"));
+        if ( currentState.prevState ){
+            tempList.push(currentState.prevState.site);
+        }
+        tempList.push(siteUrl);
+    }else{
+        // all sites list
+        history.replaceState(null, null, generateCollusionPageUrl().join("/"));
+    }
+    breadcrumbList = tempList;
+    mapBreadcrumb();
+}
+
+// FIXME: should this be global?
+window.addEventListener("popstate", function(e){
+    var filter = null;
+    try{
+        var previousNowCurrent = e.state.prevState;
+        var filter = previousNowCurrent.site;
+        history.replaceState(previousNowCurrent.prevState, null, generateCollusionPageUrl(filter).join("/"));
+    }catch(e){
+        // console.log("Show 'All Sites' List");
+    }
+    showFilteredTable(filter);
+});
+
 function showFilteredTable(filter){
+    pushUrlToHistory(filter);
+    pathToListIcon =  filter ? "../icons/collusion_icon_list.png" : "icons/collusion_icon_list.png";
     // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");
     var tbody = table.querySelector('.list-body');
@@ -138,12 +246,12 @@ function nodeToRow(node){
         elem('td', {'data-sort-key': node.nodeType}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
         elem('td', {'class': 'preferences', 'data-sort-key': settings}, '\u00A0'),
         elem('td', {'data-sort-key': node.name}, [
-                elem('img', {'src': 'icons/collusion_icon_list.png', 'class': 'update-table'}),
+                elem('img', {'src': pathToListIcon, 'class': 'update-table'}),
                 node.name
             ]),
         elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10)}, node.firstAccess.toLocaleDateString()),
         elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10)}, node.lastAccess.toLocaleDateString()),
-        elem('td', {'data-sort-key': node.howMany}, '' + node.howMany)
+        elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
     ]);
 }
 
@@ -225,6 +333,11 @@ function resetCanvas(){
     if (listTable){
         listTable.parentElement.removeChild(listTable);
     }
+    var breadcrumb = document.querySelector('.stage .breadcrumb');
+    if (breadcrumb){
+        breadcrumb.parentElement.removeChild(breadcrumb);
+    }
+    breadcrumbList = [];
     vizcanvas.classList.remove("hide");
 }
 
