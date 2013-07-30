@@ -417,7 +417,9 @@ function initializeHandlers(){
     document.querySelector('.stage-stack').addEventListener('click', function(event){
         var target = event.target;
         if(target.mozMatchesSelector('.block-pref a')){
-            dialog( {   "title": "Block Sites", 
+            dialog( {   "name": "blockDialog",
+                        "dnsPrompt": true,
+                        "title": "Block Sites", 
                         "message": "This will prevent you from connecting to the selected website(s) and can possibly break the web." 
                     },function(confirmed){
                         if ( confirmed ){
@@ -426,7 +428,9 @@ function initializeHandlers(){
                     }
             );
         }else if (target.mozMatchesSelector('.hide-pref a')){
-            dialog( {   "title": "Hide Sites", 
+            dialog( {   "name": "hideDialog",
+                        "dnsPrompt": true,
+                        "title": "Hide Sites", 
                         "message": "Data of the selected website(s) will be hidden in all the Visualizations." 
                     },function(confirmed){
                         if ( confirmed ){

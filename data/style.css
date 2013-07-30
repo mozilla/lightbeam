@@ -111,6 +111,10 @@ h3 {
     margin-top: 30px;
 }
 
+.pico-content .dialog-dns{
+    margin: 10px 0;
+}
+
 .pico-content .dialog-ok,
 .pico-content .dialog-cancel{
     display: inline-block;

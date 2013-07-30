@@ -149,6 +149,7 @@ document.querySelector('.reset-data').addEventListener('click', function(){
                             delete localStorage[key];;
                         }
                     });
+                    delete localStorage.dnsDialogs;
                     updateStatsBar();
                 }
             }
@@ -400,11 +401,19 @@ function legendBtnClickHandler(legendElm){
 
 /* Dialog / Popup ===================================== */
 
-// options: name, title, message, type, oneTime
+// options: name, title, message, type, dnsPrompt(Do Not Show)
 function dialog(options,callback){
+    var dnsPref = localStorage.dnsDialogs || "[]";
+    dnsPref = JSON.parse(dnsPref);
+    if ( dnsPref.indexOf(options.name) > -1 ) return; // according to user pref, do not show this dialog
+    showDialog(options,dnsPref,callback);
+}
+
+function showDialog(options,dnsPref,callback){
     var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
     var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
     var controls = "<div class='dialog-controls'>"+
+                        "<div class='dialog-dns hidden'><input type='checkbox' /> Do not show this again.</div>" + 
                         "<div class='pico-close dialog-cancel'>Cancel</div>" + 
                         "<div class='pico-close dialog-ok'>OK</div>" +
                     "</div>";
@@ -420,12 +429,22 @@ function dialog(options,callback){
         }
     });
 
+    if ( options.dnsPrompt ){ // show Do Not Show Again prompt
+        document.querySelector(".dialog-dns").classList.remove("hidden");
+    }
     if ( options.type == "alert" ){
         document.querySelector(".dialog-cancel").classList.add("hidden");
     }
 
     toArray(document.querySelectorAll(".pico-close")).forEach(function(btn){
         btn.addEventListener("click", function(event){
+            if ( options.dnsPrompt && (event.target.innerHTML == "OK") ){ // Do Not Show
+                var checked = document.querySelector(".dialog-dns input").checked;
+                if ( checked ){ // user does not want this dialog to show again
+                    dnsPref.push(options.name);
+                    localStorage.dnsDialogs = JSON.stringify(dnsPref);
+                }
+            }
             modal.close();
             callback( (event.target.innerHTML == "OK") ? true : false );
         });
