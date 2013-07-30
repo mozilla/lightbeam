@@ -354,7 +354,7 @@ aggregate.filters = {
     }
 };
 
-var currentFilter = aggregate.filters[localStorage.currentFilter || 'last24Hours'];
+var currentFilter = aggregate.filters[localStorage.currentFilter || 'daily'];
 
 function switchFilter(name){
     console.log('switchFilter(' + name + ')');
