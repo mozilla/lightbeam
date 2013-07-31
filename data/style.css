@@ -50,7 +50,6 @@ h3 {
     z-index: 5;
     height: 100%;
     font-size: 12px;
-    font-weight: bold;
     overflow-x: hidden;
     overflow-y: auto;
     background: #404850;
@@ -83,6 +82,13 @@ h3 {
     display: none !important;
 }
 
+.controls .section-header{
+    display: block;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 15px 0 5px 5px;
+}
+
 /* Dialog/Popup Styling ================================ */
 
 .pico-content{
@@ -111,6 +117,10 @@ h3 {
     margin-top: 30px;
 }
 
+.pico-content .dialog-dns{
+    margin: 10px 0;
+}
+
 .pico-content .dialog-ok,
 .pico-content .dialog-cancel{
     display: inline-block;
@@ -127,24 +137,22 @@ h3 {
 
 /* Button Styling ================================ */
 
-.btn a:hover{
-    background: #475B61;
-}
-
-.btn_group, 
 .btn{
-    margin-bottom: 15px;
-    background: #25292D;
+    margin-bottom: 5px;
+    background: #171E25;
     font-size: 7pt;
     letter-spacing: 1px;
     border-radius: 5px;
 }
 
-.btn_group .dropdown_button{
-    height: 32px;
-    line-height: 30px;
-    border-radius: 5px 0 0 0;
-    padding-left: 10px;
+.btn a:hover,
+.btn_group .dropdown_options a:hover{
+    background: #6FC3E5;
+    cursor: pointer;
+}
+
+.btn_group .dropdown_options a:hover{
+    margin: 0 2px;
 }
 
 .btn_group a.selected_time,
@@ -152,21 +160,8 @@ h3 {
     color: #EAEAEA;
 }
 
-.btn_group .arrow{
-    float: right;
-    padding: 0 10px;
-    background: #12181B;
-    border-radius: 0 5px 0 0;
-    cursor: pointer;
-}
-
-.collapsed {
-    display: none;
-}
-
 .btn a{
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 3px;
 }
 
 .btn_group div.dropdown_options a,
@@ -174,30 +169,40 @@ h3 {
     margin: 0;
     display: block;
     padding-left: 10px;
-    background: #303539;
+    background: #171E25;
     line-height: 28px;
+    text-transform: capitalize;
 }
 
-.btn_group .dropdown_options.expanded a:hover{
-    cursor: pointer;
-    background: #475B61;
+.btn_group .dropdown_options a{
+    border-radius: 0;
+    border-top: 2px solid #12181B;
 }
 
 .btn_group .dropdown_options a[data-selected]{
-    border-radius: 0 0 5px 5px;
-    background: #5F6771;
+    background: #73A4B8;
+    margin: 0 2px;
+    border-top: 2px solid #6FC3E5;
 }
 
-.btn_group .dropdown_options.expanded a{
-    border-radius: 0;
+.btn_group .dropdown_options a:first-child[data-selected]{
+    box-shadow: 0 -2px #6FC3E5;
 }
 
-.btn_group .dropdown_options.expanded a:last-child{
-    border-radius: 0 0 5px 5px;
+.btn_group .dropdown_options a:last-child[data-selected]{
+    box-shadow: none;
+    border-top: 2px solid #6FC3E5;
 }
 
-.btn_group .dropdown_options a.collapsed{
-    display: none;
+
+.btn_group .dropdown_options a:first-child{
+    border-radius: 3px 3px 0 0;
+    border-top: none;
+}
+
+.btn_group .dropdown_options a:last-child{
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 5px #12181B;
 }
 
 .btn_group img,
@@ -645,14 +650,12 @@ text {
 .sourceSites{
     fill: #FFF;
     stroke: none;
-    opacity: 0.3;
 }
 
 .target,
 .targetSites{
     fill: #FFDD64;
     stroke: none;
-    opacity: 0.3;
 }
 
 .source.highlighted,
@@ -769,23 +772,23 @@ text {
 }
 
 .watchedSites{
-    fill: #268CB7 !important;
+    fill: #6FC3E5 !important;
 }
 
 .watch-text{
-    color: #268CB7;
+    color: #6FC3E5;
 }
 
 .blockedSites{
-    fill: #FF0000 !important;
+    fill: #E02A61 !important;
 }
 
 .block-text{
-    color: #FF0000;
+    color: #E02A61;
 }
 
 .cookie-text{
-    color: #800080;
+    color: #6C0AAA;
 }
 
 .edge{
@@ -810,7 +813,7 @@ text {
 .cookieYes.coloured,
 .cookieBoth.coloured,
 .cookies{
-    stroke: #800080;
+    stroke: #6C0AAA;
     stroke-width: 2;
 }
 
@@ -1028,23 +1031,6 @@ text {
     float: left;
 }
 
-.legend-controls .column .btn{
-    width: 170px;
-    margin-right: 30px;
-    margin-bottom: 8px;
-    opacity: 0.4;
-}
-
-.legend-controls .column .btn:hover{
-    opacity: 1;
-}
-
-.legend-controls .column .btn.active{
-    opacity: 1;
-}
-
-
-
 .legend-controls .legend-canvas-small,
 .legend-controls .legend-canvas-large{
     height: 18px;
@@ -1065,4 +1051,82 @@ text {
 
 .legend-controls .legend-canvas-large{
     width: 34px;
+}
+
+.graph-footer .btn,
+.clock-footer .btn{
+    width: 170px;
+    margin-right: 30px;
+    margin-bottom: 8px;
+}
+
+.graph-footer .btn a,
+.clock-footer .btn a{
+    border-top: 2px solid #171E25;
+    color: #555;
+}
+
+.graph-footer .btn a:hover,
+.clock-footer .btn a:hover{
+    border-top: 2px solid #fff !important;
+    opacity: 1;
+    color: #fff;
+}
+
+.graph-footer .btn.active a,
+.clock-footer .btn.active a{
+    border-top: 2px solid #6FC3E5;
+    background: #73A4B8;
+    color: #fff;
+}
+
+.list-footer .align-left,
+.list-footer .align-right{
+    display: inline-block;
+    overflow: hidden;
+}
+
+.list-footer .align-left{
+    float: left;
+}
+
+.list-footer .align-right{
+    float: right;
+}
+
+.list-footer .align-left .btn{
+    float: left;
+    width: 140px;
+    margin-right: 20px;
+}
+
+.list-footer .align-right .btn{
+    float: left;
+    margin-left: 20px;
+}
+
+.list-footer .align-right .btn a{
+    padding: 0 15px;
+}
+
+.list-footer .btn a{
+    background: #888;
+    color: #fff;
+}
+
+.list-footer .btn a:hover{
+    background: #6FC3E5
+}
+
+.list-footer .btn.block-pref{
+    box-shadow: 0 2px #E02A61;
+}
+
+.list-footer .btn.hide-pref,
+.list-footer .btn.toggle-hidden{
+    box-shadow: 0 2px #FE7E00;
+}
+
+.list-footer .btn.watch-pref{
+    box-shadow: 0 2px #6FC3E5;
 }

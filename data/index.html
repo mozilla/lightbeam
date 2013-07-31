@@ -14,14 +14,10 @@
                 <div class="collusion-icon"></div>
                 <img class="logo" src="icons/Collusion---Wordmark-Beta.png" />
             </header>
+
+            <div class="section-header">VISUALIZATION</div>
             <div class="btn_group visualization">
-                <div data-view class="dropdown_button">
-                    <span>VISUALIZATION</span>
-                    <div class="arrow">
-                        <i class="icon-sort-down hidden"></i><i class="icon-sort-up"></i>
-                    </div>
-                </div>
-                <div data-list class="dropdown_options expanded">
+                <div data-list class="dropdown_options">
                     <a data-value="Graph">
                         <img src="image/collusion_icon_graph.png" />graph
                     </a>
@@ -33,20 +29,16 @@
                     </a>
                 </div>
             </div>
+            <div class="section-header">FILTER</div>
             <div class="btn_group session">
-                <div data-view class="dropdown_button">
-                    <span>SESSION</span>
-                    <div class="arrow">
-                        <i class="icon-sort-down hidden"></i><i class="icon-sort-up"></i>
-                    </div>
-                </div>
-                <div data-list class="dropdown_options expanded">
+                <div data-list class="dropdown_options">
                     <a data-value="recent">recent site</a>
                     <a data-value="last10sites">last 10 sites</a>
                     <a data-value="daily">daily</a>
                     <a data-value="weekly">weekly</a>
                 </div>
             </div>
+            <div class="section-header">DATA</div>
             <div class="btn">
                 <a class="download">
                     <img src="image/collusion_icon_download2.png" />Download
@@ -422,13 +414,14 @@
                         </section>
                     </section>
               </div>
+              <!-- SITE PREFERENCES for List ================================  -->
               <div class="list-footer">
               		<section class="legend-header">
                         <div><header class="blue-text">SITE PREFERENCES</header></div>
                         <div><a class="legend-toggle">Hide</a></div>
                     </section>
                     <section class="legend-controls">
-						<section class="column">
+						<section class="align-left">
 							<div class="block-pref btn active">
 								<a>
 									<img src="icons/collusion_icon_block.png" />
@@ -448,19 +441,17 @@
 								</a>
 							</div>
 						</section>
-						<section class="column">
+						<section class="align-right">
 							<div class="no-pref btn active">
 								<a>
-									Remove Preference
+									Clear Preference
 								</a>
 							</div>
-						</section>
-						<section class="column">
-							<div class="toggle-hidden btn active orange">
-								<a>
-									Hide Hidden
-								</a>
-							</div>
+                            <div class="toggle-hidden btn active orange">
+                                <a>
+                                    Hide Hidden Sites
+                                </a>
+                            </div>
 						</section>
 					</section>
               </div>
@@ -477,7 +468,6 @@
     <script src="aggregate.js"></script>
     <!-- from https://github.com/Nycto/PicoModal -->
     <script src="picoModal-1.0.0.min.js"></script>
-    <script src="infobar.js"></script>
     <script src="tooltip.js"></script>
     <script src="ui.js"></script>
     <!-- Map -->
