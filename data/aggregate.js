@@ -18,6 +18,7 @@ aggregate.trackerCount = 0;
 aggregate.siteCount = 0;
 aggregate.nodes = [];
 aggregate.edges = [];
+aggregate.recentSites = [];
 
 aggregate.nodeForKey = function(key){
     var result = {};
@@ -105,6 +106,16 @@ function onConnection(conn){
     // map to the same endpoints or edges.
     var connection = aggregate.connectionAsObject(conn);
     var sourcenode, targetnode, edge, nodelist, updated = false;
+    // Maintain the list of sites visited in dated order
+    if (connection.sourceVisited){
+        var site = connection.source;
+        var siteIdx = aggregate.recentSites.indexOf(site);
+        if (siteIdx > -1){
+            aggregate.recentSites.splice(siteIdx, 1);
+        }
+        aggregate.recentSites.push(site);
+    }
+    // Retrieve the source node and update, or create it if not found
     if (nodemap[connection.source]){
         sourcenode = nodemap[connection.source];
         sourcenode.update(connection, true);
@@ -120,6 +131,7 @@ function onConnection(conn){
         console.log('new source: %s, now %s nodes', sourcenode.name, aggregate.nodes.length);
         updated = true;
     }
+    // Retrieve the target node and update, or create it if not found
     if (nodemap[connection.target]){
         targetnode = nodemap[connection.target];
         targetnode.update(connection, false);
@@ -135,6 +147,7 @@ function onConnection(conn){
         console.log('new target: %s, now %s nodes', targetnode.name, aggregate.nodes.length);
         updated = true
     }
+    // Create edge objects. Could probably do this lazily just for the graph view
     if (edgemap[connection.source + '->' + connection.target]){
         edge = edgemap[connection.source + '->' + connection.target];
         edge.update(connection);
@@ -258,13 +271,9 @@ GraphNode.prototype.update = function(connection, isSource){
 
 // Filtering
 
-function sitesSortedByDate(nodes){
-    return nodes.filter(function(node){
-        return !!node.visitedCount;
-    }).map(function(node){
-        return [node.lastAccess.toISOString(), node];
-    }).sort().map(function(arr){ 
-        return arr[1];
+function sitesSortedByDate(){
+    return aggregate.recentSites.map(function(sitename){
+        return nodemap[sitename];
     });
 }
 aggregate.sitesSortedByDate = sitesSortedByDate;
@@ -302,7 +311,7 @@ aggregate.filters = {
     daily: function daily(){
         var now = Date.now();
         var then = now - (24 * 60 * 60 * 1000);
-        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        var sortedNodes = sitesSortedByDate();
         // console.log('daily filter before: %s', aggregate.nodes.length);
         // filter
         // find index where we go beyond date
@@ -320,7 +329,7 @@ aggregate.filters = {
     weekly: function weekly(){
         var now = Date.now();
         var then = now - (7 * 24 * 60 * 60 * 1000);
-        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        var sortedNodes = sitesSortedByDate();
         // console.log('weekly filter before: %s', sortedNodes.length);
         // filter
         // find index where we go beyond date
@@ -335,7 +344,7 @@ aggregate.filters = {
         return aggregateFromNodes(filteredNodes);
     },
     last10sites: function last10sites(){
-        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        var sortedNodes = sitesSortedByDate();
         console.log('last10sites filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-10);
         console.log('last10sites filter after: %s', filteredNodes.length)
@@ -344,7 +353,7 @@ aggregate.filters = {
         return aggregateFromNodes(filteredNodes);
     },
     recent: function recent(){
-        var sortedNodes = sitesSortedByDate(aggregate.nodes);
+        var sortedNodes = sitesSortedByDate();
         console.log('recent filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-1);
         console.log('recent filter after: %s', filteredNodes.length);
