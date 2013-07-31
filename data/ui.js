@@ -130,14 +130,9 @@ document.querySelector('.reset-data').addEventListener('click', function(){
                 if ( confirmed ){
                     addon.emit('reset');
                     aggregate.emit('reset');
-                    currentVisualization.emit('reset');
+                    currentVisualization.emit('remove');
                     allConnections = [];
-                    Object.keys(localStorage).sort().forEach(function(key){
-                        if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
-                            delete localStorage[key];;
-                        }
-                    });
-                    delete localStorage.dnsDialogs;
+                    localStorage.clear();
                     updateStatsBar();
                 }
             }
