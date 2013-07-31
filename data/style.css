@@ -137,12 +137,6 @@ h3 {
 
 /* Button Styling ================================ */
 
-.btn a:hover,
-.btn_group .dropdown_options a:hover{
-    background: #6FC3E5;
-    cursor: pointer;
-}
-
 .btn{
     margin-bottom: 5px;
     background: #171E25;
@@ -151,18 +145,23 @@ h3 {
     border-radius: 5px;
 }
 
+.btn a:hover,
+.btn_group .dropdown_options a:hover{
+    background: #6FC3E5;
+    cursor: pointer;
+}
+
+.btn_group .dropdown_options a:hover{
+    margin: 0 2px;
+}
+
 .btn_group a.selected_time,
 .btn_group a.selected_visualization{
     color: #EAEAEA;
 }
 
-.collapsed {
-    display: none;
-}
-
 .btn a{
     border-radius: 3px;
-    cursor: pointer;
 }
 
 .btn_group div.dropdown_options a,
@@ -204,10 +203,6 @@ h3 {
 .btn_group .dropdown_options a:last-child{
     border-radius: 0 0 3px 3px;
     box-shadow: 0 5px #12181B;
-}
-
-.btn_group .dropdown_options a.collapsed{
-    display: none;
 }
 
 .btn_group img,
@@ -655,14 +650,12 @@ text {
 .sourceSites{
     fill: #FFF;
     stroke: none;
-    opacity: 0.3;
 }
 
 .target,
 .targetSites{
     fill: #FFDD64;
     stroke: none;
-    opacity: 0.3;
 }
 
 .source.highlighted,
@@ -779,23 +772,23 @@ text {
 }
 
 .watchedSites{
-    fill: #268CB7 !important;
+    fill: #6FC3E5 !important;
 }
 
 .watch-text{
-    color: #268CB7;
+    color: #6FC3E5;
 }
 
 .blockedSites{
-    fill: #FF0000 !important;
+    fill: #E02A61 !important;
 }
 
 .block-text{
-    color: #FF0000;
+    color: #E02A61;
 }
 
 .cookie-text{
-    color: #800080;
+    color: #6C0AAA;
 }
 
 .edge{
@@ -820,7 +813,7 @@ text {
 .cookieYes.coloured,
 .cookieBoth.coloured,
 .cookies{
-    stroke: #800080;
+    stroke: #6C0AAA;
     stroke-width: 2;
 }
 
@@ -1038,23 +1031,6 @@ text {
     float: left;
 }
 
-.legend-controls .column .btn{
-    width: 170px;
-    margin-right: 30px;
-    margin-bottom: 8px;
-    opacity: 0.4;
-}
-
-.legend-controls .column .btn:hover{
-    opacity: 1;
-}
-
-.legend-controls .column .btn.active{
-    opacity: 1;
-}
-
-
-
 .legend-controls .legend-canvas-small,
 .legend-controls .legend-canvas-large{
     height: 18px;
@@ -1075,4 +1051,82 @@ text {
 
 .legend-controls .legend-canvas-large{
     width: 34px;
+}
+
+.graph-footer .btn,
+.clock-footer .btn{
+    width: 170px;
+    margin-right: 30px;
+    margin-bottom: 8px;
+}
+
+.graph-footer .btn a,
+.clock-footer .btn a{
+    border-top: 2px solid #171E25;
+    color: #555;
+}
+
+.graph-footer .btn a:hover,
+.clock-footer .btn a:hover{
+    border-top: 2px solid #fff !important;
+    opacity: 1;
+    color: #fff;
+}
+
+.graph-footer .btn.active a,
+.clock-footer .btn.active a{
+    border-top: 2px solid #6FC3E5;
+    background: #73A4B8;
+    color: #fff;
+}
+
+.list-footer .align-left,
+.list-footer .align-right{
+    display: inline-block;
+    overflow: hidden;
+}
+
+.list-footer .align-left{
+    float: left;
+}
+
+.list-footer .align-right{
+    float: right;
+}
+
+.list-footer .align-left .btn{
+    float: left;
+    width: 140px;
+    margin-right: 20px;
+}
+
+.list-footer .align-right .btn{
+    float: left;
+    margin-left: 20px;
+}
+
+.list-footer .align-right .btn a{
+    padding: 0 15px;
+}
+
+.list-footer .btn a{
+    background: #888;
+    color: #fff;
+}
+
+.list-footer .btn a:hover{
+    background: #6FC3E5
+}
+
+.list-footer .btn.block-pref{
+    box-shadow: 0 2px #E02A61;
+}
+
+.list-footer .btn.hide-pref,
+.list-footer .btn.toggle-hidden{
+    box-shadow: 0 2px #FE7E00;
+}
+
+.list-footer .btn.watch-pref{
+    box-shadow: 0 2px #6FC3E5;
 }

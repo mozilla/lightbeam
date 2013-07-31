@@ -92,7 +92,6 @@ window.addEventListener('load', function(evt){
     addon.emit("privateWindowCheck");
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
-    document.querySelector('.btn_group.visualization [data-selected]').classList.remove("collapsed");
     var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
     switchVisualization(visualization);
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
