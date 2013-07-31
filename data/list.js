@@ -366,6 +366,7 @@ function setUserSetting(row, pref){
     }
     // uncheck the row
     row.querySelector('[type=checkbox]').checked = false;
+    row.classList.remove("checked");
 }
 
 function selectAllRows(flag){
@@ -379,6 +380,7 @@ function setPreferences(pref){
     getSelectedRows().forEach(function(row){
         setUserSetting(row, pref);
     });
+    toggleOnPrefButtons(false); // disable buttons since all checkboxes are unchecked now
 }
 
 function toggleHiddenSites(target){
@@ -416,7 +418,7 @@ function initializeHandlers(){
 
     document.querySelector('.stage-stack').addEventListener('click', function(event){
         var target = event.target;
-        if(target.mozMatchesSelector('.block-pref a')){
+        if(target.mozMatchesSelector('.block-pref.active a') ){
             dialog( {   "name": "blockDialog",
                         "dnsPrompt": true,
                         "title": "Block Sites", 
@@ -427,7 +429,7 @@ function initializeHandlers(){
                         }
                     }
             );
-        }else if (target.mozMatchesSelector('.hide-pref a')){
+        }else if (target.mozMatchesSelector('.hide-pref.active a')){
             dialog( {   "name": "hideDialog",
                         "dnsPrompt": true,
                         "title": "Hide Sites", 
@@ -438,9 +440,9 @@ function initializeHandlers(){
                         }
                     }
             );
-        }else if (target.mozMatchesSelector('.watch-pref a')){
+        }else if (target.mozMatchesSelector('.watch-pref.active a')){
             setPreferences('watch');
-        }else if(target.mozMatchesSelector('.no-pref a')){
+        }else if(target.mozMatchesSelector('.no-pref.active a')){
             setPreferences('');
         }else if(target.mozMatchesSelector('.toggle-hidden a')){
             toggleHiddenSites(target);
@@ -452,19 +454,16 @@ function initializeHandlers(){
         var node = event.target;
         // clicking on the cell where the checkbox locates can also trigger the checkbox clicking handler
         if (node.mozMatchesSelector('tbody tr td:first-child, tbody tr td:first-child [type=checkbox]')){
-            var rowChecked;
-            if ( node.mozMatchesSelector('tbody tr td:first-child') ){
-                rowChecked = node.querySelector("[type=checkbox]").checked;
-            }else{
-                rowChecked = node.checked;
-            }
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
+            var rowChecked = node.querySelector("[type=checkbox]").checked;
             if (rowChecked){
                 node.classList.add("checked");
+                toggleOnPrefButtons(true);
             }else{
                 node.classList.remove("checked");
+                toggleOnPrefButtons(false);
             }
         }
     });
@@ -472,6 +471,21 @@ function initializeHandlers(){
 }catch(e){
     console.log('Error: %o', e);
 }
+}
+
+function toggleOnPrefButtons(toggleOn){
+    var classToAdd = toggleOn ? "active" : "disabled";
+    var classToRemove = toggleOn ? "disabled" : "active";
+    // toggle on class
+    document.querySelector(".block-pref").classList.add(classToAdd);
+    document.querySelector(".hide-pref").classList.add(classToAdd);
+    document.querySelector(".watch-pref").classList.add(classToAdd);
+    document.querySelector(".no-pref").classList.add(classToAdd);
+    // toggle off class
+    document.querySelector(".block-pref").classList.remove(classToRemove);
+    document.querySelector(".hide-pref").classList.remove(classToRemove);
+    document.querySelector(".watch-pref").classList.remove(classToRemove);
+    document.querySelector(".no-pref").classList.remove(classToRemove);
 }
 
 })(visualizations);

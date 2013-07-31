@@ -1109,12 +1109,23 @@ text {
     padding: 0 15px;
 }
 
+.list-footer .btn.disabled{
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.list-footer .btn{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
 .list-footer .btn a{
     background: #888;
     color: #fff;
 }
 
-.list-footer .btn a:hover{
+.list-footer .btn.active a:hover{
     background: #6FC3E5
 }
 
