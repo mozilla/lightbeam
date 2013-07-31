@@ -22,6 +22,16 @@ graph.on('init', onInit);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
 
+/* for Highlighting and Colouring -------------------- */
+
+var highlight = {};
+highlight.visited = true;
+highlight.neverVisited = true;
+highlight.connections = true;
+highlight.cookies = false;
+highlight.watched = false;
+highlight.blocked = false;
+
 function onUpdate(){
     // new nodes, reheat graph simulation
     if (force){
@@ -171,7 +181,7 @@ function initGraph(){
             }else{
                 this.classList.remove('highlighted');
             }
-            if (d.cookieCount > 0 && highlight.cookies){
+            if (d.cookieCount && highlight.cookies){
                 this.classList.add('coloured');
             }else{
                 this.classList.remove('coloured');
@@ -279,15 +289,6 @@ function resetCanvas(){
 
 
 
-/* for Highlighting and Colouring -------------------- */
-
-var highlight = {};
-highlight.visited = true;
-highlight.neverVisited = true;
-highlight.connections = true;
-highlight.cookies = false;
-highlight.watched = false;
-highlight.blocked = false;
 var graphLegend = document.querySelector(".graph-footer");
 
 legendBtnClickHandler(graphLegend);
