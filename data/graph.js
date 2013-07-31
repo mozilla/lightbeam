@@ -198,9 +198,9 @@ function initGraph(){
                 this.classList.add('visitedNo');
                 this.classList.remove('visitedYes');
             }
-            if (d.visitedCount && highlight.highlightVisited){
+            if (d.visitedCount && highlight.visited){
                 this.classList.add('highlighted');
-            }else if((!d.visitedCount) &&highlight.highlightNeverVisited){
+            }else if((!d.visitedCount) &&highlight.neverVisited){
                 this.classList.add('highlighted');
             }else{
                 this.classList.remove('highlighted');
