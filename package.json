@@ -1,10 +1,10 @@
 {
-  "name": "c2",
+  "name": "collusion",
   "fullName": "Collusion",
-  "description": "A clean rewrite of Collusion",
+  "description": "A Firefox add-on to track who is tracking you",
   "author": "Mozilla Foundation",
   "license": "MPL 2.0",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "id": "jid1-7OBiDHPW1YAPaQ",
   "permissions": {"private-browsing": true}
 }
