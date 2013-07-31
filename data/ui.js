@@ -17,7 +17,7 @@ function dropdownGroup(btnGroup, callback){
             btnGroup.querySelector("[data-selected]").removeAttribute("data-selected");
             e.target.setAttribute("data-selected", true);
             callback( e.target.getAttribute("data-value") );
-        }); 
+        });
     });
 }
 
@@ -65,7 +65,7 @@ document.querySelector(".toggle-btn.share-btn").addEventListener("click",functio
 
 function confirmStartSharing(elmClicked){
     startSharing(function(confirmed){
-        if ( confirmed ){ 
+        if ( confirmed ){
             toggleBtnOnEffect( document.querySelector(".share-btn") );
         }else{
             elmClicked.checked = false;
@@ -75,7 +75,7 @@ function confirmStartSharing(elmClicked){
 
 function confirmStopSharing(elmClicked){
      stopSharing(function(confirmed){
-        if ( confirmed ){ 
+        if ( confirmed ){
             toggleBtnOffEffect( document.querySelector(".share-btn") );
         }else{
            elmClicked.checked = true;
@@ -124,8 +124,8 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 });
 
 document.querySelector('.reset-data').addEventListener('click', function(){
-    dialog( {   "title": "Reset Data", 
-                "message": "Are you sure you want to reset your data?" 
+    dialog( {   "title": "Reset Data",
+                "message": "Are you sure you want to reset your data?"
             },function(confirmed){
                 if ( confirmed ){
                     addon.emit('reset');
@@ -320,7 +320,7 @@ function exportFormat(connections, roundOff){
         version: '1.1',
         token: localStorage.collusionToken,
         connections: tempConnections
-    });
+    }, null, "  ");
 }
 
 /* Filter out connections collected in Private Mode */
@@ -334,7 +334,7 @@ function roundOffTimestamp(connections){
     return  connections.map(function(conn){
                 var tempConn = conn.slice(0);
                 tempConn[TIMESTAMP] -= ( tempConn[TIMESTAMP] % roundOffFactor );
-                return tempConn; 
+                return tempConn;
             });
 }
 
@@ -401,8 +401,8 @@ function showDialog(options,dnsPref,callback){
     var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
     var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
     var controls = "<div class='dialog-controls'>"+
-                        "<div class='dialog-dns hidden'><input type='checkbox' /> Do not show this again.</div>" + 
-                        "<div class='pico-close dialog-cancel'>Cancel</div>" + 
+                        "<div class='dialog-dns hidden'><input type='checkbox' /> Do not show this again.</div>" +
+                        "<div class='pico-close dialog-cancel'>Cancel</div>" +
                         "<div class='pico-close dialog-ok'>OK</div>" +
                     "</div>";
 
