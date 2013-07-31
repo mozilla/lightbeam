@@ -9,10 +9,10 @@
   dropdown buttons: #363636
   sidebar "link" buttons: #939393
 */
- 
+
 
 /*  New colour scheme:
-    sidebar, info panel 
+    sidebar, info panel
         background:#404850
 */
 
@@ -65,9 +65,9 @@ h3 {
 }
 
 .collusion-icon{
-    border:1px solid #5ABED2; 
-    width: 35px; 
-    height: 35px; 
+    border:1px solid #5ABED2;
+    width: 35px;
+    height: 35px;
     border-radius: 5px;
     float: left;
 }
@@ -212,6 +212,15 @@ h3 {
     margin-right: 15px;
     position: relative;
     top: 3px;
+}
+
+.controls .links > a, .controls .links > a:visited{
+    color: white;
+    text-decoration: none;
+}
+
+.controls .links > a:hover {
+    text-decoration: underline;
 }
 
 .controls .links{
@@ -469,7 +478,7 @@ h3 {
 .feature-name{
     display: inline-block;
     width: 120px;
-    font-weight: bold; 
+    font-weight: bold;
     text-transform: capitalize;
 }
 
@@ -835,11 +844,11 @@ text {
 
 .breadcrumb .arrow-left {
     float: left;
-    width: 0; 
-    height: 0; 
+    width: 0;
+    height: 0;
     border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent; 
-    border-right:10px solid #303539; 
+    border-bottom: 5px solid transparent;
+    border-right:10px solid #303539;
     margin: 7px 10px 0 10px;
 }
 
