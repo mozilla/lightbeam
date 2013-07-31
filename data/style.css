@@ -752,13 +752,6 @@ text {
 
 /* Graph Visualization */
 
-.cookieYes,
-.cookieNo,
-.cookieBoth{
-    stroke: #FFFFFF;
-    stroke-width: 2;
-}
-
 .visitedSites,
 .unvisitedSites,
 .selectedSites,
@@ -814,7 +807,6 @@ text {
 .cookieBoth.coloured,
 .cookies{
     stroke: #6C0AAA;
-    stroke-width: 2;
 }
 
 /* List Visualization */
