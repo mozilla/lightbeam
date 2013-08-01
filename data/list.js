@@ -416,7 +416,8 @@ var listStageStackClickHandler = function(event){
                     "message":  "<p><b>Warning:</b></p> " + 
                                 "<p>Blocking sites will prevent any and all content from being loaded from these domains: [domain1.com, domain2.com, ...] and ALL SUBDOMAINS [www.domain1.com, etc.]. </p>" + 
                                 "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>" + 
-                                "<p>For more info: <a href='http://mozilla.org/collusion'>http://mozilla.org/collusion</a></p>"
+                                "<p>For more info: <a href='http://mozilla.org/collusion'>http://mozilla.org/collusion</a></p>",
+                    "imageUrl": "image/collusion_popup_blocked.png"
                 },function(confirmed){
                     if ( confirmed ){
                         setPreferences('block');
@@ -432,7 +433,8 @@ var listStageStackClickHandler = function(event){
                         "dnsPrompt": true,
                         "title": "Hide Sites", 
                         "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 
-                                    "<p>You can use this to ignore trusted sites from the data.</p>" 
+                                    "<p>You can use this to ignore trusted sites from the data.</p>",
+                        "imageUrl": "image/collusion_popup_hidden.png"
                     },function(confirmed){
                         if ( confirmed ){
                             setPreferences('hide');

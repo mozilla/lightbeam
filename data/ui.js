@@ -125,8 +125,9 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 
 document.querySelector('.reset-data').addEventListener('click', function(){
     dialog( {   "title": "Reset Data",
-                "message":  "Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list [etc.]. " + 
-                            "Your browser will be returned to the state of a fresh install of Collusion."
+                "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list [etc.].</p>" + 
+                            "<p>Your browser will be returned to the state of a fresh install of Collusion.</p>",
+                "imageUrl": "image/collusion_popup_warningreset.png"
             },function(confirmed){
                 if ( confirmed ){
                     addon.emit('reset');
@@ -385,7 +386,7 @@ function legendBtnClickHandler(legendElm){
 
 /* Dialog / Popup ===================================== */
 
-// options: name, title, message, type, dnsPrompt(Do Not Show)
+// options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
 function dialog(options,callback){
     if ( doNotShowDialog(options.name) ) return; // according to user pref, do not show this dialog
     createDialog(options,callback);
@@ -398,24 +399,8 @@ function doNotShowDialog(dialogName){
 }
 
 function createDialog(options,callback){
-    var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
-    var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
-    var childElems = "";
-    if ( options.dnsPrompt ){ // show Do Not Show Again prompt
-        childElems += "<div class='dialog-dns'><input type='checkbox' /> Do not show this again.</div>";
-    }
-    if ( navigator.appVersion.indexOf("Win") > -1 ){ // runs on Windows
-        childElems += "<div class='pico-close dialog-cancel'>Cancel</div>";
-        childElems += "<div class='pico-close dialog-ok'>OK</div>";
-    }else{
-        childElems += "<div class='pico-close dialog-ok'>OK</div>";
-        childElems += "<div class='pico-close dialog-cancel'>Cancel</div>";
-    }
-    var controls = "<div class='dialog-controls'>" + childElems + "</div>";
-
-    // create dialog
     var modal = picoModal({
-        content: titleBar + messageBody + controls,
+        content: createDialogContent(options),
         closeButton: false,
         overlayClose: false,
         overlayStyles: {
@@ -431,6 +416,34 @@ function createDialog(options,callback){
     addDialogEventHandlers(modal,options,function(userResponse){
         callback(userResponse);
     });
+}
+
+function createDialogContent(options){
+    var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
+    var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
+    var content = "";
+    // dialog sign
+    var image = "";
+    if ( options.imageUrl ){
+        image = "<div class='dialog-sign'><img src='" + options.imageUrl + "' /></div>";
+    }
+    // controls
+    var controls;
+    var childElems = "";
+    if ( options.dnsPrompt ){ // show Do Not Show Again prompt
+        childElems += "<div class='dialog-dns'><input type='checkbox' /> Do not show this again.</div>";
+    }
+    if ( navigator.appVersion.indexOf("Win") > -1 ){ // runs on Windows
+        childElems += "<div class='pico-close dialog-cancel'>Cancel</div>";
+        childElems += "<div class='pico-close dialog-ok'>OK</div>";
+    }else{
+        childElems += "<div class='pico-close dialog-ok'>OK</div>";
+        childElems += "<div class='pico-close dialog-cancel'>Cancel</div>";
+    }
+    controls = "<div class='dialog-controls'>" + childElems + "</div>";
+    content = "<div class='dialog-content'>" + image + messageBody + "</div>";
+
+    return titleBar + content + controls;
 }
 
 function addDialogEventHandlers(modal,options,callback){

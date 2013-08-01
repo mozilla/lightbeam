@@ -201,7 +201,8 @@ function startSharing(callback){
                     'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
                     '<p>For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
                     'privacy policies are, please visit <a href="http://mozilla.org/collusion">http://mozilla.org/collusion</a> </p>' + 
-                    '<p>By clicking OK you are agreeing to share your data under those terms.</p>'
+                    '<p>By clicking OK you are agreeing to share your data under those terms.</p>',
+                "imageUrl": "image/collusion_popup_warningsharing.png"
             },
             function(confirmed){
                 if ( confirmed ){
@@ -217,7 +218,8 @@ function stopSharing(callback){
     dialog( {   "title": "Stop Uploading Data", 
                 "message": 
                     '<p>You are about to stop sharing data with the Mozilla Collusion server.</p>' +
-                    '<p>By clicking OK you will no longer be uploading data.</p>'
+                    '<p>By clicking OK you will no longer be uploading data.</p>',
+                "imageUrl": "image/collusion_popup_stopsharing2.png"
             },
             function(confirmed){
                 if ( confirmed ){

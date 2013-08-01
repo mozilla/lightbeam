@@ -114,12 +114,34 @@ h3 {
     padding-left: 20px;
 }
 
+.pico-content .dialog-content{
+    overflow: hidden;
+    margin-top: 30px;
+}
+
 .pico-content p{
     margin-top: 15px;
 }
 
+.pico-content .dialog-sign{
+    float: left;
+    width: 20%;
+}
+
+.pico-content .dialog-sign img{
+    margin-top: 10px;
+    width: 100%;
+    height: 100%;
+}
+
 .pico-content .dialog-message{
-    margin-top: 30px;
+    float: left;
+    width: calc( 80% - 20px );
+    margin-left: 20px;
+}
+
+.pico-content .dialog-controls{
+    clear: both;
 }
 
 .pico-content .dialog-dns{
