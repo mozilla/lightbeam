@@ -89,7 +89,6 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
-    addon.emit("privateWindowCheck");
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
@@ -104,32 +103,6 @@ window.addEventListener('load', function(evt){
 window.addEventListener('beforeunload', function(){
     saveConnections(allConnections);
 }, false);
-
-
-addon.on("isPrivateWindow", function(isPrivate){
-    if ( !localStorage.privateBrowsingMsgShown ){
-        if ( isPrivate ){
-            dialog( {   "type": "alert",
-                        "title": "Data Collected while Private Browsing", 
-                        "message": 
-                            "You've launched Collusion in a Private Browsing Window. " +
-                            "Data collected under Private Browsing Windows will not be perserved or stored. " + 
-                            "It will not appear again once the Window is close."
-                    }
-            );
-        }else{
-            dialog( {   "type": "alert",
-                        "title": "Data Collected while Private Browsing", 
-                        "message": 
-                            "Data collected under Private Browsing Windows will not be perserved or stored. " + 
-                            "It will not appear again once the Window is close."
-                    }
-            );
-        }
-    }
-
-    localStorage.privateBrowsingMsgShown = true;
-});
 
 function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
