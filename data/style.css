@@ -62,6 +62,10 @@ a:visited{
     color: #73A4B8;
 }
 
+.grey-text{
+    color: #3E454D;
+}
+
 .main{
     position: relative;
     height: 100%;
@@ -346,7 +350,7 @@ a:visited{
 
 .stats-section{
     float: left;
-    color: #707070;
+    color: #3E454D;
     width: 80%;
 }
 
@@ -364,7 +368,7 @@ a:visited{
 .sharing-section .label{
     display: inline-block;
     letter-spacing: 1px;
-    color: #707070;
+    color: #3E454D;
 }
 
 .sharing-section .share-btn{
@@ -647,14 +651,14 @@ text {
 /* CLOCK Visualization */
 
 .source,
-.sourceSites{
-    fill: #FFF;
+.source-sites{
+    fill: #128764;
     stroke: none;
 }
 
 .target,
-.targetSites{
-    fill: #FFDD64;
+.target-sites{
+    fill: #F1C40F;
     stroke: none;
 }
 
@@ -688,7 +692,7 @@ text {
 }
 
 .times-am-pm-label{
-    fill: #555;
+    fill: #3E454D;
     font-size: 10px;
 }
 
@@ -738,7 +742,7 @@ text {
 }
 
 .clicked-node.node.target{
-    stroke: #FA6900;
+    stroke: #F1C40F;
 }
 
 .colluded-source.node, .colluded-target.node{
