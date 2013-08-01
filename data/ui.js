@@ -192,7 +192,7 @@ function setZoom(box,canvas){
 *  clock                      = " -350 -495 700 500 "
 *  map                        = " 0 0 2711.3 1196.7 "
 */
-var graphZoomInLimit   = { x:300, y:300, w:200, h:300 };
+var graphZoomInLimit   = { w:250, h:250 };
 var graphZoomOutLimit  = { w:4000, h:4000 };
 var clockZoomInLimit   = { w:350, h:250 };
 var clockZoomOutLimit  = { w:2800, h:2800 };
