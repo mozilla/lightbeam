@@ -26,6 +26,12 @@ clock.name = "clock";
 clock.on('init', onInit);
 aggregate.on('connection', onConnection);
 clock.on('remove', onRemove);
+clock.on('reset', onReset);
+
+function onReset(){
+    onRemove();
+    onInit();
+}
 
 function onInit(){
     // console.log("= onInit = allConnections.length = %s" , allConnections.length);

@@ -19,6 +19,12 @@ list.on("remove", onRemove);
 list.on("showFilteredTable", function(filter){
     showFilteredTable(filter);
 });
+list.on('reset', onReset);
+
+function onReset(){
+    onRemove();
+    onInit();
+}
 
 function onInit(connections){
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it

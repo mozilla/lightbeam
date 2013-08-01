@@ -20,6 +20,20 @@ aggregate.nodes = [];
 aggregate.edges = [];
 aggregate.recentSites = [];
 
+function resetData(){
+    aggregate.nodes = {};
+    nodemap = {};
+    edgemap = {};
+    aggregate.edges [];
+    aggregate.trackerCount = 0;
+    aggregate.siteCount = 0;
+    aggregate.resentSites = [];
+    if (currentVisualization){
+        currentVisualization.emit('reset');
+    }
+}
+aggregate.on('reset', resetData); 
+
 aggregate.nodeForKey = function(key){
     var result = {};
     var linkedNodes = new Array();
