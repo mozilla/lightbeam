@@ -224,11 +224,11 @@ function dateAsKey(timestamp){
 function startSharing(callback){
     dialog( {   "title": "Upload Data", 
                 "message": 
-                    'You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
-                    'Your data will continue to be uploaded periodically until you turn off sharing. </br>' +
-                    'For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
-                    'privacy policies are, please visit http://ItsOurData.com/privacy/. </br>' + 
-                    'By clicking OK you are agreeing to share your data under those terms.'
+                    '<p>You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
+                    'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
+                    '<p>For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
+                    'privacy policies are, please visit <a href="http://mozilla.org/collusion">http://mozilla.org/collusion</a> </p>' + 
+                    '<p>By clicking OK you are agreeing to share your data under those terms.</p>'
             },
             function(confirmed){
                 if ( confirmed ){
@@ -243,8 +243,8 @@ function startSharing(callback){
 function stopSharing(callback){
     dialog( {   "title": "Stop Uploading Data", 
                 "message": 
-                    'You are about to stop sharing data with the Mozilla Collusion server.</br>' +
-                    'By clicking OK you will no longer be uploading data.'
+                    '<p>You are about to stop sharing data with the Mozilla Collusion server.</p>' +
+                    '<p>By clicking OK you will no longer be uploading data.</p>'
             },
             function(confirmed){
                 console.log(confirmed);
