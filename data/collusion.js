@@ -220,7 +220,6 @@ function stopSharing(callback){
                     '<p>By clicking OK you will no longer be uploading data.</p>'
             },
             function(confirmed){
-                console.log(confirmed);
                 if ( confirmed ){
                     localStorage.userHasOptedIntoSharing = false;
                     if (uploadTimer){

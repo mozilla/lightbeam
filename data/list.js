@@ -424,17 +424,22 @@ var listStageStackClickHandler = function(event){
                 }
         );
     }else if (target.mozMatchesSelector('.hide-pref.active a')){
-        dialog( {   "name": "hideDialog",
-                    "dnsPrompt": true,
-                    "title": "Hide Sites", 
-                    "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 
-                                "<p>You can use this to ignore trusted sites from the data.</p>" 
-                },function(confirmed){
-                    if ( confirmed ){
-                        setPreferences('hide');
+        var hideDialogName = "hideDialog";
+        if ( doNotShowDialog(hideDialogName) ){
+            setPreferences('hide');
+        }else{
+            dialog( {   "name": hideDialogName,
+                        "dnsPrompt": true,
+                        "title": "Hide Sites", 
+                        "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 
+                                    "<p>You can use this to ignore trusted sites from the data.</p>" 
+                    },function(confirmed){
+                        if ( confirmed ){
+                            setPreferences('hide');
+                        }
                     }
-                }
-        );
+            );
+        }
     }else if (target.mozMatchesSelector('.watch-pref.active a')){
         setPreferences('watch');
     }else if(target.mozMatchesSelector('.no-pref.active a')){
