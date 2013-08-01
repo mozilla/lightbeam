@@ -34,9 +34,32 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
     font-family: "Open Sans";
 }
 
-h3 {
-    color: #EBE9E9;
+a{
+    color: #73A4B8;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #6FC3E5;
+}
+
+a:visited{
+    color: #FFF;
+}
+
+.large-header{
+    color: #73A4B8;
     font-size: 18px;
+}
+
+.all-cap-header{
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.blue-text {
+    color: #73A4B8;
 }
 
 .main{
@@ -50,7 +73,6 @@ h3 {
     float: left;
     z-index: 5;
     height: 100%;
-    font-size: 12px;
     overflow-x: hidden;
     overflow-y: auto;
     background: #404850;
@@ -85,8 +107,6 @@ h3 {
 
 .controls .section-header{
     display: block;
-    text-transform: uppercase;
-    font-weight: bold;
     margin: 15px 0 5px 5px;
 }
 
@@ -198,6 +218,7 @@ h3 {
     background: #171E25;
     line-height: 28px;
     text-transform: capitalize;
+    color: #fff;
 }
 
 .btn_group .dropdown_options a{
@@ -240,17 +261,10 @@ h3 {
     top: 3px;
 }
 
-.controls .links > a, .controls .links > a:visited{
-    color: white;
-    text-decoration: none;
-}
-
-.controls .links > a:hover {
-    text-decoration: underline;
-}
-
 .controls .links{
+    text-align: center;
     line-height: 30px;
+    margin-top: 15px;
 }
 
 .controls .links img{
@@ -270,7 +284,6 @@ h3 {
     width: 60px;
     height: 28px;
     padding: 3px;
-    font-size: 12px;
     cursor: pointer;
 }
 
@@ -289,7 +302,7 @@ h3 {
 .toggle-btn .toggle-btn-innner .on-off-text{
     float: right;
     line-height: 20px;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: bold;
     margin: 0 5px;
 }
@@ -318,11 +331,6 @@ h3 {
     height: 100%;
 }
 
-#content span,
-#content p{
-    font-size: 12px;
-}
-
 .content-flex{
     display:flex;
     flex-direction:column;
@@ -334,7 +342,6 @@ h3 {
     background-color:#fff;
     flex:none;
     padding: 10px;
-    font-size: 10px;
 }
 
 .stats-section{
@@ -348,11 +355,6 @@ h3 {
     margin-right: 20px;
 }
 
-.stats-section .context-label{
-    display: block;
-    font-weight: bold;
-}
-
 .sharing-section{
     float: right;
     margin: 3px 5px 0 0;
@@ -361,7 +363,6 @@ h3 {
 
 .sharing-section .label{
     display: inline-block;
-    font-weight: bold;
     letter-spacing: 1px;
     color: #707070;
 }
@@ -374,9 +375,6 @@ h3 {
 
 .stat{
     display:inline-block;
-    font-weight:bold;
-    color:#38a9cb;
-    font-size: 20px;
     margin: 0 3px;
 }
 
@@ -448,16 +446,11 @@ h3 {
     top: 2px;
 }
 
-.info .holder > div{
-    font-size: 12px;
-}
-
-.info .holder > div h4{
-    font-size: 20px;
+.info .holder > div .large-header{
     margin-bottom: 10px;
 }
 
-.info .holder > div h4 img{
+.info .holder > div .large-header img{
     width: 16px;
     height: 16px;
 }
@@ -468,15 +461,12 @@ h3 {
     color: #777;
     letter-spacing: 1px;
     font-weight: bold;
-    text-transform: uppercase;
 }
 
-.blue-label{
+.help-content .blue-text.all-cap-header,
+.about-content .blue-text.all-cap-header{
     margin-bottom: 10px;
-    color: #4CC7E6;
-    letter-spacing: 1px;
     font-weight: bold;
-    text-transform: uppercase;
 }
 
 .info .holder section{
@@ -511,18 +501,7 @@ h3 {
 /* Info Panel(Profile) Sections */
 
 .map-section{
-    margin: 10px 0 50px 0;
-    font-size: 10px;
-}
-
-.map-control i:hover{
-    color: #fff;
-}
-
-.map-control i{
-    font-size: 12px;
-    margin: 0 5px;
-    color: #939393;
+    margin: 10px 0 10px 0;
 }
 
 
@@ -554,13 +533,6 @@ h3 {
 
 .showinfo .info{
     width: 300px;
-}
-
-.blue-text {
-    color: #4CC7E6;
-}
-.dark-blue-text{
-    color: #0C87A6;
 }
 
 .info .filters{
@@ -607,8 +579,6 @@ h3 {
 }
 
 .connections-list ul{
-    margin-top:50px;
-    font-size: 12px;
     line-height: 15px;
     list-style-type: none;
     min-height: 150px;
@@ -622,7 +592,7 @@ h3 {
 }
 
 .connections-list ul li:hover{
-    background-color: #475B61;
+    background-color: #6FC3E5;
 }
 
 .stage-stack{
@@ -676,11 +646,6 @@ text {
 
 /* CLOCK Visualization */
 
-.howMany{
-    font-size: 0.8em;
-    color: #343533;
-}
-
 .source,
 .sourceSites{
     fill: #FFF;
@@ -718,17 +683,13 @@ text {
     stroke-width: 2;
 }
 
-.time-hand-label{
-    font-size: 13px;
-}
-
 .times-label{
     font-size: 15px;
 }
 
 .times-am-pm-label{
     fill: #555;
-    font-size: 9px;
+    font-size: 10px;
 }
 
 .clock-time{
@@ -881,7 +842,6 @@ text {
 
 .list-table{
     border-collapse: collapse;
-    font-size: 12px;
     height: 100%;
     margin-right: 10px;
 }
@@ -1032,13 +992,12 @@ text {
 
 .legend-header header{
     display: inline-block;
-    font-size: 15px;
     margin-bottom: 3px;
 }
 
 .legend-header .legend-toggle{
     display: inline-block;
-    font-size: 12px;
+    font-size: 10px;
     cursor: pointer;
 }
 
@@ -1049,7 +1008,7 @@ text {
 
 .legend-controls .legend-label{
     margin-bottom: 15px;
-    font-size: 7pt;
+    font-size: 10px;
     letter-spacing: 1px;
     border-radius: 5px
 }
@@ -1062,7 +1021,7 @@ text {
 .legend-controls .legend-canvas-large{
     height: 18px;
     position: relative;
-    top: 7px;
+    top: 6px;
     margin-right: 5px;
 }
 
@@ -1078,6 +1037,10 @@ text {
 
 .legend-controls .legend-canvas-large{
     width: 34px;
+}
+
+.legend-controls .btn a{
+    font-size: 10px;
 }
 
 .graph-footer .btn,
