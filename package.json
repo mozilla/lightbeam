@@ -4,7 +4,7 @@
   "description": "A Firefox add-on to track who is tracking you",
   "author": "Mozilla Foundation",
   "license": "MPL 2.0",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "id": "jid1-7OBiDHPW1YAPaQ",
   "permissions": {"private-browsing": true}
 }
