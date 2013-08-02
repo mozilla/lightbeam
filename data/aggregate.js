@@ -19,15 +19,17 @@ aggregate.siteCount = 0;
 aggregate.nodes = [];
 aggregate.edges = [];
 aggregate.recentSites = [];
+aggregate.initialized = false;
 
 function resetData(){
-    aggregate.nodes = {};
     nodemap = {};
     edgemap = {};
+    aggregate.nodes = {};
     aggregate.edges = [];
     aggregate.trackerCount = 0;
     aggregate.siteCount = 0;
-    aggregate.resentSites = [];
+    aggregate.recentSites = [];
+    aggregate.initialized = false;
     if (currentVisualization){
         currentVisualization.emit('reset');
     }
@@ -87,6 +89,7 @@ aggregate.on('filter', applyFilter);
 function onLoad(connections){
     // console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
+    aggregate.initialized = true;
     filteredAggregate = currentFilter();
     currentVisualization.emit('init');
     // console.log('aggregate::onLoad end')
@@ -121,13 +124,21 @@ function onConnection(conn){
     var connection = aggregate.connectionAsObject(conn);
     var sourcenode, targetnode, edge, nodelist, updated = false;
     // Maintain the list of sites visited in dated order
+    // console.log('check for recent sites: %s: %s', connection.source, connection.sourceVisited);
     if (connection.sourceVisited){
+        // console.log('source visited: %s (%s)', connection.source, connection.target);
         var site = connection.source;
         var siteIdx = aggregate.recentSites.indexOf(site);
-        if (siteIdx > -1){
-            aggregate.recentSites.splice(siteIdx, 1);
+        if (aggregate.recentSites.length && siteIdx === (aggregate.recentSites.length - 1)){
+            // most recent site is already at the end of the recentSites list, do nothing
+        }else{
+            if (siteIdx > -1){
+                // if site is already in list (but not last), remove it
+                aggregate.recentSites.splice(siteIdx, 1);
+            }
+            aggregate.recentSites.push(site); // push site on end of list if it is not there
+            updated = true;
         }
-        aggregate.recentSites.push(site);
     }
     // Retrieve the source node and update, or create it if not found
     if (nodemap[connection.source]){
@@ -142,7 +153,7 @@ function onConnection(conn){
         }else{
             aggregate.trackerCount++;
         }
-        console.log('new source: %s, now %s nodes', sourcenode.name, aggregate.nodes.length);
+        // console.log('new source: %s, now %s nodes', sourcenode.name, aggregate.nodes.length);
         updated = true;
     }
     // Retrieve the target node and update, or create it if not found
@@ -158,7 +169,7 @@ function onConnection(conn){
         }else{
             aggregate.trackerCount++;
         }
-        console.log('new target: %s, now %s nodes', targetnode.name, aggregate.nodes.length);
+        // console.log('new target: %s, now %s nodes', targetnode.name, aggregate.nodes.length);
         updated = true
     }
     // Create edge objects. Could probably do this lazily just for the graph view
@@ -359,20 +370,20 @@ aggregate.filters = {
     },
     last10sites: function last10sites(){
         var sortedNodes = sitesSortedByDate();
-        console.log('last10sites filter before: %s', sortedNodes.length);
+        // console.log('last10sites filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-10);
-        console.log('last10sites filter after: %s', filteredNodes.length)
-        console.log('last 10 sites before joining with linked nodes:');
-        console.log('\t%o', filteredNodes.map(function(node){return node.name}));
+        // console.log('last10sites filter after: %s', filteredNodes.length)
+        // console.log('last 10 sites before joining with linked nodes:');
+        // console.log('\t%o', filteredNodes.map(function(node){return node.name}));
         return aggregateFromNodes(filteredNodes);
     },
     recent: function recent(){
         var sortedNodes = sitesSortedByDate();
-        console.log('recent filter before: %s', sortedNodes.length);
+        // console.log('recent filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-1);
-        console.log('recent filter after: %s', filteredNodes.length);
-        console.log('recent nodes before joining with linked nodes:');
-        console.log('\t%o', filteredNodes.map(function(node){return node.name;}));
+        // console.log('recent filter after: %s', filteredNodes.length);
+        // console.log('recent nodes before joining with linked nodes:');
+        // console.log('\t%o', filteredNodes.map(function(node){return node.name;}));
         return aggregateFromNodes(filteredNodes);
     }
 };
@@ -395,8 +406,10 @@ function switchFilter(name){
 aggregate.switchFilter = switchFilter;
 
 aggregate.update = function update(){
-    global.filteredAggregate = currentFilter();
-    aggregate.emit('update');
+    if (aggregate.initialized){
+        global.filteredAggregate = currentFilter();
+        aggregate.emit('update');
+    }
 }
 
 })(this);

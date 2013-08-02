@@ -118,11 +118,8 @@ function edgeCookie(edge){ return edge.cookieCount > 0; }
 function edgeHighlight(edge){ return highlight.connections; }
 function edgeColoured(edge){ return edge.cookieCount > 0 && highlight.cookies; }
 function nodeName(node){ 
-    try{
-        return node.name; 
-    }catch(e){
-        console.trace(e);
-        console.log('node: %o, error: %o', node, e);
+    if (node){
+        return node.name;
     }
 }
 
