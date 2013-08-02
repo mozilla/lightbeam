@@ -35,7 +35,7 @@ self.port.on("passTempConnections", function(connReceived){
     localStorage.lastSaved = Date.now();
 
     var nonPrivateConnections = connReceived.filter(function(connection){
-        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == null);
+        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
     });
     unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
 });
