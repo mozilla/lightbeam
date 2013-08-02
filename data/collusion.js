@@ -89,7 +89,6 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
-    addon.emit("privateWindowCheck");
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
@@ -104,32 +103,6 @@ window.addEventListener('load', function(evt){
 window.addEventListener('beforeunload', function(){
     saveConnections(allConnections);
 }, false);
-
-
-addon.on("isPrivateWindow", function(isPrivate){
-    if ( !localStorage.privateBrowsingMsgShown ){
-        if ( isPrivate ){
-            dialog( {   "type": "alert",
-                        "title": "Data Collected while Private Browsing", 
-                        "message": 
-                            "You've launched Collusion in a Private Browsing Window. " +
-                            "Data collected under Private Browsing Windows will not be perserved or stored. " + 
-                            "It will not appear again once the Window is close."
-                    }
-            );
-        }else{
-            dialog( {   "type": "alert",
-                        "title": "Data Collected while Private Browsing", 
-                        "message": 
-                            "Data collected under Private Browsing Windows will not be perserved or stored. " + 
-                            "It will not appear again once the Window is close."
-                    }
-            );
-        }
-    }
-
-    localStorage.privateBrowsingMsgShown = true;
-});
 
 function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
@@ -224,11 +197,12 @@ function dateAsKey(timestamp){
 function startSharing(callback){
     dialog( {   "title": "Upload Data", 
                 "message": 
-                    'You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
-                    'Your data will continue to be uploaded periodically until you turn off sharing. </br>' +
-                    'For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
-                    'privacy policies are, please visit http://ItsOurData.com/privacy/. </br>' + 
-                    'By clicking OK you are agreeing to share your data under those terms.'
+                    '<p>You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
+                    'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
+                    '<p>For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
+                    'privacy policies are, please visit <a href="http://mozilla.org/collusion">http://mozilla.org/collusion</a> </p>' + 
+                    '<p>By clicking OK you are agreeing to share your data under those terms.</p>',
+                "imageUrl": "image/collusion_popup_warningsharing.png"
             },
             function(confirmed){
                 if ( confirmed ){
@@ -243,11 +217,11 @@ function startSharing(callback){
 function stopSharing(callback){
     dialog( {   "title": "Stop Uploading Data", 
                 "message": 
-                    'You are about to stop sharing data with the Mozilla Collusion server.</br>' +
-                    'By clicking OK you will no longer be uploading data.'
+                    '<p>You are about to stop sharing data with the Mozilla Collusion server.</p>' +
+                    '<p>By clicking OK you will no longer be uploading data.</p>',
+                "imageUrl": "image/collusion_popup_stopsharing2.png"
             },
             function(confirmed){
-                console.log(confirmed);
                 if ( confirmed ){
                     localStorage.userHasOptedIntoSharing = false;
                     if (uploadTimer){

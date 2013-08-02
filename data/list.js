@@ -36,6 +36,7 @@ function onInit(connections){
     if ( !statsBarInitiated ){  
         updateStatsBar();
     }
+    toggleShowHideHiddenButton();
 }
 
 
@@ -344,6 +345,7 @@ function resetCanvas(){
         breadcrumb.parentElement.removeChild(breadcrumb);
     }
     breadcrumbList = [];
+    document.querySelector('.stage-stack').removeEventListener('click', listStageStackClickHandler, false);
     vizcanvas.classList.remove("hide");
 }
 
@@ -387,6 +389,7 @@ function setPreferences(pref){
         setUserSetting(row, pref);
     });
     toggleOnPrefButtons(false); // disable buttons since all checkboxes are unchecked now
+    toggleShowHideHiddenButton();
 }
 
 function toggleHiddenSites(target){
@@ -411,6 +414,49 @@ if (localStorage.listViewHideRows){
     document.querySelector('.stage-stack').classList.add('hide-hidden-rows');
 }
 
+
+var listStageStackClickHandler = function(event){
+    var target = event.target;
+    if(target.mozMatchesSelector('.block-pref.active a') ){
+        dialog( {   "title": "Block Sites", 
+                    "message":  "<p><b>Warning:</b></p> " + 
+                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [domain1.com, domain2.com, ...] and ALL SUBDOMAINS [www.domain1.com, etc.]. </p>" + 
+                                "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>" + 
+                                "<p>For more info: <a href='http://mozilla.org/collusion'>http://mozilla.org/collusion</a></p>",
+                    "imageUrl": "image/collusion_popup_blocked.png"
+                },function(confirmed){
+                    if ( confirmed ){
+                        setPreferences('block');
+                    }
+                }
+        );
+    }else if (target.mozMatchesSelector('.hide-pref.active a')){
+        var hideDialogName = "hideDialog";
+        if ( doNotShowDialog(hideDialogName) ){
+            setPreferences('hide');
+        }else{
+            dialog( {   "name": hideDialogName,
+                        "dnsPrompt": true,
+                        "title": "Hide Sites", 
+                        "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 
+                                    "<p>You can use this to ignore trusted sites from the data.</p>",
+                        "imageUrl": "image/collusion_popup_hidden.png"
+                    },function(confirmed){
+                        if ( confirmed ){
+                            setPreferences('hide');
+                        }
+                    }
+            );
+        }
+    }else if (target.mozMatchesSelector('.watch-pref.active a')){
+        setPreferences('watch');
+    }else if(target.mozMatchesSelector('.no-pref.active a')){
+        setPreferences('');
+    }else if(target.mozMatchesSelector('.toggle-hidden a')){
+        toggleHiddenSites(target);
+    }
+};
+
 // Install handlers
 function initializeHandlers(){
     try{
@@ -422,38 +468,7 @@ function initializeHandlers(){
     	toggleLegendSection(event.target,document.querySelector('.list-footer'));
 	});
 
-    document.querySelector('.stage-stack').addEventListener('click', function(event){
-        var target = event.target;
-        if(target.mozMatchesSelector('.block-pref.active a') ){
-            dialog( {   "name": "blockDialog",
-                        "dnsPrompt": true,
-                        "title": "Block Sites", 
-                        "message": "This will prevent you from connecting to the selected website(s) and can possibly break the web." 
-                    },function(confirmed){
-                        if ( confirmed ){
-                            setPreferences('block');
-                        }
-                    }
-            );
-        }else if (target.mozMatchesSelector('.hide-pref.active a')){
-            dialog( {   "name": "hideDialog",
-                        "dnsPrompt": true,
-                        "title": "Hide Sites", 
-                        "message": "Data of the selected website(s) will be hidden in all the Visualizations." 
-                    },function(confirmed){
-                        if ( confirmed ){
-                            setPreferences('hide');
-                        }
-                    }
-            );
-        }else if (target.mozMatchesSelector('.watch-pref.active a')){
-            setPreferences('watch');
-        }else if(target.mozMatchesSelector('.no-pref.active a')){
-            setPreferences('');
-        }else if(target.mozMatchesSelector('.toggle-hidden a')){
-            toggleHiddenSites(target);
-        }
-    }, false);
+    document.querySelector('.stage-stack').addEventListener('click', listStageStackClickHandler, false);
 
     // highlight selected row
     document.querySelector(".list-table").addEventListener("click",function(event){
@@ -492,6 +507,14 @@ function toggleOnPrefButtons(toggleOn){
     document.querySelector(".hide-pref").classList.remove(classToRemove);
     document.querySelector(".watch-pref").classList.remove(classToRemove);
     document.querySelector(".no-pref").classList.remove(classToRemove);
+}
+
+function toggleShowHideHiddenButton(){
+    if ( document.querySelectorAll("[data-pref='hide']").length > 0 ){
+        document.querySelector(".toggle-hidden").classList.remove("disabled");
+    }else{
+        document.querySelector(".toggle-hidden").classList.add("disabled");
+    }
 }
 
 })(visualizations);

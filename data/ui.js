@@ -125,19 +125,16 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 
 document.querySelector('.reset-data').addEventListener('click', function(){
     dialog( {   "title": "Reset Data",
-                "message": "Are you sure you want to reset your data?"
+                "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list [etc.].</p>" + 
+                            "<p>Your browser will be returned to the state of a fresh install of Collusion.</p>",
+                "imageUrl": "image/collusion_popup_warningreset.png"
             },function(confirmed){
                 if ( confirmed ){
                     addon.emit('reset');
                     aggregate.emit('reset');
-                    currentVisualization.emit('reset');
+                    currentVisualization.emit('remove');
                     allConnections = [];
-                    Object.keys(localStorage).sort().forEach(function(key){
-                        if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
-                            delete localStorage[key];;
-                        }
-                    });
-                    delete localStorage.dnsDialogs;
+                    localStorage.clear();
                     updateStatsBar();
                 }
             }
@@ -197,7 +194,7 @@ function setZoom(box,canvas){
 *  clock                      = " -350 -495 700 500 "
 *  map                        = " 0 0 2711.3 1196.7 "
 */
-var graphZoomInLimit   = { x:300, y:300, w:200, h:300 };
+var graphZoomInLimit   = { w:250, h:250 };
 var graphZoomOutLimit  = { w:4000, h:4000 };
 var clockZoomInLimit   = { w:350, h:250 };
 var clockZoomOutLimit  = { w:2800, h:2800 };
@@ -389,53 +386,92 @@ function legendBtnClickHandler(legendElm){
 
 /* Dialog / Popup ===================================== */
 
-// options: name, title, message, type, dnsPrompt(Do Not Show)
+// options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
 function dialog(options,callback){
-    var dnsPref = localStorage.dnsDialogs || "[]";
-    dnsPref = JSON.parse(dnsPref);
-    if ( dnsPref.indexOf(options.name) > -1 ) return; // according to user pref, do not show this dialog
-    showDialog(options,dnsPref,callback);
+    if ( doNotShowDialog(options.name) ) return; // according to user pref, do not show this dialog
+    createDialog(options,callback);
 }
 
-function showDialog(options,dnsPref,callback){
-    var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
-    var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
-    var controls = "<div class='dialog-controls'>"+
-                        "<div class='dialog-dns hidden'><input type='checkbox' /> Do not show this again.</div>" +
-                        "<div class='pico-close dialog-cancel'>Cancel</div>" +
-                        "<div class='pico-close dialog-ok'>OK</div>" +
-                    "</div>";
+function doNotShowDialog(dialogName){
+    var dnsPref = localStorage.dnsDialogs || "[]";
+    dnsPref = JSON.parse(dnsPref);
+    return ( dnsPref.indexOf(dialogName) > -1 ) ? true : false;
+}
 
+function createDialog(options,callback){
     var modal = picoModal({
-        content: titleBar + messageBody + controls,
+        content: createDialogContent(options),
         closeButton: false,
         overlayClose: false,
-        // width: 400,
         overlayStyles: {
             backgroundColor: "#000",
             opacity: 0.75
         }
     });
 
-    if ( options.dnsPrompt ){ // show Do Not Show Again prompt
-        document.querySelector(".dialog-dns").classList.remove("hidden");
-    }
     if ( options.type == "alert" ){
         document.querySelector(".dialog-cancel").classList.add("hidden");
     }
 
-    toArray(document.querySelectorAll(".pico-close")).forEach(function(btn){
-        btn.addEventListener("click", function(event){
-            if ( options.dnsPrompt && (event.target.innerHTML == "OK") ){ // Do Not Show
-                var checked = document.querySelector(".dialog-dns input").checked;
-                if ( checked ){ // user does not want this dialog to show again
-                    dnsPref.push(options.name);
-                    localStorage.dnsDialogs = JSON.stringify(dnsPref);
-                }
-            }
-            modal.close();
-            callback( (event.target.innerHTML == "OK") ? true : false );
-        });
+    addDialogEventHandlers(modal,options,function(userResponse){
+        callback(userResponse);
     });
 }
 
+function createDialogContent(options){
+    var titleBar = "<div class='dialog-title'>" + (options.title || "&nbsp;") + "</div>";
+    var messageBody = "<div class='dialog-message'>" + (options.message || "&nbsp;") + "</div>";
+    var content = "";
+    // dialog sign
+    var image = "";
+    if ( options.imageUrl ){
+        image = "<div class='dialog-sign'><img src='" + options.imageUrl + "' /></div>";
+    }
+    // controls
+    var controls;
+    var childElems = "";
+    if ( options.dnsPrompt ){ // show Do Not Show Again prompt
+        childElems += "<div class='dialog-dns'><input type='checkbox' /> Do not show this again.</div>";
+    }
+    if ( navigator.appVersion.indexOf("Win") > -1 ){ // runs on Windows
+        childElems += "<div class='pico-close dialog-cancel'>Cancel</div>";
+        childElems += "<div class='pico-close dialog-ok'>OK</div>";
+    }else{
+        childElems += "<div class='pico-close dialog-ok'>OK</div>";
+        childElems += "<div class='pico-close dialog-cancel'>Cancel</div>";
+    }
+    controls = "<div class='dialog-controls'>" + childElems + "</div>";
+    content = "<div class='dialog-content'>" + image + messageBody + "</div>";
+
+    return titleBar + content + controls;
+}
+
+function addDialogEventHandlers(modal,options,callback){
+    // press Esc to close the dialog (functions the same as clicking Cancel)
+    var escapeDialogKeyHandler = function(e){
+        if ( e.keyCode == "27" ){ // Esc key pressed
+            modal.close();
+            callback(false);
+        }
+    }
+    document.addEventListener("keydown", escapeDialogKeyHandler);
+    modal.onClose(function(){
+        document.removeEventListener("keydown", escapeDialogKeyHandler);
+    });
+    // OK button click event handler
+    document.querySelector(".pico-close.dialog-ok").addEventListener("click",function(){
+         if ( document.querySelector(".dialog-dns input") && document.querySelector(".dialog-dns input").checked ){ // Do Not Show
+            var dnsPref = localStorage.dnsDialogs || "[]";
+            dnsPref = JSON.parse(dnsPref);
+            dnsPref.push(options.name);
+            localStorage.dnsDialogs = JSON.stringify(dnsPref);
+        }
+        modal.close();
+        callback(true);
+    });
+    // Cancel button click event handler
+    document.querySelector(".pico-close.dialog-cancel").addEventListener("click",function(){
+        modal.close();
+        callback(false);
+    });
+}
