@@ -190,7 +190,7 @@ function setZoom(box,canvas){
 /* Scroll over visualization to zoom in/out ========================= */
 
 /* define viewBox limits
-*  graph view default viewBox = " 0 0 1000 1000 "
+*  graph view default viewBox = " 0 0 750 750 "
 *  clock                      = " -350 -495 700 500 "
 *  map                        = " 0 0 2711.3 1196.7 "
 */

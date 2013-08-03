@@ -9,7 +9,7 @@
 var graph = new Emitter();
 visualizations.graph = graph;
 graph.name = "graph";
-var width = 1000, height = 1000;
+var width = 750, height = 750;
 var force, vis;
 var edges, nodes;
 
