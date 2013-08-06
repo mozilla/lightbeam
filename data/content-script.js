@@ -18,7 +18,7 @@ self.port.on('connection', function(connection){
 self.port.on('init', function(collusionToken){
     console.error('content-script::init()');
     localStorage.collusionToken = collusionToken;
-    
+
     if (unsafeWindow && unsafeWindow.aggregate){
         unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
@@ -31,7 +31,7 @@ self.port.on('init', function(collusionToken){
 self.port.on("passTempConnections", function(connReceived){
     // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
     self.port.emit("tempConnectionTransferred", true);
-    
+
     localStorage.lastSaved = Date.now();
 
     var nonPrivateConnections = connReceived.filter(function(connection){
@@ -40,6 +40,21 @@ self.port.on("passTempConnections", function(connReceived){
     unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
 });
 
+self.port.on("private-browsing", function() {
+    unsafeWindow.dialog( {
+            "name": "privateBrowsingDialog",
+            "dnsPrompt": true,
+            "title": "Private Browsing",
+            "message":  "<p>You have one or more private browsing windows open. Connections made in private browsing windows will be visualized in Collusion but that data is neither stored locally nor will it ever be shared, if sharing is enabled. Data gathered in Private Browsing Mode will be deleted whenever Collusion is restarted, and is not collected at all when Collusion is not open.</p>",
+            "imageUrl": "image/collusion_popup_hidden.png"
+        },
+        function(confirmed) {
+            if ( confirmed ) {
+                setPreferences('hide');
+            }
+        }
+    );
+})
 
 function getAllConnections(){
     var allConnectionsAsArray = [];
