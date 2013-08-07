@@ -7,9 +7,7 @@
 (function(visualizations){
 
 var list = new Emitter();
-var breadcrumbList = [ "All Sites" ];
-var currentState = {};
-var pathToListIcon = "icons/collusion_icon_list.png";
+var breadcrumbStack = [];
 visualizations.list = list;
 list.name = "list";
 
@@ -105,109 +103,89 @@ function initList(){
     showFilteredTable(); // showing all data so no filter param is passed here
 }
 
+function initBreadcrumb(){
+    var stage = document.querySelector('.stage');
+    var breadcrumb = elem("div", {"class": "breadcrumb"});
+    stage.appendChild(breadcrumb);
+}
+
+function updateBreadcrumb(url){
+    // push to breadcrumbStack
+    breadcrumbStack.push(url ? url : "All Sites");
+    // remove all child nodes in breadcrumb container before we start mapping breadcrumbs to UI again
+    resetVisibleBreadcrumb();
+    // map breadcrumbs to UI
+    mapBreadcrumbsToUI();
+}
 
 var breadcrumbClickHandler = function(event){
     var url = event.target.getAttribute("site-url");
-    if ( url != breadcrumbList[0] ){
-        history.back();
-    }else{
-        history.pushState({"site":currentState.site,"prevState":currentState}, null, generateCollusionPageUrl(currentState.site).join("/"));
-        history.replaceState(null, null, generateCollusionPageUrl().join("/"));
-        showFilteredTable();
+    var idxInStack = event.target.getAttribute("idx");
+    while ( breadcrumbStack.length > idxInStack ){
+        breadcrumbStack.pop();   
     }
+    showFilteredTable(url);
 };
 
-function initBreadcrumb(){
-    var stage = document.querySelector('.stage');
-    breadcrumbList.push("All Sites");
-    var breadcrumb = elem("div", {"class": "breadcrumb"}, [
-            elem("div", {"class": "breadcrumb-chunk"}),
-            elem("div", {"class": "arrow-left hidden"}),
-            elem("div", {"class": "breadcrumb-chunk hidden"}),
-            elem("div", {"class": "arrow-left hidden"}),
-            elem("div", {"class": "breadcrumb-chunk hidden"})
-        ]);
-    stage.appendChild(breadcrumb);
-    document.querySelector(".breadcrumb-chunk").innerHTML = breadcrumbList[0]; // Show "All Sites" 
-    document.querySelector(".breadcrumb-chunk").addEventListener("click",breadcrumbClickHandler);
-}
+function mapBreadcrumbsToUI(){
+    var breadcrumb = document.querySelector(".breadcrumb");
+    var lastIdxInStack = breadcrumbStack.length-1;
+    // add "All Sites" to breadcrumb container
+    breadcrumb.appendChild( elem("div", {"class": "breadcrumb-chunk"}, breadcrumbStack[0]) );
+    // other than "All Sites", there is only 1 tier in breadcrumbStack 
+    // add that tier to breadcrumb container
+    if ( lastIdxInStack == 1 ){
+        breadcrumb.appendChild( elem("div", {"class": "arrow-left"}) );
+        breadcrumb.appendChild( elem(   "div", 
+                                        {
+                                            "class": "breadcrumb-chunk no-click", 
+                                            "site-url": breadcrumbStack[lastIdxInStack]
+                                        },
+                                        breadcrumbStack[lastIdxInStack]) );
+    }
+    // other than "All Sites", there are more than 1 tier in breadcrumbStack 
+    // we only want to show "All Sites" and the last 2 tiers
+    // so add the last 2 tiers to breadcrumb container
+    if ( lastIdxInStack >= 2 ){
+        // second last tier
+        breadcrumb.appendChild( elem(   "div", {"class": "arrow-left"}) );
+        breadcrumb.appendChild( elem(   "div", 
+                                        {
+                                            "class": "breadcrumb-chunk", 
+                                            "site-url": breadcrumbStack[lastIdxInStack-1], 
+                                            "idx": (lastIdxInStack-1)
+                                        },
+                                        breadcrumbStack[lastIdxInStack-1]) );
+        // last tier
+        breadcrumb.appendChild( elem("div", {"class": "arrow-left"}) );
+        breadcrumb.appendChild( elem(   "div", 
+                                        {
+                                            "class": "breadcrumb-chunk no-click", 
+                                            "site-url": breadcrumbStack[lastIdxInStack],
+                                            "idx": lastIdxInStack
+                                        },
+                                        breadcrumbStack[lastIdxInStack]) );
+    }
 
-function mapBreadcrumb(){
-    resetBreadcrumbByHide();
-    var chunks = toArray( document.querySelectorAll(".breadcrumb-chunk") );
-    breadcrumbList.forEach(function(siteUrl,i){
-        // show and update breadcrumb chunk 
-        chunks[i].classList.remove("hidden");
-        chunks[i].innerHTML = siteUrl;
-        chunks[i].setAttribute("site-url", siteUrl);
-        // show arrow accordingly
-        var hiddenArrows = toArray(document.querySelectorAll(".arrow-left.hidden"));
-        var numArrowShown = 2 - hiddenArrows.length;
-        var numTier = breadcrumbList.length;
-        if ( (numTier-1) > numArrowShown ){
-            hiddenArrows[0].classList.remove("hidden");
-        }
-        // add click handler if the breadcrumb chunk is not on the last tier(current)
-        if ( i <= (breadcrumbList.length-2) ){
-            chunks[i].addEventListener("click",breadcrumbClickHandler);
-        }else{
-            chunks[i].classList.add("no-click");
+    // add breadcrumbs click event handler
+    var allBreadcrumbChunks = document.querySelectorAll(".breadcrumb-chunk");
+    toArray(allBreadcrumbChunks).forEach(function(chunk){
+        if ( !chunk.classList.contains("no-click") ){
+            chunk.addEventListener("click", breadcrumbClickHandler, false);
         }
     });
 }
 
-// Reset the breadcrumb
-function resetBreadcrumbByHide(){
-    var chunks = document.querySelectorAll(".breadcrumb-chunk");
-    for (var i=0; i<chunks.length; i++ ){
-        chunks[i].classList.add("hidden");
-        chunks[i].classList.remove("no-click");
-    }
-    var allArrows = toArray(document.querySelectorAll(".arrow-left"));
-    for (var i=0; i<allArrows.length; i++ ){
-        allArrows[i].classList.add("hidden");
-    }
-}
 
-// Push State to Browser History
-// FIXME: should this be global?
-function pushUrlToHistory(siteUrl){
-    var tempList = [ "All Sites" ];
-    var href = generateCollusionPageUrl(siteUrl);
-    if (siteUrl){
-        if ( href[href.length-1] != "index.html" ){
-            currentState.site = href[href.length-1];
-            currentState.prevState = history.state;
-        }
-        history.pushState({"site": siteUrl, "prevState":currentState}, null, href.join("/"));
-        if ( currentState.prevState ){
-            tempList.push(currentState.prevState.site);
-        }
-        tempList.push(siteUrl);
-    }else{
-        // all sites list
-        history.replaceState(null, null, generateCollusionPageUrl().join("/"));
-    }
-    breadcrumbList = tempList;
-    mapBreadcrumb();
+function resetVisibleBreadcrumb(){
+    var breadcrumbContainer = document.querySelector(".breadcrumb");
+    while ( breadcrumbContainer.firstChild ){
+        breadcrumbContainer.removeChild(breadcrumbContainer.firstChild);
+    } 
 }
-
-// FIXME: should this be global?
-window.addEventListener("popstate", function(e){
-    var filter = null;
-    try{
-        var previousNowCurrent = e.state.prevState;
-        var filter = previousNowCurrent.site;
-        history.replaceState(previousNowCurrent.prevState, null, generateCollusionPageUrl(filter).join("/"));
-    }catch(e){
-        // console.log("Show 'All Sites' List");
-    }
-    showFilteredTable(filter);
-});
 
 function showFilteredTable(filter){
-    pushUrlToHistory(filter);
-    pathToListIcon =  filter ? "../icons/collusion_icon_list.png" : "icons/collusion_icon_list.png";
+    updateBreadcrumb(filter);
     // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");
     var tbody = table.querySelector('.list-body');
@@ -255,7 +233,7 @@ function nodeToRow(node){
         elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
         elem('td', {'class': 'preferences', 'data-sort-key': settings, 'role': 'gridcell'}, '\u00A0'),
         elem('td', {'data-sort-key': node.name, 'role': 'gridcell'}, [
-                elem('img', {'src': pathToListIcon, 'class': 'update-table', 'role': 'gridcell'}),
+                elem('img', {'src': 'icons/collusion_icon_list.png', 'class': 'update-table', 'role': 'gridcell'}),
                 node.name
             ]),
         elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10), 'role': 'gridcell'}, formattedDate(node.firstAccess)),
@@ -346,7 +324,7 @@ function resetCanvas(){
     if (breadcrumb){
         breadcrumb.parentElement.removeChild(breadcrumb);
     }
-    breadcrumbList = [];
+    breadcrumbStack = [];
     document.querySelector('.stage-stack').removeEventListener('click', listStageStackClickHandler, false);
     vizcanvas.classList.remove("hide");
 }
