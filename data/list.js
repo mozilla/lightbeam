@@ -63,21 +63,21 @@ function initList(){
 
     // list header
     var table = elem("div", {'class': 'list-table'}, [
-        elem('table', [
+        elem('table', {'role': 'grid', 'aria-label': 'Entering List table'}, [
             elem('thead', {'class': 'header-table'}, [
-                elem('tr', [
-                    elem('th', elem('input', {'class': 'selected-header', type: 'checkbox'})),
-                    elem('th', 'Type'),
-                    elem('th', 'Prefs'),
-                    elem('th', 'Website'),
-                    elem('th', 'First Access'),
-                    elem('th', 'Last Access'),
-                    elem('th', {'class': 'sort-numeric'}, 'Sites Connected')
+                elem('tr', {'role':'row', 'tabIndex': '0'}, [
+                    elem('th', elem('input', {'class': 'selected-header', type: 'checkbox', 'tabIndex': '-1'})),
+                    elem('th', {'role':'gridcell'}, 'Type'),
+                    elem('th', {'role':'gridcell'}, 'Prefs'),
+                    elem('th', {'role':'gridcell'}, 'Website'),
+                    elem('th', {'role':'gridcell'}, 'First Access'),
+                    elem('th', {'role':'gridcell'}, 'Last Access'),
+                    elem('th', {'class': 'sort-numeric', 'role': 'gridcell'}, 'Sites Connected')
                 ])
             ]),
         ]),
         elem('div', {'class': 'body-table'},
-            elem('table',
+            elem('table', {'role': 'grid'},
                 elem('tbody', {'class': 'list-body'})
             )
         )
@@ -247,18 +247,20 @@ function nodeToRow(node){
             'class': 'node ' + node.nodeType,
             'data-pref': settings,
             'data-name': node.name,
-            'site-url': node.name
+            'site-url': node.name,
+            'role': 'row',
+            'tabIndex': '0'
     }, [
-        elem('td', elem('input', {'type': 'checkbox', 'class': 'selected-row'})),
-        elem('td', {'data-sort-key': node.nodeType}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
-        elem('td', {'class': 'preferences', 'data-sort-key': settings}, '\u00A0'),
-        elem('td', {'data-sort-key': node.name}, [
-                elem('img', {'src': pathToListIcon, 'class': 'update-table'}),
+        elem('td', elem('input', {'type': 'checkbox', 'class': 'selected-row', 'tabIndex':'-1'})),
+        elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
+        elem('td', {'class': 'preferences', 'data-sort-key': settings, 'role': 'gridcell'}, '\u00A0'),
+        elem('td', {'data-sort-key': node.name, 'role': 'gridcell'}, [
+                elem('img', {'src': pathToListIcon, 'class': 'update-table', 'role': 'gridcell'}),
                 node.name
             ]),
-        elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10)}, formattedDate(node.firstAccess)),
-        elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10)}, formattedDate(node.lastAccess)),
-        elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
+        elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10), 'role': 'gridcell'}, formattedDate(node.firstAccess)),
+        elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10), 'role': 'gridcell'}, formattedDate(node.lastAccess)),
+        elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1, 'role': 'gridcell'}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
     ]);
 }
 
