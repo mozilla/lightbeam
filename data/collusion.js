@@ -126,8 +126,6 @@ function switchVisualization(name){
 
 
 function resetAddtionalUI(){
-    // reset Collusion url to root 
-    history.replaceState(null, null, generateCollusionPageUrl().join("/"));
     // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
     var activeTab = document.querySelector(".info-panel-controls ul li.active");
@@ -200,7 +198,7 @@ function startSharing(callback){
                     '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
                     'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
                     '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
-                    'privacy policies are, please visit <a href="http://mozilla.org/collusion">http://mozilla.org/collusion</a> </p>' + 
+                    'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
                     '<p>By clicking OK you are agreeing to share your data under those terms.</p>',
                 "imageUrl": "image/collusion_popup_warningsharing.png"
             },

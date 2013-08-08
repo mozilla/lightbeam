@@ -182,6 +182,18 @@ a:hover{
     cursor: pointer;
 }
 
+.pico-content .dialog-ok:focus,
+.pico-content .dialog-cancel:focus{
+    outline-size: 1px;
+    outline-style: dotted;
+    outline-color: grey;
+}
+
+.pico-content .dialog-ok:active,
+.pico-content .dialog-cancel:active{
+    outline: 0;
+}
+
 /* Button Styling ================================ */
 
 .btn{
