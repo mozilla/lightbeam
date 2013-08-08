@@ -197,9 +197,9 @@ function dateAsKey(timestamp){
 function startSharing(callback){
     dialog( {   "title": "Upload Data", 
                 "message": 
-                    '<p>You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
+                    '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
                     'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
-                    '<p>For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
+                    '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
                     'privacy policies are, please visit <a href="http://mozilla.org/collusion">http://mozilla.org/collusion</a> </p>' + 
                     '<p>By clicking OK you are agreeing to share your data under those terms.</p>',
                 "imageUrl": "image/collusion_popup_warningsharing.png"
