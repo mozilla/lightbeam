@@ -168,10 +168,13 @@ a:hover{
     margin: 20px 0;
 }
 
+.pico-content .dialog-btns{
+    float: right;
+}
+
 .pico-content .dialog-ok,
 .pico-content .dialog-cancel{
     display: inline-block;
-    float: right;
     background: #4CC7E6;
     color: #fff;
     font-size: 10px;

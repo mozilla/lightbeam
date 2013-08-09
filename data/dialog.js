@@ -42,19 +42,20 @@ function createDialogContent(options){
     // controls
     var controls;
     var childElems = "";
+    var doNotShowAgainPrompt = "<div class='dialog-dns'><input type='checkbox' /> Do not show this again.</div>";
+    var okButton = "<a class='pico-close dialog-ok'>OK</a>";
+    var cancelButton = "<a class='pico-close dialog-cancel'>Cancel</a>";
     if ( options.dnsPrompt ){ // show Do Not Show Again prompt
-        childElems += "<div class='dialog-dns'><input type='checkbox' /> Do not show this again.</div>";
+        childElems += doNotShowAgainPrompt;
     }
     if ( options.type == "alert" ){ // alert dialog only needs a single button "OK"
-        childElems += "<a href='' class='pico-close dialog-ok'>OK</a>";
+        childElems += "<div class='dialog-btns'>" + "<a class='pico-close dialog-ok'>OK</a>" + "</div>";
 
     }else{
         if ( navigator.appVersion.indexOf("Win") > -1 ){ // runs on Windows
-            childElems += "<a href='' class='pico-close dialog-cancel'>Cancel</a>";
-            childElems += "<a href='' class='pico-close dialog-ok'>OK</a>";
+            childElems += "<div class='dialog-btns'>" + okButton + cancelButton + "</div>";
         }else{ // runs on OS other than Windows
-            childElems += "<a href='' class='pico-close dialog-ok'>OK</a>";
-            childElems += "<a href='' class='pico-close dialog-cancel'>Cancel</a>";
+            childElems += "<div class='dialog-btns'>" + cancelButton + okButton + "</div>";
         }
     }
 
@@ -69,7 +70,6 @@ function restrictFocusWithinDialog(){
     var tabIndex = 0;
     toArray(allElemsInDialog).forEach(function(elem, i){
         if ( elem.nodeName.toLowerCase() == "a" || elem.nodeName.toLowerCase() == "input" ){
-            // console.log("====  "  + elem.nodeName.toLowerCase() +" =====");
             elem.setAttribute("tabIndex", tabIndex);
             tabIndex++;
         }
@@ -95,15 +95,21 @@ function addDialogEventHandlers(modal,options,callback){
     // restrict Tab/focus within dialogs
     document.querySelector(".pico-content").addEventListener("keypress", function(event){
         event.stopPropagation();
-        // console.log(document.activeElement);
+        var focusedElm = document.activeElement;
+        // Tab key is pressed
         if ( event.keyCode == "9" ){
-            var currentTabIndex = parseInt(document.activeElement.getAttribute("tabIndex"));
+            var currentTabIndex = parseInt(focusedElm.getAttribute("tabIndex"));
             var nextElem = document.querySelector(".pico-content [tabIndex='" + (currentTabIndex+1) + "']");
             if ( nextElem ){
                 nextElem.focus();
             }else{
                 document.querySelector(".pico-content [tabIndex='0']").focus();
             }
+        }
+        // when the focused element is the OK or Cancel button and Enter key is pressed
+        // mimic mouse clicking on button
+        if ( event.keyCode == "13" && focusedElm.mozMatchesSelector(".pico-content .dialog-btns a") ){
+            focusedElm.click();
         }
     });
 

@@ -42,17 +42,16 @@ self.port.on("passTempConnections", function(connReceived){
 
 self.port.on("private-browsing", function() {
     unsafeWindow.dialog( {
+            "type": "alert",
             "name": "privateBrowsingDialog",
             "dnsPrompt": true,
             "title": "Private Browsing",
-            "message":  "<p>You have one or more private browsing windows open. Connections made in private browsing windows will be visualized in Collusion but that data is neither stored locally nor will it ever be shared, if sharing is enabled. Data gathered in Private Browsing Mode will be deleted whenever Collusion is restarted, and is not collected at all when Collusion is not open.</p>",
-            "imageUrl": "image/collusion_popup_hidden.png"
+            "message":  "<p>You have one or more private browsing windows open.</p>" +
+                        "<p>Connections made in private browsing windows will be visualized in Collusion but that data is neither stored locally nor will it ever be shared, if sharing is enabled.</p>" + 
+                        "<p>Data gathered in Private Browsing Mode will be deleted whenever Collusion is restarted, and is not collected at all when Collusion is not open.</p>",
+            "imageUrl": "image/collusion_popup_privacy.png"
         },
-        function(confirmed) {
-            if ( confirmed ) {
-                setPreferences('hide');
-            }
-        }
+        function(confirmed){}
     );
 })
 
