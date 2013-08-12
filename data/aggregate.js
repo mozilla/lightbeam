@@ -5,8 +5,6 @@
 (function(global){
 "use strict";
 
-var nodemap = {}, edgemap = {};
-
 var aggregate = new Emitter();
 global.aggregate = aggregate;
 global.filteredAggregate = {
@@ -20,16 +18,17 @@ aggregate.nodes = [];
 aggregate.edges = [];
 aggregate.recentSites = [];
 aggregate.initialized = false;
+aggregate.nodemap = {};
+aggregate.edgemap = {};
 
 function resetData(){
-    nodemap = {};
-    edgemap = {};
-    aggregate.nodes = {};
+    aggregate.nodemap = {};
+    aggregate.edgemap = {};
+    aggregate.nodes = [];
     aggregate.edges = [];
     aggregate.trackerCount = 0;
     aggregate.siteCount = 0;
     aggregate.recentSites = [];
-    aggregate.initialized = false;
     if (currentVisualization){
         currentVisualization.emit('reset');
     }
@@ -39,10 +38,10 @@ aggregate.on('reset', resetData);
 aggregate.nodeForKey = function(key){
     var result = {};
     var linkedNodes = new Array();
-    linkedNodes = nodemap[key].linkedFrom.concat(nodemap[key].linkedTo);
-    result[key] = nodemap[key];
+    linkedNodes = aggregate.nodemap[key].linkedFrom.concat(aggregate.nodemap[key].linkedTo);
+    result[key] = aggregate.nodemap[key];
     linkedNodes.forEach(function(nodeName){
-        var node = nodemap[nodeName];
+        var node = aggregate.nodemap[nodeName];
         var temp = {};
         for ( var p in node ){
             if ( node.hasOwnProperty(p) && !( p == "linkedFrom" || p == "linkedTo" ) ){
@@ -127,7 +126,7 @@ function onConnection(conn){
     // console.log('check for recent sites: %s: %s', connection.source, connection.sourceVisited);
     if (connection.sourceVisited){
         // console.log('source visited: %s (%s)', connection.source, connection.target);
-        var site = connection.source;
+        var site = connection.target;
         var siteIdx = aggregate.recentSites.indexOf(site);
         if (aggregate.recentSites.length && siteIdx === (aggregate.recentSites.length - 1)){
             // most recent site is already at the end of the recentSites list, do nothing
@@ -141,12 +140,12 @@ function onConnection(conn){
         }
     }
     // Retrieve the source node and update, or create it if not found
-    if (nodemap[connection.source]){
-        sourcenode = nodemap[connection.source];
+    if (aggregate.nodemap[connection.source]){
+        sourcenode = aggregate.nodemap[connection.source];
         sourcenode.update(connection, true);
     }else{
         sourcenode = new GraphNode(connection, true);
-        nodemap[connection.source] = sourcenode;
+        aggregate.nodemap[connection.source] = sourcenode;
         aggregate.nodes.push(sourcenode);
         if (connection.sourceVisited){
             aggregate.siteCount++;
@@ -157,12 +156,12 @@ function onConnection(conn){
         updated = true;
     }
     // Retrieve the target node and update, or create it if not found
-    if (nodemap[connection.target]){
-        targetnode = nodemap[connection.target];
+    if (aggregate.nodemap[connection.target]){
+        targetnode = aggregate.nodemap[connection.target];
         targetnode.update(connection, false);
     }else{
         targetnode = new GraphNode(connection, false);
-        nodemap[connection.target] = targetnode;
+        aggregate.nodemap[connection.target] = targetnode;
         aggregate.nodes.push(targetnode); // all nodes
         if (connection.sourceVisited){
             aggregate.siteCount++; // Can this ever be true?
@@ -173,12 +172,12 @@ function onConnection(conn){
         updated = true
     }
     // Create edge objects. Could probably do this lazily just for the graph view
-    if (edgemap[connection.source + '->' + connection.target]){
-        edge = edgemap[connection.source + '->' + connection.target];
+    if (aggregate.edgemap[connection.source + '->' + connection.target]){
+        edge = aggregate.edgemap[connection.source + '->' + connection.target];
         edge.update(connection);
     }else{
         edge = new GraphEdge(sourcenode, targetnode, connection);
-        edgemap[edge.name] = edge;
+        aggregate.edgemap[edge.name] = edge;
         aggregate.edges.push(edge);
         updated = true;
     }
@@ -192,8 +191,8 @@ aggregate.on('connection', onConnection);
 
 function GraphEdge(source, target, connection){
     var name = source.name + '->' + target.name;
-    if (edgemap[name]){
-        return edgemap[name];
+    if (aggregate.edgemap[name]){
+        return aggregate.edgemap[name];
     }
     this.source = source;
     this.target = target;
@@ -264,18 +263,17 @@ GraphNode.prototype.update = function(connection, isSource){
     if (this.contentTypes.indexOf(connection.contentType) < 0){
         this.contentTypes.push(connection.contentType);
     }
-    if (isSource){
-        this.visitedCount = connection.sourceVisited ? this.visitedCount+1 : this.visitedCount;
-        if ( this.subdomain.indexOf(connection.sourceSub) < 0 ){
-            this.subdomain.push(connection.sourceSub);
-        }
-    }else{
-        if ( this.subdomain.indexOf(connection.targetSub) < 0 ){
-            this.subdomain.push(connection.targetSub);
-        }
+    if (connection.sourceVisited){
+        this.visitedCount++;
     }
-    this.cookieCount = connection.cookie ? this.cookieCount+1 : this.cookieCount;
-    this.secureCount = connection.secure ? this.secureCount+1 : this.secureCount;
+    if ( this.subdomain.indexOf(connection.sourceSub) < 0 ){
+        this.subdomain.push(connection.sourceSub);
+    }if (connection.cookie){
+        this.cookieCount++;
+    }
+    if (connection.secure){
+        this.secureCount++;
+    }
     if ( this.method.indexOf(connection.method) < 0 ){
         this.method.push(connection.method);
     }
@@ -298,7 +296,7 @@ GraphNode.prototype.update = function(connection, isSource){
 
 function sitesSortedByDate(){
     return aggregate.recentSites.map(function(sitename){
-        return nodemap[sitename];
+        return aggregate.nodemap[sitename];
     });
 }
 aggregate.sitesSortedByDate = sitesSortedByDate;
@@ -309,13 +307,13 @@ function aggregateFromNodes(nodes){
     nodes.forEach(function(node){
         localmap[node.name] = node;
         node.linkedFrom.forEach(function(nodename){
-            var linkedNode = nodemap[nodename];
+            var linkedNode = aggregate.nodemap[nodename];
             var edge = new GraphEdge(node, linkedNode);
             edgemap[edge.name] = edge;
             localmap[nodename] = linkedNode;
         });
         node.linkedTo.forEach(function(nodename){
-            var linkedNode = nodemap[nodename];
+            var linkedNode = aggregate.nodemap[nodename];
             var edge = new GraphEdge(node, linkedNode);
             edgemap[edge.name] = edge;
             localmap[nodename] = linkedNode;
