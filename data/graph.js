@@ -79,7 +79,8 @@ function onRemove(){
 };
 
 function onReset(){
-    updateGraph();
+    onRemove();
+    aggregate.emit('load', allConnections);
 }
 
 

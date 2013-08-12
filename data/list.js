@@ -21,7 +21,7 @@ list.on('reset', onReset);
 
 function onReset(){
     onRemove();
-    onInit();
+    aggregate.emit('load', allConnections);
 }
 
 function onInit(connections){
@@ -40,21 +40,18 @@ function onInit(connections){
 
 function onConnection(conn){
     var connection = aggregate.connectionAsObject(conn);
-    aggregate.emit('connection', connection);
     updateStatsBar();
 }
 
 
 function onRemove(){
     // console.log('removing list');
-    //aggregate.emit('reset');
     resetCanvas();
 }
 
 
 function initList(){
     var stage = document.querySelector('.stage');
-    document.querySelector('.stage-stack').classList.add("list");
 
     // breadcrumb
     initBreadcrumb();
@@ -315,7 +312,6 @@ function resort(table){
 }
 
 function resetCanvas(){
-    document.querySelector(".stage").classList.remove("list");
     var listTable = document.querySelector('.stage .list-table');
     if (listTable){
         listTable.parentElement.removeChild(listTable);

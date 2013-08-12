@@ -24,7 +24,7 @@ aggregate.initialized = false;
 function resetData(){
     nodemap = {};
     edgemap = {};
-    aggregate.nodes = {};
+    aggregate.nodes = [];
     aggregate.edges = [];
     aggregate.trackerCount = 0;
     aggregate.siteCount = 0;
