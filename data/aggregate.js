@@ -33,6 +33,7 @@ function resetData(){
     if (currentVisualization){
         currentVisualization.emit('reset');
     }
+    updateStatsBar();
 }
 aggregate.on('reset', resetData); 
 
@@ -92,6 +93,7 @@ function onLoad(connections){
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
     currentVisualization.emit('init');
+    updateStatsBar();
     // console.log('aggregate::onLoad end')
 }
 
@@ -185,6 +187,7 @@ function onConnection(conn){
     if (updated){
         aggregate.update();
     }
+    updateStatsBar();
 }
 
 aggregate.on('connection', onConnection);
@@ -410,6 +413,7 @@ aggregate.update = function update(){
         global.filteredAggregate = currentFilter();
         aggregate.emit('update');
     }
+    updateStatsBar();
 }
 
 })(this);

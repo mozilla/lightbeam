@@ -30,17 +30,12 @@ function onInit(connections){
     // This binds our data to the D3 visualization and sets up the callbacks
     initList();
     initializeHandlers();
-    //aggregate.on('updated', function(){ });
-    if ( !statsBarInitiated ){  
-        updateStatsBar();
-    }
     toggleShowHideHiddenButton();
 }
 
 
 function onConnection(conn){
     var connection = aggregate.connectionAsObject(conn);
-    updateStatsBar();
 }
 
 

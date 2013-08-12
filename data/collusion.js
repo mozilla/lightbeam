@@ -15,7 +15,6 @@ try{
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
 var uploadTimer;
 var saveTimer;
-var statsBarInitiated;
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -321,5 +320,4 @@ function updateStatsBar(){
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
     document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " THIRD PARTY SITES"; 
     document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " SITES";
-    statsBarInitiated = true;
 }

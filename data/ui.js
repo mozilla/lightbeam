@@ -135,7 +135,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
                     addon.emit('reset');
                     aggregate.emit('reset');
                     localStorage.clear();
-                    updateStatsBar();
                 }
             }
     );

@@ -43,9 +43,6 @@ function onInit(){
         }
     });
     fadeEarlierTrackers(timeToBucket(new Date()));
-    if ( !statsBarInitiated ){  
-        updateStatsBar();
-    }
 };
 
 function drawClockFrame(){
@@ -118,7 +115,6 @@ function onConnection(conn){
     // group source nodes closer to the center of the clock
     // and group target nodes further away
     arrangeNodePosition(bucketIdx);
-    updateStatsBar();
 }
 
 
