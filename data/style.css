@@ -783,6 +783,10 @@ text {
     color: #6FC3E5;
 }
 
+.hide-text{
+    color: #FE7E00;
+}
+
 .blockedSites{
     fill: #E02A61 !important;
 }
