@@ -228,8 +228,8 @@ function nodeToRow(node){
                 elem('img', {'src': 'icons/collusion_icon_list.png', 'class': 'update-table', 'role': 'gridcell'}),
                 node.name
             ]),
-        elem('td', {'data-sort-key': node.firstAccess.toISOString().slice(0,10), 'role': 'gridcell'}, formattedDate(node.firstAccess)),
-        elem('td', {'data-sort-key': node.lastAccess.toISOString().slice(0,10), 'role': 'gridcell'}, formattedDate(node.lastAccess)),
+        elem('td', {'data-sort-key': node.firstAccess, 'role': 'gridcell'}, formattedDate(node.firstAccess)),
+        elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, formattedDate(node.lastAccess)),
         elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1, 'role': 'gridcell'}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
     ]);
 }
