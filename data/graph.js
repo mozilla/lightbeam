@@ -177,19 +177,29 @@ function initGraph(){
             // `this` is the DOM node
             this.setAttribute('transform', 'translate(' + d.x + ',' + d.y + ') scale(' + (1 + .05 * d.weight) + ')');
             this.setAttribute('data-timestamp', d.lastAccess.toISOString());
+            // check to see if it's a visited node or not
             if (d.visitedCount){
                 this.classList.add('visitedYes');
-                this.classList.remove('visitedNo');
+                // this.classList.remove('visitedNo');
             }else{
                 this.classList.add('visitedNo');
-                this.classList.remove('visitedYes');
+                // this.classList.remove('visitedYes');
             }
+            // check to see if it should be highlighted
             if (d.visitedCount && highlight.visited){
                 this.classList.add('highlighted');
             }else if((!d.visitedCount) &&highlight.neverVisited){
                 this.classList.add('highlighted');
             }else{
                 this.classList.remove('highlighted');
+            }
+            // check to see if it's a watched site
+            if ( Object.keys(userSettings).indexOf(d.name) > -1 && userSettings[d.name].contains("watch") ){
+                this.classList.add("watched");
+            }
+            // check to see if it's a blocked site
+            if ( Object.keys(userSettings).indexOf(d.name) > -1 && userSettings[d.name].contains("block") ){
+                this.classList.add("blocked");
             }
         });
         var endDraw = Date.now();

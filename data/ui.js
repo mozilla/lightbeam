@@ -134,6 +134,7 @@ document.querySelector('.reset-data').addEventListener('click', function(){
                     allConnections = [];
                     addon.emit('reset');
                     aggregate.emit('reset');
+                    userSettings = {};
                     localStorage.clear();
                 }
             }
