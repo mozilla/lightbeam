@@ -4,6 +4,17 @@ function toArray(nl){
     return Array.prototype.slice.call(nl, 0);
 }
 
+/**************************************************
+*   For accessibility:
+*       if the current focused element is an anchor, press Enter will mimic mouse click on that element
+*/
+document.addEventListener("keypress", function(event){
+    var focusedElm = document.activeElement;
+    if ( event.keyCode == "13" && focusedElm.mozMatchesSelector("a") && !focusedElm.getAttribute("href") ){
+        focusedElm.click();
+    }
+});
+
 
 /**************************************************
 *   Buttons
@@ -382,5 +393,3 @@ function legendBtnClickHandler(legendElm){
         }
     });
 }
-
-
