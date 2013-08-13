@@ -341,12 +341,12 @@ aggregate.filters = {
         var now = Date.now();
         var then = now - (24 * 60 * 60 * 1000);
         var sortedNodes = sitesSortedByDate();
-        console.log('daily filter before: %s', aggregate.recentSites.length);
+        // console.log('daily filter before: %s', aggregate.recentSites.length);
         // filter
         // find index where we go beyond date
         var i;
         for (i = sortedNodes.length - 1; i > -1; i--){
-            console.log(sortedNodes[i].lastAccess.valueOf() + ' < ' + then + ': ' + (sortedNodes[i].lastAccess.valueOf() < then));
+            // console.log(sortedNodes[i].lastAccess.valueOf() + ' < ' + then + ': ' + (sortedNodes[i].lastAccess.valueOf() < then));
             if (sortedNodes[i].lastAccess.valueOf() < then){
                 break;
             }
