@@ -94,18 +94,18 @@ function polygonAsString(points, size){
 
 // ACCESSOR FUNCTIONS
 
-function scaleNode(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .05 * node.weight) + ')'; }
-function visited(node){ return !!node.visitedCount; }
-function notVisited(node){ return !node.visitedCount; }
-function timestamp(node){ return node.lastAccess.toISOString(); }
-function nodeHighlight(node){ return ( node.visitedCount > 0 ) ? highlight.highlightVisited : highlight.highlightNeverVisited; }
-function sourceX(edge){ return edge.source.x; }
-function sourceY(edge){ return edge.source.y; }
-function targetX(edge){ return edge.target.x; }
-function targetY(edge){ return edge.target.y; }
-function edgeCookie(edge){ return edge.cookieCount > 0; }
-function edgeHighlight(edge){ return highlight.connections; }
-function edgeColoured(edge){ return edge.cookieCount > 0 && highlight.cookies; }
+// function scaleNode(node){ return 'translate(' + node.x + ',' + node.y + ') scale(' + (1 + .05 * node.weight) + ')'; }
+function visited(node){ return node.nodeType === 'site' || node.nodeType === 'both'; }
+function notVisited(node){ return node.nodeType === 'thirdparty'; }
+// function timestamp(node){ return node.lastAccess.toISOString(); }
+// function nodeHighlight(node){ return ( node.visitedCount > 0 ) ? highlight.highlightVisited : highlight.highlightNeverVisited; }
+// function sourceX(edge){ return edge.source.x; }
+// function sourceY(edge){ return edge.source.y; }
+// function targetX(edge){ return edge.target.x; }
+// function targetY(edge){ return edge.target.y; }
+// function edgeCookie(edge){ return edge.cookieCount > 0; }
+// function edgeHighlight(edge){ return highlight.connections; }
+// function edgeColoured(edge){ return edge.cookieCount > 0 && highlight.cookies; }
 function nodeName(node){ 
     if (node){
         return node.name;
@@ -116,13 +116,15 @@ function nodeName(node){
 
 var ticking = false;
 
+function charge(d){ return -(500 +  d.weight * 25); }
+
 function initGraph(){
     // Initialize D3 layout and bind data
     // console.log('initGraph()');
     force = d3.layout.force()
         .nodes(filteredAggregate.nodes)
         .links(filteredAggregate.edges)
-        .charge(-500)
+        .charge(charge)
         .size([width,height])
         .start();
     updateGraph();
@@ -177,18 +179,16 @@ function initGraph(){
             // `this` is the DOM node
             this.setAttribute('transform', 'translate(' + d.x + ',' + d.y + ') scale(' + (1 + .05 * d.weight) + ')');
             this.setAttribute('data-timestamp', d.lastAccess.toISOString());
-            // check to see if it's a visited node or not
-            if (d.visitedCount){
+            if (d.nodeType === 'site' || d.nodeType === 'both'){
                 this.classList.add('visitedYes');
-                // this.classList.remove('visitedNo');
+                this.classList.remove('visitedNo');
             }else{
                 this.classList.add('visitedNo');
-                // this.classList.remove('visitedYes');
+                this.classList.remove('visitedYes');
             }
-            // check to see if it should be highlighted
-            if (d.visitedCount && highlight.visited){
+            if ((d.nodeType === 'site' || d.nodeType === 'both') && highlight.visited){
                 this.classList.add('highlighted');
-            }else if((!d.visitedCount) &&highlight.neverVisited){
+            }else if((d.nodeType === 'thirdparty') && highlight.neverVisited){
                 this.classList.add('highlighted');
             }else{
                 this.classList.remove('highlighted');

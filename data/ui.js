@@ -323,7 +323,7 @@ function exportFormat(connections, roundOff){
 /* Filter out connections collected in Private Mode */
 function excludePrivateConnection(connections){
     return connections.filter(function(connection){
-        return (connection[FROM_PRIVATE_MODE] == false);
+        return !connection[FROM_PRIVATE_MODE];
     })
 }
 
