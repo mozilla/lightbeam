@@ -95,7 +95,7 @@ window.addEventListener('load', function(evt){
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
-    saveTimer = setInterval(saveConnections, 5 * 60 * 1000); // save to localStorage every 5 minutes
+    saveTimer = setInterval(saveConnections, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('collusion load() ended');
 });
 
 
@@ -152,10 +152,13 @@ function resetAddtionalUI(){
 *   Save connections
 */
 function saveConnections(){
-    var lastSaved = localStorage.lastSaved || 0;
+    console.error('saveConnections( ' + allConnections.length + ' connection)');
+    var lastSaved = Number(localStorage.lastSaved || 0);
     var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
+        // console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');
         return ( connection[TIMESTAMP] > lastSaved);
     });
+    // console.error(unsavedNonPrivateConn.length + ' unsaved, non-private connections');
     if ( unsavedNonPrivateConn.length > 0 ){
         saveConnectionsByDate(unsavedNonPrivateConn);
     }
