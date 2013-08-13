@@ -43,10 +43,6 @@ a:hover{
     color: #6FC3E5;
 }
 
-a:visited{
-    color: #FFF;
-}
-
 .large-header{
     color: #73A4B8;
     font-size: 18px;
@@ -172,10 +168,13 @@ a:visited{
     margin: 20px 0;
 }
 
+.pico-content .dialog-btns{
+    float: right;
+}
+
 .pico-content .dialog-ok,
 .pico-content .dialog-cancel{
     display: inline-block;
-    float: right;
     background: #4CC7E6;
     color: #fff;
     font-size: 10px;
@@ -184,6 +183,18 @@ a:visited{
     padding: 5px 25px;
     margin: 10px 0 0 10px;
     cursor: pointer;
+}
+
+.pico-content .dialog-ok:focus,
+.pico-content .dialog-cancel:focus{
+    outline-size: 1px;
+    outline-style: dotted;
+    outline-color: grey;
+}
+
+.pico-content .dialog-ok:active,
+.pico-content .dialog-cancel:active{
+    outline: 0;
 }
 
 /* Button Styling ================================ */
@@ -489,7 +500,7 @@ a:visited{
     list-style-type: none;
 }
 
-.info .holder section ul img{
+.info .holder section img{
     width: 15px;
     height: 15px;
     margin-right: 5px;

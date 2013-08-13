@@ -18,7 +18,7 @@ self.port.on('connection', function(connection){
 self.port.on('init', function(collusionToken){
     console.error('content-script::init()');
     localStorage.collusionToken = collusionToken;
-    
+
     if (unsafeWindow && unsafeWindow.aggregate){
         unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
@@ -31,15 +31,29 @@ self.port.on('init', function(collusionToken){
 self.port.on("passTempConnections", function(connReceived){
     // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
     self.port.emit("tempConnectionTransferred", true);
-    
+
     localStorage.lastSaved = Date.now();
 
     var nonPrivateConnections = connReceived.filter(function(connection){
-        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == null);
+        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
     });
     unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
 });
 
+self.port.on("private-browsing", function() {
+    unsafeWindow.dialog( {
+            "type": "alert",
+            "name": "privateBrowsingDialog",
+            "dnsPrompt": true,
+            "title": "Private Browsing",
+            "message":  "<p>You have one or more private browsing windows open.</p>" +
+                        "<p>Connections made in private browsing windows will be visualized in Collusion but that data is neither stored locally nor will it ever be shared, if sharing is enabled.</p>" + 
+                        "<p>Data gathered in Private Browsing Mode will be deleted whenever Collusion is restarted, and is not collected at all when Collusion is not open.</p>",
+            "imageUrl": "image/collusion_popup_privacy.png"
+        },
+        function(confirmed){}
+    );
+})
 
 function getAllConnections(){
     var allConnectionsAsArray = [];

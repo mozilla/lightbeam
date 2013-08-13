@@ -7,24 +7,24 @@
     <link rel="stylesheet" type="text/css" href="font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
-<body>
+<body role="application">
     <div class="main">
-        <aside class="controls">
+        <aside class="controls" role="navigation">
             <header>
                 <div class="collusion-icon"></div>
                 <img class="logo" src="icons/Collusion---Wordmark-Beta.png" />
             </header>
 
             <div class="section-header all-cap-header">VISUALIZATION</div>
-            <div class="btn_group visualization">
+            <div class="btn_group visualization" role="menu">
                 <div data-list class="dropdown_options">
-                    <a data-value="Graph">
+                    <a data-value="Graph" href="" role="menuitem" tabIndex="1" aria-label="Graph Visualization">
                         <img src="image/collusion_icon_graph.png" />graph
                     </a>
-                    <a data-value="Clock">
+                    <a data-value="Clock" href="" role="menuitem" tabIndex="2" aria-label="Clock Visualization">
                         <img src="image/collusion_icon_clock.png" />clock
                     </a>
-                    <a data-value="List">
+                    <a data-value="List" href="" role="menuitem" tabIndex="3" aria-label="List. Display data in tabular format.">
                         <img src="image/collusion_icon_list.png" />list
                     </a>
                 </div>
@@ -55,8 +55,8 @@
             </div>
         </aside>
 
-		<div class="content-flex">
-			<div class="top-bar">
+        <div class="content-flex">
+            <div class="top-bar">
                 <div class="stats-section">
                     <section>
                         <div class="all-cap-header">DATA GATHERED SINCE</div>
@@ -82,24 +82,24 @@
                         </label>
                     </div>
                 </div>
-			</div>
+            </div>
         <div id="content">
             <aside class="info">
                 <div class="holder">
                 <!-- Site Profile starts ================================= -->
                     <div class="site-profile-content hidden">
-    					<div>
-    						<header class="title large-header"></header>
-    						<!--span class="blue-text">You are currently browsing this site</span-->
-    						<span class="all-cap-header"><b>First Access </b></span><span class="info-first-access">Date</span><br>
-    						<span class="all-cap-header"><b>Last Access </b></span><span class="info-last-access">Date</span>
+                        <div>
+                            <header class="title large-header"></header>
+                            <!--span class="blue-text">You are currently browsing this site</span-->
+                            <span class="all-cap-header"><b>First Access </b></span><span class="info-first-access">Date</span><br>
+                            <span class="all-cap-header"><b>Last Access </b></span><span class="info-last-access">Date</span>
                         <div class="map-section">
                             <header class="blue-text large-header">Server Location</header>
                             <div><span id="country">&nbsp;</span></div>
                             <!-- SVG world map code starts; based on BlankMap-World6,_compact.svg by Canuckguy et al. =========================  -->
                             <object type="image/svg+xml" data="map.svg" class="world-map"></object>
                         </div>
-    					</div>
+                        </div>
                         <div class="connections-list">
                             <header class="large-header"><b class="num-connected-sites"></b> Connected Sites</header>
                             <ul>
@@ -210,8 +210,8 @@
                             <section>
                                 <div class="blue-text all-cap-header">FEATURES</div>
                                 <div>
-                                    <div><span class="feature-name">(_icon_) Checkboxes</span> - click + apply site preference</div>
-                                    <div><span class="feature-name">(_icon_) _SORT BY_</span> - Type, Preference, WEbsite(A-Z), Date</div>
+                                    <div><span class="feature-name"><img src="image/collusion_icon_checkbox.png" />  Checkboxes</span> - click + apply site preference</div>
+                                    <div><span class="feature-name"><img src="image/collusion_icon_sortby.png" /> SORT BY</span> - Type, Preference, WEbsite(A-Z), Date</div>
                                 </div>
                             </section>
                             <section>
@@ -280,7 +280,7 @@
                     <li class="toggle-about"><a class="about"><img src="image/collusion_icon_about.png" /></a><i class="icon-chevron-right hidden"></i></li>
                 </ul>
             </div>
-            <div class="stage-stack">
+            <div class="stage-stack" role="main">
               <div class="stage">
                   <svg class="vizcanvas" width="100%" height="100%" viewBox="-350 -450 700 500">
                       <defs>
@@ -416,44 +416,44 @@
               </div>
               <!-- SITE PREFERENCES for List ================================  -->
               <div class="list-footer">
-              		<section class="legend-header">
+                    <section class="legend-header">
                         <div><header class="blue-text all-cap-header">SITE PREFERENCES</header></div>
                         <div><a class="legend-toggle blue-text">Hide</a></div>
                     </section>
                     <section class="legend-controls">
-						<section class="align-left">
-							<div class="block-pref btn disabled">
-								<a>
-									<img src="icons/collusion_icon_block.png" />
-									Block Site
-								</a>
-							</div>
-							<div class="hide-pref btn disabled">
-								<a>
-									<img src="icons/collusion_icon_hide.png" />
-									Hide Site
-								</a>
-					</div>
-							<div class="watch-pref btn disabled">
-								<a>
-									<img src="icons/collusion_icon_watch.png" />
-									Watch Site
-								</a>
-							</div>
-						</section>
-						<section class="align-right">
-							<div class="no-pref btn disabled">
-								<a>
-									Clear Preference
-								</a>
-							</div>
+                        <section class="align-left">
+                            <div class="block-pref btn disabled">
+                                <a>
+                                    <img src="icons/collusion_icon_block.png" />
+                                    Block Site
+                                </a>
+                            </div>
+                            <div class="hide-pref btn disabled">
+                                <a>
+                                    <img src="icons/collusion_icon_hide.png" />
+                                    Hide Site
+                                </a>
+                    </div>
+                            <div class="watch-pref btn disabled">
+                                <a>
+                                    <img src="icons/collusion_icon_watch.png" />
+                                    Watch Site
+                                </a>
+                            </div>
+                        </section>
+                        <section class="align-right">
+                            <div class="no-pref btn disabled">
+                                <a>
+                                    Clear Preference
+                                </a>
+                            </div>
                             <div class="toggle-hidden disabled btn">
                                 <a>
                                     Hide Hidden Sites
                                 </a>
                             </div>
-						</section>
-					</section>
+                        </section>
+                    </section>
               </div>
             </div><!-- .stage-stack -->
         </div>
@@ -469,6 +469,7 @@
     <!-- from https://github.com/Nycto/PicoModal -->
     <script src="picoModal-1.0.0.min.js"></script>
     <script src="tooltip.js"></script>
+    <script src="dialog.js"></script>
     <script src="ui.js"></script>
     <!-- Map -->
     <script src="parseuri.js"></script>

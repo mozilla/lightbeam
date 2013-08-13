@@ -24,16 +24,16 @@ visualizations.clock = clock;
 clock.name = "clock";
 
 clock.on('init', onInit);
-aggregate.on('connection', onConnection);
 clock.on('remove', onRemove);
 clock.on('reset', onReset);
 
 function onReset(){
     onRemove();
-    onInit();
+    aggregate.emit('load', allConnections);
 }
 
 function onInit(){
+    aggregate.on('connection', onConnection);
     // console.log("= onInit = allConnections.length = %s" , allConnections.length);
     drawClockFrame();
     var oneDayAgo = Date.now() - (24 *  60 * 60 * 1000);
@@ -43,9 +43,6 @@ function onInit(){
         }
     });
     fadeEarlierTrackers(timeToBucket(new Date()));
-    if ( !statsBarInitiated ){  
-        updateStatsBar();
-    }
 };
 
 function drawClockFrame(){
@@ -118,7 +115,6 @@ function onConnection(conn){
     // group source nodes closer to the center of the clock
     // and group target nodes further away
     arrangeNodePosition(bucketIdx);
-    updateStatsBar();
 }
 
 

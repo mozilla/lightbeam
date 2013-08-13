@@ -15,7 +15,6 @@ try{
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
 var uploadTimer;
 var saveTimer;
-var statsBarInitiated;
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -126,8 +125,6 @@ function switchVisualization(name){
 
 
 function resetAddtionalUI(){
-    // reset Collusion url to root 
-    history.replaceState(null, null, generateCollusionPageUrl().join("/"));
     // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
     var activeTab = document.querySelector(".info-panel-controls ul li.active");
@@ -200,10 +197,10 @@ function dateAsKey(timestamp){
 function startSharing(callback){
     dialog( {   "title": "Upload Data", 
                 "message": 
-                    '<p>You are about to start uploading anonymized data to the Mozilla Collusion server. ' +
+                    '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
                     'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
-                    '<p>For more information about the data we upload, how it is anonymized, and what Mozilla\'s ' +
-                    'privacy policies are, please visit <a href="http://mozilla.org/collusion">http://mozilla.org/collusion</a> </p>' + 
+                    '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
+                    'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
                     '<p>By clicking OK you are agreeing to share your data under those terms.</p>',
                 "imageUrl": "image/collusion_popup_warningsharing.png"
             },
@@ -326,20 +323,4 @@ function updateStatsBar(){
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
     document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " THIRD PARTY SITES"; 
     document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " SITES";
-    statsBarInitiated = true;
-}
-
-
-/****************************************
-*   Generate Collusion Page Url
-*/
-function generateCollusionPageUrl(siteUrl){
-    var href = window.location.href.split("/");
-    if ( href[href.length-1] != "index.html" ){
-        href = href.slice(0,href.length-1);
-    }
-    if ( siteUrl ){
-        href.push(siteUrl);
-    }
-    return href;
 }
