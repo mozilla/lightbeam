@@ -55,20 +55,8 @@ function onInit(){
     aggregate.on('update', onUpdate);
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
-    if ( !statsBarInitiated ){  
-        updateStatsBar();
-    }
     // console.log('graph::onInit end');
 };
-
-// function onConnection(connection){
-//     console.log("= allConnections.length = %s" , allConnections.length);
-//     updateGraph();
-//     if (force){
-//         force.start();
-//     }
-//     updateStatsBar();
-// }
 
 function onRemove(){
     if (force){
@@ -79,7 +67,8 @@ function onRemove(){
 };
 
 function onReset(){
-    updateGraph();
+    onRemove();
+    aggregate.emit('load', allConnections);
 }
 
 

@@ -130,12 +130,11 @@ document.querySelector('.reset-data').addEventListener('click', function(){
                 "imageUrl": "image/collusion_popup_warningreset.png"
             },function(confirmed){
                 if ( confirmed ){
+                    // currentVisualization.emit('remove');
+                    allConnections = [];
                     addon.emit('reset');
                     aggregate.emit('reset');
-                    currentVisualization.emit('remove');
-                    allConnections = [];
                     localStorage.clear();
-                    updateStatsBar();
                 }
             }
     );
