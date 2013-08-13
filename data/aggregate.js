@@ -125,12 +125,13 @@ function onConnection(conn){
     // Maintain the list of sites visited in dated order
     // console.log('check for recent sites: %s: %s', connection.source, connection.sourceVisited);
     if (connection.sourceVisited){
-        // console.log('source visited: %s (%s)', connection.source, connection.target);
+        // console.log('source visited: %s -> %s', connection.source, connection.target);
         var site = connection.target;
         var siteIdx = aggregate.recentSites.indexOf(site);
         if (aggregate.recentSites.length && siteIdx === (aggregate.recentSites.length - 1)){
             // most recent site is already at the end of the recentSites list, do nothing
         }else{
+
             if (siteIdx > -1){
                 // if site is already in list (but not last), remove it
                 aggregate.recentSites.splice(siteIdx, 1);
@@ -138,6 +139,8 @@ function onConnection(conn){
             aggregate.recentSites.push(site); // push site on end of list if it is not there
             updated = true;
         }
+    }else{
+        // console.log('source not visited: %s -> %s', connection.source, connection.target);
     }
     // Retrieve the source node and update, or create it if not found
     if (aggregate.nodemap[connection.source]){
@@ -179,7 +182,7 @@ function onConnection(conn){
         edge = new GraphEdge(sourcenode, targetnode, connection);
         aggregate.edgemap[edge.name] = edge;
         aggregate.edges.push(edge);
-        updated = true;
+        // updated = true;
     }
     if (updated){
         aggregate.update();
@@ -335,15 +338,19 @@ aggregate.filters = {
         var now = Date.now();
         var then = now - (24 * 60 * 60 * 1000);
         var sortedNodes = sitesSortedByDate();
-        // console.log('daily filter before: %s', aggregate.nodes.length);
+        console.log('daily filter before: %s', aggregate.recentSites.length);
         // filter
         // find index where we go beyond date
         var i;
         for (i = sortedNodes.length - 1; i > -1; i--){
-            if (sortedNodes[i].lastAccess < then){
+            console.log(sortedNodes[i].lastAccess.valueOf() + ' < ' + then + ': ' + (sortedNodes[i].lastAccess.valueOf() < then));
+            if (sortedNodes[i].lastAccess.valueOf() < then){
                 break;
             }
         }
+        // i is always 1 too low at the point
+        i++; // put it back
+        // console.log('slicing on index %s', i);
         var filteredNodes = sortedNodes.slice(i);
         // Done filtering
         // console.log('daily filter after: %s', filteredNodes.length);
@@ -362,6 +369,7 @@ aggregate.filters = {
                 break;
             }
         }
+        i++; // we decrement too far, put it back
         var filteredNodes = sortedNodes.slice(i);
         // console.log('weekly filter after: %s', filteredNodes.length);
         return aggregateFromNodes(filteredNodes);
@@ -389,7 +397,7 @@ aggregate.filters = {
 var currentFilter = aggregate.filters[localStorage.currentFilter || 'daily'];
 
 function switchFilter(name){
-    console.log('switchFilter(' + name + ')');
+    // console.log('switchFilter(' + name + ')');
     if (currentFilter && currentFilter === aggregate.filters[name]) return;
     currentFilter = aggregate.filters[name];
     if (currentFilter){

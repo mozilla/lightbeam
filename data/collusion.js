@@ -158,10 +158,10 @@ function saveConnections(){
     console.error('saveConnections( ' + allConnections.length + ' connection)');
     var lastSaved = Number(localStorage.lastSaved || 0);
     var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
-        console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');
+        // console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');
         return ( connection[TIMESTAMP] > lastSaved);
     });
-    console.error(unsavedNonPrivateConn.length + ' unsaved, non-private connections');
+    // console.error(unsavedNonPrivateConn.length + ' unsaved, non-private connections');
     if ( unsavedNonPrivateConn.length > 0 ){
         saveConnectionsByDate(unsavedNonPrivateConn);
     }
