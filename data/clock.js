@@ -78,43 +78,51 @@ function onConnection(conn){
         vizcanvas.appendChild(clock.timeslots[bucketIdx].group);
     }
 
-    var bucket = clock.timeslots[bucketIdx];
-
-    // see if we've already added this source node to the visualization
-    // if not, create one
-    var sourceIdx = -1;
-    if ( bucket.sourceNodes.length > 0 ) {
-        for (var i=0; i<bucket.sourceNodes.length; i++){
-            if ( bucket.sourceNodes[i] == connection.source ){
-                sourceIdx = i;
-                break;
-            }
-        }
-    }
-    if ( sourceIdx < 0 ){
-        bucket.sourceNodes.push(connection.source);
-        appendNodeG(bucket,connection,"source");
-    }
+    // check to see the site nodes have already existed, if not, create one and add it to the bucket
+    addNodesFromConnection(clock.timeslots[bucketIdx],connection)
  
-    // see if we've already added this target node to the visualization
-    // if not, create one
-    var targetIdx = -1;
-    if ( bucket.targetNodes.length > 0 ) {
-        for (var i=0; i<bucket.targetNodes.length; i++){
-            if ( bucket.targetNodes[i] == connection.target ){
-                targetIdx = i;
-                break;
-            }
-        }
-    }
-    if ( targetIdx < 0 ){
-        bucket.targetNodes.push(connection.target);
-        appendNodeG(bucket,connection,"target");
-    }
- 
-    // group source nodes closer to the center of the clock
-    // and group target nodes further away
+    // group visited site nodes closer to the center of the clock
+    // and group third party site nodes further away
     arrangeNodePosition(bucketIdx);
+}
+
+function addNodesFromConnection(bucket,connection){
+    if ( aggregate.isDomainVisited(connection.source) ){ // we only want to show visited source
+        console.log("VISITED = " + connection.source)
+        addNewNode(bucket,connection,"source");
+    }
+    if ( !aggregate.isDomainVisited(connection.target) ){ // if the target has been visited, leave it as visited node.  do not show it as third-party
+        addNewNode(bucket,connection,"target");  
+    }
+}
+
+function addNewNode(bucket,connection,type){
+    var idxInBucket = -1;
+    var existingNodes;
+    var site;
+
+    if ( type == "source" ){
+        existingNodes = bucket.sourceNodes;
+        site = connection.source;
+    }else{ // "target"
+        existingNodes = bucket.targetNodes;
+        site = connection.target;
+    }
+
+    // see if we've already added this node to the specified type group("source"/"target")
+    // if not, create one
+    if ( existingNodes.length > 0 ) {
+        for (var i=0; i<existingNodes.length; i++){
+            if ( existingNodes[i] == site ){
+                idxInBucket = i;
+                break;
+            }
+        }
+    }
+    if ( idxInBucket < 0 ){
+        existingNodes.push(site);
+        appendNodeG(bucket,connection,type);
+    }    
 }
 
 
