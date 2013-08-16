@@ -4,6 +4,17 @@ function toArray(nl){
     return Array.prototype.slice.call(nl, 0);
 }
 
+/**************************************************
+*   For accessibility:
+*       if the current focused element is an anchor, press Enter will mimic mouse click on that element
+*/
+document.addEventListener("keypress", function(event){
+    var focusedElm = document.activeElement;
+    if ( event.keyCode == "13" && focusedElm.mozMatchesSelector("a") && !focusedElm.getAttribute("href") ){
+        focusedElm.click();
+    }
+});
+
 
 /**************************************************
 *   Buttons
@@ -134,6 +145,7 @@ document.querySelector('.reset-data').addEventListener('click', function(){
                     allConnections = [];
                     addon.emit('reset');
                     aggregate.emit('reset');
+                    userSettings = {};
                     localStorage.clear();
                 }
             }
@@ -203,34 +215,47 @@ var mapZoomOutLimit    = { w:2711.3, h:1196.7 };
 document.querySelector(".stage").addEventListener("wheel",function(event){
     if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && currentVisualization.name != "list" ){
         if ( currentVisualization.name == "graph" ){
-            zoomWithinLimit(event, vizcanvas, graphZoomInLimit, graphZoomOutLimit);
-        }else{ // clock view
-            zoomWithinLimit(event, vizcanvas, clockZoomInLimit, clockZoomOutLimit);
+            zoomWithinLimit(event.deltaY, vizcanvas, graphZoomInLimit, graphZoomOutLimit);
+        }
+        if ( currentVisualization.name == "clock" ){ // clock view
+            zoomWithinLimit(event.deltaY, vizcanvas, clockZoomInLimit, clockZoomOutLimit);
         }
     }
 },false);
 
 
+// check to see if the viewBox of the targeting svg is within the limit we define
+function checkWithinZoomLimit(targetSvg,zoomType,zoomLimit){
+    var currentViewBox = getZoom(targetSvg);
+    if ( zoomType == "in" ){
+        var withinZoomInLimit = ( currentViewBox.w > zoomLimit.w && currentViewBox.h > zoomLimit.h);
+        if ( zoomLimit.x && zoomLimit.y ){
+            withinZoomInLimit =
+                withinZoomInLimit && ( currentViewBox.x < zoomLimit.x && currentViewBox.y < zoomLimit.y );
+        }
+        return withinZoomInLimit;
+    }else{
+         var withinZoomOutLimit = ( currentViewBox.w <= zoomLimit.w && currentViewBox.h <= zoomLimit.h );
+         return withinZoomOutLimit;
+    }
+}
+
 // Check to see if the viewBox of the targeting svg is within the limit we define
 // if yes, zoom
-function zoomWithinLimit(event, targetSvg, zoomInLimit, zoomOutLimit){
-    var currentViewBox = getZoom(targetSvg);
-
-    var withinZoomInLimit = ( currentViewBox.w > zoomInLimit.w && currentViewBox.h > zoomInLimit.h);
-    if ( zoomInLimit.x && zoomInLimit.y ){
-        withinZoomInLimit =
-            withinZoomInLimit && ( currentViewBox.x < zoomInLimit.x && currentViewBox.y < zoomInLimit.y );
+function zoomWithinLimit(scrollDist, targetSvg, zoomInLimit, zoomOutLimit){
+    if ( scrollDist >= 1 ){ // scroll up to zoom out
+        for ( var i=1; i<=scrollDist; i++){
+            if ( checkWithinZoomLimit(targetSvg,"out",zoomOutLimit) ){
+                svgZooming(targetSvg, (1/1.35));
+            }
+        }
     }
-
-    var withinZoomOutLimit = ( currentViewBox.w <= zoomOutLimit.w && currentViewBox.h <= zoomOutLimit.h );
-
-    // event.deltaY can only be larger than 1.0 or less than -1.0
-    // conditions set to +/- 3 to lower the scrolling control sensitivity
-    if ( event.deltaY >= 3 && withinZoomOutLimit ){ // scroll up to zoom out
-        svgZooming(targetSvg, (1/1.25));
-    }
-    if ( event.deltaY <= -3 && withinZoomInLimit) { // scroll down to zoom in
-        svgZooming(targetSvg, 1.25);
+    if ( scrollDist <= -1 ){ // scroll down to zoom in
+        for ( var i=scrollDist; i<=-1; i++){
+            if ( checkWithinZoomLimit(targetSvg,"in",zoomInLimit) ){
+                svgZooming(targetSvg, 1.35);
+            }
+        }
     }
 }
 
@@ -381,5 +406,3 @@ function legendBtnClickHandler(legendElm){
         }
     });
 }
-
-

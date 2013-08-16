@@ -783,6 +783,10 @@ text {
     color: #6FC3E5;
 }
 
+.hide-text{
+    color: #FE7E00;
+}
+
 .blockedSites{
     fill: #E02A61 !important;
 }
@@ -889,6 +893,10 @@ text {
     text-align: left;
     cursor:pointer;
     -moz-user-select: -moz-none !important;
+}
+
+.list-table [role]
+    outline: none;
 }
 
 .list-table tr[site-url]{

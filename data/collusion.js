@@ -201,7 +201,7 @@ function startSharing(callback){
                     'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
                     '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
                     'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
-                    '<p>By clicking OK you are agreeing to share your data under those terms.</p>',
+                    '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
                 "imageUrl": "image/collusion_popup_warningsharing.png"
             },
             function(confirmed){

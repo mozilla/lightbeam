@@ -193,6 +193,14 @@ function initGraph(){
             }else{
                 this.classList.remove('highlighted');
             }
+            // check to see if it's a watched site
+            if ( Object.keys(userSettings).indexOf(d.name) > -1 && userSettings[d.name].contains("watch") ){
+                this.classList.add("watched");
+            }
+            // check to see if it's a blocked site
+            if ( Object.keys(userSettings).indexOf(d.name) > -1 && userSettings[d.name].contains("block") ){
+                this.classList.add("blocked");
+            }
         });
         var endDraw = Date.now();
         draws.push(endDraw - lastTick);
