@@ -151,6 +151,12 @@ function onConnection(conn){
     // Retrieve the source node and update, or create it if not found
     if (aggregate.nodemap[connection.source]){
         sourcenode = aggregate.nodemap[connection.source];
+        if (connection.sourceVisited && sourcenode.nodeType == "thirdparty"){
+            // the previously "thirdparty" site has now become a "visited" site
+            // +1 on visited sites counter and -1 on trackers counter
+            aggregate.siteCount++; 
+            aggregate.trackerCount--;
+        }
         sourcenode.update(connection, true);
     }else{
         sourcenode = new GraphNode(connection, true);
