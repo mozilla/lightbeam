@@ -114,6 +114,10 @@ aggregate.on('load', onLoad);
 //const STATUS = 12;
 //const CACHEABLE = 13;
 
+aggregate.isDomainVisited = function isDomainVisited(domain){
+    return aggregate.recentSites.length && (aggregate.recentSites.indexOf(domain) > -1);
+}
+
 
 function onConnection(conn){
     // A connection has the following keys:
