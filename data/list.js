@@ -31,6 +31,12 @@ function onInit(connections){
     initList();
     initializeHandlers();
     toggleShowHideHiddenButton();
+    aggregate.on('update', onUpdate);
+}
+
+function onUpdate(){
+    // FIXME: This is heavyweight: every new node involved deleting and recreating the table
+    showFilteredTable(lastFilter);
 }
 
 
@@ -176,7 +182,10 @@ function resetVisibleBreadcrumb(){
     } 
 }
 
+var lastFilter = null;
+
 function showFilteredTable(filter){
+    lastFilter = filter;
     updateBreadcrumb(filter);
     // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");

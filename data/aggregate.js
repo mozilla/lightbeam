@@ -419,6 +419,7 @@ function switchFilter(name){
 aggregate.switchFilter = switchFilter;
 
 aggregate.update = function update(){
+    // FIXME: Don't do this for clock view, maybe not for list view
     if (aggregate.initialized){
         global.filteredAggregate = currentFilter();
         aggregate.emit('update');
