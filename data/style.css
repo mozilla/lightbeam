@@ -895,8 +895,8 @@ text {
     -moz-user-select: -moz-none !important;
 }
 
-.list-table [role]
-    outline: none;
+.list-table [role]{
+    outline: 0;
 }
 
 .list-table tr[site-url]{
