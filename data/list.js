@@ -48,6 +48,7 @@ function onConnection(conn){
 function onRemove(){
     // console.log('removing list');
     resetCanvas();
+    aggregate.off('update', onUpdate);
 }
 
 
