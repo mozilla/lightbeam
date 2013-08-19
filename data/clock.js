@@ -88,7 +88,6 @@ function onConnection(conn){
 
 function addNodesFromConnection(bucket,connection){
     if ( aggregate.isDomainVisited(connection.source) ){ // we only want to show visited source
-        console.log("VISITED = " + connection.source)
         addNewNode(bucket,connection,"source");
     }
     if ( !aggregate.isDomainVisited(connection.target) ){ // if the target has been visited, leave it as visited node.  do not show it as third-party
