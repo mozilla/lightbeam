@@ -99,6 +99,7 @@ function initList(){
         }
     },false);
     showFilteredTable(); // showing all data so no filter param is passed here
+    updateBreadcrumb();
 }
 
 function initBreadcrumb(){
@@ -185,8 +186,8 @@ function resetVisibleBreadcrumb(){
 var lastFilter = null;
 
 function showFilteredTable(filter){
+    if ( lastFilter != filter ) updateBreadcrumb(filter); 
     lastFilter = filter;
-    updateBreadcrumb(filter);
     // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");
     var tbody = table.querySelector('.list-body');
