@@ -152,7 +152,7 @@ function resetAddtionalUI(){
 *   Save connections
 */
 function saveConnections(){
-    console.error('saveConnections( ' + allConnections.length + ' connection)');
+    // console.error('saveConnections( ' + allConnections.length + ' connection)');
     var lastSaved = Number(localStorage.lastSaved || 0);
     var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
         // console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');

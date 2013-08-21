@@ -16,14 +16,14 @@ self.port.on('connection', function(connection){
 });
 
 self.port.on('init', function(collusionToken){
-    console.error('content-script::init()');
+    // console.error('content-script::init()');
     localStorage.collusionToken = collusionToken;
 
     if (unsafeWindow && unsafeWindow.aggregate){
         unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     }else{
-        console.error('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
+        // console.error('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
     }
 });
 
