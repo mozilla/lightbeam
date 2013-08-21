@@ -15,6 +15,11 @@ document.addEventListener("keypress", function(event){
     }
 });
 
+/* Collusion Logo Click handler ====================== */
+document.querySelector(".main header").addEventListener("click",function(){
+    location.reload();
+});
+
 
 /**************************************************
 *   Buttons

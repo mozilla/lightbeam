@@ -87,6 +87,10 @@ a:hover{
     margin-bottom: 20px;
 }
 
+.main header:hover{
+    cursor: pointer;
+}
+
 .collusion-icon{
     border:1px solid #5ABED2;
     width: 35px;
