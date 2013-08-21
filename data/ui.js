@@ -147,6 +147,7 @@ document.querySelector('.reset-data').addEventListener('click', function(){
                     aggregate.emit('reset');
                     userSettings = {};
                     localStorage.clear();
+                    location.reload(); // reload page
                 }
             }
     );
