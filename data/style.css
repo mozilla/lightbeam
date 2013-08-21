@@ -604,6 +604,10 @@ a:hover{
     background-color: #6FC3E5;
 }
 
+.connections-list ul li[data-selected]{
+    background-color: #73A4B8;
+}
+
 .stage-stack{
     padding: 20px 0 20px 40px;
     flex-direction: column;
@@ -737,20 +741,20 @@ text {
     opacity: 0.2;
 }
 
-.clicked-node.node{
+.clicked-node.node circle:last-child{
     stroke-width: 2;
     fill: #fff;
 }
 
-.clicked-node.node.source{
+.clicked-node.node.source circle:last-child{
     stroke: #128764;
 }
 
-.clicked-node.node.target{
+.clicked-node.node.target circle:last-child{
     stroke: #F1C40F;
 }
 
-.colluded-source.node, .colluded-target.node{
+.colluded-source.node circle:last-child, .colluded-target.node circle:last-child{
     stroke: #fff;
     stroke-width: 1;
 }
@@ -897,6 +901,10 @@ text {
     cursor: pointer;
 }
 
+.list-table tr.selected-connected-row{
+    background-color: #73A4B8;
+}
+
 [data-pref=watch]{
     color: teal;
 }
@@ -933,7 +941,8 @@ text {
 
 .list-table tbody tr:hover,
 .list-table tbody tr.checked{
-    background: #33464d;
+    background: rgba(255,255,255,1);
+    color: #000;
 }
 
 .list-table .visited-row td{

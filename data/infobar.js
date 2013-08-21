@@ -9,21 +9,26 @@ document.querySelector('#content').addEventListener('click', function(event){
     // click could happen on .node or an element inside of .node
     if (event.target.mozMatchesSelector('.node, .node *')){
         var node = event.target;
+        var name;
         if (node.mozMatchesSelector('[type=checkbox], td [type=checkbox]')) return;
         while(node.mozMatchesSelector('.node *')){
             node = node.parentElement;
         }
-        // console.log('svg node: %o, name: %s, data node: %s', node, node.getAttribute('data-name'), aggregate.nodeForKey(node.getAttribute('data-name')));
-        updateInfo(node.getAttribute("data-name"));
-    }else{
-        //console.log('does not match .node: %o', event.target);
+        name = node.getAttribute("data-name");
+        selectedNodeEffect(name);
+        updateInfo(name);
     }
 },false);
 
 document.querySelector(".connections-list ul").addEventListener("click", function(event){
-    if (event.target.mozMatchesSelector("li")){
-        updateInfo(event.target.innerHTML);
+    var name = event.target.innerHTML;
+    var previouslySelected = document.querySelector(".connections-list ul li[data-selected]");
+    if ( previouslySelected ){
+        document.querySelector(".connections-list ul li[data-selected]").removeAttribute("data-selected");
     }
+    event.target.setAttribute("data-selected",true);
+    resetAllGlow("connected");
+    connectedNodeEffect(name);
 });
 
 // get server info from http://freegeoip.net

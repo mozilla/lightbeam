@@ -278,6 +278,8 @@ function resetCanvas(){
     // You will still need to remove timer events
     var parent = vizcanvas.parentNode;
     var newcanvas = vizcanvas.cloneNode(false);
+    var vizcanvasDefs = document.querySelector(".vizcanvas defs").cloneNode(true);
+    newcanvas.appendChild(vizcanvasDefs);
     parent.replaceChild(newcanvas, vizcanvas);
     vizcanvas = newcanvas;
     aggregate.off('update', onUpdate);

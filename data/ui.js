@@ -359,23 +359,6 @@ function roundOffTimestamp(connections){
             });
 }
 
-
-/* Info Panel Connections List ===================================== */
-
-document.querySelector(".connections-list ul").addEventListener("click", function(event){
-    if (event.target.mozMatchesSelector("li")){
-        if ( currentVisualization.name === "clock" ){
-            applyHighlightingEffect(event.target.innerHTML);
-        }
-        else if ( currentVisualization.name === "list" ){
-            //currentVisualization.emit("showFilteredTable", event.target.innerHTML);
-        }else{
-
-        }
-    }
-});
-
-
 /* Legend & Controls ===================================== */
 
 function toggleLegendSection(eventTarget,legendElm){
@@ -406,3 +389,88 @@ function legendBtnClickHandler(legendElm){
         }
     });
 }
+
+
+
+/* Glowing Effect for Graph/Clock & Highlighting Effect for List ============= */
+
+function selectedNodeEffect(name){
+    if ( currentVisualization.name == "graph" || currentVisualization.name == "clock"){
+        resetAllGlow("all");
+    }
+    if ( currentVisualization.name == "graph" ){
+        addGlow(name,"selected");
+    }
+    if ( currentVisualization.name == "list" ){
+        resetHighlightedRow();
+    }
+}
+
+function connectedNodeEffect(name){
+    console.log(name);
+    if ( currentVisualization.name != "list" ){
+        var glow;
+        while( glow ){
+            glow = document.querySelector(".connected-glow"); 
+            glow.parentNode.removeChild(glow);
+        }
+        addGlow(name,"connected");
+    }else{
+        resetHighlightedRow();
+        var row = document.querySelector(".list-table tr[data-name='"+name+"']");
+        if (row ){ 
+            row.classList.add("selected-connected-row");
+        }
+    }
+    
+}
+
+// for Graph & Clock
+function addGlow(name,type){
+    var gNodes = document.querySelectorAll(".node[data-name='"+name+"']");
+    var siteNode, shape, type, radiusBase, cx, cy, r;
+    toArray(gNodes).forEach(function(gNode){
+        siteNode = gNode.childNodes[0];
+        shape = siteNode.nodeName.toLowerCase();
+        type = ( type == "selected") ? "selected-glow" : "connected-glow";
+        radiusBase = ( currentVisualization.name == "graph" ) ? 40 : 20;
+        cx = siteNode.getAttribute("cx") || 0;
+        cy = siteNode.getAttribute("cy") || 0;
+        r = ( shape == "circle" ) ? radiusBase : radiusBase+10;
+        d3.select(gNode)
+                .insert('circle', ":first-child")
+                .attr('cx', cx)
+                .attr('cy', cy)
+                .attr('r', r)
+                .attr("fill", "url(#"+type+")")
+                .classed(type, true); 
+
+    });
+}
+
+// for Graph & Clock
+function resetAllGlow(type){
+    var selectedGlow;
+    var connectedGlow;
+    if ( type == "selected" || type == "all"){
+        while( document.querySelector(".selected-glow") ){
+            selectedGlow = document.querySelector(".selected-glow");
+            selectedGlow.parentNode.removeChild(selectedGlow);
+        }
+    }
+    if ( type == "connected" || type == "all"){
+        while( document.querySelector(".connected-glow") ){
+            connectedGlow = document.querySelector(".connected-glow");
+            connectedGlow.parentNode.removeChild(connectedGlow);
+        }
+    }
+}
+
+// for List
+function resetHighlightedRow(){
+    var preHighlighted = document.querySelector(".list-table .selected-connected-row");
+    if ( preHighlighted ){
+        preHighlighted.classList.remove("selected-connected-row");
+    }
+}
+
