@@ -1100,17 +1100,30 @@ text {
     color: #fff;
 }
 
+.graph-footer .btn_group{
+    float: right;
+    width: 150px;
+}
+
+.graph-footer .btn_group .all-cap-header{
+    margin-right: 10px;
+}
+
+.graph-footer .btn_group .dropdown_options{
+    width: 100px;
+}
+
 .list-footer .align-left,
 .list-footer .align-right{
     display: inline-block;
     overflow: hidden;
 }
 
-.list-footer .align-left{
+.align-left{
     float: left;
 }
 
-.list-footer .align-right{
+.align-right{
     float: right;
 }
 
