@@ -400,7 +400,8 @@ if (localStorage.listViewHideRows){
 var listStageStackClickHandler = function(event){
     var target = event.target;
     if(target.mozMatchesSelector('.block-pref.active a') ){
-        dialog( {   "title": "Block Sites", 
+        dialog( {   "name" : dialogNames.blockSites,
+                    "title": "Block Sites",
                     "message":  "<p><b>Warning:</b></p> " + 
                                 "<p>Blocking sites will prevent any and all content from being loaded from these domains: [domain1.com, domain2.com, ...] and ALL SUBDOMAINS [www.domain1.com, etc.]. </p>" + 
                                 "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>" + 
@@ -413,11 +414,10 @@ var listStageStackClickHandler = function(event){
                 }
         );
     }else if (target.mozMatchesSelector('.hide-pref.active a')){
-        var hideDialogName = "hideDialog";
-        if ( doNotShowDialog(hideDialogName) ){
+        if ( doNotShowDialog(dialogNames.hideSites) ){
             setPreferences('hide');
         }else{
-            dialog( {   "name": hideDialogName,
+            dialog( {   "name": dialogNames.hideSites,
                         "dnsPrompt": true,
                         "title": "Hide Sites", 
                         "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 

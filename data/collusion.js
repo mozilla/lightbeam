@@ -88,6 +88,7 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
+    localStorage.numLaunch = parseInt(localStorage.numLaunch)+1 || 1;
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
@@ -194,15 +195,17 @@ function dateAsKey(timestamp){
 *   Upload data
 */
 
-function startSharing(callback){
-    dialog( {   "title": "Upload Data", 
-                "message": 
-                    '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
-                    'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
-                    '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
-                    'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
-                    '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
-                "imageUrl": "image/collusion_popup_warningsharing.png"
+function startSharing(askForConfirmation,callback){
+    if ( askForConfirmation ){
+        dialog( {   "name": dialogNames.startUploadData,
+                    "title": "Upload Data", 
+                    "message": 
+                        '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
+                        'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
+                        '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
+                        'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
+                        '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
+                    "imageUrl": "image/collusion_popup_warningsharing.png"
             },
             function(confirmed){
                 if ( confirmed ){
@@ -211,11 +214,17 @@ function startSharing(callback){
                 }
                 callback(confirmed);
             }
-    );
+        );
+    }else{
+        sharingData();
+        localStorage.userHasOptedIntoSharing = true;
+        callback(true);
+    }
 }
 
 function stopSharing(callback){
-    dialog( {   "title": "Stop Uploading Data", 
+    dialog( {   "name": dialogNames.stopUploadData,
+                "title": "Stop Uploading Data", 
                 "message": 
                     '<p>You are about to stop sharing data with the Mozilla Collusion server.</p>' +
                     '<p>By clicking OK you will no longer be uploading data.</p>',

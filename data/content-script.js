@@ -25,6 +25,9 @@ self.port.on('init', function(collusionToken){
     }else{
         // console.error('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
     }
+
+    // FIXME: temporary solution for now.  need to clean up the code
+    unsafeWindow.showPromptToShareDialog();
 });
 
 
@@ -43,7 +46,7 @@ self.port.on("passTempConnections", function(connReceived){
 self.port.on("private-browsing", function() {
     unsafeWindow.dialog( {
             "type": "alert",
-            "name": "privateBrowsingDialog",
+            "name": unsafeWindow.dialogNames.privateBrowsing, 
             "dnsPrompt": true,
             "title": "Private Browsing",
             "message":  "<p>You have one or more private browsing windows open.</p>" +

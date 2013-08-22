@@ -1,5 +1,18 @@
 /* Dialog / Popup ===================================== */
 
+// dialog names (used as dialog identifiers)
+const dialogNames = {
+    "promptToShare" : "promptToShareData",
+    "resetData" : "resetData",
+    "blockSites" : "blockSites",
+    "hideSites" : "hideSites",
+    "startUploadData" : "startUploadData",
+    "stopUploadData" : "stopUploadData",
+    "privateBrowsing" : "privateBrowsing",
+    "welcome" : "welcome" 
+};
+
+
 // options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
 function dialog(options,callback){
     if ( doNotShowDialog(options.name) ) return; // according to user pref, do not show this dialog
@@ -78,10 +91,7 @@ function addDialogEventHandlers(modal,options,callback){
     var okButton = dialogContainer.querySelector(".pico-close.dialog-ok");
     okButton.addEventListener("click",function(){
         if ( dialogContainer.querySelector(".dialog-dns input") && dialogContainer.querySelector(".dialog-dns input").checked ){ // Do Not Show
-            var dnsPref = localStorage.dnsDialogs || "[]";
-            dnsPref = JSON.parse(dnsPref);
-            dnsPref.push(options.name);
-            localStorage.dnsDialogs = JSON.stringify(dnsPref);
+            addToDoNotShowAgainList(options.name);
         }
         modal.close();
         callback(true);
@@ -90,6 +100,11 @@ function addDialogEventHandlers(modal,options,callback){
     var cancelButton = dialogContainer.querySelector(".pico-close.dialog-cancel");
     if ( cancelButton ){
         cancelButton.addEventListener("click",function(){
+            if (options.name == dialogNames.promptToShare){
+                if ( dialogContainer.querySelector(".dialog-dns input").checked ){
+                    addToDoNotShowAgainList(options.name);
+                }
+            }
             modal.close();
             callback(false);
         });
@@ -114,6 +129,15 @@ function addDialogEventHandlers(modal,options,callback){
 
     restrictTabWithinDialog(modal);
 }
+
+
+function addToDoNotShowAgainList(dialogName){
+    var dnsPref = localStorage.dnsDialogs || "[]";
+    dnsPref = JSON.parse(dnsPref);
+    dnsPref.push(dialogName);
+    localStorage.dnsDialogs = JSON.stringify(dnsPref);
+}
+
 
 function restrictTabWithinDialog(modal){
     var dialogContainer = modal.modalElem;

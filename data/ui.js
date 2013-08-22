@@ -1,4 +1,3 @@
-
 /* Convert a NodeList to Array */
 function toArray(nl){
     return Array.prototype.slice.call(nl, 0);
@@ -72,17 +71,18 @@ document.querySelector(".toggle-btn.share-btn").addEventListener("click",functio
     var elmClicked = event.target;
     if ( elmClicked.mozMatchesSelector("input") ){
         if ( elmClicked.checked ){
-            confirmStartSharing(elmClicked);
+            confirmStartSharing(true,elmClicked);
         }else{
             confirmStopSharing(elmClicked);
         }
     }
 });
 
-function confirmStartSharing(elmClicked){
-    startSharing(function(confirmed){
+function confirmStartSharing(askForConfirmation,elmClicked){
+    startSharing(askForConfirmation,function(confirmed){
         if ( confirmed ){
             toggleBtnOnEffect( document.querySelector(".share-btn") );
+            disablePromptToShareDataDialog();
         }else{
             elmClicked.checked = false;
         }
@@ -140,7 +140,8 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 });
 
 document.querySelector('.reset-data').addEventListener('click', function(){
-    dialog( {   "title": "Reset Data",
+    dialog( {   "name": dialogNames.resetData,
+                "title": "Reset Data",
                 "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list [etc.].</p>" + 
                             "<p>Your browser will be returned to the state of a fresh install of Collusion.</p>",
                 "imageUrl": "image/collusion_popup_warningreset.png"
@@ -480,3 +481,44 @@ function resetHighlightedRow(){
     }
 }
 
+
+/**************************************************
+*   Special dialog handler for promptToShareDataDialog ======================
+*   FIXME: temporary solution for now.  need to clean up the code a bit.
+*/
+const promptToShareDialogShowLimit = 3;
+function showPromptToShareDialog(){
+    var showTimes, today, shownToday, belowLimit;
+    showTimes = localStorage.promptToShareDialogShowTimes || "[]";
+    showTimes = JSON.parse(showTimes);
+    today = formattedDate(Date.now());
+    shownToday = showTimes.indexOf(today) > -1;
+    belowLimit = showTimes.length < promptToShareDialogShowLimit;
+    if ( localStorage.numLaunch > 1 && !doNotShowDialog(dialogNames.promptToShare) && !shownToday && belowLimit){
+        showTimes.push(today);
+        localStorage.promptToShareDialogShowTimes = JSON.stringify(showTimes);
+        dialog( {
+                "name": dialogNames.promptToShare,
+                "dnsPrompt": true,
+                "title": "Help the Ecosystem by Sharing",
+                "message":  "<p>As a user of Collusion Beta, you can help contribute to build our data ecosystem.</p>" + 
+                            "<p>By sharing your data you can help us and others to understand third-party relationships on the web and promote further research in the field of online tracking and privacy.</p>  "+
+                            "<p>Do you want to upload your de-identified data to the public database now?</p>",
+                "imageUrl": "image/collusion_popup_startsharing.png"
+            },
+            function(confirmed){
+                if( confirmed ){
+                    var sharingToggle = document.querySelector(".toggle-btn.share-btn input");
+                    confirmStartSharing(false,sharingToggle);
+                    disablePromptToShareDataDialog();
+                }
+            }
+        );
+    }
+}
+
+function disablePromptToShareDataDialog(){
+    if ( !doNotShowDialog(dialogNames.promptToShare) ){
+        addToDoNotShowAgainList(dialogNames.promptToShare);
+    }
+}
