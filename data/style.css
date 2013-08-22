@@ -354,13 +354,12 @@ a:hover{
 .top-bar{
     background-color:#fff;
     flex:none;
-    padding: 10px 10px 0 10px;
+    padding: 10px;
 }
 
 .stats-section{
     float: left;
     color: #3E454D;
-    width: 80%;
 }
 
 .stats-section section{
@@ -370,18 +369,11 @@ a:hover{
 
 .sharing-section{
     float: right;
-    margin: 3px 5px 0 0;
     text-align: center;
 }
 
 .sharing-section .label{
-    letter-spacing: 1px;
     color: #3E454D;
-}
-
-.stat{
-    display:inline-block;
-    margin: 0 3px;
 }
 
 .info{
