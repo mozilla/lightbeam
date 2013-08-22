@@ -14,6 +14,7 @@ global.filteredAggregate = {
 
 aggregate.trackerCount = 0;
 aggregate.siteCount = 0;
+aggregate.blockList = {};
 aggregate.nodes = [];
 aggregate.edges = [];
 aggregate.recentSites = [];
@@ -24,6 +25,7 @@ aggregate.edgemap = {};
 function resetData(){
     aggregate.nodemap = {};
     aggregate.edgemap = {};
+    aggregate.blockList = {};
     aggregate.nodes = [];
     aggregate.edges = [];
     aggregate.trackerCount = 0;
@@ -34,13 +36,41 @@ function resetData(){
     }
     updateStatsBar();
 }
-aggregate.on('reset', resetData); 
+aggregate.on('reset', resetData);
+
+aggregate.getAllNodes = function() {
+  var blockedDomains = Object.keys(aggregate.blockList).filter(function(domain) {
+    // ignore domains already known
+    var nodes = aggregate.nodes;
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      if (nodes[i].name == domain) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  return aggregate.nodes.concat(blockedDomains.map(function(blockedDomain) {
+    return {
+      site: blockedDomain,
+      nodeType: 'blocked',
+      name: blockedDomain
+    };
+  }))
+}
+
+aggregate.getConnectionCount = function(node) {
+  return (node.nodeType === 'blocked' ? 0 : Object.keys(aggregate.nodeForKey(node.name)).length - 1);
+}
 
 aggregate.nodeForKey = function(key){
     var result = {};
     var linkedNodes = new Array();
+
     linkedNodes = aggregate.nodemap[key].linkedFrom.concat(aggregate.nodemap[key].linkedTo);
     result[key] = aggregate.nodemap[key];
+
     linkedNodes.forEach(function(nodeName){
         var node = aggregate.nodemap[nodeName];
         var temp = {};
@@ -154,7 +184,7 @@ function onConnection(conn){
         if (connection.sourceVisited && sourcenode.nodeType == "thirdparty"){
             // the previously "thirdparty" site has now become a "visited" site
             // +1 on visited sites counter and -1 on trackers counter
-            aggregate.siteCount++; 
+            aggregate.siteCount++;
             aggregate.trackerCount--;
         }
         sourcenode.update(connection, true);
@@ -162,6 +192,7 @@ function onConnection(conn){
         sourcenode = new GraphNode(connection, true);
         aggregate.nodemap[connection.source] = sourcenode;
         aggregate.nodes.push(sourcenode);
+
         if (connection.sourceVisited){
             aggregate.siteCount++;
         }else{
@@ -205,6 +236,21 @@ function onConnection(conn){
 aggregate.on('connection', onConnection);
 
 
+function onBlocklistUpdate({ domain, flag }) {
+  if (flag) {
+    aggregate.blockList[domain] = flag;
+  }
+  else {
+    delete aggregate.blockList[domain];
+  }
+}
+aggregate.on('update-blocklist', onBlocklistUpdate);
+
+function onBlocklistUpdateAll(domains) {
+  (domains || []).forEach(onBlocklistUpdate);
+}
+aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
+
 function GraphEdge(source, target, connection){
     var name = source.name + '->' + target.name;
     if (aggregate.edgemap[name]){
@@ -213,7 +259,7 @@ function GraphEdge(source, target, connection){
     this.source = source;
     this.target = target;
     this.name = name;
-    if (connection){ 
+    if (connection){
         this.cookieCount = connection.cookie ? 1 : 0;
     }
     // console.log('edge: %s', this.name);
