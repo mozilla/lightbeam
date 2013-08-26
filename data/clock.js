@@ -147,7 +147,7 @@ function appendNodeG(bucket,connection,nodeType){
     g.appendChild(svg('circle', {
         cx: 0,
         cy: 0,
-        r: 4,
+        r: graphNodeRadius["clock"],
         'class': 'tracker'
     }));
 

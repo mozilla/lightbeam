@@ -1,3 +1,8 @@
+const graphNodeRadius = {
+    "graph": 12,
+    "clock": 4
+};
+
 /* Convert a NodeList to Array */
 function toArray(nl){
     return Array.prototype.slice.call(nl, 0);
@@ -434,25 +439,36 @@ function connectedNodeEffect(name){
 
 // for Graph & Clock
 function addGlow(name,type){
+    type = ( type == "selected") ? "selected-glow" : "connected-glow";
+    var viz = currentVisualization.name;
     var gNodes = document.querySelectorAll(".node[data-name='"+name+"']");
-    var siteNode, shape, type, radiusBase, cx, cy, r;
     toArray(gNodes).forEach(function(gNode){
-        siteNode = gNode.childNodes[0];
-        shape = siteNode.nodeName.toLowerCase();
-        type = ( type == "selected") ? "selected-glow" : "connected-glow";
-        radiusBase = ( currentVisualization.name == "graph" ) ? 40 : 20;
-        cx = siteNode.getAttribute("cx") || 0;
-        cy = siteNode.getAttribute("cy") || 0;
-        r = ( shape == "circle" ) ? radiusBase : radiusBase+10;
+        var glowProps = calculateGlowSize(gNode,viz);
         d3.select(gNode)
                 .insert('circle', ":first-child")
-                .attr('cx', cx)
-                .attr('cy', cy)
-                .attr('r', r)
+                .attr('cx', glowProps.cx)
+                .attr('cy', glowProps.cy)
+                .attr('r', glowProps.radius)
                 .attr("fill", "url(#"+type+")")
                 .classed(type, true); 
 
     });
+}
+
+function calculateGlowSize(gNode,viz){
+    var glowProps = {};
+    var siteNode = gNode.childNodes[0];
+    var shape = siteNode.nodeName.toLowerCase();
+    var radius = graphNodeRadius[currentVisualization.name];
+    if ( viz == "graph" ){
+        if ( shape == "polygon" ) radius *= 2.2;
+        glowProps.radius = radius + 22;
+    }else{
+        glowProps.radius = radius * 4;
+    }
+    glowProps.cx = siteNode.getAttribute("cx") || 0;
+    glowProps.cy = siteNode.getAttribute("cy") || 0;
+    return glowProps;
 }
 
 // for Graph & Clock

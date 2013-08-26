@@ -255,7 +255,7 @@ function addCircle(selection){
         .append('circle')
         .attr('cx', 0)
         .attr('cy', 0)
-        .attr('r', 12)
+        .attr('r', graphNodeRadius["graph"])
         .classed('site', true);
 }
 
