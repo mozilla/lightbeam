@@ -597,6 +597,11 @@ a:hover{
     background-color: #73A4B8;
 }
 
+.connections-list ul li.disabled{
+    color: #555;
+    pointer-events: none;
+}
+
 .stage-stack{
     padding: 20px 0 20px 40px;
     flex-direction: column;

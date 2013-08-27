@@ -11,6 +11,13 @@ global.filteredAggregate = {
     nodes: [],
     edges: []
 };
+global.isSiteInAggregate = function(nodes,domain){
+    for (var i=0; i<nodes.length; i++){
+        if ( nodes[i].name == domain ) return true;
+    }
+    return false;
+};
+
 
 aggregate.trackerCount = 0;
 aggregate.siteCount = 0;
