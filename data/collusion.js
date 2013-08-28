@@ -174,7 +174,11 @@ function saveConnectionsByDate(connections){
     for ( var i=0; i<connections.length; i++ ){
         conn = connections[i];
         key = dateAsKey( conn[TIMESTAMP] );
-        connByDateSet[key] = connByDateSet[key] ? connByDateSet[key].push(conn) : [ conn ];
+        if ( connByDateSet[key] ){
+            connByDateSet[key].push(conn);
+        }else{
+            connByDateSet[key] = [conn];
+        }
     }
     // save each group of connections to localStorage
     for(var date in connByDateSet){
