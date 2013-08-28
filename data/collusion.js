@@ -118,14 +118,14 @@ function switchVisualization(name){
     }
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
-    resetAddtionalUI();
+    resetAdditionalUI();
     addon.emit('uiready');
 }
 
 
 
 
-function resetAddtionalUI(){
+function resetAdditionalUI(){
     // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
     var activeTab = document.querySelector(".info-panel-controls ul li.active");
@@ -168,14 +168,26 @@ function saveConnections(){
 
 
 function saveConnectionsByDate(connections){
+    var connByDateSet = {};
+    var conn, key;
+    // group connections by date
     for ( var i=0; i<connections.length; i++ ){
-        var conn = connections[i];
-        var key = dateAsKey( conn[TIMESTAMP] );
-        if ( !localStorage.getItem(key) ){
-            saveToLocalStorage(key, "[" + JSON.stringify(conn) + "]");
-        }else{
-            saveToLocalStorage(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
-        }
+        conn = connections[i];
+        key = dateAsKey( conn[TIMESTAMP] );
+        connByDateSet[key] = connByDateSet[key] ? connByDateSet[key].push(conn) : [ conn ];
+    }
+    // save each group of connections to localStorage
+    for(var date in connByDateSet){
+        saveConnToLocalStorage(date,connByDateSet[date]);
+    }
+}
+
+
+function saveConnToLocalStorage(date,connections){
+    if ( !localStorage.getItem(date) ){
+        saveToLocalStorage(date, JSON.stringify(connections));
+    }else{
+        saveToLocalStorage(date, localStorage.getItem(date).slice(0,-1) + "," + JSON.stringify(connections).slice(1,-1) + "]");
     }
 }
 
