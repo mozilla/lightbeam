@@ -37,7 +37,22 @@ function d3ShowTooltip(node, idx){
     return false;
 }
 
-
+// for List view
+function listShowTooltip(event){
+    if (!tooltip){
+        tooltip = document.getElementById('tooltip');
+    }
+    tooltip.style.left = '-1000px';
+    tooltip.style.display = 'inline-block';
+    // console.error(event, event.target, event.target.dataset);
+    tooltip.innerHTML = "go to " + event.target.parentElement.getAttribute(["data-sort-key"]) + "'s site list";
+    var rect = event.target.getClientRects()[0];
+    var tooltipWidth = tooltip.offsetWidth;
+    tooltip.style.top = (rect.top - 40) + 'px';
+    tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
+    setTooltipTimeout();
+    return false;
+}
 
 
 function setTooltipTimeout(){
@@ -72,7 +87,8 @@ global.tooltip = {
     add: add,
     remove: remove,
     show: d3ShowTooltip,
-    hide: hideTooltip
+    hide: hideTooltip,
+    addTooltip: listShowTooltip
 };
 
 })(this);

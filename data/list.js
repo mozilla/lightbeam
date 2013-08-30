@@ -224,7 +224,9 @@ function getNodes(filter){
 
 function nodeToRow(node){
     var settings = userSettings[node.name] || '';
-    return elem('tr', {
+    var iconUrl = 'icons/collusion_icon_list.png';
+    var listIcon = elem('img', {'src': iconUrl, 'class': 'update-table', 'role': 'gridcell'});
+    var row = elem('tr', {
             'class': 'node ' + node.nodeType,
             'data-pref': settings,
             'data-name': node.name,
@@ -236,13 +238,23 @@ function nodeToRow(node){
         elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
         elem('td', {'class': 'preferences', 'data-sort-key': settings, 'role': 'gridcell'}, '\u00A0'),
         elem('td', {'data-sort-key': node.name, 'role': 'gridcell'}, [
-                elem('img', {'src': 'icons/collusion_icon_list.png', 'class': 'update-table', 'role': 'gridcell'}),
+                listIcon,
                 node.name
             ]),
         elem('td', {'data-sort-key': node.firstAccess, 'role': 'gridcell'}, formattedDate(node.firstAccess)),
         elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, formattedDate(node.lastAccess)),
         elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1, 'role': 'gridcell'}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
     ]);
+    listIcon.addEventListener("mouseenter",tooltip.addTooltip);
+    listIcon.addEventListener("mouseleave",tooltip.hide);
+    row.addEventListener("mouseenter",function(){
+        row.childNodes[3].firstChild.setAttribute("src", "image/collusion_icon_list_blue.png");
+    });
+    row.addEventListener("mouseleave",function(){
+        row.childNodes[3].firstChild.setAttribute("src", iconUrl);
+    });
+
+    return row;
 }
 
 
