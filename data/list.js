@@ -310,10 +310,25 @@ function sortTableOnColumn(table, n){
             rows.sort(sort);
         }
         var frag = document.createDocumentFragment();
+        var preFrag = document.createDocumentFragment();
+        
         rows.forEach(function(row){
-            frag.appendChild(row[1]);
-        });
-        tbody.appendChild(frag);
+            var rowElement = row[1];
+
+            // Check if there are any preferences set for this row
+            var prefVal = rowElement.attributes.getNamedItem('data-pref').value;
+
+            // Split up the elements into two fragments according 
+            // to the existence (or absence) of a data-pref value.
+            if (prefVal != '') {
+                // We should append this row to the top fragment
+                preFrag.appendChild(rowElement);
+            } else {
+                frag.appendChild(rowElement);
+            }
+         });
+         tbody.appendChild(preFrag);
+         tbody.appendChild(frag);
     }
 }
 
