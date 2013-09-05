@@ -354,7 +354,7 @@ a:hover{
 .top-bar{
     background-color:#fff;
     flex:none;
-    padding: 10px;
+    padding: 20px 20px 5px 20px;
 }
 
 .stats-section{
@@ -372,9 +372,20 @@ a:hover{
     text-align: center;
 }
 
+.share-btn label{
+    position: relative;
+    top: 10px;
+}
+
 .sharing-section .label{
     color: #3E454D;
+    margin-right: 5px;
 }
+
+.sharing-section div{
+    display: inline-block;
+}
+
 
 .info{
     width: 8px;
@@ -391,7 +402,7 @@ a:hover{
     display: block;
     float: right;
     z-index: 1000;
-    margin: 30px 0 0 0;
+    margin: 10px 0 0 0;
 }
 
 .info-panel-controls ul{
@@ -404,7 +415,7 @@ a:hover{
     position: relative;
     bottom: 10px;
     margin-bottom: 5px;
-    padding: 5px 10px;
+    padding: 18px;
     background: #20272E;
     border-radius: 2px 0 0 2px;
     cursor: pointer;
@@ -418,8 +429,13 @@ a:hover{
 .info-panel-controls img{
     width: 15px;
     height: 15px;
+}
+
+.info-panel-controls img,
+.info-panel-controls .icon-chevron-right{
     position: relative;
-    right: 3px;
+    right: 8px;
+    bottom: 8px;
 }
 
 .toggle-site-profile.disabled{
@@ -430,7 +446,9 @@ a:hover{
 .info .holder{
     display:flex;
     flex-direction:column;
+    width: 300px;
     height:100%;
+    padding: 17px 23px 8px 18px;
 }
 
 
@@ -516,12 +534,6 @@ a:hover{
 
 
 /* End Map Styles */
-
-.info .holder{
-    width: 300px;
-    height: 100%;
-    padding: 15px;
-}
 
 .info .holder .favicon{
     width: 20px;
@@ -988,7 +1000,7 @@ text {
 .graph-footer,
 .clock-footer,
 .list-footer{
-    margin-right: 20px;
+    margin-right: 8px;
     flex: none;
 }
 
