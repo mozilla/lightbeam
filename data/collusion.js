@@ -346,6 +346,6 @@ function updateStatsBar(){
         dateSince = formattedDate(allConnections[0][2]);
     }
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
-    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " THIRD PARTY SITES"; 
-    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " SITES";
+    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
+    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }

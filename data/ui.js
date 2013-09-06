@@ -499,7 +499,7 @@ function resetHighlightedRow(){
 
 
 /**************************************************
-*   Special dialog handler for promptToShareDataDialog ======================
+*   Special dialog handler for promptToShareDataDialog
 *   FIXME: temporary solution for now.  need to clean up the code a bit.
 */
 const promptToShareDialogShowLimit = 3;
@@ -537,4 +537,15 @@ function disablePromptToShareDataDialog(){
     if ( !doNotShowDialog(dialogNames.promptToShare) ){
         addToDoNotShowAgainList(dialogNames.promptToShare);
     }
+}
+
+
+/**************************************************
+*   Singular / Plural Noun
+*/
+function singularOrPluralNoun(num,str){
+    if ( typeof num != "number" ){
+        num = parseFloat(num);
+    }
+    return ( num > 1) ? str+"s" : str;
 }

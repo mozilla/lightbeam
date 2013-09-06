@@ -118,7 +118,7 @@ function updateInfo(nodeName){
         document.querySelector('.info-first-access').textContent = firstAccess;
         document.querySelector('.info-last-access').textContent = lastAccess;
 
-        document.querySelector(".num-total-connected-sites").textContent = numTotalConnected;
+        document.querySelector(".num-total-connected-sites").textContent = numTotalConnected + " " + singularOrPluralNoun(numTotalConnected,"site");
         document.querySelector('.short-first-access').textContent = firstAccess;
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
