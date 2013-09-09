@@ -433,23 +433,9 @@ function applyHighlightingEffect(clickedNodeName){
 /* for Highlighting and Colouring -------------------- */
 
 var highlight = {};
-highlight.source = true;
-highlight.target = true;
 var clockLegend = document.querySelector(".clock-footer");
 
 legendBtnClickHandler(clockLegend);
-
-clockLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
-    var visited = document.querySelectorAll(".source");
-    toggleVizElements(visited,"highlighted");
-    highlight.source = !highlight.source;
-});
-
-clockLegend.querySelector(".legend-toggle-target").addEventListener("click", function(event){
-    var targets = document.querySelectorAll(".target");
-    toggleVizElements(targets,"highlighted");
-    highlight.target = !highlight.target;
-});
 
 clockLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
     var watchedSites = document.querySelectorAll(".watched");
