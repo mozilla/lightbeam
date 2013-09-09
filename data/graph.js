@@ -56,6 +56,7 @@ function onInit(){
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
     // console.log('graph::onInit end');
+    document.querySelector(".filter-display").classList.remove("hidden");
 };
 
 function onRemove(){
@@ -64,6 +65,7 @@ function onRemove(){
         force = null;
     }
     resetCanvas();
+    document.querySelector(".filter-display").classList.add("hidden");
 };
 
 function onReset(){

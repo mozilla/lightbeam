@@ -43,6 +43,7 @@ function dropdownGroup(btnGroup, callback){
 
 // Default selections
 document.querySelector('a[data-value=' + (localStorage.currentFilter || 'daily') + ']').dataset.selected = true;
+document.querySelector(".filter-display header").innerHTML = document.querySelector(".btn_group.session").querySelector("[data-selected]").innerHTML;
 
 /* Bind click event listener to each of the btn_group memebers */
 var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
@@ -60,6 +61,7 @@ btnGroupArray.forEach(function(btnGroup){
             case 'daily':
             case 'weekly':
                 aggregate.switchFilter(val);
+                document.querySelector(".filter-display header").innerHTML = btnGroup.querySelector("[data-selected]").innerHTML;
                 break;
             default:
                 console.log("selected val=" + val);

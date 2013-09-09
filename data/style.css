@@ -768,6 +768,11 @@ text {
 
 /* Graph Visualization */
 
+.filter-display header{
+    text-transform: capitalize;
+    font-size: 30px;
+}
+
 .visitedSites,
 .unvisitedSites,
 .selectedSites,
