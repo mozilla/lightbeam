@@ -88,7 +88,6 @@ function updateMap(countryCode){
 
 // updates info on the info panel
 function updateInfo(nodeName){
-    var aggregateData = ( currentVisualization.name == "graph" ) ? filteredAggregate : aggregate;
 
     // get server info and then update content on the info panel
     getServerInfo(nodeName, function(data){
@@ -98,17 +97,13 @@ function updateInfo(nodeName){
         // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
         var htmlList = "";
-        var numTotalConnected = 0;
+        var numConnectedSites = 0;
         var firstAccess;
         var lastAccess;
         for ( var key in nodeList ){
             if ( key != nodeName ){ // connected site
-                if ( isSiteInAggregate(aggregateData.nodes,key) ){
-                    htmlList = htmlList + "<li>" + key + "</li>";
-                }else{
-                    htmlList = htmlList + "<li class='disabled'>" + key + "</li>";
-                }
-                numTotalConnected++;
+                htmlList = htmlList + "<li>" + key + "</li>";
+                numConnectedSites++;
             }else{ // the selected site itself
                 firstAccess = formattedDate( nodeList[key].firstAccess,"long");
                 lastAccess = formattedDate( nodeList[key].lastAccess,"long");
@@ -118,8 +113,7 @@ function updateInfo(nodeName){
         document.querySelector('.info-first-access').textContent = firstAccess;
         document.querySelector('.info-last-access').textContent = lastAccess;
 
-        document.querySelector(".num-total-connected-sites").textContent = numTotalConnected + " " + singularOrPluralNoun(numTotalConnected,"site");
-        document.querySelector('.short-first-access').textContent = firstAccess;
+        document.querySelector(".num-connected-sites").textContent = numConnectedSites + " " + singularOrPluralNoun(numConnectedSites,"site");
         document.querySelector(".connections-list ul").innerHTML = htmlList;
 
         // display site profile in Info Panel 
