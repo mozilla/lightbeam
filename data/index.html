@@ -29,15 +29,6 @@
                     </a>
                 </div>
             </div>
-            <div class="section-header all-cap-header">FILTER</div>
-            <div class="btn_group session">
-                <div data-list class="dropdown_options">
-                    <a data-value="recent">recent site</a>
-                    <a data-value="last10sites">last 10 sites</a>
-                    <a data-value="daily">daily</a>
-                    <a data-value="weekly">weekly</a>
-                </div>
-            </div>
             <div class="section-header all-cap-header">DATA</div>
             <div class="btn">
                 <a class="download">
@@ -50,7 +41,7 @@
                 </a>
             </div>
             <div class="links">
-                <img src="image/collusion_icon_feedback.png"> <a href="https://docs.google.com/forms/d/1_sSOmEVpGlKG_w6E88neasohfWXGAGdxqgk_T6Azyo0/viewform" target="_blank">Give Us Feedback</a></br>
+                <img src="image/collusion_icon_feedback.png"> <a href="https://docs.google.com/a/mozillafoundation.org/forms/d/1QeVKe8xDwmaJMqiWDBs1eCR8kpDGaUDdanUWIn-xn1Q/viewform" target="_blank">Give Us Feedback</a></br>
                 <a href="http://www.mozilla.org/collusion" target="_blank">mozilla.org/collusion</a>
             </div>
         </aside>
@@ -72,7 +63,7 @@
                     </section>
                 </div>
                 <div class="sharing-section">
-                    <div class="label all-cap-header">SHARING DATA</div>
+                    <div class="label all-cap-header">CONTRIBUTING DATA</div>
                     <div class="toggle-btn share-btn">
                         <label><input type="checkbox" name="" id="" />
                             <div class="toggle-btn-innner">
@@ -101,7 +92,9 @@
                         </div>
                         </div>
                         <div class="connections-list">
-                            <header class="large-header"><b class="num-connected-sites"></b> Connected Sites</header>
+                            <header class="large-header">
+                                Connected to <b class="num-connected-sites"></b> since first access.
+                            </header>
                             <ul>
                             </ul>
                         </div>
@@ -236,8 +229,8 @@
                         <div class="graph-view-help">
                             <header class="large-header"><img src="image/collusion_icon_about.png" /> About Collusion</header>
                             <div>
-                                <div class="grey-label all-cap-header">VERSION</div> v1.0</br>
-                                <div class="grey-label all-cap-header">BY</div> ____</br>
+                                <div class="grey-label all-cap-header">VERSION</div> v0.9</br>
+                                <div class="grey-label all-cap-header">BY</div> Mozilla Foundation</br>
                             </div>
                             <section>
                                 <div class="blue-text all-cap-header">ABOUT THIS ADD-ON</div>
@@ -246,21 +239,9 @@
                                 </p>
                             </section>
                             <section>
-                                <div class="blue-text all-cap-header">MISSION STATEMENT</div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel lectus eu quam consectetur vestibulum. Vivamus elementum faucibus commodo. Nullam bibendum ac justo in convallis. Ut ac lacinia nibh. Suspendisse ac eleifend enim. Donec ornare, metus eu suscipit tempor, nisl leo bibendum quam, ac fermentum eros est a mi.
-                                </p>
-                            </section>
-                            <section>
                                 <div class="blue-text all-cap-header">Privacy Policy</div>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel lectus eu quam consectetur vestibulum. Vivamus elementum faucibus commodo. Nullam bibendum ac justo in convallis. Ut ac lacinia nibh. Suspendisse ac eleifend enim. Donec ornare, metus eu suscipit tempor, nisl leo bibendum quam, ac fermentum eros est a mi.
-                                </p>
-                            </section>
-                            <section>
-                                <div class="blue-text all-cap-header">CONTACT</div>
-                                <p>
-                                    <i>You can contact us at:</i>
                                 </p>
                             </section>
                             <section>
@@ -283,8 +264,21 @@
             </div>
             <div class="stage-stack" role="main">
               <div class="stage">
+                    <div class="filter-display hidden">
+                        <header></header>
+                        <div class="blue-text all-cap-header">Graph View</div>
+                    </div>
                   <svg class="vizcanvas" width="100%" height="100%" viewBox="-350 -450 700 500">
                       <defs>
+                        <radialGradient fy="50%" fx="50%" r="50%" cy="50%" cx="50%" id="selected-glow">
+                            <stop style="stop-color:rgb(255,255,255);stop-opacity:1" offset="0%"></stop>
+                            <stop style="stop-color:rgb(0,0,0);stop-opacity:0" offset="100%"></stop>
+                        </radialGradient>
+                        <radialGradient fy="50%" fx="50%" r="50%" cy="50%" cx="50%" id="connected-glow">
+                            <stop style="stop-color:#73A4B8;stop-opacity:1" offset="0%"></stop>
+                            <stop style="stop-color:#73A4B8;stop-opacity:0.5" offset="40%"></stop>
+                            <stop style="stop-color:rgb(0,0,0);stop-opacity:0" offset="100%"></stop>
+                        </radialGradient>
                       </defs>
                   </svg>
               </div><!-- .stage -->
@@ -353,6 +347,17 @@
                                 </a>
                             </div>
                         </section>
+                        <div class="btn_group session">
+                            <div data-list class="dropdown_options align-right">
+                                <a data-value="recent">recent site</a>
+                                <a data-value="last10sites">last 10 sites</a>
+                                <a data-value="daily">daily</a>
+                                <a data-value="weekly">weekly</a>
+                            </div>
+                            <div class="all-cap-header align-right">
+                                Filter:
+                            </div>
+                        </div>
                     </section>
                 </div>
                 <!-- LEGEND & CONTROLS for Clock ================================  -->
@@ -362,24 +367,6 @@
                         <div><a class="legend-toggle blue-text">Hide</a></div>
                     </section>
                     <section class="legend-controls">
-                        <section class="column">
-                            <div class="btn legend-toggle-visited active">
-                                <a>
-                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="source-sites" cx="8" cy="8" r="6" />
-                                    </svg>
-                                    Visited Sites
-                                </a>
-                            </div>
-                            <div class="btn legend-toggle-target active">
-                                <a>
-                                    <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <circle class="target-sites" cx="8" cy="8" r="6" />
-                                    </svg>
-                                    Third Party Sites
-                                </a>
-                            </div>
-                        </section>
                         <section class="column">
                             <div class="btn legend-toggle-watched">
                                 <a>
@@ -399,20 +386,20 @@
                                 </a>
                             </div>
                         </section>
-                        <!-- <section class="column">
+                        <section class="column">
                             <div class="legend-label">
                                 <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="selectedSites" cx="8" cy="8" r="6" />
+                                    <circle class="source-sites" cx="8" cy="8" r="6" />
                                 </svg>
-                                Selected Site
+                                Visited Sites
                             </div>
                             <div class="legend-label">
                                 <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="colludedSites" cx="8" cy="8" r="6" />
+                                    <circle class="target-sites" cx="8" cy="8" r="6" />
                                 </svg>
-                                "Colluded Sites"
+                                Third Party Sites
                             </div>
-                        </section> -->
+                        </section>
                     </section>
               </div>
               <!-- SITE PREFERENCES for List ================================  -->
@@ -461,22 +448,23 @@
     </div>
     </div>
     <div id="tooltip"></div>
+
     <script src="d3.v3.min.js"></script>
-    <script src="events.js"></script>
-    <script src="infobar.js"></script>
-    <script src="collusion.js"></script>
-    <script src="svgdataset.js"></script>
-    <script src="aggregate.js"></script>
+    <script src="events.js" type="application/javascript;version=1.8"></script>
+    <script src="infobar.js" type="application/javascript;version=1.8"></script>
+    <script src="collusion.js" type="application/javascript;version=1.8"></script>
+    <script src="svgdataset.js" type="application/javascript;version=1.8"></script>
+    <script src="aggregate.js" type="application/javascript;version=1.8"></script>
     <!-- from https://github.com/Nycto/PicoModal -->
     <script src="picoModal-1.0.0.min.js"></script>
-    <script src="tooltip.js"></script>
-    <script src="dialog.js"></script>
-    <script src="ui.js"></script>
+    <script src="tooltip.js" type="application/javascript;version=1.8"></script>
+    <script src="dialog.js" type="application/javascript;version=1.8"></script>
+    <script src="ui.js" type="application/javascript;version=1.8"></script>
     <!-- Map -->
-    <script src="parseuri.js"></script>
+    <script src="parseuri.js" type="application/javascript;version=1.8"></script>
     <!-- Visualizations -->
-    <script src="clock.js"></script>
-    <script src="graph.js"></script>
-    <script src="list.js"></script>
+    <script src="clock.js" type="application/javascript;version=1.8"></script>
+    <script src="graph.js" type="application/javascript;version=1.8"></script>
+    <script src="list.js" type="application/javascript;version=1.8"></script>
 </body>
 </html>

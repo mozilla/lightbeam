@@ -87,6 +87,10 @@ a:hover{
     margin-bottom: 20px;
 }
 
+.main header:hover{
+    cursor: pointer;
+}
+
 .collusion-icon{
     border:1px solid #5ABED2;
     width: 35px;
@@ -350,13 +354,13 @@ a:hover{
 .top-bar{
     background-color:#fff;
     flex:none;
-    padding: 10px;
+    padding: 20px 20px 5px 20px;
+    text-transform: uppercase;
 }
 
 .stats-section{
     float: left;
     color: #3E454D;
-    width: 80%;
 }
 
 .stats-section section{
@@ -366,26 +370,23 @@ a:hover{
 
 .sharing-section{
     float: right;
-    margin: 3px 5px 0 0;
-    width: calc( 20% - 5px );
+    text-align: center;
+}
+
+.share-btn label{
+    position: relative;
+    top: 10px;
 }
 
 .sharing-section .label{
-    display: inline-block;
-    letter-spacing: 1px;
     color: #3E454D;
+    margin-right: 5px;
 }
 
-.sharing-section .share-btn{
+.sharing-section div{
     display: inline-block;
-    position: relative;
-    top: 8px;
 }
 
-.stat{
-    display:inline-block;
-    margin: 0 3px;
-}
 
 .info{
     width: 8px;
@@ -402,7 +403,7 @@ a:hover{
     display: block;
     float: right;
     z-index: 1000;
-    margin: 30px 0 0 0;
+    margin: 10px 0 0 0;
 }
 
 .info-panel-controls ul{
@@ -415,7 +416,7 @@ a:hover{
     position: relative;
     bottom: 10px;
     margin-bottom: 5px;
-    padding: 5px 10px;
+    padding: 18px;
     background: #20272E;
     border-radius: 2px 0 0 2px;
     cursor: pointer;
@@ -429,8 +430,13 @@ a:hover{
 .info-panel-controls img{
     width: 15px;
     height: 15px;
+}
+
+.info-panel-controls img,
+.info-panel-controls .icon-chevron-right{
     position: relative;
-    right: 3px;
+    right: 8px;
+    bottom: 8px;
 }
 
 .toggle-site-profile.disabled{
@@ -441,7 +447,9 @@ a:hover{
 .info .holder{
     display:flex;
     flex-direction:column;
+    width: 300px;
     height:100%;
+    padding: 17px 23px 8px 18px;
 }
 
 
@@ -528,12 +536,6 @@ a:hover{
 
 /* End Map Styles */
 
-.info .holder{
-    width: 300px;
-    height: 100%;
-    padding: 15px;
-}
-
 .info .holder .favicon{
     width: 20px;
     height: 20px;
@@ -602,6 +604,15 @@ a:hover{
 
 .connections-list ul li:hover{
     background-color: #6FC3E5;
+}
+
+.connections-list ul li[data-selected]{
+    background-color: #73A4B8;
+}
+
+.connections-list ul li.disabled{
+    color: #555;
+    pointer-events: none;
 }
 
 .stage-stack{
@@ -737,25 +748,30 @@ text {
     opacity: 0.2;
 }
 
-.clicked-node.node{
+.clicked-node.node circle:last-child{
     stroke-width: 2;
     fill: #fff;
 }
 
-.clicked-node.node.source{
+.clicked-node.node.source circle:last-child{
     stroke: #128764;
 }
 
-.clicked-node.node.target{
+.clicked-node.node.target circle:last-child{
     stroke: #F1C40F;
 }
 
-.colluded-source.node, .colluded-target.node{
+.colluded-source.node circle:last-child, .colluded-target.node circle:last-child{
     stroke: #fff;
     stroke-width: 1;
 }
 
 /* Graph Visualization */
+
+.filter-display header{
+    text-transform: capitalize;
+    font-size: 30px;
+}
 
 .visitedSites,
 .unvisitedSites,
@@ -897,6 +913,10 @@ text {
     cursor: pointer;
 }
 
+.list-table tr.selected-connected-row{
+    background-color: #73A4B8;
+}
+
 [data-pref=watch]{
     color: teal;
 }
@@ -933,7 +953,8 @@ text {
 
 .list-table tbody tr:hover,
 .list-table tbody tr.checked{
-    background: #33464d;
+    background: rgba(255,255,255,1);
+    color: #000;
 }
 
 .list-table .visited-row td{
@@ -985,7 +1006,7 @@ text {
 .graph-footer,
 .clock-footer,
 .list-footer{
-    margin-right: 20px;
+    margin-right: 8px;
     flex: none;
 }
 
@@ -1087,17 +1108,30 @@ text {
     color: #fff;
 }
 
+.graph-footer .btn_group{
+    float: right;
+    width: 150px;
+}
+
+.graph-footer .btn_group .all-cap-header{
+    margin-right: 10px;
+}
+
+.graph-footer .btn_group .dropdown_options{
+    width: 100px;
+}
+
 .list-footer .align-left,
 .list-footer .align-right{
     display: inline-block;
     overflow: hidden;
 }
 
-.list-footer .align-left{
+.align-left{
     float: left;
 }
 
-.list-footer .align-right{
+.align-right{
     float: right;
 }
 

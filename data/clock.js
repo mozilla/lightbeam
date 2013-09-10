@@ -147,7 +147,7 @@ function appendNodeG(bucket,connection,nodeType){
     g.appendChild(svg('circle', {
         cx: 0,
         cy: 0,
-        r: 4,
+        r: graphNodeRadius["clock"],
         'class': 'tracker'
     }));
 
@@ -216,6 +216,8 @@ function resetCanvas(){
     // You will still need to remove timer events
     var parent = vizcanvas.parentNode;
     var newcanvas = vizcanvas.cloneNode(false);
+    var vizcanvasDefs = document.querySelector(".vizcanvas defs").cloneNode(true);
+    newcanvas.appendChild(vizcanvasDefs);
     parent.replaceChild(newcanvas, vizcanvas);
     vizcanvas = newcanvas;
 }
@@ -391,7 +393,6 @@ document.querySelector('#content').addEventListener('click', function(event){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
-            // console.log(node);
             applyHighlightingEffect(node.getAttribute("data-name"));
         }
     }
@@ -432,23 +433,9 @@ function applyHighlightingEffect(clickedNodeName){
 /* for Highlighting and Colouring -------------------- */
 
 var highlight = {};
-highlight.source = true;
-highlight.target = true;
 var clockLegend = document.querySelector(".clock-footer");
 
 legendBtnClickHandler(clockLegend);
-
-clockLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
-    var visited = document.querySelectorAll(".source");
-    toggleVizElements(visited,"highlighted");
-    highlight.source = !highlight.source;
-});
-
-clockLegend.querySelector(".legend-toggle-target").addEventListener("click", function(event){
-    var targets = document.querySelectorAll(".target");
-    toggleVizElements(targets,"highlighted");
-    highlight.target = !highlight.target;
-});
 
 clockLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
     var watchedSites = document.querySelectorAll(".watched");

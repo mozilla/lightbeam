@@ -56,6 +56,7 @@ function onInit(){
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
     vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
     // console.log('graph::onInit end');
+    document.querySelector(".filter-display").classList.remove("hidden");
 };
 
 function onRemove(){
@@ -64,6 +65,7 @@ function onRemove(){
         force = null;
     }
     resetCanvas();
+    document.querySelector(".filter-display").classList.add("hidden");
 };
 
 function onReset(){
@@ -255,7 +257,7 @@ function addCircle(selection){
         .append('circle')
         .attr('cx', 0)
         .attr('cy', 0)
-        .attr('r', 12)
+        .attr('r', graphNodeRadius["graph"])
         .classed('site', true);
 }
 
@@ -278,6 +280,8 @@ function resetCanvas(){
     // You will still need to remove timer events
     var parent = vizcanvas.parentNode;
     var newcanvas = vizcanvas.cloneNode(false);
+    var vizcanvasDefs = document.querySelector(".vizcanvas defs").cloneNode(true);
+    newcanvas.appendChild(vizcanvasDefs);
     parent.replaceChild(newcanvas, vizcanvas);
     vizcanvas = newcanvas;
     aggregate.off('update', onUpdate);

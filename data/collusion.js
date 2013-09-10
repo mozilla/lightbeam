@@ -88,6 +88,7 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
+    localStorage.numLaunch = parseInt(localStorage.numLaunch)+1 || 1;
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
@@ -117,14 +118,14 @@ function switchVisualization(name){
     }
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
-    resetAddtionalUI();
+    resetAdditionalUI();
     addon.emit('uiready');
 }
 
 
 
 
-function resetAddtionalUI(){
+function resetAdditionalUI(){
     // toggle off info panel
     document.querySelector("#content").classList.remove("showinfo");
     var activeTab = document.querySelector(".info-panel-controls ul li.active");
@@ -152,7 +153,7 @@ function resetAddtionalUI(){
 *   Save connections
 */
 function saveConnections(){
-    console.error('saveConnections( ' + allConnections.length + ' connection)');
+    // console.error('saveConnections( ' + allConnections.length + ' connection)');
     var lastSaved = Number(localStorage.lastSaved || 0);
     var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
         // console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');
@@ -167,14 +168,30 @@ function saveConnections(){
 
 
 function saveConnectionsByDate(connections){
+    var connByDateSet = {};
+    var conn, key;
+    // group connections by date
     for ( var i=0; i<connections.length; i++ ){
-        var conn = connections[i];
-        var key = dateAsKey( conn[TIMESTAMP] );
-        if ( !localStorage.getItem(key) ){
-            saveToLocalStorage(key, "[" + JSON.stringify(conn) + "]");
+        conn = connections[i];
+        key = dateAsKey( conn[TIMESTAMP] );
+        if ( connByDateSet[key] ){
+            connByDateSet[key].push(conn);
         }else{
-            saveToLocalStorage(key, localStorage.getItem(key).slice(0,-1) + "," + JSON.stringify(conn) + "]");
+            connByDateSet[key] = [conn];
         }
+    }
+    // save each group of connections to localStorage
+    for(var date in connByDateSet){
+        saveConnToLocalStorage(date,connByDateSet[date]);
+    }
+}
+
+
+function saveConnToLocalStorage(date,connections){
+    if ( !localStorage.getItem(date) ){
+        saveToLocalStorage(date, JSON.stringify(connections));
+    }else{
+        saveToLocalStorage(date, localStorage.getItem(date).slice(0,-1) + "," + JSON.stringify(connections).slice(1,-1) + "]");
     }
 }
 
@@ -194,15 +211,17 @@ function dateAsKey(timestamp){
 *   Upload data
 */
 
-function startSharing(callback){
-    dialog( {   "title": "Upload Data", 
-                "message": 
-                    '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
-                    'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
-                    '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
-                    'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
-                    '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
-                "imageUrl": "image/collusion_popup_warningsharing.png"
+function startSharing(askForConfirmation,callback){
+    if ( askForConfirmation ){
+        dialog( {   "name": dialogNames.startUploadData,
+                    "title": "Upload Data", 
+                    "message": 
+                        '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
+                        'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
+                        '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
+                        'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
+                        '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
+                    "imageUrl": "image/collusion_popup_warningsharing.png"
             },
             function(confirmed){
                 if ( confirmed ){
@@ -211,11 +230,17 @@ function startSharing(callback){
                 }
                 callback(confirmed);
             }
-    );
+        );
+    }else{
+        sharingData();
+        localStorage.userHasOptedIntoSharing = true;
+        callback(true);
+    }
 }
 
 function stopSharing(callback){
-    dialog( {   "title": "Stop Uploading Data", 
+    dialog( {   "name": dialogNames.stopUploadData,
+                "title": "Stop Uploading Data", 
                 "message": 
                     '<p>You are about to stop sharing data with the Mozilla Collusion server.</p>' +
                     '<p>By clicking OK you will no longer be uploading data.</p>',
@@ -321,6 +346,6 @@ function updateStatsBar(){
         dateSince = formattedDate(allConnections[0][2]);
     }
     document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
-    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " THIRD PARTY SITES"; 
-    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " SITES";
+    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
+    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }

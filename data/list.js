@@ -224,7 +224,9 @@ function getNodes(filter){
 
 function nodeToRow(node){
     var settings = userSettings[node.name] || '';
-    return elem('tr', {
+    var iconUrl = 'icons/collusion_icon_list.png';
+    var listIcon = elem('img', {'src': iconUrl, 'class': 'update-table', 'role': 'gridcell'});
+    var row = elem('tr', {
             'class': 'node ' + node.nodeType,
             'data-pref': settings,
             'data-name': node.name,
@@ -236,13 +238,23 @@ function nodeToRow(node){
         elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
         elem('td', {'class': 'preferences', 'data-sort-key': settings, 'role': 'gridcell'}, '\u00A0'),
         elem('td', {'data-sort-key': node.name, 'role': 'gridcell'}, [
-                elem('img', {'src': 'icons/collusion_icon_list.png', 'class': 'update-table', 'role': 'gridcell'}),
+                listIcon,
                 node.name
             ]),
         elem('td', {'data-sort-key': node.firstAccess, 'role': 'gridcell'}, formattedDate(node.firstAccess)),
         elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, formattedDate(node.lastAccess)),
         elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1, 'role': 'gridcell'}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
     ]);
+    listIcon.addEventListener("mouseenter",tooltip.addTooltip);
+    listIcon.addEventListener("mouseleave",tooltip.hide);
+    row.addEventListener("mouseenter",function(){
+        row.childNodes[3].firstChild.setAttribute("src", "image/collusion_icon_list_blue.png");
+    });
+    row.addEventListener("mouseleave",function(){
+        row.childNodes[3].firstChild.setAttribute("src", iconUrl);
+    });
+
+    return row;
 }
 
 
@@ -400,7 +412,8 @@ if (localStorage.listViewHideRows){
 var listStageStackClickHandler = function(event){
     var target = event.target;
     if(target.mozMatchesSelector('.block-pref.active a') ){
-        dialog( {   "title": "Block Sites", 
+        dialog( {   "name" : dialogNames.blockSites,
+                    "title": "Block Sites",
                     "message":  "<p><b>Warning:</b></p> " + 
                                 "<p>Blocking sites will prevent any and all content from being loaded from these domains: [domain1.com, domain2.com, ...] and ALL SUBDOMAINS [www.domain1.com, etc.]. </p>" + 
                                 "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>" + 
@@ -413,11 +426,10 @@ var listStageStackClickHandler = function(event){
                 }
         );
     }else if (target.mozMatchesSelector('.hide-pref.active a')){
-        var hideDialogName = "hideDialog";
-        if ( doNotShowDialog(hideDialogName) ){
+        if ( doNotShowDialog(dialogNames.hideSites) ){
             setPreferences('hide');
         }else{
-            dialog( {   "name": hideDialogName,
+            dialog( {   "name": dialogNames.hideSites,
                         "dnsPrompt": true,
                         "title": "Hide Sites", 
                         "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 

@@ -3,6 +3,7 @@
 var tooltipTimer;
 var tooltip;
 
+// for Clock view
 function showTooltip(event){
     if (!tooltip){
         tooltip = document.getElementById('tooltip');
@@ -11,14 +12,15 @@ function showTooltip(event){
     tooltip.style.display = 'inline-block';
     // console.error(event, event.target, event.target.dataset);
     tooltip.innerHTML = event.target.getAttribute(["data-name"]);
-    var rect = event.target.getClientRects()[0];
+    var rect = event.target.querySelector(":last-child").getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
-    tooltip.style.top = (rect.top - 45) + 'px';
+    tooltip.style.top = (rect.top - 40) + 'px';
     tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
     setTooltipTimeout();
     return false;
 }
 
+// for Graph view
 function d3ShowTooltip(node, idx){
     if (!tooltip){
         tooltip = document.getElementById('tooltip');
@@ -27,14 +29,30 @@ function d3ShowTooltip(node, idx){
     tooltip.style.display = 'inline-block';
     // console.error(event, event.target, event.target.dataset);
     tooltip.innerHTML = node.name;
-    var rect = this.getClientRects()[0];
+    var shapeNode = this.querySelector(".site") || this.querySelector("[data-name]"); // look for "site"(circle) node or "tracker(triangle)" node
+    var rect = shapeNode.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
-    tooltip.style.top = (rect.top - 55) + 'px';
+    tooltip.style.top = (rect.top - 40) + 'px';
     tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
     return false;
 }
 
-
+// for List view
+function listShowTooltip(event){
+    if (!tooltip){
+        tooltip = document.getElementById('tooltip');
+    }
+    tooltip.style.left = '-1000px';
+    tooltip.style.display = 'inline-block';
+    // console.error(event, event.target, event.target.dataset);
+    tooltip.innerHTML = "go to " + event.target.parentElement.getAttribute(["data-sort-key"]) + "'s site list";
+    var rect = event.target.getClientRects()[0];
+    var tooltipWidth = tooltip.offsetWidth;
+    tooltip.style.top = (rect.top - 40) + 'px';
+    tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
+    setTooltipTimeout();
+    return false;
+}
 
 
 function setTooltipTimeout(){
@@ -69,7 +87,8 @@ global.tooltip = {
     add: add,
     remove: remove,
     show: d3ShowTooltip,
-    hide: hideTooltip
+    hide: hideTooltip,
+    addTooltip: listShowTooltip
 };
 
 })(this);
