@@ -216,10 +216,9 @@ function startSharing(askForConfirmation,callback){
         dialog( {   "name": dialogNames.startUploadData,
                     "title": "Upload Data", 
                     "message": 
-                        '<p>You are about to start uploading de-identified data to the Mozilla Collusion server. ' +
-                        'Your data will continue to be uploaded periodically until you turn off sharing. </p>' +
-                        '<p>For more information about the data we upload, how it is de-identified, and what Mozilla\'s ' +
-                        'privacy policies are, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
+                        '<p>You are about to start uploading de-identified information to our shared tracker database. ' +
+                        'Your information will continue to be uploaded  until you turn off sharing. </p>' +
+                        '<p>To learn more about uploading data, how it is de-identified, please visit <a href="http://mozilla.org/collusion" target="_blank">http://mozilla.org/collusion</a> </p>' + 
                         '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
                     "imageUrl": "image/collusion_popup_warningsharing.png"
             },
@@ -242,8 +241,8 @@ function stopSharing(callback){
     dialog( {   "name": dialogNames.stopUploadData,
                 "title": "Stop Uploading Data", 
                 "message": 
-                    '<p>You are about to stop sharing data with the Mozilla Collusion server.</p>' +
-                    '<p>By clicking OK you will no longer be uploading data.</p>',
+                    '<p>You are about to stop sharing information with our shared tracker database.</p>' +
+                    '<p>By clicking OK you will no longer be uploading information.</p>',
                 "imageUrl": "image/collusion_popup_stopsharing2.png"
             },
             function(confirmed){

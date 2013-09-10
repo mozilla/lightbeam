@@ -149,7 +149,7 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 document.querySelector('.reset-data').addEventListener('click', function(){
     dialog( {   "name": dialogNames.resetData,
                 "title": "Reset Data",
-                "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list [etc.].</p>" + 
+                "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list etc.</p>" + 
                             "<p>Your browser will be returned to the state of a fresh install of Collusion.</p>",
                 "imageUrl": "image/collusion_popup_warningreset.png"
             },function(confirmed){
