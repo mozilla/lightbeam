@@ -194,6 +194,15 @@ a:hover{
     outline: 1px dotted grey;
 }
 
+.pico-content .privacy-policy{
+    height: 150px;
+    overflow-y: auto;
+}
+
+.privacy-policy ul{
+    margin-left: 15px;
+    list-style-type: circle !important;
+}
 
 /* Button Styling ================================ */
 
