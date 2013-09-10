@@ -323,11 +323,11 @@ function sortTableOnColumn(table, n){
             // Check if there are any preferences set for this row
             var prefVal = rowElement.attributes.getNamedItem('data-pref').value;
 
-            if (prefCol && prefVal != '') {
-                // This row is marked with a preference. We should 
-                // append it to the top fragment
+            if (prefCol && prefVal != ''){
+                // This row is marked with a preference and should
+                // be appended to the top fragment.
                 preFrag.appendChild(rowElement);
-            } else {
+            }else{
                 frag.appendChild(rowElement);
             }
          });
