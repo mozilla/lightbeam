@@ -524,7 +524,7 @@ a:hover{
     text-transform: capitalize;
 }
 
-/* Info Panel(Profile) Sections */
+/* Info Panel(Site Profile) Sections */
 
 .map-section{
     margin: 10px 0 10px 0;
@@ -542,6 +542,12 @@ a:hover{
     flex-direction:column;
 }
 
+.pref-tag img{
+    width: 15px;
+    height: 15px;
+    position: relative;
+    top: 3px;
+}
 
 /* End Map Styles */
 

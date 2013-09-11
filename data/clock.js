@@ -133,10 +133,10 @@ function appendNodeG(bucket,connection,nodeType){
     if ( nodeType == "target" && highlight.target ){
         classes.push("highlighted");
     }
-    if ( Object.keys(userSettings).indexOf(connection[nodeType]) > -1 && userSettings[connection[nodeType]].contains("watch") ){
+    if ( siteHasPref(connection[nodeType],"watch") ){
         classes.push("watched");
     }
-    if ( Object.keys(userSettings).indexOf(connection[nodeType]) > -1 && userSettings[connection[nodeType]].contains("block") ){
+    if ( siteHasPref(connection[nodeType],"block") ){
         classes.push("blocked");
     }
 
