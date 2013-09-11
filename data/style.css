@@ -1063,7 +1063,8 @@ text {
     margin-bottom: 15px;
     font-size: 10px;
     letter-spacing: 1px;
-    border-radius: 5px
+    border-radius: 5px;
+    width: 170px;
 }
 
 .legend-controls .column{
