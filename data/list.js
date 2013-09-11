@@ -122,7 +122,7 @@ var breadcrumbClickHandler = function(event){
     var url = event.target.getAttribute("site-url");
     var idxInStack = event.target.getAttribute("idx");
     while ( breadcrumbStack.length > idxInStack ){
-        breadcrumbStack.pop();   
+        breadcrumbStack.pop();
     }
     showFilteredTable(url);
 };
@@ -132,35 +132,35 @@ function mapBreadcrumbsToUI(){
     var lastIdxInStack = breadcrumbStack.length-1;
     // add "All Sites" to breadcrumb container
     breadcrumb.appendChild( elem("div", {"class": "breadcrumb-chunk"}, breadcrumbStack[0]) );
-    // other than "All Sites", there is only 1 tier in breadcrumbStack 
+    // other than "All Sites", there is only 1 tier in breadcrumbStack
     // add that tier to breadcrumb container
     if ( lastIdxInStack == 1 ){
         breadcrumb.appendChild( elem("div", {"class": "arrow-left"}) );
-        breadcrumb.appendChild( elem(   "div", 
+        breadcrumb.appendChild( elem(   "div",
                                         {
-                                            "class": "breadcrumb-chunk no-click", 
+                                            "class": "breadcrumb-chunk no-click",
                                             "site-url": breadcrumbStack[lastIdxInStack]
                                         },
                                         breadcrumbStack[lastIdxInStack]) );
     }
-    // other than "All Sites", there are more than 1 tier in breadcrumbStack 
+    // other than "All Sites", there are more than 1 tier in breadcrumbStack
     // we only want to show "All Sites" and the last 2 tiers
     // so add the last 2 tiers to breadcrumb container
     if ( lastIdxInStack >= 2 ){
         // second last tier
         breadcrumb.appendChild( elem(   "div", {"class": "arrow-left"}) );
-        breadcrumb.appendChild( elem(   "div", 
+        breadcrumb.appendChild( elem(   "div",
                                         {
-                                            "class": "breadcrumb-chunk", 
-                                            "site-url": breadcrumbStack[lastIdxInStack-1], 
+                                            "class": "breadcrumb-chunk",
+                                            "site-url": breadcrumbStack[lastIdxInStack-1],
                                             "idx": (lastIdxInStack-1)
                                         },
                                         breadcrumbStack[lastIdxInStack-1]) );
         // last tier
         breadcrumb.appendChild( elem("div", {"class": "arrow-left"}) );
-        breadcrumb.appendChild( elem(   "div", 
+        breadcrumb.appendChild( elem(   "div",
                                         {
-                                            "class": "breadcrumb-chunk no-click", 
+                                            "class": "breadcrumb-chunk no-click",
                                             "site-url": breadcrumbStack[lastIdxInStack],
                                             "idx": lastIdxInStack
                                         },
@@ -181,13 +181,13 @@ function resetVisibleBreadcrumb(){
     var breadcrumbContainer = document.querySelector(".breadcrumb");
     while ( breadcrumbContainer.firstChild ){
         breadcrumbContainer.removeChild(breadcrumbContainer.firstChild);
-    } 
+    }
 }
 
 var lastFilter = null;
 
 function showFilteredTable(filter){
-    if ( lastFilter != filter ) updateBreadcrumb(filter); 
+    if ( lastFilter != filter ) updateBreadcrumb(filter);
     lastFilter = filter;
     // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");
@@ -414,8 +414,8 @@ var listStageStackClickHandler = function(event){
     if(target.mozMatchesSelector('.block-pref.active a') ){
         dialog( {   "name" : dialogNames.blockSites,
                     "title": "Block Sites",
-                    "message":  "<p><b>Warning:</b></p> " + 
-                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" + 
+                    "message":  "<p><b>Warning:</b></p> " +
+                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" +
                                 "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>",
                     "imageUrl": "image/collusion_popup_blocked.png"
                 },function(confirmed){
@@ -430,8 +430,8 @@ var listStageStackClickHandler = function(event){
         }else{
             dialog( {   "name": dialogNames.hideSites,
                         "dnsPrompt": true,
-                        "title": "Hide Sites", 
-                        "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 
+                        "title": "Hide Sites",
+                        "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" +
                                     "<p>You can use this to ignore trusted sites from the data.</p>",
                         "imageUrl": "image/collusion_popup_hidden.png"
                     },function(confirmed){
@@ -488,6 +488,11 @@ function initializeHandlers(){
 }
 
 function toggleOnPrefButtons(toggleOn){
+    // do not toggle the pref buttons if there are still selected rows
+    if (toggleOn === false && getSelectedRows().length > 0) {
+      return;
+    }
+
     var classToAdd = toggleOn ? "active" : "disabled";
     var classToRemove = toggleOn ? "disabled" : "active";
     // toggle on class
@@ -500,6 +505,8 @@ function toggleOnPrefButtons(toggleOn){
     document.querySelector(".hide-pref").classList.remove(classToRemove);
     document.querySelector(".watch-pref").classList.remove(classToRemove);
     document.querySelector(".no-pref").classList.remove(classToRemove);
+
+    return;
 }
 
 function toggleShowHideHiddenButton(){
