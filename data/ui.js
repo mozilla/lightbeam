@@ -551,3 +551,12 @@ function singularOrPluralNoun(num,str){
     }
     return ( num > 1) ? str+"s" : str;
 }
+
+
+/**************************************************
+*   Check if a site has certain preference set to it
+*/
+function siteHasPref(site,pref){
+    return ( Object.keys(userSettings).indexOf(site) > -1 && userSettings[site].contains(pref) );
+}
+

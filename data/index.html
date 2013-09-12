@@ -82,8 +82,14 @@
                         <div>
                             <header class="title large-header"></header>
                             <!--span class="blue-text">You are currently browsing this site</span-->
-                            <span class="all-cap-header"><b>First Access </b></span><span class="info-first-access">Date</span><br>
+                            <span class="all-cap-header"><b>First Access </b></span><span class="info-first-access">Date</span><br/>
                             <span class="all-cap-header"><b>Last Access </b></span><span class="info-last-access">Date</span>
+                            <div class="pref-tag hidden">
+                                <br/>
+                                <img src="" />
+                                This site is currently
+                                <b><span></span></b>.
+                            </div>
                         <div class="map-section">
                             <header class="blue-text large-header">Server Location</header>
                             <div><span id="country">&nbsp;</span></div>
@@ -240,15 +246,34 @@
                             </section>
                             <section>
                                 <div class="blue-text all-cap-header">Privacy Policy</div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel lectus eu quam consectetur vestibulum. Vivamus elementum faucibus commodo. Nullam bibendum ac justo in convallis. Ut ac lacinia nibh. Suspendisse ac eleifend enim. Donec ornare, metus eu suscipit tempor, nisl leo bibendum quam, ac fermentum eros est a mi.
-                                </p>
-                            </section>
-                            <section>
-                                <div class="blue-text all-cap-header">WEBSITE</div>
-                                <p>
-                                    <i>For more information please visit: <a href="www.mozilla.org/collusion" target="_blank">mozilla.org/collusion/</a></i>
-                                </p>
+                                <!-- Collusion Privacy Policy.  FIXEME: temp placeholder for v0.9 -->
+                                <div class="privacy-policy">
+                                    <p>
+                                        <header><b>Collusion Privacy</b></header>
+                                        <div>We care about your privacy. Collusion is a browser add-on that collects and helps you visualize third party requests on any site you visit. If you choose to send Collusion data to Mozilla (that’s us), our privacy policy describes how we handle that data. </div>
+                                    </p>
+                                    <p>
+                                        <header><b>Things you should know</b></header>
+                                        <ul>
+                                            <li>
+                                                After you install Collusion, the add-on collects data to help you visualize third party requests when you visit sites. 
+                                                <ul>
+                                                    <li>When you visit a site and that site contacts a third party, Collusion collects the following type of data: URLs of the visited sites and third parties, the existence of cookies, and a rough timestamp of when the site was visited. To see a complete list, please visit <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank" >here</a>.</li>
+                                                </ul>
+                                            </li>
+                                            <li>By default, data collected by Collusion remains in your browser and is not sent to us. </li>
+                                            <li>
+                                                You can choose to share your Collusion data with us. Information from Collusion can help us and others to understand third party relationships on the web and promote further research in the field of online tracking and privacy.
+                                                <ul>
+                                                    <li>If you do share Collusion data with us, your browser will send us your de-identified Collusion data (you can see a list of the kind of data involved <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank">here</a>) along with a randomly generated browser ID which helps us understand how many unique browsers are sharing data. We will post your data along with data from others in an aggregated and open database. Users will benefit  by making more informed decisions based on the collective information and patterns about trackers.</li>
+                                                    <li>If you turn off data sharing, the randomly generated browser ID is reset and if you turn data sharing on again, a new randomly generated user ID will be created.</li>
+                                                    <li>Uninstalling Collusion prevents collection of any further Collusion data and will delete the data stored locally in your browser.</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                                <!-- Collusion Privacy Policy ends -->
                             </section>
                         </div>
                     </div>
@@ -368,6 +393,20 @@
                     </section>
                     <section class="legend-controls">
                         <section class="column">
+                            <div class="legend-label">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="source-sites" cx="8" cy="8" r="6" />
+                                </svg>
+                                Visited Sites
+                            </div>
+                            <div class="legend-label">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="target-sites" cx="8" cy="8" r="6" />
+                                </svg>
+                                Third Party Sites
+                            </div>
+                        </section>
+                        <section class="column">
                             <div class="btn legend-toggle-watched">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -386,20 +425,6 @@
                                 </a>
                             </div>
                         </section>
-                        <section class="column">
-                            <div class="legend-label">
-                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="source-sites" cx="8" cy="8" r="6" />
-                                </svg>
-                                Visited Sites
-                            </div>
-                            <div class="legend-label">
-                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="target-sites" cx="8" cy="8" r="6" />
-                                </svg>
-                                Third Party Sites
-                            </div>
-                        </section>
                     </section>
               </div>
               <!-- SITE PREFERENCES for List ================================  -->
@@ -410,32 +435,32 @@
                     </section>
                     <section class="legend-controls">
                         <section class="align-left">
-                            <div class="block-pref btn disabled">
-                                <a>
+                            <input id="block-pref" type="radio" name="pref-options" value="" >
+                               <label for="block-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
                                     <img src="icons/collusion_icon_block.png" />
                                     Block Site
-                                </a>
-                            </div>
-                            <div class="hide-pref btn disabled">
-                                <a>
+                                </label>
+                            <input id="hide-pref" type="radio" name="pref-options" value="">
+                                <label for="hide-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
                                     <img src="icons/collusion_icon_hide.png" />
                                     Hide Site
-                                </a>
-                    </div>
-                            <div class="watch-pref btn disabled">
-                                <a>
+                                </label>
+                            <input id="watch-pref" type="radio" name="pref-options" value="">
+                               <label for="watch-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
                                     <img src="icons/collusion_icon_watch.png" />
                                     Watch Site
-                                </a>
-                            </div>
+                               </label> 
+                            <input id="no-pref" type="radio" name="pref-options" value="">
+                               <label for="no-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
+                                    Clear Preference
+                               </label>
                         </section>
                         <section class="align-right">
-                            <div class="no-pref btn disabled">
-                                <a>
-                                    Clear Preference
-                                </a>
-                            </div>
-                            <div class="toggle-hidden disabled btn">
+                            <div class="toggle-hidden btn">
                                 <a>
                                     Hide Hidden Sites
                                 </a>

@@ -197,11 +197,11 @@ function initGraph(){
                 this.classList.remove('highlighted');
             }
             // check to see if it's a watched site
-            if ( Object.keys(userSettings).indexOf(d.name) > -1 && userSettings[d.name].contains("watch") ){
+            if ( siteHasPref(d.name,"watch") ){
                 this.classList.add("watched");
             }
             // check to see if it's a blocked site
-            if ( Object.keys(userSettings).indexOf(d.name) > -1 && userSettings[d.name].contains("block") ){
+            if ( siteHasPref(d.name,"block") ){
                 this.classList.add("blocked");
             }
         });
