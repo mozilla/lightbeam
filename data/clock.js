@@ -43,6 +43,7 @@ function onInit(){
         }
     });
     fadeEarlierTrackers(timeToBucket(new Date()));
+    colourHighlightNodes(highlight);
 };
 
 function drawClockFrame(){
@@ -438,16 +439,13 @@ var clockLegend = document.querySelector(".clock-footer");
 legendBtnClickHandler(clockLegend);
 
 clockLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
-    var watchedSites = document.querySelectorAll(".watched");
-    // console.log(watchedSites);
-    toggleVizElements(watchedSites,"watchedSites");
     highlight.watched = !highlight.watched;
+    colourHighlightNodes(highlight);
 });
 
 clockLegend.querySelector(".legend-toggle-blocked").addEventListener("click", function(event){
-    var blockedSites = document.querySelectorAll(".blocked");
-    toggleVizElements(blockedSites,"blockedSites");
     highlight.blocked = !highlight.blocked;
+    colourHighlightNodes(highlight);
 });
 
 clockLegend.querySelector(".legend-toggle").addEventListener("click", function(event){

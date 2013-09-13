@@ -560,3 +560,30 @@ function siteHasPref(site,pref){
     return ( Object.keys(userSettings).indexOf(site) > -1 && userSettings[site].contains(pref) );
 }
 
+
+/**************************************************
+*   When initializing Graph View / Clock View
+*   if the "Watched Sites" or "Blocked Sites" toggles are on, apply colour to the corresponding nodes
+*/
+function colourHighlightNodes(highlight){
+    var watchedSites = document.querySelectorAll(".watched");
+    var blockedSites = document.querySelectorAll(".blocked");
+    if ( highlight.watched ){
+        for (var i=0; i<watchedSites.length; i++){
+            watchedSites[i].classList.add("watchedSites");
+        }
+    }else{
+        for (var i=0; i<watchedSites.length; i++){
+            watchedSites[i].classList.remove("watchedSites");
+        }
+    }
+    if ( highlight.blocked ){
+        for (var i=0; i<blockedSites.length; i++){
+            blockedSites[i].classList.add("blockedSites");
+        }
+    }else{
+        for (var i=0; i<blockedSites.length; i++){
+            blockedSites[i].classList.remove("blockedSites");
+        }
+    }
+}

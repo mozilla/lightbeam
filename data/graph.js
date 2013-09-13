@@ -41,6 +41,7 @@ function onUpdate(){
         force.links(filteredAggregate.edges);
         force.start();
         updateGraph();
+        colourHighlightNodes(highlight);
     }else{
         console.log('the force is not with us');
     }    
@@ -113,6 +114,12 @@ function nodeName(node){
         return node.name;
     }
 }
+function watchSite(node){
+    return siteHasPref(node.name,"watch");
+}
+function blockSite(node){
+    return siteHasPref(node.name,"block");
+}
 
 // SET UP D3 HANDLERS
 
@@ -130,6 +137,7 @@ function initGraph(){
         .size([width,height])
         .start();
     updateGraph();
+    colourHighlightNodes(highlight);
 
     // update method
     var lastUpdate, lastTick;
@@ -195,14 +203,6 @@ function initGraph(){
             }else{
                 this.classList.remove('highlighted');
             }
-            // check to see if it's a watched site
-            if ( siteHasPref(d.name,"watch") ){
-                this.classList.add("watched");
-            }
-            // check to see if it's a blocked site
-            if ( siteHasPref(d.name,"block") ){
-                this.classList.add("blocked");
-            }
         });
         var endDraw = Date.now();
         draws.push(endDraw - lastTick);
@@ -231,6 +231,8 @@ function updateGraph(){
 	nodes.enter().append('g')
         .classed('visitedYes', visited )
         .classed('visitedNo', notVisited)
+        .classed("watched",watchSite)
+        .classed("blocked",blockSite)
         .call(addShape)
         .attr('data-name', nodeName)
         .on('mouseenter', tooltip.show)
@@ -318,15 +320,13 @@ graphLegend.querySelector(".legend-toggle-cookies").addEventListener("click", fu
 });
 
 graphLegend.querySelector(".legend-toggle-watched").addEventListener("click", function(event){
-    var watchedSites = document.querySelectorAll(".watched");
-    toggleVizElements(watchedSites,"watchedSites");
     highlight.watched = !highlight.watched;
+    colourHighlightNodes(highlight);
 });
 
 graphLegend.querySelector(".legend-toggle-blocked").addEventListener("click", function(event){
-    var blockedSites = document.querySelectorAll(".blocked");
-    toggleVizElements(blockedSites,"blockedSites");
     highlight.blocked = !highlight.blocked;
+    colourHighlightNodes(highlight);
 });
 
 
