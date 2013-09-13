@@ -1012,6 +1012,8 @@ text {
 }
 .body-table td:nth-child(7){
     width: 115px;
+    text-align: right;
+    padding-right: 15px;
 }
 
 
