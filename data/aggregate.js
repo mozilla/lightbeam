@@ -14,7 +14,6 @@ global.filteredAggregate = {
 
 aggregate.trackerCount = 0;
 aggregate.siteCount = 0;
-aggregate.blockList = {};
 aggregate.nodes = [];
 aggregate.edges = [];
 aggregate.recentSites = [];
@@ -25,7 +24,6 @@ aggregate.edgemap = {};
 function resetData(){
     aggregate.nodemap = {};
     aggregate.edgemap = {};
-    aggregate.blockList = {};
     aggregate.nodes = [];
     aggregate.edges = [];
     aggregate.trackerCount = 0;
@@ -39,7 +37,7 @@ function resetData(){
 aggregate.on('reset', resetData);
 
 aggregate.getAllNodes = function() {
-  var blockedDomains = Object.keys(aggregate.blockList).filter(function(domain) {
+  var blockedDomains = Object.keys(userSettings).filter(function(domain) {
     // ignore domains already known
     var nodes = aggregate.nodes;
     for (var i = nodes.length - 1; i >= 0; i--) {
@@ -48,20 +46,24 @@ aggregate.getAllNodes = function() {
       }
     }
 
-    return true;
+    return userSettings[domain] == 'block';
   });
 
-  return aggregate.nodes.concat(blockedDomains.map(function(blockedDomain) {
+  return aggregate.nodes.concat(blockedDomains.map(function(domain) {
     return {
-      site: blockedDomain,
+      site: domain,
       nodeType: 'blocked',
-      name: blockedDomain
+      name: domain
     };
-  }))
+  }));
 }
 
 aggregate.getConnectionCount = function(node) {
-  return (node.nodeType === 'blocked' ? 0 : Object.keys(aggregate.nodeForKey(node.name)).length - 1);
+  if (node.nodeType === 'blocked')
+    return 0;
+
+  let connections = Object.keys(aggregate.nodeForKey(node.name)).length;
+  return connections - 1 > 0 ? connections - 1 : 0;
 }
 
 aggregate.nodeForKey = function(key){
@@ -111,7 +113,6 @@ aggregate.connectionAsObject = function(conn){
 
 function applyFilter(filter){
     currentFilter = filter;
-
 }
 
 aggregate.on('filter', applyFilter);
@@ -237,11 +238,14 @@ aggregate.on('connection', onConnection);
 
 
 function onBlocklistUpdate({ domain, flag }) {
-  if (flag) {
-    aggregate.blockList[domain] = flag;
+  if (flag === true) {
+    // Make sure we have blocked domains in localStorage, no matter what.
+    // If localStorage is cleared the domains will still be blocked,
+    // this is wahy the update is necessary.
+    userSettings[domain] = 'block';
   }
-  else {
-    delete aggregate.blockList[domain];
+  else if (userSettings[domain] == 'block') {
+    delete userSettings[domain];
   }
 }
 aggregate.on('update-blocklist', onBlocklistUpdate);

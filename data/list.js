@@ -235,7 +235,7 @@ function nodeToRow(node){
             'tabIndex': '0'
     }, [
         elem('td', elem('input', {'type': 'checkbox', 'class': 'selected-row', 'tabIndex':'-1'})),
-        elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : (node.nodeType === 'blocked' ? 'Blocked' : 'Visited')),
+        elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : (node.nodeType === 'blocked' ? 'Unknown' : 'Visited')),
         elem('td', {'class': 'preferences', 'data-sort-key': settings, 'role': 'gridcell'}, '\u00A0'),
         elem('td', {'data-sort-key': node.name, 'role': 'gridcell'}, [
                 listIcon,
@@ -243,7 +243,7 @@ function nodeToRow(node){
             ]),
         elem('td', {'data-sort-key': node.firstAccess, 'role': 'gridcell'}, (node.nodeType === 'blocked' ? 'Unknown' : formattedDate(node.firstAccess))),
         elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, (node.nodeType === 'blocked' ? 'Unknown' : formattedDate(node.lastAccess))),
-        elem('td', {'data-sort-key': aggregate.getConnectionCount(node), 'role': 'gridcell'}, aggregate.getConnectionCount(node))
+        elem('td', {'data-sort-key': aggregate.getConnectionCount(node), 'role': 'gridcell'}, aggregate.getConnectionCount(node) + '')
     ]);
     listIcon.addEventListener("mouseenter",tooltip.addTooltip);
     listIcon.addEventListener("mouseleave",tooltip.hide);
@@ -442,7 +442,7 @@ var listStageStackClickHandler = function(event){
                     }
                 }
         );
-    }else if (target.mozMatchesSelector('label[for=hide-pref], label[for=hide-pref] *') ){   
+    }else if (target.mozMatchesSelector('label[for=hide-pref], label[for=hide-pref] *') ){
         if ( doNotShowDialog(dialogNames.hideSites) ){
             setPreferences('hide');
         }else{
