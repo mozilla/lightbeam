@@ -35,8 +35,28 @@ function onInit(connections){
 }
 
 function onUpdate(){
-    // FIXME: This is heavyweight: every new node involved deleting and recreating the table
-    showFilteredTable(lastFilter);
+    let { nodes } = aggregate;
+    let oldNodeRows = getAllRows().map(function(row) row.getAttribute('data-name'));
+    let newNodes = nodes.filter(function(node) {
+        return oldNodeRows.indexOf(node.name) < 0;
+    });
+    if (newNodes.length <= 0) {
+        return;
+    }
+
+    let refreshRow = document.getElementById('refresh-data-row');
+    let refreshLink = document.getElementById('refresh-data-link');
+    refreshLink.innerHTML = 'Click to refresh <b>' + newNodes.length + ' new site(s)</b> ...';
+    refreshRow.addEventListener('click', function onClick() {
+      refreshRow.removeEventListener('click', onClick, false);
+
+      refreshRow.classList.remove('show');
+
+      // FIXME: This is heavyweight: every new node involved deleting and recreating the table
+      showFilteredTable(lastFilter);
+    }, false);
+    refreshRow.classList.add('show');
+    return;
 }
 
 
@@ -61,6 +81,9 @@ function initList(){
     // list header
     var table = elem("div", {'class': 'list-table'}, [
         elem('table', {'role': 'grid', 'aria-label': 'Entering List table'}, [
+            elem('tr', {'class': 'refresh', 'id': 'refresh-data-row'}, [
+              elem('td', {'colspan': '7', 'id': 'refresh-data-link'})
+            ]),
             elem('thead', {'class': 'header-table'}, [
                 elem('tr', {'role':'row', 'tabIndex': '0'}, [
                     elem('th', elem('input', {'class': 'selected-header', type: 'checkbox', 'tabIndex': '-1'})),
@@ -259,7 +282,9 @@ function nodeToRow(node){
 
 
 function createBody(nodes){
-    return elem("tbody", {'class': 'list-body'}, nodes.map(nodeToRow));
+    return elem("tbody", {
+      'class': 'list-body'
+    }, nodes.map(nodeToRow));
 }
 
 function sort(item1, item2){
@@ -343,9 +368,13 @@ function resetCanvas(){
     vizcanvas.classList.remove("hide");
 }
 
+function getAllRows() {
+    return Array.slice(document.querySelectorAll('.body-table tr'));
+}
+
 function getSelectedRows(){
     // returns selected rows as an Array
-    return Array.prototype.slice.call(document.querySelectorAll('.body-table tr')).filter(function(item){
+    return getAllRows().filter(function(item){
         return item.querySelector('.selected-row:checked');
     })
 }
