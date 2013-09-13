@@ -95,7 +95,7 @@ function updateInfo(nodeName){
         showFavIcon(nodeName);
         showFirstAndLastAccess(nodeList[nodeName]);
         showSitePref(nodeName);
-        showConnectionsList(nodeName);
+        showConnectionsList(nodeName,nodeList);
         // display site profile in Info Panel 
         showSiteProfile();
         // update map after we have loaded the SVG
