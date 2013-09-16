@@ -783,6 +783,12 @@ text {
 
 /* Graph Visualization */
 
+.filter-display{
+    display: inline-block;
+    position: absolute;
+    background: rgba(0,0,0,0.9);
+}
+
 .filter-display header{
     text-transform: capitalize;
     font-size: 30px;
