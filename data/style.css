@@ -1246,3 +1246,18 @@ text {
 .list-footer input[name=pref-options]:checked + label .radio-dot{
     background-image: url(image/Collusion_radio_on.png);
 }
+
+tr.refresh {
+  text-align: center;
+  background-color: rgb(23, 30, 37);
+  visibility: collapse;
+}
+
+tr.refresh.show {
+  visibility: visible;
+}
+
+tr.refresh.show:hover {
+  background-color: rgb(115, 164, 184);
+  cursor: pointer;
+}
