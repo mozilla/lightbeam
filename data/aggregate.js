@@ -34,13 +34,45 @@ function resetData(){
     }
     updateStatsBar();
 }
-aggregate.on('reset', resetData); 
+aggregate.on('reset', resetData);
+
+aggregate.getAllNodes = function() {
+  var blockedDomains = Object.keys(userSettings).filter(function(domain) {
+    // ignore domains already known
+    var nodes = aggregate.nodes;
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      if (nodes[i].name == domain) {
+        return false;
+      }
+    }
+
+    return userSettings[domain] == 'block';
+  });
+
+  return aggregate.nodes.concat(blockedDomains.map(function(domain) {
+    return {
+      site: domain,
+      nodeType: 'blocked',
+      name: domain
+    };
+  }));
+}
+
+aggregate.getConnectionCount = function(node) {
+  if (node.nodeType === 'blocked')
+    return 0;
+
+  let connections = Object.keys(aggregate.nodeForKey(node.name)).length;
+  return connections - 1 > 0 ? connections - 1 : 0;
+}
 
 aggregate.nodeForKey = function(key){
     var result = {};
     var linkedNodes = new Array();
+
     linkedNodes = aggregate.nodemap[key].linkedFrom.concat(aggregate.nodemap[key].linkedTo);
     result[key] = aggregate.nodemap[key];
+
     linkedNodes.forEach(function(nodeName){
         var node = aggregate.nodemap[nodeName];
         var temp = {};
@@ -81,7 +113,6 @@ aggregate.connectionAsObject = function(conn){
 
 function applyFilter(filter){
     currentFilter = filter;
-
 }
 
 aggregate.on('filter', applyFilter);
@@ -154,7 +185,7 @@ function onConnection(conn){
         if (connection.sourceVisited && sourcenode.nodeType == "thirdparty"){
             // the previously "thirdparty" site has now become a "visited" site
             // +1 on visited sites counter and -1 on trackers counter
-            aggregate.siteCount++; 
+            aggregate.siteCount++;
             aggregate.trackerCount--;
         }
         sourcenode.update(connection, true);
@@ -162,6 +193,7 @@ function onConnection(conn){
         sourcenode = new GraphNode(connection, true);
         aggregate.nodemap[connection.source] = sourcenode;
         aggregate.nodes.push(sourcenode);
+
         if (connection.sourceVisited){
             aggregate.siteCount++;
         }else{
@@ -205,6 +237,24 @@ function onConnection(conn){
 aggregate.on('connection', onConnection);
 
 
+function onBlocklistUpdate({ domain, flag }) {
+  if (flag === true) {
+    // Make sure we have blocked domains in localStorage, no matter what.
+    // If localStorage is cleared the domains will still be blocked,
+    // this is wahy the update is necessary.
+    userSettings[domain] = 'block';
+  }
+  else if (userSettings[domain] == 'block') {
+    delete userSettings[domain];
+  }
+}
+aggregate.on('update-blocklist', onBlocklistUpdate);
+
+function onBlocklistUpdateAll(domains) {
+  (domains || []).forEach(onBlocklistUpdate);
+}
+aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
+
 function GraphEdge(source, target, connection){
     var name = source.name + '->' + target.name;
     if (aggregate.edgemap[name]){
@@ -213,7 +263,7 @@ function GraphEdge(source, target, connection){
     this.source = source;
     this.target = target;
     this.name = name;
-    if (connection){ 
+    if (connection){
         this.cookieCount = connection.cookie ? 1 : 0;
     }
     // console.log('edge: %s', this.name);

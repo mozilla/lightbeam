@@ -122,7 +122,7 @@ var breadcrumbClickHandler = function(event){
     var url = event.target.getAttribute("site-url");
     var idxInStack = event.target.getAttribute("idx");
     while ( breadcrumbStack.length > idxInStack ){
-        breadcrumbStack.pop();   
+        breadcrumbStack.pop();
     }
     showFilteredTable(url);
 };
@@ -132,35 +132,35 @@ function mapBreadcrumbsToUI(){
     var lastIdxInStack = breadcrumbStack.length-1;
     // add "All Sites" to breadcrumb container
     breadcrumb.appendChild( elem("div", {"class": "breadcrumb-chunk"}, breadcrumbStack[0]) );
-    // other than "All Sites", there is only 1 tier in breadcrumbStack 
+    // other than "All Sites", there is only 1 tier in breadcrumbStack
     // add that tier to breadcrumb container
     if ( lastIdxInStack == 1 ){
         breadcrumb.appendChild( elem("div", {"class": "arrow-left"}) );
-        breadcrumb.appendChild( elem(   "div", 
+        breadcrumb.appendChild( elem(   "div",
                                         {
-                                            "class": "breadcrumb-chunk no-click", 
+                                            "class": "breadcrumb-chunk no-click",
                                             "site-url": breadcrumbStack[lastIdxInStack]
                                         },
                                         breadcrumbStack[lastIdxInStack]) );
     }
-    // other than "All Sites", there are more than 1 tier in breadcrumbStack 
+    // other than "All Sites", there are more than 1 tier in breadcrumbStack
     // we only want to show "All Sites" and the last 2 tiers
     // so add the last 2 tiers to breadcrumb container
     if ( lastIdxInStack >= 2 ){
         // second last tier
         breadcrumb.appendChild( elem(   "div", {"class": "arrow-left"}) );
-        breadcrumb.appendChild( elem(   "div", 
+        breadcrumb.appendChild( elem(   "div",
                                         {
-                                            "class": "breadcrumb-chunk", 
-                                            "site-url": breadcrumbStack[lastIdxInStack-1], 
+                                            "class": "breadcrumb-chunk",
+                                            "site-url": breadcrumbStack[lastIdxInStack-1],
                                             "idx": (lastIdxInStack-1)
                                         },
                                         breadcrumbStack[lastIdxInStack-1]) );
         // last tier
         breadcrumb.appendChild( elem("div", {"class": "arrow-left"}) );
-        breadcrumb.appendChild( elem(   "div", 
+        breadcrumb.appendChild( elem(   "div",
                                         {
-                                            "class": "breadcrumb-chunk no-click", 
+                                            "class": "breadcrumb-chunk no-click",
                                             "site-url": breadcrumbStack[lastIdxInStack],
                                             "idx": lastIdxInStack
                                         },
@@ -181,13 +181,13 @@ function resetVisibleBreadcrumb(){
     var breadcrumbContainer = document.querySelector(".breadcrumb");
     while ( breadcrumbContainer.firstChild ){
         breadcrumbContainer.removeChild(breadcrumbContainer.firstChild);
-    } 
+    }
 }
 
 var lastFilter = null;
 
 function showFilteredTable(filter){
-    if ( lastFilter != filter ) updateBreadcrumb(filter); 
+    if ( lastFilter != filter ) updateBreadcrumb(filter);
     lastFilter = filter;
     // remove existing table tbodys, if any
     var table = document.querySelector(".list-table");
@@ -202,7 +202,7 @@ function showFilteredTable(filter){
 
 function getNodes(filter){
     if( !filter ){ // if no filter, show all
-        return aggregate.nodes;
+        return aggregate.getAllNodes();
     }else{
         var nodeMap = aggregate.nodeForKey(filter);
         return Object.keys(nodeMap).map(function(key){ return nodeMap[key]; });
@@ -223,7 +223,7 @@ function getNodes(filter){
 
 
 function nodeToRow(node){
-    var settings = userSettings[node.name] || '';
+    var settings = userSettings[node.name] || (node.nodeType == 'blocked' ? 'block' : '');
     var iconUrl = 'icons/collusion_icon_list.png';
     var listIcon = elem('img', {'src': iconUrl, 'class': 'update-table', 'role': 'gridcell'});
     var row = elem('tr', {
@@ -235,15 +235,15 @@ function nodeToRow(node){
             'tabIndex': '0'
     }, [
         elem('td', elem('input', {'type': 'checkbox', 'class': 'selected-row', 'tabIndex':'-1'})),
-        elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : 'Visited'),
+        elem('td', {'data-sort-key': node.nodeType, 'role': 'gridcell'}, node.nodeType === 'thirdparty' ? 'Third Party' : (node.nodeType === 'blocked' ? 'Unknown' : 'Visited')),
         elem('td', {'class': 'preferences', 'data-sort-key': settings, 'role': 'gridcell'}, '\u00A0'),
         elem('td', {'data-sort-key': node.name, 'role': 'gridcell'}, [
                 listIcon,
                 node.name
             ]),
-        elem('td', {'data-sort-key': node.firstAccess, 'role': 'gridcell'}, formattedDate(node.firstAccess)),
-        elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, formattedDate(node.lastAccess)),
-        elem('td', {'data-sort-key': Object.keys(aggregate.nodeForKey(node.name)).length - 1, 'role': 'gridcell'}, '' + Object.keys(aggregate.nodeForKey(node.name)).length - 1)
+        elem('td', {'data-sort-key': node.firstAccess, 'role': 'gridcell'}, (node.nodeType === 'blocked' ? 'Unknown' : formattedDate(node.firstAccess))),
+        elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, (node.nodeType === 'blocked' ? 'Unknown' : formattedDate(node.lastAccess))),
+        elem('td', {'data-sort-key': aggregate.getConnectionCount(node), 'role': 'gridcell'}, aggregate.getConnectionCount(node) + '')
     ]);
     listIcon.addEventListener("mouseenter",tooltip.addTooltip);
     listIcon.addEventListener("mouseleave",tooltip.hide);
@@ -372,20 +372,26 @@ function getSelectedRows(){
 
 // Event handlers
 
-function setUserSetting(row, pref){
+function setUserSetting(row, pref) {
     var site = row.dataset.name;
+
     // change setting
     userSettings[site] = pref;
+
     // send change through to add-on
     addon.emit('updateBlocklist', site, pref === 'block');
+
     // modify row
     row.dataset.pref = pref;
+
     // Add sort order to preference column
     row.querySelector('.preferences').dataset.sortKey = pref;
+
     // Re-sort if sorted by preference
     if(localStorage.lastSortColumn === '2'){
         resort(document.querySelector(".list-table"));
     }
+
     // uncheck the row
     row.querySelector('[type=checkbox]').checked = false;
     row.classList.remove("checked");
@@ -446,8 +452,8 @@ var listStageStackClickHandler = function(event){
     if(target.mozMatchesSelector('label[for=block-pref], label[for=block-pref] *') ){
         dialog( {   "name" : dialogNames.blockSites,
                     "title": "Block Sites",
-                    "message":  "<p><b>Warning:</b></p> " + 
-                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" + 
+                    "message":  "<p><b>Warning:</b></p> " +
+                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" +
                                 "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>",
                     "imageUrl": "image/collusion_popup_blocked.png"
                 },function(confirmed){
@@ -456,14 +462,14 @@ var listStageStackClickHandler = function(event){
                     }
                 }
         );
-    }else if (target.mozMatchesSelector('label[for=hide-pref], label[for=hide-pref] *') ){   
+    }else if (target.mozMatchesSelector('label[for=hide-pref], label[for=hide-pref] *') ){
         if ( doNotShowDialog(dialogNames.hideSites) ){
             setPreferences('hide');
         }else{
             dialog( {   "name": dialogNames.hideSites,
                         "dnsPrompt": true,
-                        "title": "Hide Sites", 
-                        "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" + 
+                        "title": "Hide Sites",
+                        "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" +
                                     "<p>You can use this to ignore trusted sites from the data.</p>",
                         "imageUrl": "image/collusion_popup_hidden.png"
                     },function(confirmed){

@@ -1,6 +1,6 @@
-self.port.on('log', function log(arguments){
+self.port.on('log', function log(args){
     if (unsafeWindow && unsafeWindow.console){
-        unsafeWindow.console.log.call(unsafeWindow, arguments);
+        unsafeWindow.console.log.call(unsafeWindow, args);
     }else{
         console.log('cannot call browser logging: ' + unsafeWindow);
     }
@@ -12,6 +12,22 @@ self.port.on('connection', function(connection){
         unsafeWindow.aggregate.emit('connection', connection);
     }else{
         console.log('cannot call unsafeWindow.aggregate: '  + unsafeWindow);
+    }
+});
+
+self.port.on('update-blocklist', function(domain){
+    if (unsafeWindow && unsafeWindow.aggregate){
+        unsafeWindow.aggregate.emit('update-blocklist', domain);
+    }else{
+        console.log('cannot call unsafeWindow.aggregate to update blocklist: '  + unsafeWindow);
+    }
+});
+
+self.port.on('update-blocklist-all', function(domains){
+    if (unsafeWindow && unsafeWindow.aggregate){
+        unsafeWindow.aggregate.emit('update-blocklist-all', domains);
+    }else{
+        console.log('cannot call unsafeWindow.aggregate to update blocklist: '  + unsafeWindow);
     }
 });
 
@@ -46,11 +62,11 @@ self.port.on("passTempConnections", function(connReceived){
 self.port.on("private-browsing", function() {
     unsafeWindow.dialog( {
             "type": "alert",
-            "name": unsafeWindow.dialogNames.privateBrowsing, 
+            "name": unsafeWindow.dialogNames.privateBrowsing,
             "dnsPrompt": true,
             "title": "Private Browsing",
             "message":  "<p>You have one or more private browsing windows open.</p>" +
-                        "<p>Connections made in private browsing windows will be visualized in Collusion but that data is neither stored locally nor will it ever be shared, even if sharing is enabled. </p>" + 
+                        "<p>Connections made in private browsing windows will be visualized in Collusion but that data is neither stored locally nor will it ever be shared, even if sharing is enabled. </p>" +
                         "<p> Information gathered in private browsing mode will be deleted whenever Collusion is restarted, and is not collected at all when Collusion is not open..</p>",
             "imageUrl": "image/collusion_popup_privacy.png"
         },
