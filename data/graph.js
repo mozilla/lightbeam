@@ -44,7 +44,7 @@ function onUpdate(){
         colourHighlightNodes(highlight);
     }else{
         console.log('the force is not with us');
-    }    
+    }
 }
 
 function onInit(){
@@ -109,10 +109,11 @@ function notVisited(node){ return node.nodeType === 'thirdparty'; }
 // function edgeCookie(edge){ return edge.cookieCount > 0; }
 // function edgeHighlight(edge){ return highlight.connections; }
 // function edgeColoured(edge){ return edge.cookieCount > 0 && highlight.cookies; }
-function nodeName(node){ 
+function nodeName(node){
     if (node){
         return node.name;
     }
+    return undefined;
 }
 function watchSite(node){
     return siteHasPref(node.name,"watch");
