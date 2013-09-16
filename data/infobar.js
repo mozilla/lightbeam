@@ -91,50 +91,71 @@ function updateInfo(nodeName){
 
     // get server info and then update content on the info panel
     getServerInfo(nodeName, function(data){
-        var favicon = "<img src='http://"+ nodeName +"/favicon.ico' class='favicon'>";
-        document.querySelector(".holder .title").innerHTML = favicon+nodeName;
-
-        // update the connections list
         var nodeList = aggregate.nodeForKey(nodeName);
-        var htmlList = "";
-        var numConnectedSites = 0;
-        var firstAccess;
-        var lastAccess;
-        for ( var key in nodeList ){
-            if ( key != nodeName ){ // connected site
-                htmlList = htmlList + "<li>" + key + "</li>";
-                numConnectedSites++;
-            }else{ // the selected site itself
-                firstAccess = formattedDate( nodeList[key].firstAccess,"long");
-                lastAccess = formattedDate( nodeList[key].lastAccess,"long");
-            }
-        }
-
-        document.querySelector('.info-first-access').textContent = firstAccess;
-        document.querySelector('.info-last-access').textContent = lastAccess;
-
-        document.querySelector(".num-connected-sites").textContent = numConnectedSites + " " + singularOrPluralNoun(numConnectedSites,"site");
-        document.querySelector(".connections-list ul").innerHTML = htmlList;
-
+        showFavIcon(nodeName);
+        showFirstAndLastAccess(nodeList[nodeName]);
+        showSitePref(nodeName);
+        showConnectionsList(nodeName,nodeList);
         // display site profile in Info Panel 
         showSiteProfile();
-
         // update map after we have loaded the SVG
-        if ( data == false || data.country_name === "Reserved" ){
-            document.querySelector("#country").innerHTML = "(Unable to find server location)";
-            resetMap();
-        }else{
-            // update country info only when it is different from the current one
-            if ( data.country_name !==  document.querySelector("#country").innerHTML ){
-                resetMap();
-                document.querySelector("#country").innerHTML = data.country_name;
-                updateMap(data.country_code.toLowerCase());
-            }
-        }
+        showServerLocation(data);
     });
 
 }
 
+function showFavIcon(nodeName){
+    var favicon = "<img src='http://"+ nodeName +"/favicon.ico' class='favicon'>";
+    document.querySelector(".holder .title").innerHTML = favicon+nodeName;
+}
+
+function showFirstAndLastAccess(site){
+    var firstAccess = formattedDate(site.firstAccess,"long");
+    var lastAccess = formattedDate(site.lastAccess,"long");
+    document.querySelector('.info-first-access').textContent = firstAccess;
+    document.querySelector('.info-last-access').textContent = lastAccess;
+}
+
+function showSitePref(nodeName){
+    var prefTag = document.querySelector(".pref-tag");
+    var sitePref = userSettings[nodeName];
+    if ( sitePref ){
+        prefTag.querySelector("img").src = "icons/collusion_icon_"+sitePref+".png";
+        prefTag.querySelector("span").className = "";
+        prefTag.querySelector("span").classList.add(sitePref + "-text");
+        prefTag.querySelector("span").innerHTML = (sitePref=="hide") ? "hidden" : sitePref + "ed";
+        prefTag.classList.remove("hidden");
+    }else{
+        prefTag.classList.add("hidden");
+    }
+}
+
+function showConnectionsList(nodeName,nodeList){
+    var htmlList = "";
+    var numConnectedSites = 0;
+    for ( var key in nodeList ){
+        if ( key != nodeName ){ // connected site
+            htmlList = htmlList + "<li>" + key + "</li>";
+            numConnectedSites++;
+        }
+    }
+    document.querySelector(".num-connected-sites").textContent = numConnectedSites + " " + singularOrPluralNoun(numConnectedSites,"site");
+    document.querySelector(".connections-list ul").innerHTML = htmlList;
+}
+
+function showServerLocation(serverData){
+    if ( serverData == false || serverData.country_name === "Reserved" ){
+        document.querySelector("#country").innerHTML = "(Unable to find server location)";
+        resetMap();
+    }else{
+        // update country info only when it is different from the current one
+        if ( serverData.country_name !==  document.querySelector("#country").innerHTML ){
+            resetMap();
+            document.querySelector("#country").innerHTML = serverData.country_name;
+            updateMap(serverData.country_code.toLowerCase());
+        }
+    }
+}
 
 function showSiteProfile(){
     var siteProfileTab = document.querySelector(".toggle-site-profile");

@@ -194,6 +194,15 @@ a:hover{
     outline: 1px dotted grey;
 }
 
+.pico-content .privacy-policy{
+    height: 150px;
+    overflow-y: auto;
+}
+
+.privacy-policy ul{
+    margin-left: 15px;
+    list-style-type: circle !important;
+}
 
 /* Button Styling ================================ */
 
@@ -515,7 +524,7 @@ a:hover{
     text-transform: capitalize;
 }
 
-/* Info Panel(Profile) Sections */
+/* Info Panel(Site Profile) Sections */
 
 .map-section{
     margin: 10px 0 10px 0;
@@ -533,6 +542,12 @@ a:hover{
     flex-direction:column;
 }
 
+.pref-tag img{
+    width: 15px;
+    height: 15px;
+    position: relative;
+    top: 3px;
+}
 
 /* End Map Styles */
 
@@ -768,6 +783,12 @@ text {
 
 /* Graph Visualization */
 
+.filter-display{
+    display: inline-block;
+    position: absolute;
+    background: rgba(0,0,0,0.9);
+}
+
 .filter-display header{
     text-transform: capitalize;
     font-size: 30px;
@@ -997,6 +1018,8 @@ text {
 }
 .body-table td:nth-child(7){
     width: 115px;
+    text-align: right;
+    padding-right: 15px;
 }
 
 
@@ -1048,7 +1071,8 @@ text {
     margin-bottom: 15px;
     font-size: 10px;
     letter-spacing: 1px;
-    border-radius: 5px
+    border-radius: 5px;
+    width: 170px;
 }
 
 .legend-controls .column{
@@ -1161,24 +1185,64 @@ text {
 }
 
 
-.list-footer .btn a{
+.list-footer .btn a,
+.list-footer input[name=pref-options] + label{
     background: #888;
     color: #fff;
 }
 
-.list-footer .btn.active a:hover{
-    background: #6FC3E5
+.list-footer .btn a:hover,
+.list-footer input[name=pref-options] + label:hover{
+    background: #6FC3E5;
+    cursor: pointer;
 }
 
-.list-footer .btn.block-pref{
+.list-footer label[for=block-pref]{
     box-shadow: 0 2px #E02A61;
 }
 
-.list-footer .btn.hide-pref,
+.list-footer label[for=hide-pref],
 .list-footer .btn.toggle-hidden{
     box-shadow: 0 2px #FE7E00;
 }
 
-.list-footer .btn.watch-pref{
+.list-footer label[for=watch-pref]{
     box-shadow: 0 2px #6FC3E5;
+}
+
+.list-footer input[name=pref-options]{
+    display: none;
+}
+
+.list-footer input[name=pref-options] + label{
+    margin-right: 10px;
+    width: 140px;
+    line-height: 28px;
+}
+
+.list-footer input[name=pref-options] + label img{
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+}
+
+/*.list-footer input[name=pref-options]:checked + label{
+    border: 1px solid red;
+}*/
+
+.list-footer input[name=pref-options] + label .radio-dot{
+    width: 15px;
+    height: 15px;
+    background-image: url(image/Collusion_radio_off.png);
+    background-repeat: no-repeat;
+    background-size: 15px 15px;
+    display: inline-block;
+    margin-left: 5px;
+    position: relative;
+    top: 3px;
+
+}
+
+.list-footer input[name=pref-options]:checked + label .radio-dot{
+    background-image: url(image/Collusion_radio_on.png);
 }

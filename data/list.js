@@ -281,6 +281,7 @@ function sortTableOnColumn(table, n){
         // if this is not sorted column, unset sorted flag on that column
         var reversed = evt.target.classList.contains('reverse-sorted');
         var sorted = evt.target.classList.contains('sorted');
+
         if (!(sorted || reversed)){
             var oldcolumn = table.querySelector('.sorted, .reverse-sorted');
             if (oldcolumn){
@@ -309,11 +310,30 @@ function sortTableOnColumn(table, n){
             evt.target.classList.add('sorted');
             rows.sort(sort);
         }
+
         var frag = document.createDocumentFragment();
+        var preFrag = document.createDocumentFragment();
+
+        // Is this the preference column?
+        var prefCol = localStorage.lastSortColumn === '2';
+
         rows.forEach(function(row){
-            frag.appendChild(row[1]);
-        });
-        tbody.appendChild(frag);
+            var rowElement = row[1];
+
+            // Check if there are any preferences set for this row
+            var prefVal = rowElement.attributes.getNamedItem('data-pref').value;
+
+            if (prefCol && prefVal != ''){
+                // This row is marked with a preference and should
+                // be appended to the top fragment.
+                preFrag.appendChild(rowElement);
+            }else{
+                frag.appendChild(rowElement);
+            }
+         });
+
+         tbody.appendChild(preFrag);
+         tbody.appendChild(frag);
     }
 }
 
@@ -371,10 +391,22 @@ function setUserSetting(row, pref){
     row.classList.remove("checked");
 }
 
+
+// selectAllRows should only select VISIBLE rows
 function selectAllRows(flag){
-    var checkboxes = document.querySelectorAll('.selected-row');
-    for (var i = 0; i < checkboxes.length; i++){
-        checkboxes[i].checked = flag;
+    // apply flag to ALL rows first
+    var rows = document.querySelectorAll(".body-table tr");
+    for (var i = 0; i < rows.length; i++){
+        rows[i].querySelector(".selected-row").checked = flag;
+        highlightRow(rows[i],flag);
+    }
+    // and then exclude all the hidden rows
+    if ( document.querySelector(".hide-hidden-rows") ){
+        var hiddenRows = document.querySelectorAll(".list-table .body-table tr[data-pref=hide]");
+        for (var i = 0; i < hiddenRows.length; i++){
+            hiddenRows[i].querySelector(".selected-row").checked = false; // makes sure the hidden rows are always unchecked
+            highlightRow(hiddenRows[i],false);
+        }
     }
 }
 
@@ -382,7 +414,7 @@ function setPreferences(pref){
     getSelectedRows().forEach(function(row){
         setUserSetting(row, pref);
     });
-    toggleOnPrefButtons(false); // disable buttons since all checkboxes are unchecked now
+    togglePrefButtons();
     toggleShowHideHiddenButton();
 }
 
@@ -411,13 +443,12 @@ if (localStorage.listViewHideRows){
 
 var listStageStackClickHandler = function(event){
     var target = event.target;
-    if(target.mozMatchesSelector('.block-pref.active a') ){
+    if(target.mozMatchesSelector('label[for=block-pref], label[for=block-pref] *') ){
         dialog( {   "name" : dialogNames.blockSites,
                     "title": "Block Sites",
                     "message":  "<p><b>Warning:</b></p> " + 
-                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [domain1.com, domain2.com, ...] and ALL SUBDOMAINS [www.domain1.com, etc.]. </p>" + 
-                                "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>" + 
-                                "<p>For more info: <a href='http://mozilla.org/collusion' target='_blank'>http://mozilla.org/collusion</a></p>",
+                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" + 
+                                "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>",
                     "imageUrl": "image/collusion_popup_blocked.png"
                 },function(confirmed){
                     if ( confirmed ){
@@ -425,7 +456,7 @@ var listStageStackClickHandler = function(event){
                     }
                 }
         );
-    }else if (target.mozMatchesSelector('.hide-pref.active a')){
+    }else if (target.mozMatchesSelector('label[for=hide-pref], label[for=hide-pref] *') ){   
         if ( doNotShowDialog(dialogNames.hideSites) ){
             setPreferences('hide');
         }else{
@@ -442,9 +473,9 @@ var listStageStackClickHandler = function(event){
                     }
             );
         }
-    }else if (target.mozMatchesSelector('.watch-pref.active a')){
+    }else if (target.mozMatchesSelector('label[for=watch-pref], label[for=watch-pref] *')){
         setPreferences('watch');
-    }else if(target.mozMatchesSelector('.no-pref.active a')){
+    }else if(target.mozMatchesSelector('label[for=no-pref], label[for=no-pref] *')){
         setPreferences('');
     }else if(target.mozMatchesSelector('.toggle-hidden a')){
         toggleHiddenSites(target);
@@ -456,6 +487,7 @@ function initializeHandlers(){
     try{
     document.querySelector('.selected-header').addEventListener('change', function(event){
         selectAllRows(event.target.checked);
+        togglePrefButtons();
     }, false);
 
     document.querySelector('.list-footer').querySelector(".legend-toggle").addEventListener("click", function(event){
@@ -472,14 +504,8 @@ function initializeHandlers(){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
-            var rowChecked = node.querySelector("[type=checkbox]").checked;
-            if (rowChecked){
-                node.classList.add("checked");
-                toggleOnPrefButtons(true);
-            }else{
-                node.classList.remove("checked");
-                toggleOnPrefButtons(false);
-            }
+            highlightRow(node,node.querySelector("[type=checkbox]").checked);
+            togglePrefButtons();
         }
     });
 
@@ -488,19 +514,27 @@ function initializeHandlers(){
 }
 }
 
-function toggleOnPrefButtons(toggleOn){
+function highlightRow(node,rowChecked){
+    if (rowChecked){
+        node.classList.add("checked");
+    }else{
+        node.classList.remove("checked");
+    }
+}
+
+function togglePrefButtons(){
+    var numChecked = document.querySelectorAll(".list-table .body-table tr input[type=checkbox]:checked").length;
+    var toggleOn = numChecked > 0;
     var classToAdd = toggleOn ? "active" : "disabled";
     var classToRemove = toggleOn ? "disabled" : "active";
     // toggle on class
-    document.querySelector(".block-pref").classList.add(classToAdd);
-    document.querySelector(".hide-pref").classList.add(classToAdd);
-    document.querySelector(".watch-pref").classList.add(classToAdd);
-    document.querySelector(".no-pref").classList.add(classToAdd);
+    toArray(document.querySelectorAll("input[name=pref-options] + label")).forEach(function(option){
+        option.classList.add(classToAdd);
+    });
     // toggle off class
-    document.querySelector(".block-pref").classList.remove(classToRemove);
-    document.querySelector(".hide-pref").classList.remove(classToRemove);
-    document.querySelector(".watch-pref").classList.remove(classToRemove);
-    document.querySelector(".no-pref").classList.remove(classToRemove);
+    toArray(document.querySelectorAll("input[name=pref-options] + label")).forEach(function(option){
+        option.classList.remove(classToRemove);
+    });
 }
 
 function toggleShowHideHiddenButton(){

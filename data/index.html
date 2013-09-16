@@ -82,8 +82,14 @@
                         <div>
                             <header class="title large-header"></header>
                             <!--span class="blue-text">You are currently browsing this site</span-->
-                            <span class="all-cap-header"><b>First Access </b></span><span class="info-first-access">Date</span><br>
+                            <span class="all-cap-header"><b>First Access </b></span><span class="info-first-access">Date</span><br/>
                             <span class="all-cap-header"><b>Last Access </b></span><span class="info-last-access">Date</span>
+                            <div class="pref-tag hidden">
+                                <br/>
+                                <img src="" />
+                                This site is currently
+                                <b><span></span></b>.
+                            </div>
                         <div class="map-section">
                             <header class="blue-text large-header">Server Location</header>
                             <div><span id="country">&nbsp;</span></div>
@@ -112,11 +118,10 @@
                             <section>
                                 <div class="blue-text all-cap-header">DESCRIPTION</div>
                                 <p>
-                                    In this graph visualization, you can see <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle class="visitedSites" cx="8" cy="8" r="6" /></svg> <b>circular nodes</b> that are websites you have visited, <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="unvisitedSites" points="0,14 7,2 14,14" /></svg> <b>triangular nodes</b> are third party site and <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><line class="connectionLine" x1="14" y1="2" x2="2" y2="14" /></svg> <b>connections</b> between them.
-                                    Over time, this graph will become a network of connections and nodes to visualize your relationship with the web.
+                                    In this Graph visualization, <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle class="visitedSites" cx="8" cy="8" r="6" /></svg> <b>circular nodes</b> are websites you have visited and <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="unvisitedSites" points="0,14 7,2 14,14" /></svg> <b>triangular nodes</b> are third party sites.  Over time, this graph will become a network of <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg"><line class="connectionLine" x1="14" y1="2" x2="2" y2="14" /></svg> <b>connections</b> and nodes to visualize your activity on the web.
                                 </p>
                                 <p>
-                                    This graph may get complex quickly and to reduce the amount of info displayed use  <b>SESSIONS</b> to help focus on a set of data.
+                                    This graph may get complex quickly; to reduce the amount of information displayed, use <b>FILTERS</b> to help focus on a set of data.
                                 </p>
                             </section>
                             <section>
@@ -131,17 +136,20 @@
                             <section>
                                 <div class="blue-text all-cap-header">LEGENDS AND CONTROLS</div>
                                 <p>
-                                    These buttons serve as toggles to help identify various elements on the graph.
+                                    These buttons serve as toggles to help <u>identify</u> various elements on the graph.
                                 </p>
                                 <p>
-                                    When you set your site preferecnes:
                                     <ul>
                                         <li><svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                         <line class="cookies" x1="14" y1="2" x2="2" y2="14" />
-                                    </svg> <span class="cookie-text"><b>Cookies</b></span> means the site stored some data in your browser.</li>
+                                    </svg> <span class="cookie-text"><b>Cookies</b></span> identify when a site has stored some data in your browser.</li>
+                                    </ul><br/>
+                                    When you set your site preferences:
+                                    <ul>
                                         <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
                                         <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
                                     </ul>
+                                    These preferences can be set in the List Visualization.
                                 </p>
                             </section>
                         </div>
@@ -173,14 +181,15 @@
                             <section>
                                 <div class="blue-text all-cap-header">LEGENDS AND CONTROLS</div>
                                 <p>
-                                    These buttons serve as toggles to help identify various elements on the graph.
+                                    These buttons serve as toggles to help <u>identify</u> various elements on the graph.
                                 </p>
                                 <p>
-                                    When you set your site preferecnes:
+                                    When you set your site preferences:
                                     <ul>
                                         <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
                                         <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
                                     </ul>
+                                    These preferences can be set in the List Visualization.
                                 </p>
                             </section>
                         </div>
@@ -210,14 +219,14 @@
                             <section>
                                 <div class="blue-text all-cap-header">LEGENDS AND CONTROLS</div>
                                 <p>
-                                    These buttons serve as toggles to help identify various elements on the graph.
+                                    These buttons <u>apply actions</u> to specific sites.
                                 </p>
                                 <p>
-                                    When you set your site preferecnes:
+                                    When you set your site preferences:
                                     <ul>
-                                        <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means they are blocked from connecting to your browser.</li>
-                                        <li><img src="icons/collusion_icon_hide.png" /><span class="hide-text">Hide</span>  means you have the option to hide them from visualization.</li>
-                                        <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means they are highlighted.</li>
+                                        <li><img src="icons/collusion_icon_block.png" /><span class="block-text">Block</span>  means sites are blocked from connecting to your browser.</li>
+                                        <li><img src="icons/collusion_icon_hide.png" /><span class="hide-text">Hide</span>  means sites are not seen in the visualization.</li>
+                                        <li><img src="icons/collusion_icon_watch.png" /><span class="watch-text">Watch</span>  means sites are highlighted.</li>
                                     </ul>
                                 </p>
                             </section>
@@ -235,19 +244,45 @@
                             <section>
                                 <div class="blue-text all-cap-header">ABOUT THIS ADD-ON</div>
                                 <p>
-                                    Collusion is an experimental add-on for Firefox that allows you to see which sites are using third-party cookies to track your movements across the Web.  It shows, in realtime, how that data creates a spiderwed of interaction between companies and other trackers.
+                                    Collusion is a Firefox add-on that tracks the trackers—and shows you which third parties are receiving information about your movements across the web. Using interactive visualizations, Collusion shows the relationships between the websites you visit and the third parties who receive data about your visit—often without you even knowing.
                                 </p>
                             </section>
                             <section>
                                 <div class="blue-text all-cap-header">Privacy Policy</div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel lectus eu quam consectetur vestibulum. Vivamus elementum faucibus commodo. Nullam bibendum ac justo in convallis. Ut ac lacinia nibh. Suspendisse ac eleifend enim. Donec ornare, metus eu suscipit tempor, nisl leo bibendum quam, ac fermentum eros est a mi.
-                                </p>
+                                <!-- Collusion Privacy Policy.  FIXEME: temp placeholder for v0.9 -->
+                                <div class="privacy-policy">
+                                    <p>
+                                        <header><b>Collusion Privacy</b></header>
+                                        <div>We care about your privacy. Collusion is a browser add-on that collects and helps you visualize third party requests on any site you visit. If you choose to send Collusion data to Mozilla (that’s us), our privacy policy describes how we handle that data. </div>
+                                    </p>
+                                    <p>
+                                        <header><b>Things you should know</b></header>
+                                        <ul>
+                                            <li>
+                                                After you install Collusion, the add-on collects data to help you visualize third party requests when you visit sites. 
+                                                <ul>
+                                                    <li>When you visit a site and that site contacts a third party, Collusion collects the following type of data: URLs of the visited sites and third parties, the existence of cookies, and a rough timestamp of when the site was visited. To see a complete list, please visit <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank" >here</a>.</li>
+                                                </ul>
+                                            </li>
+                                            <li>By default, data collected by Collusion remains in your browser and is not sent to us. </li>
+                                            <li>
+                                                You can choose to share your Collusion data with us. Information from Collusion can help us and others to understand third party relationships on the web and promote further research in the field of online tracking and privacy.
+                                                <ul>
+                                                    <li>If you do share Collusion data with us, your browser will send us your de-identified Collusion data (you can see a list of the kind of data involved <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank">here</a>) along with a randomly generated browser ID which helps us understand how many unique browsers are sharing data. We will post your data along with data from others in an aggregated and open database. Users will benefit  by making more informed decisions based on the collective information and patterns about trackers.</li>
+                                                    <li>If you turn off data sharing, the randomly generated browser ID is reset and if you turn data sharing on again, a new randomly generated user ID will be created.</li>
+                                                    <li>Uninstalling Collusion prevents collection of any further Collusion data and will delete the data stored locally in your browser.</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                                <!-- Collusion Privacy Policy ends -->
                             </section>
                             <section>
-                                <div class="blue-text all-cap-header">WEBSITE</div>
+                                <div class="blue-text all-cap-header">Contact</div>
                                 <p>
-                                    <i>For more information please visit: <a href="www.mozilla.org/collusion" target="_blank">mozilla.org/collusion/</a></i>
+                                    IRC channel is #collusion on irc.mozilla.org. <br/>
+                                    GitHub: <a href="https://github.com/mozilla/collusion" target="_blank">https://github.com/mozilla/collusion</a>
                                 </p>
                             </section>
                         </div>
@@ -368,6 +403,20 @@
                     </section>
                     <section class="legend-controls">
                         <section class="column">
+                            <div class="legend-label">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="source-sites" cx="8" cy="8" r="6" />
+                                </svg>
+                                Visited Sites
+                            </div>
+                            <div class="legend-label">
+                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="target-sites" cx="8" cy="8" r="6" />
+                                </svg>
+                                Third Party Sites
+                            </div>
+                        </section>
+                        <section class="column">
                             <div class="btn legend-toggle-watched">
                                 <a>
                                     <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -386,20 +435,6 @@
                                 </a>
                             </div>
                         </section>
-                        <section class="column">
-                            <div class="legend-label">
-                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="source-sites" cx="8" cy="8" r="6" />
-                                </svg>
-                                Visited Sites
-                            </div>
-                            <div class="legend-label">
-                                <svg class="legend-canvas-small" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="target-sites" cx="8" cy="8" r="6" />
-                                </svg>
-                                Third Party Sites
-                            </div>
-                        </section>
                     </section>
               </div>
               <!-- SITE PREFERENCES for List ================================  -->
@@ -410,32 +445,32 @@
                     </section>
                     <section class="legend-controls">
                         <section class="align-left">
-                            <div class="block-pref btn disabled">
-                                <a>
+                            <input id="block-pref" type="radio" name="pref-options" value="" >
+                               <label for="block-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
                                     <img src="icons/collusion_icon_block.png" />
                                     Block Site
-                                </a>
-                            </div>
-                            <div class="hide-pref btn disabled">
-                                <a>
+                                </label>
+                            <input id="hide-pref" type="radio" name="pref-options" value="">
+                                <label for="hide-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
                                     <img src="icons/collusion_icon_hide.png" />
                                     Hide Site
-                                </a>
-                    </div>
-                            <div class="watch-pref btn disabled">
-                                <a>
+                                </label>
+                            <input id="watch-pref" type="radio" name="pref-options" value="">
+                               <label for="watch-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
                                     <img src="icons/collusion_icon_watch.png" />
                                     Watch Site
-                                </a>
-                            </div>
+                               </label> 
+                            <input id="no-pref" type="radio" name="pref-options" value="">
+                               <label for="no-pref" class="btn disabled">
+                                    <div class="radio-dot"></div>
+                                    Clear Preference
+                               </label>
                         </section>
                         <section class="align-right">
-                            <div class="no-pref btn disabled">
-                                <a>
-                                    Clear Preference
-                                </a>
-                            </div>
-                            <div class="toggle-hidden disabled btn">
+                            <div class="toggle-hidden btn">
                                 <a>
                                     Hide Hidden Sites
                                 </a>

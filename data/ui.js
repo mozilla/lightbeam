@@ -149,7 +149,7 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 document.querySelector('.reset-data').addEventListener('click', function(){
     dialog( {   "name": dialogNames.resetData,
                 "title": "Reset Data",
-                "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list [etc.].</p>" + 
+                "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list etc.</p>" + 
                             "<p>Your browser will be returned to the state of a fresh install of Collusion.</p>",
                 "imageUrl": "image/collusion_popup_warningreset.png"
             },function(confirmed){
@@ -550,4 +550,40 @@ function singularOrPluralNoun(num,str){
         num = parseFloat(num);
     }
     return ( num > 1) ? str+"s" : str;
+}
+
+
+/**************************************************
+*   Check if a site has certain preference set to it
+*/
+function siteHasPref(site,pref){
+    return ( Object.keys(userSettings).indexOf(site) > -1 && userSettings[site].contains(pref) );
+}
+
+
+/**************************************************
+*   When initializing Graph View / Clock View
+*   if the "Watched Sites" or "Blocked Sites" toggles are on, apply colour to the corresponding nodes
+*/
+function colourHighlightNodes(highlight){
+    var watchedSites = document.querySelectorAll(".watched");
+    var blockedSites = document.querySelectorAll(".blocked");
+    if ( highlight.watched ){
+        for (var i=0; i<watchedSites.length; i++){
+            watchedSites[i].classList.add("watchedSites");
+        }
+    }else{
+        for (var i=0; i<watchedSites.length; i++){
+            watchedSites[i].classList.remove("watchedSites");
+        }
+    }
+    if ( highlight.blocked ){
+        for (var i=0; i<blockedSites.length; i++){
+            blockedSites[i].classList.add("blockedSites");
+        }
+    }else{
+        for (var i=0; i<blockedSites.length; i++){
+            blockedSites[i].classList.remove("blockedSites");
+        }
+    }
 }
