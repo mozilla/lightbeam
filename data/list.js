@@ -301,6 +301,7 @@ function sortTableOnColumn(table, n){
         // if this is not sorted column, unset sorted flag on that column
         var reversed = evt.target.classList.contains('reverse-sorted');
         var sorted = evt.target.classList.contains('sorted');
+
         if (!(sorted || reversed)){
             var oldcolumn = table.querySelector('.sorted, .reverse-sorted');
             if (oldcolumn){
@@ -329,11 +330,30 @@ function sortTableOnColumn(table, n){
             evt.target.classList.add('sorted');
             rows.sort(sort);
         }
+
         var frag = document.createDocumentFragment();
+        var preFrag = document.createDocumentFragment();
+
+        // Is this the preference column?
+        var prefCol = localStorage.lastSortColumn === '2';
+
         rows.forEach(function(row){
-            frag.appendChild(row[1]);
-        });
-        tbody.appendChild(frag);
+            var rowElement = row[1];
+
+            // Check if there are any preferences set for this row
+            var prefVal = rowElement.attributes.getNamedItem('data-pref').value;
+
+            if (prefCol && prefVal != ''){
+                // This row is marked with a preference and should
+                // be appended to the top fragment.
+                preFrag.appendChild(rowElement);
+            }else{
+                frag.appendChild(rowElement);
+            }
+         });
+
+         tbody.appendChild(preFrag);
+         tbody.appendChild(frag);
     }
 }
 
