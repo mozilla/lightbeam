@@ -43,22 +43,10 @@ function onUpdate(){
     if (newNodes.length <= 0) {
         return;
     }
-
-    let refreshRow = document.getElementById('refresh-data-row');
-    let refreshLink = document.getElementById('refresh-data-link');
-    refreshLink.innerHTML = 'Click to refresh <b>' + newNodes.length + ' new site(s)</b> ...';
-    refreshRow.addEventListener('click', function onClick() {
-      refreshRow.removeEventListener('click', onClick, false);
-
-      refreshRow.classList.remove('show');
-
-      // FIXME: This is heavyweight: every new node involved deleting and recreating the table
-      showFilteredTable(lastFilter);
-    }, false);
-    refreshRow.classList.add('show');
+    document.getElementById('refresh-data-link').innerHTML = 'Click to refresh <b>' + newNodes.length + singularOrPluralNoun(newNodes.length," new site") + '</b> ...';
+    document.getElementById('refresh-data-row').classList.add('show');
     return;
 }
-
 
 function onConnection(conn){
     var connection = aggregate.connectionAsObject(conn);
@@ -122,6 +110,13 @@ function initList(){
             showFilteredTable(url);
         }
     },false);
+    // Add handler to refresh rows 
+    var refreshRow = document.querySelector("#refresh-data-row");
+    refreshRow.addEventListener('click', function onClick() {
+        refreshRow.classList.remove('show');
+        showFilteredTable(lastFilter);
+    }, false);
+
     showFilteredTable(); // showing all data so no filter param is passed here
     updateBreadcrumb();
 }
