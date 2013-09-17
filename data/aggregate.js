@@ -70,8 +70,13 @@ aggregate.nodeForKey = function(key){
     var result = {};
     var linkedNodes = new Array();
 
-    linkedNodes = aggregate.nodemap[key].linkedFrom.concat(aggregate.nodemap[key].linkedTo);
-    result[key] = aggregate.nodemap[key];
+    if (aggregate.nodemap[key]){
+        linkedNodes = aggregate.nodemap[key].linkedFrom.concat(aggregate.nodemap[key].linkedTo);
+        result[key] = aggregate.nodemap[key];
+    }else{
+        linkedNodes = [];
+        result[key] = {};
+    }
 
     linkedNodes.forEach(function(nodeName){
         var node = aggregate.nodemap[nodeName];

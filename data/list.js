@@ -242,8 +242,8 @@ function getNodes(filter){
 
 function nodeToRow(node){
     var settings = userSettings[node.name] || (node.nodeType == 'blocked' ? 'block' : '');
-    var iconUrl = 'icons/collusion_icon_list.png';
-    var listIcon = elem('img', {'src': iconUrl, 'class': 'update-table', 'role': 'gridcell'});
+    var iconUrl = node.nodeType === 'blocked'? 'icons/collusion_icon_empty_list.png' : 'icons/collusion_icon_list.png';
+    var listIcon = elem('img', {'src': iconUrl, 'class': node.nodeType === 'blocked'? 'no-update' :'update-table', 'role': 'gridcell'});
     var row = elem('tr', {
             'class': 'node ' + node.nodeType,
             'data-pref': settings,
@@ -263,15 +263,19 @@ function nodeToRow(node){
         elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, (node.nodeType === 'blocked' ? 'Unknown' : formattedDate(node.lastAccess))),
         elem('td', {'data-sort-key': aggregate.getConnectionCount(node), 'role': 'gridcell'}, aggregate.getConnectionCount(node) + '')
     ]);
-    listIcon.addEventListener("mouseenter",tooltip.addTooltip);
-    listIcon.addEventListener("mouseleave",tooltip.hide);
-    row.addEventListener("mouseenter",function(){
-        row.childNodes[3].firstChild.setAttribute("src", "image/collusion_icon_list_blue.png");
-    });
-    row.addEventListener("mouseleave",function(){
-        row.childNodes[3].firstChild.setAttribute("src", iconUrl);
-    });
-
+    if (!node.nodeType === 'blocked'){
+        listIcon.addEventListener("mouseenter",tooltip.addTooltip);
+        listIcon.addEventListener("mouseleave",tooltip.hide);
+        row.addEventListener("mouseenter",function(){
+            row.childNodes[3].firstChild.setAttribute("src", "image/collusion_icon_list_blue.png");
+        });
+        row.addEventListener("mouseleave",function(){
+            row.childNodes[3].firstChild.setAttribute("src", iconUrl);
+        });
+    }
+    if (node.nodeType === 'blocked'){
+        row.dataset.isBlocked = true;
+    }
     return row;
 }
 
