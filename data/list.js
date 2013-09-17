@@ -92,31 +92,6 @@ function initList(){
     ]);
     stage.appendChild(table);
 
-    // Set sort handlers. nth-child(n+2) skips the checkbox column
-    var headers = Array.prototype.slice.call(table.querySelectorAll('th:nth-child(n+2)'))
-    headers.forEach(function(th, idx){
-        // idx+1 gives the actual column (skipping the checkbox the other way)
-        th.addEventListener('click', sortTableOnColumn(table, idx+1), false);
-    });
-    // Add handler for rows
-    document.querySelector('.list-table').addEventListener('click', function(event){
-        var url = event.target.parentNode.dataset.sortKey;
-        if (event.target.mozMatchesSelector('td:nth-child(1)')){
-            var checkbox = event.target.querySelector('input')
-            if (checkbox){
-                checkbox.checked = !checkbox.checked; // toggle it
-            }
-        }else if (event.target.mozMatchesSelector('.update-table') && url ){
-            showFilteredTable(url);
-        }
-    },false);
-    // Add handler to refresh rows 
-    var refreshRow = document.querySelector("#refresh-data-row");
-    refreshRow.addEventListener('click', function onClick() {
-        refreshRow.classList.remove('show');
-        showFilteredTable(lastFilter);
-    }, false);
-
     showFilteredTable(); // showing all data so no filter param is passed here
     updateBreadcrumb();
 }
@@ -530,19 +505,35 @@ function initializeHandlers(){
 
     document.querySelector('.stage-stack').addEventListener('click', listStageStackClickHandler, false);
 
-    // highlight selected row
-    document.querySelector(".list-table").addEventListener("click",function(event){
+    // Add handler for rows
+    document.querySelector('.list-table').addEventListener('click', function(event){
+        var url = event.target.parentNode.dataset.sortKey;
         var node = event.target;
-        // clicking on the cell where the checkbox locates can also trigger the checkbox clicking handler
-        if (node.mozMatchesSelector('tbody tr td:first-child, tbody tr td:first-child [type=checkbox]')){
+        if (node.mozMatchesSelector('td:first-child [type=checkbox]')){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
             highlightRow(node,node.querySelector("[type=checkbox]").checked);
             togglePrefButtons();
+        }else if (node.mozMatchesSelector('.update-table') && url ){
+            showFilteredTable(url);
         }
-    });
+    },false);
 
+    // Add handler to refresh rows 
+    var refreshRow = document.querySelector("#refresh-data-row");
+    refreshRow.addEventListener('click', function onClick() {
+        refreshRow.classList.remove('show');
+        showFilteredTable(lastFilter);
+    }, false);
+
+    // Set sort handlers. nth-child(n+2) skips the checkbox column
+    var table = document.querySelector(".list-table");
+    var headers = Array.prototype.slice.call(table.querySelectorAll('th:nth-child(n+2)'));
+    headers.forEach(function(th, idx){
+        // idx+1 gives the actual column (skipping the checkbox the other way)
+        th.addEventListener('click', sortTableOnColumn(table, idx+1), false);
+    });
 }catch(e){
     console.log('Error: %o', e);
 }
