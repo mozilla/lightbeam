@@ -14,6 +14,9 @@ document.querySelector('#content').addEventListener('click', function(event){
         while(node.mozMatchesSelector('.node *')){
             node = node.parentElement;
         }
+        if (node.dataset.isBlocked){
+            return;
+        }
         name = node.getAttribute("data-name");
         selectedNodeEffect(name);
         updateInfo(name);
