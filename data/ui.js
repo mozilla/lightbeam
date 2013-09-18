@@ -1,6 +1,6 @@
 const graphNodeRadius = {
     "graph": 12,
-    "clock": 4
+    "clock": 3
 };
 
 /* Convert a NodeList to Array */

@@ -145,12 +145,20 @@ function appendNodeG(bucket,connection,nodeType){
         'class': classes.join(" "),
         'data-name': connection[nodeType]
     });
-    g.appendChild(svg('circle', {
-        cx: 0,
-        cy: 0,
-        r: graphNodeRadius["clock"],
-        'class': 'tracker'
-    }));
+
+    if (nodeType == "source"){
+        g.appendChild(svg('circle', {
+            cx: 0,
+            cy: 0,
+            r: graphNodeRadius["clock"],
+            'class': 'tracker'
+        }));
+    }else if (nodeType == "target"){
+        g.appendChild(svg('polygon', {
+            points: "0,-3 -4,3 4,3",
+            'class': 'tracker'
+        }));
+    }
 
     // highlight this node if it belongs to the "colluded nodes" of the currently selected(clicked) node 
     if ( document.querySelector(".clicked-node") ){
@@ -172,8 +180,8 @@ function appendNodeG(bucket,connection,nodeType){
 
 
 function positionTargetDot(selection, numSourceNode){
-    selection.select("circle").attr("cx", function(d,i){
-        return ( numSourceNode + i + 1 ) * 10;
+    selection.select("polygon").attr("transform", function(d,i){
+        return "translate("+ (numSourceNode+i+1)*10 + ",0) rotate(90)" ;
     });
 };
 

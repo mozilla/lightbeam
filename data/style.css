@@ -681,14 +681,10 @@ text {
 /* CLOCK Visualization */
 
 .source,
-.source-sites{
-    fill: #128764;
-    stroke: none;
-}
-
+.source-sites,
 .target,
 .target-sites{
-    fill: #F1C40F;
+    fill: #FFF;
     stroke: none;
 }
 
