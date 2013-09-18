@@ -13,6 +13,7 @@ try{
 }
 // FIXME: Read this from config file
 var uploadServer = 'http://collusiondb-development.herokuapp.com/shareData';
+var isRobot = false; // Used for spidering the web only
 var uploadTimer;
 var saveTimer;
 
