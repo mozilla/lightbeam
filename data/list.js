@@ -523,8 +523,18 @@ function initializeHandlers(){
     // Add handler to refresh rows 
     var refreshRow = document.querySelector("#refresh-data-row");
     refreshRow.addEventListener('click', function onClick() {
+        var wereSelected, selected;
         refreshRow.classList.remove('show');
+        // update the table
+        // what were selected should stay selected after the table has been updated
+        wereSelected = getSelectedRows().map(function(row){ return row.dataset.name; });
         showFilteredTable(lastFilter);
+        selected = getAllRows().filter(function(row){ return wereSelected.indexOf(row.dataset.name) > -1 })
+                               .map(function(rowToSelect){  
+                                        rowToSelect.querySelector("[type=checkbox]").checked = true;
+                                        highlightRow(rowToSelect,true);
+                                        return; 
+                               });
     }, false);
 
     // Set sort handlers. nth-child(n+2) skips the checkbox column
