@@ -402,7 +402,7 @@ document.querySelector('#content').addEventListener('click', function(event){
             while(node.mozMatchesSelector('.node *')){
                 node = node.parentElement;
             }
-            // applyHighlightingEffect(node.getAttribute("data-name"));
+            applyHighlightingEffect(node.getAttribute("data-name"));
         }
     }
 },false);
@@ -419,24 +419,26 @@ function highlightColludedNode(selection){
     });
 }
 
-// function applyHighlightingEffect(clickedNodeName){
-//     // reset styling effect
-//     d3.selectAll("g.node").classed("clicked-node", false)
-//                           .classed("colluded-source", false)
-//                           .classed("colluded-target", false);
+function applyHighlightingEffect(clickedNodeName){
+    // reset styling effect
+    d3.selectAll("g.node").classed("clicked-node", false)
+                          .classed("colluded-source", false)
+                          .classed("colluded-target", false)
+                          .classed("greyed-out", true);
 
-//     // highlight all instances of the clicked node(both source and target)
-//     d3.selectAll("g[data-name='" + clickedNodeName +"']")
-//             .classed("clicked-node", true);
+    // highlight all instances of the clicked node(both source and target)
+    d3.selectAll("g[data-name='" + clickedNodeName +"']")
+            .classed("clicked-node", true)
+            .classed("greyed-out", false);
 
-//     // find all the colluded sites and highlight all instances of them
-//     for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
-//         if ( key != clickedNodeName ){
-//             d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
-//         }
-//     }
+    // find all the colluded sites and highlight all instances of them
+    for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
+        if ( key != clickedNodeName ){
+            d3.selectAll("g[data-name='"+ key +"']").classed("greyed-out", false).call(highlightColludedNode);
+        }
+    }
 
-// }
+}
 
 
 /* for Highlighting and Colouring -------------------- */

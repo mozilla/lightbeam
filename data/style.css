@@ -754,11 +754,11 @@ text {
     strokewidth: 3px;
 }
 
-/*.greyed-out{
+.greyed-out{
     opacity: 0.2;
 }
 
-.clicked-node.node circle:last-child{
+/*.clicked-node.node circle:last-child{
     stroke-width: 2;
     fill: #fff;
 }
