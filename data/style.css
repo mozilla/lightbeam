@@ -754,7 +754,7 @@ text {
     strokewidth: 3px;
 }
 
-.greyed-out{
+/*.greyed-out{
     opacity: 0.2;
 }
 
@@ -774,7 +774,7 @@ text {
 .colluded-source.node circle:last-child, .colluded-target.node circle:last-child{
     stroke: #fff;
     stroke-width: 1;
-}
+}*/
 
 /* Graph Visualization */
 
