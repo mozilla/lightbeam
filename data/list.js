@@ -238,7 +238,7 @@ function nodeToRow(node){
         elem('td', {'data-sort-key': node.lastAccess, 'role': 'gridcell'}, (node.nodeType === 'blocked' ? 'Unknown' : formattedDate(node.lastAccess))),
         elem('td', {'data-sort-key': aggregate.getConnectionCount(node), 'role': 'gridcell'}, aggregate.getConnectionCount(node) + '')
     ]);
-    if (!node.nodeType === 'blocked'){
+    if (node.nodeType !== 'blocked'){
         listIcon.addEventListener("mouseenter",tooltip.addTooltip);
         listIcon.addEventListener("mouseleave",tooltip.hide);
         row.addEventListener("mouseenter",function(){
