@@ -1043,7 +1043,12 @@ text {
 }
 
 .legend-header div:last-of-type{
+    width: 170px;
     float: right;
+}
+
+.legend-header .legend-toggle{
+    float:right;
 }
 
 .legend-header header{
@@ -1137,7 +1142,7 @@ text {
 }
 
 .graph-footer .btn_group .dropdown_options{
-    width: 100px;
+    width: 170px;
 }
 
 .list-footer .align-left,
