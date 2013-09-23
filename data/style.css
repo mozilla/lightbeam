@@ -884,6 +884,19 @@ text {
     margin: 7px 10px 0 10px;
 }
 
+.rows-selected-label{
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+}
+
+.rows-selected-label div{
+    display: inline-block;
+}
+
+.num-selected, .num-total{
+    font-weight: bold;
+}
 
 .list-table{
     border-collapse: collapse;

@@ -66,6 +66,21 @@ function initList(){
     // breadcrumb
     initBreadcrumb();
 
+    // add number of row selected label
+    var selectedLabel = elem("div", {"class": "rows-selected-label blue-text"},[
+                            elem("div", {"class": "some-selected hidden"}, [ 
+                                elem("span", {"class": "num-selected"}),
+                                " out of ", 
+                                elem("span", {"class": "num-total"}),
+                                " sites selected"
+                            ]),
+                            elem("div", {"class": "none-selected"}, [
+                                elem("span", {"class": "num-total"}),
+                                " sites"
+                            ])
+                        ]);
+    stage.appendChild(selectedLabel);
+
     // list header
     var table = elem("div", {'class': 'list-table'}, [
         elem('table', {'role': 'grid', 'aria-label': 'Entering List table'}, [
@@ -169,13 +184,35 @@ function mapBreadcrumbsToUI(){
     });
 }
 
-
 function resetVisibleBreadcrumb(){
     var breadcrumbContainer = document.querySelector(".breadcrumb");
     while ( breadcrumbContainer.firstChild ){
         breadcrumbContainer.removeChild(breadcrumbContainer.firstChild);
     }
 }
+
+function updateNumTotalRowsLabel(){
+    var numTotal = getAllRows().length;
+    var labels = document.querySelectorAll(".num-total");
+    for ( var i=0; i<labels.length; i++){
+        labels[i].innerHTML = numTotal;
+    }
+}
+
+function updateRowSelectedLabel(){
+    var numSelected = getSelectedRows().length;
+    var selectedLabel = document.querySelector(".some-selected");
+    var noneSelectedLabel = document.querySelector(".none-selected");
+    if ( numSelected > 0 ){
+        selectedLabel.querySelector(".num-selected").innerHTML = numSelected;
+        selectedLabel.classList.remove("hidden");
+        noneSelectedLabel.classList.add("hidden");
+    }else{
+        selectedLabel.classList.add("hidden");
+        noneSelectedLabel.classList.remove("hidden");
+    }
+}
+
 
 var lastFilter = null;
 
@@ -190,6 +227,10 @@ function showFilteredTable(filter){
     var nodes = getNodes(filter);
     tbodyParent.appendChild( createBody(nodes) );
     resort(table);
+    // update other UI elements
+    document.querySelector('.selected-header').checked = false;
+    updateNumTotalRowsLabel();
+    updateRowSelectedLabel();
 }
 
 
@@ -358,6 +399,10 @@ function resetCanvas(){
         breadcrumb.parentElement.removeChild(breadcrumb);
     }
     breadcrumbStack = [];
+    var selectedLabel = document.querySelector(".rows-selected-label");
+    if (selectedLabel){
+        selectedLabel.parentElement.removeChild(selectedLabel);
+    }
     document.querySelector('.stage-stack').removeEventListener('click', listStageStackClickHandler, false);
     vizcanvas.classList.remove("hide");
 }
@@ -417,12 +462,15 @@ function selectAllRows(flag){
             highlightRow(hiddenRows[i],false);
         }
     }
+    togglePrefButtons();
 }
 
 function setPreferences(pref){
     getSelectedRows().forEach(function(row){
         setUserSetting(row, pref);
     });
+    document.querySelector('.selected-header').checked = false;
+    updateRowSelectedLabel();
     togglePrefButtons();
     toggleShowHideHiddenButton();
 }
@@ -496,7 +544,6 @@ function initializeHandlers(){
     try{
     document.querySelector('.selected-header').addEventListener('change', function(event){
         selectAllRows(event.target.checked);
-        togglePrefButtons();
     }, false);
 
     document.querySelector('.list-footer').querySelector(".legend-toggle").addEventListener("click", function(event){
@@ -555,6 +602,7 @@ function highlightRow(node,rowChecked){
     }else{
         node.classList.remove("checked");
     }
+    updateRowSelectedLabel();
 }
 
 function togglePrefButtons(){
