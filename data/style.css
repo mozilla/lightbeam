@@ -758,7 +758,7 @@ text {
     opacity: 0.2;
 }
 
-.clicked-node.node circle:last-child{
+/*.clicked-node.node circle:last-child{
     stroke-width: 2;
     fill: #fff;
 }
@@ -774,7 +774,7 @@ text {
 .colluded-source.node circle:last-child, .colluded-target.node circle:last-child{
     stroke: #fff;
     stroke-width: 1;
-}
+}*/
 
 /* Graph Visualization */
 
@@ -884,6 +884,19 @@ text {
     margin: 7px 10px 0 10px;
 }
 
+.rows-selected-label{
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+}
+
+.rows-selected-label div{
+    display: inline-block;
+}
+
+.num-selected, .num-total{
+    font-weight: bold;
+}
 
 .list-table{
     border-collapse: collapse;
@@ -1043,7 +1056,12 @@ text {
 }
 
 .legend-header div:last-of-type{
+    width: 170px;
     float: right;
+}
+
+.legend-header .legend-toggle{
+    float:right;
 }
 
 .legend-header header{
@@ -1137,7 +1155,7 @@ text {
 }
 
 .graph-footer .btn_group .dropdown_options{
-    width: 100px;
+    width: 170px;
 }
 
 .list-footer .align-left,

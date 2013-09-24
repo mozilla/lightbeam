@@ -155,23 +155,23 @@ function appendNodeG(bucket,connection,nodeType){
         }));
     }else if (nodeType == "target"){
         g.appendChild(svg('polygon', {
-            points: "0,-3 -4,3 4,3",
+            points: "-3,-3 3,0 -3,3",
             'class': 'tracker'
         }));
     }
 
     // highlight this node if it belongs to the "colluded nodes" of the currently selected(clicked) node 
-    if ( document.querySelector(".clicked-node") ){
-        var clickedNodeName = document.querySelector(".clicked-node").getAttribute("data-name");
-        if ( connection[nodeType] == clickedNodeName ){
-            d3.select(g).classed("clicked-node", true);
-        }
-        for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
-            if ( key != clickedNodeName && key == connection[nodeType] ){
-                d3.select(g).classed("colluded-"+nodeType, true);
-            }
-        }
-    }
+    // if ( document.querySelector(".clicked-node") ){
+    //     var clickedNodeName = document.querySelector(".clicked-node").getAttribute("data-name");
+    //     if ( connection[nodeType] == clickedNodeName ){
+    //         d3.select(g).classed("clicked-node", true);
+    //     }
+    //     for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
+    //         if ( key != clickedNodeName && key == connection[nodeType] ){
+    //             d3.select(g).classed("colluded-"+nodeType, true);
+    //         }
+    //     }
+    // }
     connection.view = g;
     tooltip.add(g);
     bucket.group.appendChild(g);
@@ -181,7 +181,7 @@ function appendNodeG(bucket,connection,nodeType){
 
 function positionTargetDot(selection, numSourceNode){
     selection.select("polygon").attr("transform", function(d,i){
-        return "translate("+ (numSourceNode+i+1)*10 + ",0) rotate(90)" ;
+        return "translate("+ (numSourceNode+i+1)*10 + ",0)" ;
     });
 };
 
@@ -423,16 +423,18 @@ function applyHighlightingEffect(clickedNodeName){
     // reset styling effect
     d3.selectAll("g.node").classed("clicked-node", false)
                           .classed("colluded-source", false)
-                          .classed("colluded-target", false);
+                          .classed("colluded-target", false)
+                          .classed("greyed-out", true);
 
     // highlight all instances of the clicked node(both source and target)
     d3.selectAll("g[data-name='" + clickedNodeName +"']")
-            .classed("clicked-node", true);
+            .classed("clicked-node", true)
+            .classed("greyed-out", false);
 
     // find all the colluded sites and highlight all instances of them
     for ( var key in aggregate.nodeForKey( clickedNodeName ) ){
         if ( key != clickedNodeName ){
-            d3.selectAll("g[data-name='"+ key +"']").call(highlightColludedNode);
+            d3.selectAll("g[data-name='"+ key +"']").classed("greyed-out", false).call(highlightColludedNode);
         }
     }
 

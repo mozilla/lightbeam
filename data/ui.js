@@ -415,10 +415,11 @@ function legendBtnClickHandler(legendElm){
 function selectedNodeEffect(name){
     if ( currentVisualization.name == "graph" || currentVisualization.name == "clock"){
         resetAllGlow("all");
-    }
-    if ( currentVisualization.name == "graph" ){
         addGlow(name,"selected");
     }
+    // if ( currentVisualization.name == "graph" ){
+    //     addGlow(name,"selected");
+    // }
     if ( currentVisualization.name == "list" ){
         resetHighlightedRow();
     }
@@ -427,7 +428,7 @@ function selectedNodeEffect(name){
 function connectedNodeEffect(name){
     console.log(name);
     if ( currentVisualization.name != "list" ){
-        var glow;
+        var glow = document.querySelector(".connected-glow");
         while( glow ){
             glow = document.querySelector(".connected-glow"); 
             glow.parentNode.removeChild(glow);
@@ -472,8 +473,16 @@ function calculateGlowSize(gNode,viz){
     }else{
         glowProps.radius = radius * 4;
     }
-    glowProps.cx = siteNode.getAttribute("cx") || 0;
-    glowProps.cy = siteNode.getAttribute("cy") || 0;
+
+    if ( viz == "clock" && shape == "polygon" ){
+        var transform = siteNode.getAttribute("transform");
+        var translate = transform.slice(transform.indexOf("translate("));
+        glowProps.cx = translate.substring(10,translate.indexOf(","));
+    }else{
+        glowProps.cx = siteNode.getAttribute("cx") || 20;
+        glowProps.cy = siteNode.getAttribute("cy") || 0;    
+    }
+    
     return glowProps;
 }
 
