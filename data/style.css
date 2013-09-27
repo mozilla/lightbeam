@@ -860,7 +860,7 @@ text {
 .breadcrumb{
     display: inline-block;
     overflow: hidden;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .breadcrumb .breadcrumb-chunk{
@@ -885,13 +885,23 @@ text {
 }
 
 .rows-selected-label{
-    display: inline-block;
     float: right;
     margin-right: 10px;
+    text-align: right;
 }
 
 .rows-selected-label div{
     display: inline-block;
+}
+
+.rows-selected-label .deselect {
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.rows-selected-label .deselect:hover {
+    cursor: pointer;
 }
 
 .num-selected, .num-total{

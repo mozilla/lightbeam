@@ -72,7 +72,9 @@ function initList(){
                                 elem("span", {"class": "num-selected"}),
                                 " out of ", 
                                 elem("span", {"class": "num-total"}),
-                                " sites selected"
+                                " sites selected",
+                                elem("br"),
+                                elem('span', {'class': 'deselect'}, 'clear all selected')
                             ]),
                             elem("div", {"class": "none-selected"}, [
                                 elem("span", {"class": "num-total"}),
@@ -213,6 +215,22 @@ function updateRowSelectedLabel(){
     }
 }
 
+function resetSelectedRows() {
+    let selectedRows = getSelectedRows();
+
+    for (let i = 0; i < selectedRows.length; i++) {
+        let sel = selectedRows[i];
+
+        sel.querySelector('.selected-row').checked = false;
+        sel.classList.remove('checked');
+    }
+
+    // Also uncheck the header input box if it's checked
+    document.querySelector('.selected-header').checked = false;
+
+    // Update the selected rows header to reflect the changes
+    updateRowSelectedLabel();
+}
 
 var lastFilter = null;
 
@@ -547,8 +565,8 @@ function initializeHandlers(){
     }, false);
 
     document.querySelector('.list-footer').querySelector(".legend-toggle").addEventListener("click", function(event){
-    	toggleLegendSection(event.target,document.querySelector('.list-footer'));
-	});
+        toggleLegendSection(event.target,document.querySelector('.list-footer'));
+    });
 
     document.querySelector('.stage-stack').addEventListener('click', listStageStackClickHandler, false);
 
@@ -582,6 +600,11 @@ function initializeHandlers(){
                                         highlightRow(rowToSelect,true);
                                         return; 
                                });
+    }, false);
+
+    // Add handler to deselect rows
+    document.querySelector('.deselect').addEventListener('click', function(event) {
+        resetSelectedRows();
     }, false);
 
     // Set sort handlers. nth-child(n+2) skips the checkbox column
