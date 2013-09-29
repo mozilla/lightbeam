@@ -505,7 +505,7 @@ var listStageStackClickHandler = function(event){
                     "title": "Block Sites",
                     "message":  "<p><b>Warning:</b></p> " +
                                 "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" +
-                                "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>",
+                                "<p>This can prevent some sites from working and degrade your internet experience. Please use this feature carefully. </p>",
                     "imageUrl": "image/collusion_popup_blocked.png"
                 },function(confirmed){
                     if ( confirmed ){
