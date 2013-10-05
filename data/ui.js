@@ -479,7 +479,7 @@ function calculateGlowSize(gNode,viz){
         var translate = transform.slice(transform.indexOf("translate("));
         glowProps.cx = translate.substring(10,translate.indexOf(","));
     }else{
-        glowProps.cx = siteNode.getAttribute("cx") || 20;
+        glowProps.cx = siteNode.getAttribute("cx") || 0;
         glowProps.cy = siteNode.getAttribute("cy") || 0;    
     }
     
