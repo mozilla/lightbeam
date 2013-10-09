@@ -43,7 +43,7 @@ function onUpdate(){
     if (newNodes.length <= 0) {
         return;
     }
-    document.getElementById('refresh-data-link').innerHTML = 'Click to refresh <b>' + newNodes.length + singularOrPluralNoun(newNodes.length," new site") + '</b> ...';
+    document.getElementById('refresh-data-link').innerHTML = 'Click here to refresh list...';
     document.getElementById('refresh-data-row').classList.add('show');
     return;
 }
