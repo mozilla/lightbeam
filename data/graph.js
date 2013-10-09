@@ -24,13 +24,14 @@ graph.on('reset', onReset);
 
 /* for Highlighting and Colouring -------------------- */
 
-var highlight = {};
-highlight.visited = true;
-highlight.neverVisited = true;
-highlight.connections = true;
-highlight.cookies = false;
-highlight.watched = false;
-highlight.blocked = false;
+var highlight = {
+    visited: true,
+    neverVisited: true,
+    connections: true,
+    cookies: true,
+    watched: true,
+    blocked: true
+};
 
 function onUpdate(){
     // new nodes, reheat graph simulation

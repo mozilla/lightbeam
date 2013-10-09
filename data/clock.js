@@ -443,7 +443,10 @@ function applyHighlightingEffect(clickedNodeName){
 
 /* for Highlighting and Colouring -------------------- */
 
-var highlight = {};
+var highlight = { 
+    watched: true,
+    blocked: true
+};
 var clockLegend = document.querySelector(".clock-footer");
 
 legendBtnClickHandler(clockLegend);
