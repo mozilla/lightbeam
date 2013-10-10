@@ -196,6 +196,13 @@ a:hover{
 .pico-content .privacy-policy{
     height: 150px;
     overflow-y: auto;
+    border: 1px dashed #ccc;
+    padding: 10px 0;
+    margin: 0 5px;
+}
+
+.pico-content .privacy-policy.collapsed{
+    display: none;
 }
 
 .privacy-policy ul{

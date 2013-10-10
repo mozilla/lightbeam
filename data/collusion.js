@@ -219,33 +219,29 @@ function startSharing(askForConfirmation,callback){
                     "message": 
                         '<p>You are about to start uploading de-identified information to our shared tracker database. ' +
                         'Your information will continue to be uploaded  until you turn off sharing. </p>' +
-                        '<p>To learn more about uploading data, how it is de-identified, please read the Collusion Privcy Policy below.' + 
-                        // Collusion Privacy Policy.  FIXEME: temp placeholder for v0.9
-                        '<div class="privacy-policy">' +
-                            '<p>' +
-                                '<header><b>Collusion Privacy</b></header>' +
-                                '<div>We care about your privacy. Collusion is a browser add-on that collects and helps you visualize third party requests on any site you visit. If you choose to send Collusion data to Mozilla (that’s us), our privacy policy describes how we handle that data. </div>' +
-                            '</p>' +
-                            '<p>' +
-                                '<header><b>Things you should know</b></header>' +
-                                '<ul>' +
-                                    '<li>' +
-                                        'After you install Collusion, the add-on collects data to help you visualize third party requests when you visit sites.' + 
-                                        '<ul>' +
-                                            '<li>When you visit a site and that site contacts a third party, Collusion collects the following type of data: URLs of the visited sites and third parties, the existence of cookies, and a rough timestamp of when the site was visited. To see a complete list, please visit <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank" >here</a>.</li>' + 
-                                        '</ul>' +
-                                    '</li>' +
-                                    '<li>By default, data collected by Collusion remains in your browser and is not sent to us. </li> ' +
-                                    '<li>' +
-                                        'You can choose to share your Collusion data with us. Information from Collusion can help us and others to understand third party relationships on the web and promote further research in the field of online tracking and privacy.' + 
-                                        '<ul>' +
-                                            '<li>If you do share Collusion data with us, your browser will send us your de-identified Collusion data (you can see a list of the kind of data involved <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank">here</a>) along with a randomly generated browser ID which helps us understand how many unique browsers are sharing data. We will post your data along with data from others in an aggregated and open database. Users will benefit  by making more informed decisions based on the collective information and patterns about trackers.</li>' + 
-                                            '<li>If you turn off data sharing, the randomly generated browser ID is reset and if you turn data sharing on again, a new randomly generated user ID will be created.</li>' + 
-                                            '<li>Uninstalling Collusion prevents collection of any further Collusion data and will delete the data stored locally in your browser.</li>' + 
-                                        '</ul>' +
-                                    '</li> ' +
-                                '</ul>' +
-                            '</p>' +
+                        '<p>To learn more about uploading data, how it is de-identified, please read <a class="toggle-pp">the Collusion Privcy Policy</a>.</p>' + 
+                        // Collusion Privacy Policy.
+                        '<div class="privacy-policy collapsed">' +
+                            '<header><b>Collusion Privacy</b></header>' +
+                            '<div>We care about your privacy. Collusion is a browser add-on that collects and helps you visualize third party requests on any site you visit. If you choose to send Collusion data to Mozilla (that’s us), our privacy policy describes how we handle that data. </div>' +
+                            '<br/>' + 
+                            '<header><b>Things you should know</b></header>' +
+                            '<ul>' +
+                                '<li>' +
+                                    'After you install Collusion, the add-on collects data to help you visualize third party requests when you visit sites.' + 
+                                    '<ul>' +
+                                        '<li>When you visit a site and that site contacts a third party, Collusion collects the following type of data: URLs of the visited sites and third parties, the existence of cookies, and a rough timestamp of when the site was visited. To see a complete list, please visit <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank" >here</a>.</li>' + 
+                                    '</ul>' +
+                                '</li>' +
+                                '<li>By default, data collected by Collusion remains in your browser and is not sent to us. </li> ' +
+                                '<li>' +
+                                    'You can choose to contribute your Collusion data with us. Information from Collusion can help us and others to understand third party relationships on the web and promote further research in the field of online tracking and privacy.' + 
+                                    '<ul>' +
+                                        '<li>If you do contribute Collusion data with us, your browser will send us your de-identified Collusion data (you can see a list of the kind of data involved <a href="https://github.com/mozilla/collusion/blob/master/doc/data_format.v1.1.md" target="_blank">here</a>). We will post your data along with data from others in an aggregated and open database. Users will benefit by making more informed decisions based on the collective information and patterns about trackers.</li>' + 
+                                        '<li>Uninstalling Collusion prevents collection of any further Collusion data and will delete the data stored locally in your browser.</li>' + 
+                                    '</ul>' +
+                                '</li> ' +
+                            '</ul>' +
                         '</div>' +
                         // Collusion Privacy Policy ends
                         '</br>' +

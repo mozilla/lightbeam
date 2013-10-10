@@ -127,6 +127,13 @@ function addDialogEventHandlers(modal,options,callback){
         document.removeEventListener("keydown", keyDownHandler);
     });
 
+    // for Upload Data dialog
+    if (dialogContainer.querySelector(".toggle-pp")){
+        dialogContainer.querySelector(".toggle-pp").addEventListener("click",function(event){
+            dialogContainer.querySelector(".pico-content .privacy-policy").classList.toggle("collapsed");
+        });
+    }
+
     restrictTabWithinDialog(modal);
 }
 
