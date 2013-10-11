@@ -219,12 +219,13 @@ function setZoom(box,canvas){
 *  clock                      = " -350 -495 700 500 "
 *  map                        = " 0 0 2711.3 1196.7 "
 */
-var graphZoomInLimit   = { w:250, h:250 };
-var graphZoomOutLimit  = { w:4000, h:4000 };
-var clockZoomInLimit   = { w:350, h:250 };
-var clockZoomOutLimit  = { w:2800, h:2800 };
-var mapZoomInLimit     = { w:(2711.3/5), h:(1196.7/5) };
-var mapZoomOutLimit    = { w:2711.3, h:1196.7 };
+const graphZoomInLimit   = { w:250, h:250 };
+const graphZoomOutLimit  = { w:4000, h:4000 };
+const clockZoomInLimit   = { w:350, h:250 };
+const clockZoomOutLimit  = { w:2800, h:2800 };
+const mapZoomInLimit     = { w:(2711.3/5), h:(1196.7/5) };
+const mapZoomOutLimit    = { w:2711.3, h:1196.7 };
+const svgZoomingRatio   = 1.1;
 
 document.querySelector(".stage").addEventListener("wheel",function(event){
     if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && currentVisualization.name != "list" ){
@@ -260,14 +261,14 @@ function zoomWithinLimit(scrollDist, targetSvg, zoomInLimit, zoomOutLimit){
     if ( scrollDist >= 1 ){ // scroll up to zoom out
         for ( var i=1; i<=scrollDist; i++){
             if ( checkWithinZoomLimit(targetSvg,"out",zoomOutLimit) ){
-                svgZooming(targetSvg, (1/1.35));
+                svgZooming(targetSvg, (1/svgZoomingRatio));
             }
         }
     }
     if ( scrollDist <= -1 ){ // scroll down to zoom in
         for ( var i=scrollDist; i<=-1; i++){
             if ( checkWithinZoomLimit(targetSvg,"in",zoomInLimit) ){
-                svgZooming(targetSvg, 1.35);
+                svgZooming(targetSvg, svgZoomingRatio);
             }
         }
     }
