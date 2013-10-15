@@ -250,15 +250,17 @@ function startSharing(askForConfirmation,callback){
             },
             function(confirmed){
                 if ( confirmed ){
-                    sharingData();
+                    localStorage.lastUpload = Date.now();
                     localStorage.userHasOptedIntoSharing = true;
+                    sharingData();
                 }
                 callback(confirmed);
             }
         );
     }else{
-        sharingData();
+        localStorage.lastUpload = Date.now();
         localStorage.userHasOptedIntoSharing = true;
+        sharingData();
         callback(true);
     }
 }
@@ -286,7 +288,7 @@ function stopSharing(callback){
 
 function sharingData(){
     // console.log("Beginning Upload...");
-    var lastUpload = localStorage.lastUpload || 0;
+    var lastUpload = localStorage.lastUpload;
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
     });
@@ -309,6 +311,7 @@ function sharingData(){
 }
 
 function startUploadTimer(){
+    localStorage.lastUpload = Date.now();
     uploadTimer = setTimeout(sharingData, 10 * 60 * 1000); // upload every 10 minutes
 }
 
