@@ -149,8 +149,8 @@ document.querySelector(".download").addEventListener('click', function(evt) {
 document.querySelector('.reset-data').addEventListener('click', function(){
     dialog( {   "name": dialogNames.resetData,
                 "title": "Reset Data",
-                "message":  "<p>Pressing OK will delete all Collusion information including connection history, user preferences, unique token, block sites list etc.</p>" + 
-                            "<p>Your browser will be returned to the state of a fresh install of Collusion.</p>",
+                "message":  "<p>Pressing OK will delete all Lightbeam information including connection history, user preferences, unique token, block sites list etc.</p>" + 
+                            "<p>Your browser will be returned to the state of a fresh install of Lightbeam.</p>",
                 "imageUrl": "image/collusion_popup_warningreset.png"
             },function(confirmed){
                 if ( confirmed ){
@@ -533,7 +533,7 @@ function showPromptToShareDialog(){
                 "name": dialogNames.promptToShare,
                 "dnsPrompt": true,
                 "title": "Help the Ecosystem by Sharing",
-                "message":  "<p>As a user of Collusion Beta, you can help contribute to build our data ecosystem.</p>" + 
+                "message":  "<p>As a user of Lightbeam Beta, you can help contribute to build our data ecosystem.</p>" + 
                             "<p>By sharing your data you can help us and others to understand third-party relationships on the web and promote further research in the field of online tracking and privacy.</p>  "+
                             "<p>Do you want to upload your de-identified data to the public database now?</p>",
                 "imageUrl": "image/collusion_popup_startsharing.png"

@@ -520,7 +520,7 @@ var listStageStackClickHandler = function(event){
             dialog( {   "name": dialogNames.hideSites,
                         "dnsPrompt": true,
                         "title": "Hide Sites",
-                        "message":  "<p>These sites will not be shown in Collusion visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" +
+                        "message":  "<p>These sites will not be shown in Lightbeam visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" +
                                     "<p>You can use this to ignore trusted sites from the data.</p>",
                         "imageUrl": "image/collusion_popup_hidden.png"
                     },function(confirmed){
