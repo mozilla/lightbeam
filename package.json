@@ -1,10 +1,10 @@
 {
-  "name": "collusion",
-  "fullName": "Collusion",
+  "name": "lightbeam",
+  "fullName": "Lightbeam",
   "description": "A Firefox add-on to track who is tracking you",
   "author": "Mozilla Foundation",
   "license": "MPL 2.0",
-  "version": "0.9.0",
-  "id": "jid1-7OBiDHPW1YAPaQ",
+  "version": "1.0.0",
+  "id": "jid1-F9UJ2thwoAm5gQ",
   "permissions": {"private-browsing": true}
 }

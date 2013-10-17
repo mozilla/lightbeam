@@ -9,7 +9,8 @@ const dialogNames = {
     "startUploadData" : "startUploadData",
     "stopUploadData" : "stopUploadData",
     "privateBrowsing" : "privateBrowsing",
-    "welcome" : "welcome" 
+    "welcome" : "welcome",
+    "saveOldData": "saveOldData"
 };
 
 
