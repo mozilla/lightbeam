@@ -377,3 +377,24 @@ function updateStatsBar(){
     document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
     document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
+
+/******************************************
+*  Prompt to save data from older Collusion format
+*/
+function promptToSaveOldData(data){
+    dialog({
+        "type": "message",
+        "name": dialogNames.saveOldData,
+        "dnsPrompt": false,
+        "title": "Save Data from Earlier Format",
+        "message": "<p>Lightbeam has been updated with a new data format.</p>" + 
+                   "<p>The old data you have stored from the beta (Collusion) is no longer supported and will be deleted.</p>" + 
+                   "<p>If you would like to save a copy of the old data before it is deleted, press OK. If you press Cancel, the old data will be gone.</p>"
+    },
+    function(confirmed){
+        if (confirmed){
+            downloadAsJson(data, 'oldformatCollusionData.json');
+        }
+    });
+
+}

@@ -128,20 +128,24 @@ function toggleBtnOffEffect(toggleBtn){
     toggleBtn.querySelector(".on-off-text").innerHTML = "OFF";
 }
 
-
-document.querySelector(".download").addEventListener('click', function(evt) {
-    // console.log('received export data');
-    var file = new Blob([exportFormat(allConnections)], {type: 'application/json'});
+function downloadAsJson(data, defaultFilename){
+    var file = new Blob([data], {type: 'application/json'});
     var reader = new FileReader();
     var a = document.createElement('a');
     reader.onloadend = function(){
         a.href = reader.result;
-        a.download = 'collusionData.json';
+        a.download = defaultFilename;
         a.target = '_blank';
         document.body.appendChild(a);
         a.click();
-    };
+    }
     reader.readAsDataURL(file);
+}
+
+
+document.querySelector(".download").addEventListener('click', function(evt) {
+    // console.log('received export data');
+    downloadAsJson([exportFormat(allConnections)], 'collusionData.json');
     evt.preventDefault();
     // window.open('data:application/json,' + exportFormat(allConnections));
 });
