@@ -91,18 +91,10 @@ a:hover{
     cursor: pointer;
 }
 
-.collusion-icon{
-    border:1px solid #5ABED2;
-    width: 35px;
-    height: 35px;
-    border-radius: 5px;
-    float: left;
-}
-
 .logo{
-    float: left;
-    width: 85px;
-    margin-left: 10px;
+    width: 150px;
+    margin-top: -18px;
+    margin-left: -6px;
 }
 
 .hidden{
@@ -510,7 +502,7 @@ a:hover{
 }
 
 .info .holder section p{
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
 .info .holder section ul{
