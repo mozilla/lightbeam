@@ -355,7 +355,6 @@ function exportFormat(connections, roundOff){
     if ( roundOff ){
         tempConnections = roundOffTimestamp(tempConnections);
     }
-    console.log('isRobot: %s', isRobot);
     var exportSet = {
         format: 'Collusion Save File',
         version: '1.1',

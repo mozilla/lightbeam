@@ -97,7 +97,7 @@ window.addEventListener('load', function(evt){
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
-    saveTimer = setInterval(saveConnections, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('collusion load() ended');
+    saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('collusion load() ended');
 });
 
 
@@ -244,7 +244,7 @@ function startSharing(askForConfirmation,callback){
                             '</ul>' +
                         '</div>' +
                         // Lightbeam Privacy Policy ends
-                        '</br>' +
+                        '<br />' +
                         '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
                     "imageUrl": "image/collusion_popup_warningsharing.png"
             },
@@ -293,26 +293,29 @@ function sharingData(){
         return ( connection[TIMESTAMP] ) > lastUpload;
     });
     var data = exportFormat(connections,true); // round off timestamp
+    console.log('data: %s (%s characters total)', data.slice(0,40), data.length);
     var request = new XMLHttpRequest();
     request.open("POST", uploadServer, true);
     request.setRequestHeader("Collusion-Share-Data","collusion");
     request.setRequestHeader("Content-type","application/json");
     request.send(data);
     request.onload = function(){
-        console.log(this.responseText);
-        if (this.status === 200){
+        console.log(request.responseText);
+        if (request.status === 200){
             localStorage.lastUpload = Date.now();
         }
     };
     request.onerror = function(){
-        console.log("Share data attempt failed.");
+        console.log("Share data attempt failed");
+        console.log("Status: %s - %s", request.status, request.statusText);
+        console.log('Response: %s - %s', request.responseType, request.responseText);
     };
     startUploadTimer();
 }
 
 function startUploadTimer(){
     localStorage.lastUpload = Date.now();
-    uploadTimer = setTimeout(sharingData, 10 * 60 * 1000); // upload every 10 minutes
+    uploadTimer = setTimeout(function(){sharingData();}, 10 * 60 * 1000); // upload every 10 minutes
 }
 
 // Save user settings on exit
@@ -373,9 +376,9 @@ function updateStatsBar(){
     if ( allConnections.length > 0 ){
         dateSince = formattedDate(allConnections[0][2]);
     }
-    document.querySelector(".top-bar .date-gathered").innerHTML = dateSince;
-    document.querySelector(".top-bar .third-party-sites").innerHTML = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
-    document.querySelector(".top-bar .first-party-sites").innerHTML = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
+    document.querySelector(".top-bar .date-gathered").textContent = dateSince;
+    document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
+    document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
 
 /******************************************

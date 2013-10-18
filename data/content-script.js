@@ -63,21 +63,6 @@ self.port.on("promptToSaveOldData", function(data){
     unsafeWindow.promptToSaveOldData(data);
 });
 
-self.port.on("private-browsing", function() {
-    unsafeWindow.dialog( {
-            "type": "alert",
-            "name": unsafeWindow.dialogNames.privateBrowsing,
-            "dnsPrompt": true,
-            "title": "Private Browsing",
-            "message":  "<p>You have one or more private browsing windows open.</p>" +
-                        "<p>Connections made in private browsing windows will be visualized in Lightbeam but that data is neither stored locally nor will it ever be shared, even if sharing is enabled. </p>" +
-                        "<p> Information gathered in private browsing mode will be deleted whenever Lightbeam is restarted, and is not collected at all when Lightbeam is not open..</p>",
-            "imageUrl": "image/collusion_popup_privacy.png"
-        },
-        function(confirmed){}
-    );
-});
-
 function getAllConnections(){
     var allConnectionsAsArray = [];
     Object.keys(localStorage).sort().forEach(function(key){

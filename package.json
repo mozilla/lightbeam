@@ -1,7 +1,7 @@
 {
   "name": "lightbeam",
   "fullName": "Lightbeam",
-  "description": "A Firefox add-on to track who is tracking you",
+  "description": "Lightbeam is a Firefox add-on that allows you to see the third parties that are collecting information about your browsing activity, with and without your consent. Using interactive visualizations, Lightbeam shows you the relationships between these third parties and the sites you visit.",
   "author": "Mozilla Foundation",
   "license": "MPL 2.0",
   "version": "1.0.0",

@@ -43,7 +43,7 @@ function onUpdate(){
     if (newNodes.length <= 0) {
         return;
     }
-    document.getElementById('refresh-data-link').innerHTML = 'Click here to refresh list...';
+    document.getElementById('refresh-data-link').textContent = 'Click here to refresh list...';
     document.getElementById('refresh-data-row').classList.add('show');
     return;
 }
@@ -195,7 +195,7 @@ function updateNumTotalRowsLabel(){
     var numTotal = getAllRows().length;
     var labels = document.querySelectorAll(".num-total");
     for ( var i=0; i<labels.length; i++){
-        labels[i].innerHTML = numTotal;
+        labels[i].textContent = numTotal;
     }
 }
 
