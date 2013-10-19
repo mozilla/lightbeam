@@ -204,7 +204,7 @@ function updateRowSelectedLabel(){
     var selectedLabel = document.querySelector(".some-selected");
     var noneSelectedLabel = document.querySelector(".none-selected");
     if ( numSelected > 0 ){
-        selectedLabel.querySelector(".num-selected").innerHTML = numSelected;
+        selectedLabel.querySelector(".num-selected").textContent = numSelected;
         selectedLabel.classList.remove("hidden");
         noneSelectedLabel.classList.add("hidden");
     }else{
