@@ -430,7 +430,7 @@ function selectedNodeEffect(name){
 }
 
 function connectedNodeEffect(name){
-    console.log(name);
+    // console.log(name);
     if ( currentVisualization.name != "list" ){
         var glow = document.querySelector(".connected-glow");
         while( glow ){

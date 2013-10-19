@@ -41,7 +41,7 @@ function getServerInfo(nodeName, callback){
     var request = new XMLHttpRequest();
     currentRequest = info.host;
     request.open( "GET", jsonURL, true );
-    request.onsuccess = function(){
+    request.onload = function(){
         if (currentRequest === info.host){
             callback( (request.status === 200) ? JSON.parse(request.responseText) : false );
         }
@@ -112,8 +112,12 @@ function updateInfo(nodeName){
 }
 
 function showFavIcon(nodeName){
-    var favicon = "<img src='http://"+ nodeName +"/favicon.ico' class='favicon'>";
-    document.querySelector(".holder .title").textContent = favicon+nodeName;
+    var title = document.querySelector('.holder .title');
+    while(title.childNodes.length){
+        title.removeChild(title.firstChild);
+    }
+    title.appendChild(elem(nodeName, {src: 'http://' + nodeName + '/favicon.ico', 'class': 'favicon'}));
+    title.appendChild(document.createTextNode(nodeName));
 }
 
 function showFirstAndLastAccess(site){
@@ -138,16 +142,19 @@ function showSitePref(nodeName){
 }
 
 function showConnectionsList(nodeName,nodeList){
-    var htmlList = "";
+    var htmlList = elem('ul');
     var numConnectedSites = 0;
     for ( var key in nodeList ){
         if ( key != nodeName ){ // connected site
-            htmlList = htmlList + "<li>" + key + "</li>";
+            htmlList.appendChild(elem('li', {}, key));
             numConnectedSites++;
         }
     }
     document.querySelector(".num-connected-sites").textContent = numConnectedSites + " " + singularOrPluralNoun(numConnectedSites,"site");
-    document.querySelector(".connections-list ul").textContent = htmlList;
+
+    var list = document.querySelector(".connections-list");
+    list.removeChild(list.querySelector('ul'));
+    list.appendChild(htmlList);
 }
 
 function showServerLocation(serverData){
