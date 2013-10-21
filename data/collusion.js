@@ -12,7 +12,8 @@ try{
     userSettings = {};
 }
 // FIXME: Read this from config file
-var uploadServer = 'http://collusiondb.mofostaging.net/shareData';
+//var uploadServer = 'http://collusiondb.mofostaging.net/shareData';
+var uploadServer = 'http://collusiondb.mofoprod.net/shareData';
 var isRobot = false; // Used for spidering the web only
 var uploadTimer;
 var saveTimer;
