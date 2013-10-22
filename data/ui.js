@@ -43,7 +43,7 @@ function dropdownGroup(btnGroup, callback){
 
 // Default selections
 document.querySelector('a[data-value=' + (localStorage.currentFilter || 'daily') + ']').dataset.selected = true;
-document.querySelector(".filter-display header").innerHTML = document.querySelector(".btn_group.session").querySelector("[data-selected]").innerHTML;
+document.querySelector(".filter-display header").textContent = document.querySelector(".btn_group.session").querySelector("[data-selected]").textContent;
 
 /* Bind click event listener to each of the btn_group memebers */
 var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
@@ -61,7 +61,7 @@ btnGroupArray.forEach(function(btnGroup){
             case 'daily':
             case 'weekly':
                 aggregate.switchFilter(val);
-                document.querySelector(".filter-display header").innerHTML = btnGroup.querySelector("[data-selected]").innerHTML;
+                document.querySelector(".filter-display header").textContent = btnGroup.querySelector("[data-selected]").textContent;
                 break;
             default:
                 console.log("selected val=" + val);
@@ -118,14 +118,14 @@ function toggleBtnOnEffect(toggleBtn){
     toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
     toggleBtn.querySelector(".switch").classList.add("checked");
     toggleBtn.querySelector(".on-off-text").classList.add("checked");
-    toggleBtn.querySelector(".on-off-text").innerHTML = "ON";
+    toggleBtn.querySelector(".on-off-text").textContent = "ON";
 }
 
 function toggleBtnOffEffect(toggleBtn){
     toggleBtn.querySelector(".toggle-btn-innner").classList.remove("checked");
     toggleBtn.querySelector(".switch").classList.remove("checked");
     toggleBtn.querySelector(".on-off-text").classList.remove("checked");
-    toggleBtn.querySelector(".on-off-text").innerHTML = "OFF";
+    toggleBtn.querySelector(".on-off-text").textContent = "OFF";
 }
 
 function downloadAsJson(data, defaultFilename){
@@ -387,10 +387,10 @@ function toggleLegendSection(eventTarget,legendElm){
     var elmToToggle = legendElm.querySelector(".legend-controls");
     if ( elmToToggle.classList.contains("hidden") ){
         elmToToggle.classList.remove("hidden");
-        eventTarget.innerHTML = "Hide";
+        eventTarget.textContent = "Hide";
     }else{
         elmToToggle.classList.add("hidden");
-        eventTarget.innerHTML = "Show";
+        eventTarget.textContent = "Show";
     }
 }
 
