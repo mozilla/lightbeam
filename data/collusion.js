@@ -213,78 +213,23 @@ function dateAsKey(timestamp){
 *   Upload data
 */
 
+
 function startSharing(askForConfirmation,callback){
     if ( askForConfirmation ){
-        dialog( {   "name": dialogNames.startUploadData,
-                    "title": "Upload Data", 
-                    "message": 
-                        '<p>You are about to start uploading de-identified information to our shared tracker database. ' +
-                        'Your information will continue to be uploaded  until you turn off sharing. </p>' +
-                        '<p>To learn more about uploading data, how it is de-identified, please read <a class="toggle-pp">the Lightbeam Privcy Policy</a>.</p>' + 
-                        // Lightbeam Privacy Policy.
-                        '<div class="privacy-policy collapsed">' +
-                            '<header><b>Lightbeam Privacy</b></header>' +
-                            '<div>We care about your privacy. Lightbeam is a browser add-on that collects and helps you visualize third party requests on any site you visit. If you choose to send Lightbeam data to Mozilla (that’s us), our privacy policy describes how we handle that data. </div>' +
-                            '<br/>' + 
-                            '<header><b>Things you should know</b></header>' +
-                            '<ul>' +
-                                '<li>' +
-                                    'After you install Lightbeam, the add-on collects data to help you visualize third party requests when you visit sites.' + 
-                                    '<ul>' +
-                                        '<li>When you visit a site and that site contacts a third party, Lightbeam collects the following type of data: URLs of the visited sites and third parties, the existence of cookies, and a rough timestamp of when the site was visited. To see a complete list, please visit <a href="https://github.com/mozilla/lightbeam/blob/master/doc/data_format.v1.1.md" target="_blank" >here</a>.</li>' + 
-                                    '</ul>' +
-                                '</li>' +
-                                '<li>By default, data collected by Lightbeam remains in your browser and is not sent to us. </li> ' +
-                                '<li>' +
-                                    'You can choose to contribute your Lightbeam data with us. Information from Lightbeam can help us and others to understand third party relationships on the web and promote further research in the field of online tracking and privacy.' + 
-                                    '<ul>' +
-                                        '<li>If you do contribute Lightbeam data with us, your browser will send us your de-identified Lightbeam data (you can see a list of the kind of data involved <a href="https://github.com/mozilla/lightbeam/blob/master/doc/data_format.v1.1.md" target="_blank">here</a>). We will post your data along with data from others in an aggregated and open database. Users will benefit by making more informed decisions based on the collective information and patterns about trackers.</li>' + 
-                                        '<li>Uninstalling Lightbeam prevents collection of any further Lightbeam data and will delete the data stored locally in your browser.</li>' + 
-                                    '</ul>' +
-                                '</li> ' +
-                            '</ul>' +
-                        '</div>' +
-                        // Lightbeam Privacy Policy ends
-                        '<br />' +
-                        '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
-                    "imageUrl": "image/collusion_popup_warningsharing.png"
-            },
-            function(confirmed){
-                if ( confirmed ){
-                    localStorage.lastUpload = Date.now();
-                    localStorage.userHasOptedIntoSharing = true;
-                    sharingData();
-                }
-                callback(confirmed);
+        askForDataSharingConfirmationDialog( function(confirmed){
+            if ( confirmed ){
+                localStorage.lastUpload = Date.now();
+                localStorage.userHasOptedIntoSharing = true;
+                sharingData();
             }
-        );
+            callback(confirmed);        
+        });
     }else{
         localStorage.lastUpload = Date.now();
         localStorage.userHasOptedIntoSharing = true;
         sharingData();
         callback(true);
     }
-}
-
-function stopSharing(callback){
-    dialog( {   "name": dialogNames.stopUploadData,
-                "title": "Stop Uploading Data", 
-                "message": 
-                    '<p>You are about to stop sharing information with our shared tracker database.</p>' +
-                    '<p>By clicking OK you will no longer be uploading information.</p>',
-                "imageUrl": "image/collusion_popup_stopsharing2.png"
-            },
-            function(confirmed){
-                if ( confirmed ){
-                    localStorage.userHasOptedIntoSharing = false;
-                    if (uploadTimer){
-                        clearTimeout(uploadTimer);
-                        uploadTimer = null;
-                    }
-                }
-                callback(confirmed);
-            }
-    );
 }
 
 function sharingData(){
@@ -382,23 +327,3 @@ function updateStatsBar(){
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
 
-/******************************************
-*  Prompt to save data from older Collusion format
-*/
-function promptToSaveOldData(data){
-    dialog({
-        "type": "message",
-        "name": dialogNames.saveOldData,
-        "dnsPrompt": false,
-        "title": "Save Data from Earlier Format",
-        "message": "<p>Lightbeam has been updated with a new data format.</p>" + 
-                   "<p>The old data you have stored from the beta (Collusion) is no longer supported and will be deleted.</p>" + 
-                   "<p>If you would like to save a copy of the old data before it is deleted, press OK. If you press Cancel, the old data will be gone.</p>"
-    },
-    function(confirmed){
-        if (confirmed){
-            downloadAsJson(data, 'oldformatCollusionData.json');
-        }
-    });
-
-}
