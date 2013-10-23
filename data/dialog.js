@@ -201,9 +201,9 @@ function askForDataSharingConfirmationDialog(callback){
     dialog( {   "name": dialogNames.startUploadData,
             "title": "Upload Data", 
             "message": 
-                '<p>You are about to start uploading de-identified information to our shared tracker database. ' +
+                '<p>You are about to start uploading data to the Lightbeam server. Your data will continue to be uploaded periodically until you turn off sharing.' +
                 'Your information will continue to be uploaded  until you turn off sharing. </p>' +
-                '<p>To learn more about uploading data, how it is de-identified, please read <a class="toggle-pp">the Lightbeam Privcy Policy</a>.</p>' + 
+                '<p>or more information about the data we upload, how we take steps to minimize risk of re-identification, and what Mozilla\'s privacy policies are, please read the <a class="toggle-pp">the Lightbeam Privcy Policy</a>.</p>' + 
                 // Lightbeam Privacy Policy.
                 '<div class="privacy-policy collapsed">' +
                     '<header><b>Lightbeam Privacy</b></header>' +
@@ -239,8 +239,8 @@ function stopSharingDialog(callback){
     dialog( {   "name": dialogNames.stopUploadData,
                 "title": "Stop Uploading Data", 
                 "message": 
-                    '<p>You are about to stop sharing information with our shared tracker database.</p>' +
-                    '<p>By clicking OK you will no longer be uploading information.</p>',
+                    '<p>You are about to stop sharing data with the Lightbeam server.</p>' +
+                    '<p>By clicking OK you will no longer be uploading data.</p>',
                 "imageUrl": "image/collusion_popup_stopsharing2.png"
             },
             function(confirmed){
@@ -298,8 +298,8 @@ function confirmBlockSitesDialog(callback){
     dialog( {   "name" : dialogNames.blockSites,
                 "title": "Block Sites",
                 "message":  "<p><b>Warning:</b></p> " +
-                            "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" +
-                            "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>",
+                            "<p>Blocking sites will prevent any and all content from being loaded from selected domains, for example: [example.com, example.net] and all of their subdomains [mail.example.com, news.example.net etc.]. </p>" +
+                            "<p>This can prevent some sites from working and degrade your internet experience. Please use this feature carefully. </p>",
                 "imageUrl": "image/collusion_popup_blocked.png"
             },
             callback
@@ -323,7 +323,7 @@ function confirmResetDataDialog(callback){
     dialog( {
         "name": dialogNames.resetData,
         "title": "Reset Data",
-        "message":  "<p>Pressing OK will delete all Lightbeam information including connection history, user preferences, unique token, block sites list etc.</p>" + 
+        "message":  "<p>Pressing OK will delete all Lightbeam information including connection history, user preferences, block sites list etc.</p>" + 
                     "<p>Your browser will be returned to the state of a fresh install of Lightbeam.</p>",
         "imageUrl": "image/collusion_popup_warningreset.png"
     },callback
@@ -335,9 +335,9 @@ function showPromptToShareDialog(callback){
         "name": dialogNames.promptToShare,
         "dnsPrompt": true,
         "title": "Help the Ecosystem by Sharing",
-        "message":  "<p>As a user of Lightbeam Beta, you can help contribute to build our data ecosystem.</p>" + 
+        "message":  "<p>As a user of Lightbeam, you can help contribute to build our data ecosystem.</p>" + 
                     "<p>By sharing your data you can help us and others to understand third-party relationships on the web and promote further research in the field of online tracking and privacy.</p>  "+
-                    "<p>Do you want to upload your de-identified data to the public database now?</p>",
+                    "<p>Do you want to upload your data to the <a href='http://mozilla.org/en-US/lightbeam/database/'>public database</a> now?</p>",
         "imageUrl": "image/collusion_popup_startsharing.png"
     },
     callback
@@ -347,7 +347,10 @@ function showPromptToShareDialog(callback){
 
 function showDialog(name){
     if (Object.keys(allDialogs).indexOf(name) > -1){
+        var tempPref = localStorage.dnsDialogs;
+        localStorage.dnsDialogs = '[]';
         allDialogs[name](function(){});
+        localStorage.dnsDialogs = tempPref;
     }else{
         console.log('Use: showDialog("name") where name is one of');
         Object.keys(allDialogs).forEach(function(name){
