@@ -93,7 +93,6 @@ a:hover{
 
 .logo{
     width: 150px;
-    margin-top: -18px;
     margin-left: -6px;
 }
 
@@ -507,6 +506,19 @@ a:hover{
 
 .info .holder section ul{
     list-style-type: none;
+}
+
+.info .holder section ul.bullet-form{
+    list-style-type: circle;
+}
+
+.info .holder section ul.bullet-form li{
+    list-style-type: disc;
+    margin-left: 15px;
+}
+
+.privacy-policy header{
+    margin-top: 15px;
 }
 
 .info .holder section img{
