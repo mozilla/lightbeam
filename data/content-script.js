@@ -43,7 +43,7 @@ self.port.on('init', function(collusionToken){
     }
 
     // FIXME: temporary solution for now.  need to clean up the code
-    unsafeWindow.showPromptToShareDialog();
+    unsafeWindow.showPromptToShare();
 });
 
 
@@ -59,20 +59,9 @@ self.port.on("passTempConnections", function(connReceived){
     unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
 });
 
-self.port.on("private-browsing", function() {
-    unsafeWindow.dialog( {
-            "type": "alert",
-            "name": unsafeWindow.dialogNames.privateBrowsing,
-            "dnsPrompt": true,
-            "title": "Private Browsing",
-            "message":  "<p>You have one or more private browsing windows open.</p>" +
-                        "<p>Connections made in private browsing windows will be visualized in Lightbeam but that data is neither stored locally nor will it ever be shared, even if sharing is enabled. </p>" +
-                        "<p> Information gathered in private browsing mode will be deleted whenever Lightbeam is restarted, and is not collected at all when Lightbeam is not open..</p>",
-            "imageUrl": "image/collusion_popup_privacy.png"
-        },
-        function(confirmed){}
-    );
-})
+self.port.on("promptToSaveOldData", function(data){
+    unsafeWindow.promptToSaveOldDataDialog(data);
+});
 
 function getAllConnections(){
     var allConnectionsAsArray = [];
@@ -85,6 +74,10 @@ function getAllConnections(){
     console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
     return allConnectionsAsArray;
 }
+
+self.port.on("private-browsing", function() {
+    unsafeWindow.informUserOfUnsafeWindowsDialog();
+});
 
 
 unsafeWindow.addon = self.port;

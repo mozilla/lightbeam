@@ -43,7 +43,7 @@ function dropdownGroup(btnGroup, callback){
 
 // Default selections
 document.querySelector('a[data-value=' + (localStorage.currentFilter || 'daily') + ']').dataset.selected = true;
-document.querySelector(".filter-display header").innerHTML = document.querySelector(".btn_group.session").querySelector("[data-selected]").innerHTML;
+document.querySelector(".filter-display header").textContent = document.querySelector(".btn_group.session").querySelector("[data-selected]").textContent;
 
 /* Bind click event listener to each of the btn_group memebers */
 var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
@@ -61,7 +61,7 @@ btnGroupArray.forEach(function(btnGroup){
             case 'daily':
             case 'weekly':
                 aggregate.switchFilter(val);
-                document.querySelector(".filter-display header").innerHTML = btnGroup.querySelector("[data-selected]").innerHTML;
+                document.querySelector(".filter-display header").textContent = btnGroup.querySelector("[data-selected]").textContent;
                 break;
             default:
                 console.log("selected val=" + val);
@@ -97,7 +97,7 @@ function confirmStartSharing(askForConfirmation,elmClicked){
 }
 
 function confirmStopSharing(elmClicked){
-     stopSharing(function(confirmed){
+     stopSharingDialog(function(confirmed){
         if ( confirmed ){
             toggleBtnOffEffect( document.querySelector(".share-btn") );
         }else{
@@ -118,52 +118,52 @@ function toggleBtnOnEffect(toggleBtn){
     toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
     toggleBtn.querySelector(".switch").classList.add("checked");
     toggleBtn.querySelector(".on-off-text").classList.add("checked");
-    toggleBtn.querySelector(".on-off-text").innerHTML = "ON";
+    toggleBtn.querySelector(".on-off-text").textContent = "ON";
 }
 
 function toggleBtnOffEffect(toggleBtn){
     toggleBtn.querySelector(".toggle-btn-innner").classList.remove("checked");
     toggleBtn.querySelector(".switch").classList.remove("checked");
     toggleBtn.querySelector(".on-off-text").classList.remove("checked");
-    toggleBtn.querySelector(".on-off-text").innerHTML = "OFF";
+    toggleBtn.querySelector(".on-off-text").textContent = "OFF";
+}
+
+function downloadAsJson(data, defaultFilename){
+    var file = new Blob([data], {type: 'application/json'});
+    var reader = new FileReader();
+    var a = document.createElement('a');
+    reader.onloadend = function(){
+        a.href = reader.result;
+        a.download = defaultFilename;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+    }
+    reader.readAsDataURL(file);
 }
 
 
 document.querySelector(".download").addEventListener('click', function(evt) {
     // console.log('received export data');
-    var file = new Blob([exportFormat(allConnections)], {type: 'application/json'});
-    var reader = new FileReader();
-    var a = document.createElement('a');
-    reader.onloadend = function(){
-        a.href = reader.result;
-        a.download = 'collusionData.json';
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-    };
-    reader.readAsDataURL(file);
+    downloadAsJson([exportFormat(allConnections)], 'collusionData.json');
     evt.preventDefault();
     // window.open('data:application/json,' + exportFormat(allConnections));
 });
 
+
+
 document.querySelector('.reset-data').addEventListener('click', function(){
-    dialog( {   "name": dialogNames.resetData,
-                "title": "Reset Data",
-                "message":  "<p>Pressing OK will delete all Lightbeam information including connection history, user preferences, unique token, block sites list etc.</p>" + 
-                            "<p>Your browser will be returned to the state of a fresh install of Lightbeam.</p>",
-                "imageUrl": "image/collusion_popup_warningreset.png"
-            },function(confirmed){
-                if ( confirmed ){
-                    // currentVisualization.emit('remove');
-                    allConnections = [];
-                    addon.emit('reset');
-                    aggregate.emit('reset');
-                    userSettings = {};
-                    localStorage.clear();
-                    location.reload(); // reload page
-                }
-            }
-    );
+    confirmResetDataDialog(function(confirmed){
+        if ( confirmed ){
+            // currentVisualization.emit('remove');
+            allConnections = [];
+            addon.emit('reset');
+            aggregate.emit('reset');
+            userSettings = {};
+            localStorage.clear();
+            location.reload(); // reload page
+        }
+    });
 });
 
 // function handleDisclosureToggle(elem){
@@ -351,7 +351,6 @@ function exportFormat(connections, roundOff){
     if ( roundOff ){
         tempConnections = roundOffTimestamp(tempConnections);
     }
-    console.log('isRobot: %s', isRobot);
     var exportSet = {
         format: 'Collusion Save File',
         version: '1.1',
@@ -384,10 +383,10 @@ function toggleLegendSection(eventTarget,legendElm){
     var elmToToggle = legendElm.querySelector(".legend-controls");
     if ( elmToToggle.classList.contains("hidden") ){
         elmToToggle.classList.remove("hidden");
-        eventTarget.innerHTML = "Hide";
+        eventTarget.textContent = "Hide";
     }else{
         elmToToggle.classList.add("hidden");
-        eventTarget.innerHTML = "Show";
+        eventTarget.textContent = "Show";
     }
 }
 
@@ -427,7 +426,7 @@ function selectedNodeEffect(name){
 }
 
 function connectedNodeEffect(name){
-    console.log(name);
+    // console.log(name);
     if ( currentVisualization.name != "list" ){
         var glow = document.querySelector(".connected-glow");
         while( glow ){
@@ -518,6 +517,8 @@ function resetHighlightedRow(){
 *   Special dialog handler for promptToShareDataDialog
 *   FIXME: temporary solution for now.  need to clean up the code a bit.
 */
+
+
 const promptToShareDialogShowLimit = 3;
 function showPromptToShareDialog(){
     var showTimes, today, shownToday, belowLimit;
@@ -529,23 +530,13 @@ function showPromptToShareDialog(){
     if ( localStorage.numLaunch > 1 && !doNotShowDialog(dialogNames.promptToShare) && !shownToday && belowLimit){
         showTimes.push(today);
         localStorage.promptToShareDialogShowTimes = JSON.stringify(showTimes);
-        dialog( {
-                "name": dialogNames.promptToShare,
-                "dnsPrompt": true,
-                "title": "Help the Ecosystem by Sharing",
-                "message":  "<p>As a user of Lightbeam Beta, you can help contribute to build our data ecosystem.</p>" + 
-                            "<p>By sharing your data you can help us and others to understand third-party relationships on the web and promote further research in the field of online tracking and privacy.</p>  "+
-                            "<p>Do you want to upload your de-identified data to the public database now?</p>",
-                "imageUrl": "image/collusion_popup_startsharing.png"
-            },
-            function(confirmed){
-                if( confirmed ){
-                    var sharingToggle = document.querySelector(".toggle-btn.share-btn input");
-                    confirmStartSharing(false,sharingToggle);
-                    disablePromptToShareDataDialog();
-                }
+        showPromptToShareDialog(function(confirmed){
+            if( confirmed ){
+                var sharingToggle = document.querySelector(".toggle-btn.share-btn input");
+                confirmStartSharing(false,sharingToggle);
+                disablePromptToShareDataDialog();
             }
-        );
+        });
     }
 }
 

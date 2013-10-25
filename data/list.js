@@ -43,7 +43,7 @@ function onUpdate(){
     if (newNodes.length <= 0) {
         return;
     }
-    document.getElementById('refresh-data-link').innerHTML = 'Click here to refresh list...';
+    document.getElementById('refresh-data-link').textContent = 'Click here to refresh list...';
     document.getElementById('refresh-data-row').classList.add('show');
     return;
 }
@@ -195,7 +195,7 @@ function updateNumTotalRowsLabel(){
     var numTotal = getAllRows().length;
     var labels = document.querySelectorAll(".num-total");
     for ( var i=0; i<labels.length; i++){
-        labels[i].innerHTML = numTotal;
+        labels[i].textContent = numTotal;
     }
 }
 
@@ -204,7 +204,7 @@ function updateRowSelectedLabel(){
     var selectedLabel = document.querySelector(".some-selected");
     var noneSelectedLabel = document.querySelector(".none-selected");
     if ( numSelected > 0 ){
-        selectedLabel.querySelector(".num-selected").innerHTML = numSelected;
+        selectedLabel.querySelector(".num-selected").textContent = numSelected;
         selectedLabel.classList.remove("hidden");
         noneSelectedLabel.classList.add("hidden");
     }else{
@@ -498,37 +498,24 @@ if (localStorage.listViewHideRows){
 }
 
 
+
 var listStageStackClickHandler = function(event){
     var target = event.target;
     if(target.mozMatchesSelector('label[for=block-pref], label[for=block-pref] *') ){
-        dialog( {   "name" : dialogNames.blockSites,
-                    "title": "Block Sites",
-                    "message":  "<p><b>Warning:</b></p> " +
-                                "<p>Blocking sites will prevent any and all content from being loaded from these domains: [example.com, example.net] and all subdomains [mail.example.com, news.example.net etc.]. </p>" +
-                                "<p>This can prevent some sites from working and degrade your interenet experience. Please use this feature carefully. </p>",
-                    "imageUrl": "image/collusion_popup_blocked.png"
-                },function(confirmed){
-                    if ( confirmed ){
-                        setPreferences('block');
-                    }
-                }
-        );
+        confirmBlockSitesDialog(function(confirmed){
+            if ( confirmed ){
+                setPreferences('block');
+            }
+        });
     }else if (target.mozMatchesSelector('label[for=hide-pref], label[for=hide-pref] *') ){
         if ( doNotShowDialog(dialogNames.hideSites) ){
             setPreferences('hide');
         }else{
-            dialog( {   "name": dialogNames.hideSites,
-                        "dnsPrompt": true,
-                        "title": "Hide Sites",
-                        "message":  "<p>These sites will not be shown in Lightbeam visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" +
-                                    "<p>You can use this to ignore trusted sites from the data.</p>",
-                        "imageUrl": "image/collusion_popup_hidden.png"
-                    },function(confirmed){
-                        if ( confirmed ){
-                            setPreferences('hide');
-                        }
-                    }
-            );
+            confirmHideSitesDialog(function(confirmed){
+                if ( confirmed ){
+                    setPreferences('hide');
+                }
+            });
         }
     }else if (target.mozMatchesSelector('label[for=watch-pref], label[for=watch-pref] *')){
         setPreferences('watch');

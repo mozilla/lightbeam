@@ -24,7 +24,7 @@ document.querySelector('#content').addEventListener('click', function(event){
 },false);
 
 document.querySelector(".connections-list ul").addEventListener("click", function(event){
-    var name = event.target.innerHTML;
+    var name = event.target.textContent;
     var previouslySelected = document.querySelector(".connections-list ul li[data-selected]");
     if ( previouslySelected ){
         document.querySelector(".connections-list ul li[data-selected]").removeAttribute("data-selected");
@@ -33,16 +33,20 @@ document.querySelector(".connections-list ul").addEventListener("click", functio
     resetAllGlow("connected");
     connectedNodeEffect(name);
 });
-
+var currentRequest;
 // get server info from http://freegeoip.net
 function getServerInfo(nodeName, callback){
     var info = parseUri(nodeName); // uses Steven Levithan's parseUri 1.2.2
     var jsonURL = "http://freegeoip.net/json/" + info.host;
-    var xmlHttp = null;
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", jsonURL, false );
-    xmlHttp.send( null );
-    callback( (xmlHttp.status == 200) ? JSON.parse(xmlHttp.responseText) : false );
+    var request = new XMLHttpRequest();
+    currentRequest = info.host;
+    request.open( "GET", jsonURL, true );
+    request.onload = function(){
+        if (currentRequest === info.host){
+            callback( (request.status === 200) ? JSON.parse(request.responseText) : false );
+        }
+    }
+    request.send( null );
 }
 
 // reset map
@@ -108,8 +112,12 @@ function updateInfo(nodeName){
 }
 
 function showFavIcon(nodeName){
-    var favicon = "<img src='http://"+ nodeName +"/favicon.ico' class='favicon'>";
-    document.querySelector(".holder .title").innerHTML = favicon+nodeName;
+    var title = document.querySelector('.holder .title');
+    while(title.childNodes.length){
+        title.removeChild(title.firstChild);
+    }
+    title.appendChild(elem(nodeName, {src: 'http://' + nodeName + '/favicon.ico', 'class': 'favicon'}));
+    title.appendChild(document.createTextNode(nodeName));
 }
 
 function showFirstAndLastAccess(site){
@@ -126,7 +134,7 @@ function showSitePref(nodeName){
         prefTag.querySelector("img").src = "icons/collusion_icon_"+sitePref+".png";
         prefTag.querySelector("span").className = "";
         prefTag.querySelector("span").classList.add(sitePref + "-text");
-        prefTag.querySelector("span").innerHTML = (sitePref=="hide") ? "hidden" : sitePref + "ed";
+        prefTag.querySelector("span").textContent = (sitePref=="hide") ? "hidden" : sitePref + "ed";
         prefTag.classList.remove("hidden");
     }else{
         prefTag.classList.add("hidden");
@@ -134,27 +142,30 @@ function showSitePref(nodeName){
 }
 
 function showConnectionsList(nodeName,nodeList){
-    var htmlList = "";
+    var htmlList = elem('ul');
     var numConnectedSites = 0;
     for ( var key in nodeList ){
         if ( key != nodeName ){ // connected site
-            htmlList = htmlList + "<li>" + key + "</li>";
+            htmlList.appendChild(elem('li', {}, key));
             numConnectedSites++;
         }
     }
     document.querySelector(".num-connected-sites").textContent = numConnectedSites + " " + singularOrPluralNoun(numConnectedSites,"site");
-    document.querySelector(".connections-list ul").innerHTML = htmlList;
+
+    var list = document.querySelector(".connections-list");
+    list.removeChild(list.querySelector('ul'));
+    list.appendChild(htmlList);
 }
 
 function showServerLocation(serverData){
     if ( serverData == false || serverData.country_name === "Reserved" ){
-        document.querySelector("#country").innerHTML = "(Unable to find server location)";
+        document.querySelector("#country").textContent = "(Unable to find server location)";
         resetMap();
     }else{
         // update country info only when it is different from the current one
-        if ( serverData.country_name !==  document.querySelector("#country").innerHTML ){
+        if ( serverData.country_name !==  document.querySelector("#country").textContent ){
             resetMap();
-            document.querySelector("#country").innerHTML = serverData.country_name;
+            document.querySelector("#country").textContent = serverData.country_name;
             updateMap(serverData.country_code.toLowerCase());
         }
     }

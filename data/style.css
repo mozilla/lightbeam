@@ -91,18 +91,9 @@ a:hover{
     cursor: pointer;
 }
 
-.collusion-icon{
-    border:1px solid #5ABED2;
-    width: 35px;
-    height: 35px;
-    border-radius: 5px;
-    float: left;
-}
-
 .logo{
-    float: left;
-    width: 85px;
-    margin-left: 10px;
+    width: 150px;
+    margin-left: -6px;
 }
 
 .hidden{
@@ -510,11 +501,24 @@ a:hover{
 }
 
 .info .holder section p{
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
 .info .holder section ul{
     list-style-type: none;
+}
+
+.info .holder section ul.bullet-form{
+    list-style-type: circle;
+}
+
+.info .holder section ul.bullet-form li{
+    list-style-type: disc;
+    margin-left: 15px;
+}
+
+.privacy-policy header{
+    margin-top: 15px;
 }
 
 .info .holder section img{

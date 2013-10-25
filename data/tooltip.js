@@ -11,7 +11,7 @@ function showTooltip(event){
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
     // console.error(event, event.target, event.target.dataset);
-    tooltip.innerHTML = event.target.getAttribute(["data-name"]);
+    tooltip.textContent = event.target.getAttribute(["data-name"]);
     var rect = event.target.querySelector(":last-child").getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
     tooltip.style.top = (rect.top - 40) + 'px';
@@ -28,7 +28,7 @@ function d3ShowTooltip(node, idx){
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
     // console.error(event, event.target, event.target.dataset);
-    tooltip.innerHTML = node.name;
+    tooltip.textContent = node.name;
     var shapeNode = this.querySelector(".site") || this.querySelector("[data-name]"); // look for "site"(circle) node or "tracker(triangle)" node
     var rect = shapeNode.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
@@ -45,7 +45,7 @@ function listShowTooltip(event){
     tooltip.style.left = '-1000px';
     tooltip.style.display = 'inline-block';
     // console.error(event, event.target, event.target.dataset);
-    tooltip.innerHTML = "go to " + event.target.parentElement.getAttribute(["data-sort-key"]) + "'s site list";
+    tooltip.textContent = "go to " + event.target.parentElement.getAttribute(["data-sort-key"]) + "'s site list";
     var rect = event.target.getClientRects()[0];
     var tooltipWidth = tooltip.offsetWidth;
     tooltip.style.top = (rect.top - 40) + 'px';
@@ -59,7 +59,7 @@ function setTooltipTimeout(){
     if (tooltipTimer){
         clearTimeout(tooltipTimer);
     }
-    tooltipTimer = setTimeout(timeoutTooltip, 2000);
+    tooltipTimer = setTimeout(function(){timeoutTooltip();}, 2000);
 }
 
 function timeoutTooltip(){

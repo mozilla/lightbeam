@@ -383,7 +383,7 @@ function drawTimerHand(time){
 function updateTime(){
     drawTimerHand();
     drawText();
-    clockTimer = setTimeout(updateTime, 1000);
+    clockTimer = setTimeout(function(){updateTime();}, 1000);
 }
 
 
