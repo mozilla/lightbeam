@@ -1,6 +1,6 @@
 # Collusion README
 
-This is an add-on for Firefox that helps to visualize sites that may be tracking you around the internet. The add-on is available from https://addons.mozilla.org/en-US/firefox/addon/collusion/.
+This is an add-on for Firefox that helps to visualize sites that may be tracking you around the internet. The add-on is available from https://addons.mozilla.org/en-US/firefox/addon/lightbeam/.
 
 
 ## Prerequisites
