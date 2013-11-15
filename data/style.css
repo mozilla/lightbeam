@@ -968,7 +968,7 @@ text {
 }
 
 [data-pref=watch] .preferences{
-    background-image: url(icons/collusion_icon_watch.png);
+    background-image: url(icons/lightbeam_icon_watch.png);
 }
 
 [data-pref=block]{
@@ -976,7 +976,7 @@ text {
 }
 
 [data-pref=block] .preferences{
-    background-image: url(icons/collusion_icon_block.png);
+    background-image: url(icons/lightbeam_icon_block.png);
 }
 
 [data-pref=hide]{
@@ -984,7 +984,7 @@ text {
 }
 
 [data-pref=hide] .preferences{
-    background-image: url(icons/collusion_icon_hide.png);
+    background-image: url(icons/lightbeam_icon_hide.png);
 }
 
 .hide-hidden-rows [data-pref=hide]{
@@ -1257,7 +1257,7 @@ text {
 .list-footer input[name=pref-options] + label .radio-dot{
     width: 15px;
     height: 15px;
-    background-image: url(image/Collusion_radio_off.png);
+    background-image: url(image/Lightbeam_radio_off.png);
     background-repeat: no-repeat;
     background-size: 15px 15px;
     display: inline-block;
@@ -1268,7 +1268,7 @@ text {
 }
 
 .list-footer input[name=pref-options]:checked + label .radio-dot{
-    background-image: url(image/Collusion_radio_on.png);
+    background-image: url(image/Lightbeam_radio_on.png);
 }
 
 tr.refresh {

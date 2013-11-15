@@ -19,7 +19,7 @@ document.addEventListener("keypress", function(event){
     }
 });
 
-/* Collusion Logo Click handler ====================== */
+/* Lightbeam Logo Click handler ====================== */
 document.querySelector(".main header").addEventListener("click",function(){
     location.reload();
 });
@@ -145,7 +145,7 @@ function downloadAsJson(data, defaultFilename){
 
 document.querySelector(".download").addEventListener('click', function(evt) {
     // console.log('received export data');
-    downloadAsJson([exportFormat(allConnections)], 'collusionData.json');
+    downloadAsJson([exportFormat(allConnections)], 'lightbeamData.json');
     evt.preventDefault();
     // window.open('data:application/json,' + exportFormat(allConnections));
 });
@@ -352,7 +352,7 @@ function exportFormat(connections, roundOff){
         tempConnections = roundOffTimestamp(tempConnections);
     }
     var exportSet = {
-        format: 'Collusion Save File',
+        format: 'Lightbeam Save File',
         version: '1.1',
         connections: tempConnections
     }

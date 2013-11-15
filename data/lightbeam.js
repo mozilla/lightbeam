@@ -98,7 +98,7 @@ window.addEventListener('load', function(evt){
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
-    saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('collusion load() ended');
+    saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('lightbeam load() ended');
 });
 
 

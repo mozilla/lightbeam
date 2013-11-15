@@ -258,7 +258,7 @@ function getNodes(filter){
 
 function nodeToRow(node){
     var settings = userSettings[node.name] || (node.nodeType == 'blocked' ? 'block' : '');
-    var iconUrl = node.nodeType === 'blocked'? 'icons/collusion_icon_empty_list.png' : 'icons/collusion_icon_list.png';
+    var iconUrl = node.nodeType === 'blocked'? 'icons/lightbeam_icon_empty_list.png' : 'icons/lightbeam_icon_list.png';
     var listIcon = elem('img', {'src': iconUrl, 'class': node.nodeType === 'blocked'? 'no-update' :'update-table', 'role': 'gridcell'});
     var row = elem('tr', {
             'class': 'node ' + node.nodeType,
@@ -283,7 +283,7 @@ function nodeToRow(node){
         listIcon.addEventListener("mouseenter",tooltip.addTooltip);
         listIcon.addEventListener("mouseleave",tooltip.hide);
         row.addEventListener("mouseenter",function(){
-            row.childNodes[3].firstChild.setAttribute("src", "image/collusion_icon_list_blue.png");
+            row.childNodes[3].firstChild.setAttribute("src", "image/lightbeam_icon_list_blue.png");
         });
         row.addEventListener("mouseleave",function(){
             row.childNodes[3].firstChild.setAttribute("src", iconUrl);
