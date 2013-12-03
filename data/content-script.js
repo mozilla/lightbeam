@@ -31,9 +31,9 @@ self.port.on('update-blocklist-all', function(domains) {
     }
 });
 
-self.port.on('init', function(collusionToken) {
+self.port.on('init', function(lightbeamToken) {
     // console.error('content-script::init()');
-    // localStorage.collusionToken = collusionToken;
+    // localStorage.lightbeamToken = lightbeamToken;
 
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.allConnections = getAllConnections();

@@ -207,7 +207,7 @@ function askForDataSharingConfirmationDialog(callback){
                 // Lightbeam Privacy Policy ends
                 '<br />' +
                 '<p>By clicking OK, you are agreeing to the data practices in our privacy notice.</p>',
-            "imageUrl": "image/collusion_popup_warningsharing.png"
+            "imageUrl": "image/lightbeam_popup_warningsharing.png"
     },
     callback);
 }
@@ -218,7 +218,7 @@ function stopSharingDialog(callback){
                 "message": 
                     '<p>You are about to stop sharing data with the Lightbeam server.</p>' +
                     '<p>By clicking OK you will no longer be uploading data.</p>',
-                "imageUrl": "image/collusion_popup_stopsharing2.png"
+                "imageUrl": "image/lightbeam_popup_stopsharing2.png"
             },
             function(confirmed){
                 if ( confirmed ){
@@ -242,7 +242,7 @@ function informUserOfUnsafeWindowsDialog(){
         "message": "<p>You have one or more private browsing windows open.</p>" +
                     "<p>Connections made in private browsing windows will be visualized in Lightbeam but that data is neither stored locally nor will it ever be shared, even if sharing is enabled. </p>" +
                     "<p> Information gathered in private browsing mode will be deleted whenever Lightbeam is restarted, and is not collected at all when Lightbeam is not open..</p>",
-        "imageUrl": "image/collusion_popup_privacy.png"
+        "imageUrl": "image/lightbeam_popup_privacy.png"
         },
         function(confirmed){}
     );
@@ -277,7 +277,7 @@ function confirmBlockSitesDialog(callback){
                 "message":  "<p><b>Warning:</b></p> " +
                             "<p>Blocking sites will prevent any and all content from being loaded from selected domains, for example: [example.com, example.net] and all of their subdomains [mail.example.com, news.example.net etc.]. </p>" +
                             "<p>This can prevent some sites from working and degrade your internet experience. Please use this feature carefully. </p>",
-                "imageUrl": "image/collusion_popup_blocked.png"
+                "imageUrl": "image/lightbeam_popup_blocked.png"
             },
             callback
     );
@@ -290,7 +290,7 @@ function confirmHideSitesDialog(callback){
         "title": "Hide Sites",
         "message":  "<p>These sites will not be shown in Lightbeam visualizations, including List View, unless you specifically toggle them back on with the Show Hidden Sites button.</p>" +
                     "<p>You can use this to ignore trusted sites from the data.</p>",
-        "imageUrl": "image/collusion_popup_hidden.png"
+        "imageUrl": "image/lightbeam_popup_hidden.png"
         },
         callback
     );
@@ -302,7 +302,7 @@ function confirmResetDataDialog(callback){
         "title": "Reset Data",
         "message":  "<p>Pressing OK will delete all Lightbeam information including connection history, user preferences, block sites list etc.</p>" + 
                     "<p>Your browser will be returned to the state of a fresh install of Lightbeam.</p>",
-        "imageUrl": "image/collusion_popup_warningreset.png"
+        "imageUrl": "image/lightbeam_popup_warningreset.png"
     },callback
     );
 }
@@ -315,7 +315,7 @@ function showPromptToShareDialog(callback){
         "message":  "<p>As a user of Lightbeam, you can help contribute to build our data ecosystem.</p>" + 
                     "<p>By sharing your data you can help us and others to understand third-party relationships on the web and promote further research in the field of online tracking and privacy.</p>  "+
                     "<p>Do you want to upload your data to the <a href='http://mozilla.org/en-US/lightbeam/database/'>public database</a> now?</p>",
-        "imageUrl": "image/collusion_popup_startsharing.png"
+        "imageUrl": "image/lightbeam_popup_startsharing.png"
     },
     callback
     );

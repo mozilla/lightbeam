@@ -131,7 +131,7 @@ function showSitePref(nodeName){
     var prefTag = document.querySelector(".pref-tag");
     var sitePref = userSettings[nodeName];
     if ( sitePref ){
-        prefTag.querySelector("img").src = "icons/collusion_icon_"+sitePref+".png";
+        prefTag.querySelector("img").src = "icons/lightbeam_icon_"+sitePref+".png";
         prefTag.querySelector("span").className = "";
         prefTag.querySelector("span").classList.add(sitePref + "-text");
         prefTag.querySelector("span").textContent = (sitePref=="hide") ? "hidden" : sitePref + "ed";

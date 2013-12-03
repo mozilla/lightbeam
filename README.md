@@ -1,4 +1,4 @@
-# Collusion README
+# Lightbeam for Firefox README
 
 This is an add-on for Firefox that helps to visualize sites that may be tracking you around the internet. The add-on is available from https://addons.mozilla.org/en-US/firefox/addon/lightbeam/.
 
@@ -17,16 +17,16 @@ First, [install][] the Mozilla Add-on SDK if you haven't already, and activate i
     cd addon-sdk
     source bin/activate
 
-Then, check out the Collusion repository and enter it (do this where you want the Collusion directory, not in the addon-sdk directory):
+Then, check out the Lightbeam repository and enter it (do this where you want the lightbeam directory, not in the addon-sdk directory):
 
-    git clone git://github.com/mozilla/collusion.git
-    cd collusion
+    git clone git://github.com/mozilla/lightbeam.git
+    cd lightbeam
 
 Finally, run:
 
     cfx run
 
-This will start Firefox with a temporary profile that has Collusion installed. Just click on the Collusion icon at the bottom-right of the browser window to open the web front-end.
+This will start Firefox with a temporary profile that has Lightbeam installed. Just click on the Lightbeam icon at the bottom-right of the browser window to open the web front-end.
 
 At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `cfx run` again.
 

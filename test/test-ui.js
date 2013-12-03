@@ -2,13 +2,13 @@
 
 const tabs = require('sdk/tabs');
 
-const { getCollusionTab, mainPage, openOrSwitchToOrClose } = require('ui');
+const { getLightbeamTab, mainPage, openOrSwitchToOrClose } = require('ui');
 
-exports.testGetCollusionTab = function(assert, done) {
+exports.testGetLightbeamTab = function(assert, done) {
   tabs.open({
     url: mainPage,
     onReady: function(tab) {
-      assert.equal(getCollusionTab(), tab, 'getCollusionTab found the correct tab');
+      assert.equal(getLightbeamTab(), tab, 'getLightbeamTab found the correct tab');
       tab.close(done);
     }
   });
@@ -23,28 +23,28 @@ exports.testOpenOrSwitchToOrClose = function(assert, done) {
     }
     tabs.removeListener('ready', onOpen);
 
-    assert.pass('the collusion tab was opened');
+    assert.pass('the lightbeam tab was opened');
 
     tabs.on('activate', function onActivate(tab) {
       if (tab.url != mainPage) {
-        // re-activate the collusion tab
+        // re-activate the lightbeam tab
         openOrSwitchToOrClose();
         return;
       }
       tabs.removeListener('activate', onActivate);
 
-      assert.pass('the collusion tab was re-activated');
+      assert.pass('the lightbeam tab was re-activated');
 
       tab.once('close', done);
 
-      // finally close the collusion tab
+      // finally close the lightbeam tab
       openOrSwitchToOrClose();
     });
 
     currentTab.activate();
   });
 
-  // open collusion tab
+  // open lightbeam tab
   openOrSwitchToOrClose();
 }
 
