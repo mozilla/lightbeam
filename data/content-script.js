@@ -39,14 +39,14 @@ self.port.on('init', function(collusionToken) {
         unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     } else {
-        console.error('cannot call unsafeWindow.aggregate: %o', unsafeWindow);
+        console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
     }
 
     // FIXME: temporary solution for now.  need to clean up the code
-    if (unsafeWindow && unsafeWindow.showPromptToShare) {
-        unsafeWindow.showPromptToShare();
+    if (unsafeWindow && unsafeWindow.showPromptToShareDialog) {
+        unsafeWindow.showPromptToShareDialog();
     } else {
-        console.error('cannot call unsafeWindow.showPromptToShare: %o', unsafeWindow);
+        console.error('cannot call unsafeWindow.showPromptToShare: %s', unsafeWindow);
     }
 });
 
@@ -86,5 +86,5 @@ self.port.on("private-browsing", function() {
 try {
     unsafeWindow.addon = self.port;
 } catch (e) {
-    console.error('unable to add "addon" to unsafeWindow: %o', e);
+    console.error('unable to add "addon" to unsafeWindow: %s', e);
 }
