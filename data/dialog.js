@@ -154,6 +154,9 @@ function addDialogEventHandlers(modal,options,callback){
 
 function addToDoNotShowAgainList(dialogName){
     var dnsPref = localStorage.dnsDialogs || "[]";
+    if (dnsPref === 'undefined'){
+        dnsPref = "[]";
+    }
     dnsPref = JSON.parse(dnsPref);
     dnsPref.push(dialogName);
     localStorage.dnsDialogs = JSON.stringify(dnsPref);

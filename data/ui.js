@@ -527,7 +527,7 @@ function showPromptToShareDialog(){
     today = formattedDate(Date.now());
     shownToday = showTimes.indexOf(today) > -1;
     belowLimit = showTimes.length < promptToShareDialogShowLimit;
-    if ( localStorage.numLaunch > 1 && !doNotShowDialog(dialogNames.promptToShare) && !shownToday && belowLimit){
+    if ( Number(localStorage.numLaunch) > 1 && !doNotShowDialog(dialogNames.promptToShare) && !shownToday && belowLimit){
         showTimes.push(today);
         localStorage.promptToShareDialogShowTimes = JSON.stringify(showTimes);
         showPromptToShareDialog(function(confirmed){

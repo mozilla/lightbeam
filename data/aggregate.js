@@ -479,13 +479,37 @@ function switchFilter(name){
 
 aggregate.switchFilter = switchFilter;
 
-aggregate.update = function update(){
+// Underscore debounce function
+//
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+var debounce = function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+        var context = this, args = arguments;
+        var later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+};
+
+aggregate.update = debounce(function update(){
     // FIXME: Don't do this for clock view, maybe not for list view
+    if (currentVisualization.name !== 'graph'){
+        console.log('do not update aggregate for %s view', currentVisualization.name);
+    }
     if (aggregate.initialized){
         global.filteredAggregate = currentFilter();
         aggregate.emit('update');
     }
     updateStatsBar();
-}
+});
 
 })(this);

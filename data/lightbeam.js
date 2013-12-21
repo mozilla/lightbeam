@@ -11,9 +11,7 @@ try{
 }catch(e){
     userSettings = {};
 }
-// FIXME: Read this from config file
-//var uploadServer = 'http://collusiondb.mofostaging.net/shareData';
-var uploadServer = 'http://collusiondb.mofoprod.net/shareData';
+var uploadServer = 'https://lightbeamdb.org/shareData';
 var isRobot = false; // Used for spidering the web only
 var uploadTimer;
 var saveTimer;
@@ -90,7 +88,7 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
-    localStorage.numLaunch = parseInt(localStorage.numLaunch)+1 || 1;
+    localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
