@@ -200,10 +200,12 @@ function arrangeNodePosition(bucketIdx){
 
 
 function onRemove(){
+    var startTime = Date.now();
     clearTimeout(clockTimer);
     clock.timeslots = new Array(96);
     resetCanvas();
     aggregate.off('connection', onConnection);
+    console.log('it took %s ms to remove clock view', Date.now() - startTime);
 };
 
 

@@ -24,7 +24,7 @@ function onReset(){
     aggregate.emit('load', allConnections);
 }
 
-function onInit(connections){
+function onInit(){
     vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     // This binds our data to the D3 visualization and sets up the callbacks
@@ -55,8 +55,10 @@ function onConnection(conn){
 
 function onRemove(){
     // console.log('removing list');
+    var startTime = Date.now();
     resetCanvas();
     aggregate.off('update', onUpdate);
+    console.log('It took %s ms to remove list view', Date.now() - startTime);
 }
 
 

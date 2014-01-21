@@ -32,10 +32,10 @@ self.port.on('update-blocklist-all', function(domains) {
 });
 
 self.port.on('init', function(lightbeamToken) {
-    // console.error('content-script::init()');
+    console.error('content-script::init()');
     // localStorage.lightbeamToken = lightbeamToken;
 
-    if (unsafeWindow && unsafeWindow.aggregate) {
+    if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
         unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     } else {

@@ -88,6 +88,8 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
+    console.log('window onload');
+    addon.emit('uiready');
     localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
@@ -110,8 +112,10 @@ function initCap(str){
 
 
 function switchVisualization(name){
+    var startTime = Date.now();
     // console.log('switchVisualizations(' + name + ')');
     saveConnections(allConnections);
+    console.log('it took %s ms to save connections', Date.now() - startTime)
     if (currentVisualization){
         if (currentVisualization === visualizations[name]) return;
         currentVisualization.emit('remove');
@@ -119,7 +123,9 @@ function switchVisualization(name){
     localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
     resetAdditionalUI();
-    addon.emit('uiready');
+    currentVisualization.emit('init');
+    // addon.emit('uiready'); // is this needed?
+    console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
 
 
@@ -324,4 +330,6 @@ function updateStatsBar(){
     document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
+
+
 

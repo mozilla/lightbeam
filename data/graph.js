@@ -62,12 +62,14 @@ function onInit(){
 };
 
 function onRemove(){
+    var startTime = Date.now();
     if (force){
         force.stop();
         force = null;
     }
     resetCanvas();
     document.querySelector(".filter-display").classList.add("hidden");
+    console.log('it took %s ms to remove graph view', Date.now() - startTime);
 };
 
 function onReset(){

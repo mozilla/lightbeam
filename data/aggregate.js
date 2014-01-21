@@ -22,6 +22,7 @@ aggregate.nodemap = {};
 aggregate.edgemap = {};
 
 function resetData(){
+    console.log('aggregate::resetData');
     aggregate.nodemap = {};
     aggregate.edgemap = {};
     aggregate.nodes = [];
@@ -123,13 +124,14 @@ function applyFilter(filter){
 aggregate.on('filter', applyFilter);
 
 function onLoad(connections){
-    // console.log('aggregate::onLoad with %s connections', connections.length);
+    var startTime = Date.now();
+    console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
     currentVisualization.emit('init');
     updateStatsBar();
-    // console.log('aggregate::onLoad end')
+    console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
 aggregate.on('load', onLoad);
