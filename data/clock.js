@@ -33,6 +33,7 @@ function onReset(){
 }
 
 function onInit(){
+    console.log('clock::onInit()');
     aggregate.on('connection', onConnection);
     // console.log("= onInit = allConnections.length = %s" , allConnections.length);
     drawClockFrame();

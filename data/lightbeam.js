@@ -93,8 +93,9 @@ window.addEventListener('load', function(evt){
     localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
-    var visualization = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
-    switchVisualization(visualization);
+    var visualizationName = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
+    currentVisualization = visualizations[visualizationName];
+    // switchVisualization(visualization);
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
