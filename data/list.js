@@ -55,10 +55,10 @@ function onConnection(conn){
 
 function onRemove(){
     // console.log('removing list');
-    var startTime = Date.now();
+    // var startTime = Date.now();
     resetCanvas();
     aggregate.off('update', onUpdate);
-    console.log('It took %s ms to remove list view', Date.now() - startTime);
+    // console.log('It took %s ms to remove list view', Date.now() - startTime);
 }
 
 

@@ -124,14 +124,14 @@ function applyFilter(filter){
 aggregate.on('filter', applyFilter);
 
 function onLoad(connections){
-    var startTime = Date.now();
-    console.log('aggregate::onLoad with %s connections', connections.length);
+    // var startTime = Date.now();
+    // console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
     currentVisualization.emit('init');
     updateStatsBar();
-    console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
+    // console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
 aggregate.on('load', onLoad);

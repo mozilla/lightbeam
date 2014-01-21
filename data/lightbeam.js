@@ -88,7 +88,7 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
-    console.log('window onload');
+    // console.log('window onload');
     addon.emit('uiready');
     localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
     // Wire up events
@@ -112,10 +112,10 @@ function initCap(str){
 
 
 function switchVisualization(name){
-    var startTime = Date.now();
+    // var startTime = Date.now();
     // console.log('switchVisualizations(' + name + ')');
     saveConnections(allConnections);
-    console.log('it took %s ms to save connections', Date.now() - startTime)
+    // console.log('it took %s ms to save connections', Date.now() - startTime)
     if (currentVisualization){
         if (currentVisualization === visualizations[name]) return;
         currentVisualization.emit('remove');
@@ -125,7 +125,7 @@ function switchVisualization(name){
     resetAdditionalUI();
     currentVisualization.emit('init');
     // addon.emit('uiready'); // is this needed?
-    console.log('it took %s ms to switch visualizations', Date.now() - startTime);
+    // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
 
 
