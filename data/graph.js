@@ -49,6 +49,7 @@ function onUpdate(){
 }
 
 function onInit(){
+    // console.log('graph::onInit()');
     // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
@@ -62,12 +63,14 @@ function onInit(){
 };
 
 function onRemove(){
+    // var startTime = Date.now();
     if (force){
         force.stop();
         force = null;
     }
     resetCanvas();
     document.querySelector(".filter-display").classList.add("hidden");
+    // console.log('it took %s ms to remove graph view', Date.now() - startTime);
 };
 
 function onReset(){
