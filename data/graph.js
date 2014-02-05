@@ -49,7 +49,7 @@ function onUpdate(){
 }
 
 function onInit(){
-    console.log('graph::onInit()');
+    // console.log('graph::onInit()');
     // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
