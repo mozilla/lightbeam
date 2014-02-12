@@ -1,4 +1,5 @@
-// Graph Visualization
+// Graph Visualization (one of 3 views: graph, clock, and list). This is way
+// too heavyweight for mobile right now.
 
 // Visualization of tracking data interconnections
 
@@ -6,6 +7,7 @@
 "use strict";
 
 
+// The graph is an emitter with a default size.
 var graph = new Emitter();
 visualizations.graph = graph;
 graph.name = "graph";
@@ -33,6 +35,8 @@ var highlight = {
     blocked: true
 };
 
+// Restart the simulation. This is only called when there's a new connection we
+// haven't seen before.
 function onUpdate(){
     // new nodes, reheat graph simulation
     if (force){
@@ -51,6 +55,7 @@ function onUpdate(){
 function onInit(){
     // console.log('graph::onInit()');
     // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
+    // Handles all of the panning and scaling.
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     // This binds our data to the D3 visualization and sets up the callbacks

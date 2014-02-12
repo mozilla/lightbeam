@@ -1,3 +1,4 @@
+// Bunch of utilities related to UI elements.
 const graphNodeRadius = {
     "graph": 12,
     "clock": 3
