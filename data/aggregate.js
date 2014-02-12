@@ -5,6 +5,8 @@
 (function(global){
 "use strict";
 
+// An emitter that lists nodes and edges so we can build the data structure
+// used by all 3 visualizers.
 var aggregate = new Emitter();
 global.aggregate = aggregate;
 global.filteredAggregate = {
@@ -14,6 +16,7 @@ global.filteredAggregate = {
 
 aggregate.trackerCount = 0;
 aggregate.siteCount = 0;
+// d3 has functionality to build graphs out of lists of nodes and edges.
 aggregate.nodes = [];
 aggregate.edges = [];
 aggregate.recentSites = [];
@@ -123,12 +126,15 @@ function applyFilter(filter){
 
 aggregate.on('filter', applyFilter);
 
+// Pass the list of connections to build the graph structure to pass to d3 for
+// visualizations.
 function onLoad(connections){
     // var startTime = Date.now();
     // console.log('aggregate::onLoad with %s connections', connections.length);
     connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
+    // Tell the visualization that we're ready.
     currentVisualization.emit('init');
     updateStatsBar();
     // console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
@@ -152,6 +158,8 @@ aggregate.on('load', onLoad);
 //const STATUS = 12;
 //const CACHEABLE = 13;
 
+// Check that recent sites include the domain. This is another potential source
+// of false positives.
 aggregate.isDomainVisited = function isDomainVisited(domain){
     return aggregate.recentSites.length && (aggregate.recentSites.indexOf(domain) > -1);
 }
@@ -257,11 +265,13 @@ function onBlocklistUpdate({ domain, flag }) {
 }
 aggregate.on('update-blocklist', onBlocklistUpdate);
 
+// Make sure all the blocklist is in local storage.
 function onBlocklistUpdateAll(domains) {
   (domains || []).forEach(onBlocklistUpdate);
 }
 aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
 
+// Used only by the graph view.
 function GraphEdge(source, target, connection){
     var name = source.name + '->' + target.name;
     if (aggregate.edgemap[name]){

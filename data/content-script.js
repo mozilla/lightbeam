@@ -1,3 +1,7 @@
+// This is the e10s/message passing content script that ties the workers to the
+// addon. It can see most of the addon, the window is either not visible or not
+// mutable so we use unsafeWindow below. This handles the post message
+// connections and does a little UI work on the side.
 self.port.on('log', function log(args) {
     if (unsafeWindow && unsafeWindow.console) {
         unsafeWindow.console.log.call(unsafeWindow, args);

@@ -1,3 +1,4 @@
+// Manage hover-over tooltips (works differently in graph, list, clock views)
 (function(global){
 
 var tooltipTimer;

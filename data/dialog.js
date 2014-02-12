@@ -325,6 +325,7 @@ function showPromptToShareDialog(callback){
 
 }
 
+// Helper function for testing so we can trigger any dialog.
 function showDialog(name){
     if (Object.keys(allDialogs).indexOf(name) > -1){
         var tempPref = localStorage.dnsDialogs;

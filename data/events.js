@@ -1,5 +1,6 @@
 // Basic implementation of an event emitter for visualization plugins
-
+// This may be built-in to jetpack, but it's not available on the HTML side so
+// we need to keep this.
 function Emitter(){
     this._listeners = {};
 }

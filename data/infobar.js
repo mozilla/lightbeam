@@ -1,3 +1,4 @@
+// Used for managing the DOM for infobar part of the page
 'use strict';
 
 function initMap(){
