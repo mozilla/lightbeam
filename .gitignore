@@ -7,3 +7,4 @@ data/deployment.json
 ._*
 *.xpi
 exported_graphs
+*.swp
