@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>reveal.js - The HTML Presentation Framework</title>
+    <title>Lightbeam: Illuminating Online Tracking</title>
 
     <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
     <meta name="author" content="Hakim El Hattab">
@@ -59,15 +59,24 @@
           </section>
 
           <section>
-            <h2>Physical Tracking</h2>
+            <h2>Tracking</h2>
             <!--
+            What is tracking?
+
+            Tracks are marks that you leave behind that show where you've been.
+            (breadcrumbs, metadata) Tracking is the act of collecting these
+            marks to tell a story about where you were, and to
+            try and predict where you're going.
+
+            Tracking runs directly conter to privacy.
+
             There are lots of ways you can be tracked. Some you're probably aware
             of, some you're probably not.
             -->
             <ul>
-              <li class="fragment">Video Surveillance</li>
+              <li class="fragment">Security Cameras</li>
               <li class="fragment">EZ-Pass</li>
-              <li class="fragment">Government surveillance</li>
+              <li class="fragment">Public record data brokers</li>
             </ul>
           </section>
 
@@ -127,12 +136,16 @@
 
           <section>
             <h2>Information leakage</h2>
-            <img src="img/nytimes-aol-search.png"></img>
+            <a href="http://www.nytimes.com/2006/08/09/technology/09aol.html">
+              <img src="img/nytimes-aol-search.png"></img>
+            </a>
           </section>
 
           <section>
             <h2>Re-purposing tracking mechanisms</h2>
-            <img src="img/wapo-nsa-google-cookies.png"></img>
+            <a href="http://www.washingtonpost.com/blogs/the-switch/wp/2013/12/10/nsa-uses-google-cookies-to-pinpoint-targets-for-hacking/">
+              <img src="img/wapo-nsa-google-cookies.png"></img>
+            </a>
           </section>
 
         </section>
@@ -144,8 +157,41 @@
           </section>
 
           <section>
+            <h2>Cookies</h2>
+            <a href="http://dawnchapel.com/2010/07/firefox-has-crashed/">
+              <img src="img/firefox-cookies-comic.png">
+            </a>
+          </section>
+
+          <section>
+            <h2>Cookies</h2>
+            <ol>
+              <li class="fragment">Site initially <b>sets</b> cookies</li>
+              <li class="fragment">Saved in the browser</li>
+              <li class="fragment">Later requests to that site include the cookies</li>
+            </ol>
+          </section>
+
+          <section>
+            <h2>Uses for Cookies</h2>
+            <ol>
+              <li class="fragment">Maintaining state
+                <ul>
+                  <li class="fragment">User accounts (<code>username=coolguy55</code>)</li>
+                  <li class="fragment">Site-wide preferences (<code>lang=EN</code>)</li>
+                </ul>
+              </li>
+              <li class="fragment">Tracking
+                <ul>
+                  <li class="fragment"><code>UID=2106bef3-23.61.194.248-1389648154</code></li>
+                </ul>
+              </li>
+            </ol>
+          </section>
+
+          <section>
             <h2>First Parties</h2>
-            <p><img class="fragment" src="img/tracking-1-address-bar.png" style="margin:36px;"></img></p>
+            <p><img class="fragment" src="img/tracking-1-address-bar.png" style="margin:36px;" height="100px"></img></p>
             <img class="fragment" src="img/tracking-1.png"></img>
           </section>
 
@@ -224,20 +270,12 @@
             <img src="img/tracking-10.png"></img>
           </section>
 
-          <!-- should we put this at the end? -->
-          <!--
           <section>
-            <h1>Available Tools</h1>
-            <ul>
-              <li>Ad Block Plus</li>
-              <li>Ghostery</li>
-              <li>Disconnect.me</li>
-              <li>Share Me Not</li>
-            </ul>
+            <h2>What does it look like for <em>my</em> browsing history?</h2>
           </section>
-          -->
 
         </section>
+
         <!-- mmc slides below -->
         <section>
           <h2>Why Lightbeam?</h1>
