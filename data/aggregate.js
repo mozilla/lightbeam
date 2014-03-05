@@ -44,7 +44,7 @@ function resetData(){
     if (currentVisualization){
         currentVisualization.emit('reset');
     }
-    updateStatsBar();
+    //updateStatsBar();
 }
 
 aggregate.getAllNodes = function() {
@@ -142,7 +142,7 @@ function onLoad(connections){
     filteredAggregate = currentFilter();
     // Tell the visualization that we're ready.
     currentVisualization.emit('init');
-    updateStatsBar();
+    //updateStatsBar();
     // console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
@@ -250,7 +250,7 @@ function onConnection(conn){
     if (updated){
         aggregate.update();
     }
-    updateStatsBar();
+    //updateStatsBar();
 }
 
 

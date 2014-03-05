@@ -4,20 +4,12 @@
 
 // Display data in tabular format
 
-(function(visualizations){
+(function(global){
 
-var list = new Emitter();
+var list = {};
 var breadcrumbStack = [];
-visualizations.list = list;
+global.visualizations.list = list;
 list.name = "list";
-
-list.on("init", onInit);
-// list.on("connection", onConnection);
-list.on("remove", onRemove);
-list.on("showFilteredTable", function(filter){
-    showFilteredTable(filter);
-});
-list.on('reset', onReset);
 
 function onReset(){
     onRemove();
@@ -618,4 +610,12 @@ function toggleShowHideHiddenButton(){
     }
 }
 
-})(visualizations);
+global.self.port.on("init", onInit);
+// list.on("connection", onConnection);
+global.self.port.on("remove", onRemove);
+global.self.port.on("showFilteredTable", function(filter){
+    showFilteredTable(filter);
+});
+global.self.port.on('reset', onReset);
+
+})(this);

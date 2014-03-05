@@ -1,8 +1,10 @@
+(function(global) {
+
 'use strict';
-// Convert to namespace?
+// Convert to namespace? yes
+
 
 const roundOffFactor = 5*60*1000; // in milliseconds
-// Global visualizations
 var visualizations = {};
 var currentVisualization;
 var currentFilter;
@@ -333,3 +335,13 @@ function updateStatsBar(){
     document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
+
+// Exported globals
+global.visualizations = visualizations;
+global.currentVisualization = currentVisualization;
+global.currentFilter = currentFilter;
+global.allConnections = allConnections;
+global.userSettings = userSettings;
+global.vizcanvas = viscanvas; // for ui.js
+
+})(this);
