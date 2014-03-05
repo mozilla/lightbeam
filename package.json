@@ -8,6 +8,8 @@
     "id": "jid1-F9UJ2thwoAm5gQ",
     "permissions": {
         "private-browsing": true,
-        "cross-domain-content": ["https://lightbeamdb.org/"]
+        "cross-domain-content": ["https://lightbeamdb.org/",
+                                 "https://data.mozilla.com/"
+                                ]
     }
 }

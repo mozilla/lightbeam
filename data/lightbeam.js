@@ -14,6 +14,7 @@ try{
     userSettings = {};
 }
 var uploadServer = 'https://lightbeamdb.org/shareData';
+var metricsServer = "https://data.mozilla.com/submit/lightbeam";
 var isRobot = false; // Used for spidering the web only
 var uploadTimer;
 var saveTimer;
@@ -271,7 +272,6 @@ function startSharing(askForConfirmation,callback){
 }
 
 function sharingData(){
-    console.log("Beginning Upload...");
     var lastUpload = localStorage.lastUpload;
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
@@ -285,8 +285,12 @@ function sharingData(){
     request.send(data);
     request.onload = function(){
         console.log("upload response", request.responseText);
-        if (request.status === 200){
+        let status = Number(request.status);
+        if (status >= 200 && status < 300) {
+            console.log("upload success");
             localStorage.lastUpload = Date.now();
+        } else {
+            console.log("upload failure", request.status);
         }
     };
     request.onerror = function(){
