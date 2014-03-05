@@ -9,6 +9,8 @@
     "permissions": {
         "private-browsing": true,
         "cross-domain-content": ["https://lightbeamdb.org/",
+                                 "http://lightbeamdb.org/",
+                                 "http://data.mozilla.com/",
                                  "https://data.mozilla.com/"
                                 ]
     }

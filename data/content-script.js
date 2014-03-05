@@ -25,8 +25,7 @@ self.port.on('init', function(lightbeamToken) {
     // localStorage.lightbeamToken = lightbeamToken;
 
     if (!aggregate.initialized) {
-      allConnections = getAllConnections();
-      aggregate.emit('load', allConnections);
+      aggregate.emit('load-all');
     }
     // FIXME: temporary solution for now.  need to clean up the code
     // If the user has launched Lightbeam a certain number of times, show them
@@ -58,6 +57,7 @@ self.port.on("promptToSaveOldData", function(data) {
     promptToSaveOldDataDialog(data);
 });
 
+/*
 function getAllConnections() {
     var allConnectionsAsArray = [];
     Object.keys(localStorage).sort().forEach(function(key) {
@@ -69,6 +69,7 @@ function getAllConnections() {
     console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
     return allConnectionsAsArray;
 }
+*/
 
 self.port.on("private-browsing", function() {
     informUserOfUnsafeWindowsDialog();

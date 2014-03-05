@@ -279,7 +279,8 @@ function sharingData(){
     var data = exportFormat(connections,true); // round off timestamp
     console.log('data: %s (%s characters total)', data.slice(0,40), data.length);
     var request = new XMLHttpRequest();
-    request.open("POST", uploadServer, true);
+    //request.open("POST", uploadServer, true);
+    request.open("POST", metricsServer, true);
     request.setRequestHeader("Collusion-Share-Data","collusion");
     request.setRequestHeader("Content-type","application/json");
     request.send(data);

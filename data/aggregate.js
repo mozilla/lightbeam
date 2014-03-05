@@ -476,7 +476,8 @@ aggregate.filters = {
     }
 };
 
-var currentFilter = aggregate.filters[localStorage.currentFilter || 'daily'];
+//var currentFilter = aggregate.filters[localStorage.currentFilter || 'daily'];
+var currentFilter = aggregate.filters['daily'];
 
 function switchFilter(name){
     // console.log('switchFilter(' + name + ')');
@@ -526,9 +527,24 @@ aggregate.update = debounce(function update(){
     updateStatsBar();
 });
 
+function getAllConnections() {
+    var allConnectionsAsArray = [];
+    Object.keys(localStorage).sort().forEach(function(key) {
+        if (key.charAt(0) == "2") { // date keys are in the format of yyyy-mm-dd
+            var conns = JSON.parse(localStorage.getItem(key));
+            allConnectionsAsArray = allConnectionsAsArray.concat(conns);
+        }
+    });
+    console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
+    allConnections = allConnectionsArray;
+    onLoad(allConnectionsArray);
+    return allConnectionsAsArray;
+}
+
 aggregate.on('connection', onConnection);
 aggregate.on('filter', applyFilter);
 aggregate.on('load', onLoad);
+aggregate.on('load-all', getAllConnections);
 aggregate.on('reset', resetData);
 aggregate.on('update-blocklist', onBlocklistUpdate);
 aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
