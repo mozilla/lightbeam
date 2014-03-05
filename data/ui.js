@@ -1,4 +1,5 @@
 // Bunch of utilities related to UI elements.
+// Convert to namespace?
 const graphNodeRadius = {
     "graph": 12,
     "clock": 3

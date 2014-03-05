@@ -1,6 +1,8 @@
 'use strict';
+// Convert to namespace?
 
 const roundOffFactor = 5*60*1000; // in milliseconds
+// Global visualizations
 var visualizations = {};
 var currentVisualization;
 var currentFilter;

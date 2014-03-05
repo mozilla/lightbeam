@@ -11,6 +11,7 @@ self.port.on('log', function log(args) {
 });
 
 self.port.on('connection', function(connection) {
+    console.log("in connection in content-script.js");
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.allConnections.push(connection);
         unsafeWindow.aggregate.emit('connection', connection);
@@ -21,20 +22,24 @@ self.port.on('connection', function(connection) {
 
 self.port.on('update-blocklist', function(domain) {
     console.log("in update-blocklist in content-script.js");
+/*
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.aggregate.emit('update-blocklist', domain);
     } else {
         console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
     }
+*/
 });
 
 self.port.on('update-blocklist-all', function(domains) {
     console.log("in update-blocklist-all in content-script.js");
+/*
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.aggregate.emit('update-blocklist-all', domains);
     } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
+        console.log('cannot call unsafeWindow.aggregate to update all blocklist: ' + unsafeWindow);
     }
+*/
 });
 
 self.port.on('init', function(lightbeamToken) {

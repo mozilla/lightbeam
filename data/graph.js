@@ -3,13 +3,12 @@
 
 // Visualization of tracking data interconnections
 
-(function(visualizations){
+(function(global){
 "use strict";
 
-
 // The graph is an emitter with a default size.
-var graph = new Emitter();
-visualizations.graph = graph;
+var graph = {};
+global.visualizations.graph = graph;
 graph.name = "graph";
 var width = 750, height = 750;
 var force, vis;
@@ -19,12 +18,6 @@ var edges, nodes;
 // init does initialization and receives the existing set of connections
 // connection notifies of a new connection that matches existing filter
 // remove lets the visualization know it is about to be switched out so it can clean up
-graph.on('init', onInit);
-//self.port.on("init", onInit);
-// graph.on('connection', onConnection);
-graph.on('remove', onRemove);
-graph.on('reset', onReset);
-
 /* for Highlighting and Colouring -------------------- */
 
 var highlight = {
@@ -345,5 +338,9 @@ graphLegend.querySelector(".legend-toggle").addEventListener("click", function(e
     toggleLegendSection(event.target,graphLegend);
 });
 
+global.self.port.on('init', onInit);
+// graph.on('connection', onConnection);
+global.self.port.on('remove', onRemove);
+global.self.port.on('reset', onReset);
 
-})(visualizations);
+})(this); // namespace

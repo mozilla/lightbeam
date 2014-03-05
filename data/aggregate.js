@@ -22,10 +22,6 @@ global.filteredAggregate = {
     edges: []
 };
 
-global.self.port.on("update-blocklist-all", function() {
-  console.log("got all");
-});
-
 aggregate.trackerCount = 0;
 aggregate.siteCount = 0;
 // d3 has functionality to build graphs out of lists of nodes and edges.
@@ -50,7 +46,6 @@ function resetData(){
     }
     updateStatsBar();
 }
-aggregate.on('reset', resetData);
 
 aggregate.getAllNodes = function() {
   var blockedDomains = Object.keys(userSettings).filter(function(domain) {
@@ -136,7 +131,6 @@ function applyFilter(filter){
     currentFilter = filter;
 }
 
-aggregate.on('filter', applyFilter);
 
 // Pass the list of connections to build the graph structure to pass to d3 for
 // visualizations.
@@ -151,8 +145,6 @@ function onLoad(connections){
     updateStatsBar();
     // console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
-
-aggregate.on('load', onLoad);
 
 // Constants for indexes of properties in array format
 //const SOURCE = 0;
@@ -261,8 +253,6 @@ function onConnection(conn){
     updateStatsBar();
 }
 
-aggregate.on('connection', onConnection);
-
 
 function onBlocklistUpdate({ domain, flag }) {
   if (flag === true) {
@@ -275,13 +265,11 @@ function onBlocklistUpdate({ domain, flag }) {
     delete userSettings[domain];
   }
 }
-aggregate.on('update-blocklist', onBlocklistUpdate);
 
 // Make sure all the blocklist is in local storage.
 function onBlocklistUpdateAll(domains) {
   (domains || []).forEach(onBlocklistUpdate);
 }
-aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
 
 // Used only by the graph view.
 function GraphEdge(source, target, connection){
@@ -535,5 +523,12 @@ aggregate.update = debounce(function update(){
     }
     updateStatsBar();
 });
+
+global.self.port.on('connection', onConnection);
+global.self.port.on('filter', applyFilter);
+global.self.port.on('load', onLoad);
+global.self.port.on('reset', resetData);
+global.self.port.on('update-blocklist', onBlocklistUpdate);
+global.self.port.on('update-blocklist-all', onBlocklistUpdateAll);
 
 })(this);
