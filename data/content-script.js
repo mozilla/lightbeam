@@ -20,6 +20,7 @@ self.port.on('connection', function(connection) {
 });
 
 self.port.on('update-blocklist', function(domain) {
+    console.log("in update-blocklist in content-script.js");
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.aggregate.emit('update-blocklist', domain);
     } else {
@@ -28,6 +29,7 @@ self.port.on('update-blocklist', function(domain) {
 });
 
 self.port.on('update-blocklist-all', function(domains) {
+    console.log("in update-blocklist-all in content-script.js");
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.aggregate.emit('update-blocklist-all', domains);
     } else {

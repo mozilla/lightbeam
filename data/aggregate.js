@@ -2,17 +2,29 @@
 
 // Visualization of tracking data interconnections
 
+self.port.on("update-blocklist", function() {
+  console.log("got update-blocklist in aggregate.js"); });
+self.port.on("update-blocklist-all", function() {
+  console.log("got update-blocklist-all in aggregate.js"); });
+
 (function(global){
 "use strict";
 
 // An emitter that lists nodes and edges so we can build the data structure
 // used by all 3 visualizers.
-var aggregate = new Emitter();
+//var aggregate = new Emitter();
+var aggregate = {};
+aggregate.on = function() {};
+aggregate.emit = function() {};
 global.aggregate = aggregate;
 global.filteredAggregate = {
     nodes: [],
     edges: []
 };
+
+global.self.port.on("update-blocklist-all", function() {
+  console.log("got all");
+});
 
 aggregate.trackerCount = 0;
 aggregate.siteCount = 0;

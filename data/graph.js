@@ -20,6 +20,7 @@ var edges, nodes;
 // connection notifies of a new connection that matches existing filter
 // remove lets the visualization know it is about to be switched out so it can clean up
 graph.on('init', onInit);
+//self.port.on("init", onInit);
 // graph.on('connection', onConnection);
 graph.on('remove', onRemove);
 graph.on('reset', onReset);
@@ -53,8 +54,8 @@ function onUpdate(){
 }
 
 function onInit(){
-    // console.log('graph::onInit()');
-    // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
+    console.log('graph::onInit()');
+    console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     // Handles all of the panning and scaling.
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks

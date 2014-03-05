@@ -88,7 +88,7 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
-    // console.log('window onload');
+    console.log('window onload');
     addon.emit('uiready');
     localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
     // Wire up events
@@ -331,6 +331,3 @@ function updateStatsBar(){
     document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
-
-
-
