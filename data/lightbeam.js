@@ -69,6 +69,7 @@ global.allConnections = allConnections;
 global.userSettings = userSettings;
 global.vizcanvas = vizcanvas; // for ui.js
 global.mapcanvas = mapcanvas;
+global.isRobot = isRobot;
 
 // DOM Utility
 
@@ -369,5 +370,7 @@ global.elem = elem;
 global.updateStatsBar = updateStatsBar;
 global.formattedDate = formattedDate;
 global.switchVisualization = switchVisualization;
+global.saveConnectionsByDate = saveConnectionsByDate;
+global.startSharing = startSharing;
 
 })(this);

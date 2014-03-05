@@ -605,5 +605,6 @@ global.graphNodeRadius = graphNodeRadius;
 global.colourHighlightNodes = colourHighlightNodes;
 global.toArray = toArray;
 global.singularOrPluralNoun = singularOrPluralNoun;
+global.exportFormat = exportFormat;
 
 })(this); // namespace

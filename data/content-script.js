@@ -1,6 +1,5 @@
 // This is the e10s/message passing content script that ties the workers to the
-// addon. It can see most of the addon, the window is either not visible or not
-// mutable so we use unsafeWindow below. This handles the post message
+// addon. It can see most of the addon.  This handles the post message
 // connections and does a little UI work on the side.
 self.port.on('log', function log(args) {
     console.log(args);
@@ -25,17 +24,20 @@ self.port.on('init', function(lightbeamToken) {
     console.log('content-script::init()');
     // localStorage.lightbeamToken = lightbeamToken;
 
-    allConnections = getAllConnections();
-    aggregate.emit('load', allConnections);
-
-    // FIXME: temporary solution for now.  need to clean up the code
-/*
-    if (unsafeWindow && unsafeWindow.showPromptToShareDialog) {
-        unsafeWindow.showPromptToShareDialog();
-    } else {
-        console.error('cannot call unsafeWindow.showPromptToShare: %s', unsafeWindow);
+    if (!aggregate.initialized) {
+      allConnections = getAllConnections();
+      aggregate.emit('load', allConnections);
     }
-*/
+    // FIXME: temporary solution for now.  need to clean up the code
+    // If the user has launched Lightbeam a certain number of times, show them
+    // the prompt sharing dialog once. Disable this for now.
+    /*
+    if (showPromptToShareDialog) {
+        showPromptToShareDialog();
+    } else {
+        console.error('cannot call showPromptToShare');
+    }
+    */
 });
 
 
@@ -45,18 +47,15 @@ self.port.on("passTempConnections", function(connReceived) {
     self.port.emit("tempConnectionTransferred", true);
 
     localStorage.lastSaved = Date.now();
-
-/*
     var nonPrivateConnections = connReceived.filter(function(connection) {
-        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
+        return (connection[FROM_PRIVATE_MODE] == false);
     });
-    unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
-*/
+    saveConnectionsByDate(nonPrivateConnections);
 });
 
 self.port.on("promptToSaveOldData", function(data) {
     console.log("in promptToSaveOldData in content-script.js");
-    //unsafeWindow.promptToSaveOldDataDialog(data);
+    promptToSaveOldDataDialog(data);
 });
 
 function getAllConnections() {
@@ -72,11 +71,11 @@ function getAllConnections() {
 }
 
 self.port.on("private-browsing", function() {
-    //unsafeWindow.informUserOfUnsafeWindowsDialog();
+    informUserOfUnsafeWindowsDialog();
 });
 
 /*
-WTF?!!
+// WTF?!!
 try {
     unsafeWindow.addon = self.port;
 } catch (e) {
