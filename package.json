@@ -7,6 +7,7 @@
     "version": "1.0.8",
     "id": "jid1-F9UJ2thwoAm5gQ",
     "permissions": {
-        "private-browsing": true
+        "private-browsing": true,
+        "cross-domain-content": ["https://lightbeamdb.org/"]
     }
 }

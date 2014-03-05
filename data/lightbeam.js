@@ -70,6 +70,7 @@ global.userSettings = userSettings;
 global.vizcanvas = vizcanvas; // for ui.js
 global.mapcanvas = mapcanvas;
 global.isRobot = isRobot;
+global.uploadTimer = uploadTimer;
 
 // DOM Utility
 
@@ -270,20 +271,20 @@ function startSharing(askForConfirmation,callback){
 }
 
 function sharingData(){
-    // console.log("Beginning Upload...");
+    console.log("Beginning Upload...");
     var lastUpload = localStorage.lastUpload;
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
     });
     var data = exportFormat(connections,true); // round off timestamp
-    // console.log('data: %s (%s characters total)', data.slice(0,40), data.length);
+    console.log('data: %s (%s characters total)', data.slice(0,40), data.length);
     var request = new XMLHttpRequest();
     request.open("POST", uploadServer, true);
     request.setRequestHeader("Collusion-Share-Data","collusion");
     request.setRequestHeader("Content-type","application/json");
     request.send(data);
     request.onload = function(){
-        // console.log(request.responseText);
+        console.log("upload response", request.responseText);
         if (request.status === 200){
             localStorage.lastUpload = Date.now();
         }
