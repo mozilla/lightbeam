@@ -7,7 +7,6 @@ self.port.on('log', function log(args) {
 });
 
 self.port.on('connection', function(connection) {
-    console.log("in connection in content-script.js");
     allConnections.push(connection);
     aggregate.emit('connection', connection);
 });
