@@ -11,9 +11,9 @@ self.port.on("init", function() { console.log("got init in graph.js"); });
 "use strict";
 
 // The graph is an emitter with a default size.
-var graph = {};
+var graph = new Emitter();
 graph.name = "graph";
-global.visualizations.graph = graph;
+visualizations.graph = graph;
 var width = 750, height = 750;
 var force, vis;
 var edges, nodes;
@@ -341,10 +341,10 @@ graphLegend.querySelector(".legend-toggle").addEventListener("click", function(e
     toggleLegendSection(event.target,graphLegend);
 });
 
-global.self.port.on('init', onInit);
+graph.on('init', onInit);
 // graph.on('connection', onConnection);
-global.self.port.on('remove', onRemove);
-global.self.port.on('reset', onReset);
+graph.on('remove', onRemove);
+graph.on('reset', onReset);
 
 console.log("finished reading graph.js");
 

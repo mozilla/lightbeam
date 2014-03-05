@@ -3,10 +3,7 @@
 'use strict';
 
 const roundOffFactor = 5*60*1000; // in milliseconds
-if (!global.visualizations) {
-  global.visualizations = {};
-}
-var visualizations = global.visualizations;
+var visualizations = {};
 var currentVisualization;
 var currentFilter;
 var allConnections = [];
@@ -37,6 +34,25 @@ const METHOD = 11;
 const STATUS = 12;
 const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
+
+// Constants for indexes of properties in array format
+/*
+const SOURCE = 0;
+const TARGET = 1;
+const TIMESTAMP = 2;
+const CONTENT_TYPE = 3;
+const COOKIE = 4;
+const SOURCE_VISITED = 5;
+const SECURE = 6;
+const SOURCE_PATH_DEPTH = 7;
+const SOURCE_QUERY_DEPTH = 8;
+const SOURCE_SUB = 9;
+const TARGET_SUB = 10;
+const METHOD = 11;
+const STATUS = 12;
+const CACHEABLE = 13;
+const FROM_PRIVATE_MODE = 14;
+*/
 
 var vizcanvas = document.querySelector('.vizcanvas');
 var mapDocument, mapcanvas;

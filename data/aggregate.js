@@ -526,12 +526,12 @@ aggregate.update = debounce(function update(){
     updateStatsBar();
 });
 
-global.self.port.on('connection', onConnection);
-global.self.port.on('filter', applyFilter);
-global.self.port.on('load', onLoad);
-global.self.port.on('reset', resetData);
-global.self.port.on('update-blocklist', onBlocklistUpdate);
-global.self.port.on('update-blocklist-all', onBlocklistUpdateAll);
-global.self.port.on('update', function() { console.log('aggregate on update'); });
+aggregate.on('connection', onConnection);
+aggregate.on('filter', applyFilter);
+aggregate.on('load', onLoad);
+aggregate.on('reset', resetData);
+aggregate.on('update-blocklist', onBlocklistUpdate);
+aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
+// Update is set by each visualization separately
 
 })(this);

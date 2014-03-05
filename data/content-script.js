@@ -4,59 +4,30 @@
 // connections and does a little UI work on the side.
 self.port.on('log', function log(args) {
     console.log(args);
-/*
-    if (unsafeWindow && unsafeWindow.console) {
-        unsafeWindow.console.log.call(unsafeWindow, args);
-    } else {
-        console.log('cannot call browser logging: ' + unsafeWindow);
-    }
-*/
 });
 
 self.port.on('connection', function(connection) {
     console.log("in connection in content-script.js");
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.allConnections.push(connection);
-        //unsafeWindow.aggregate.emit('connection', connection);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
-    }
+    allConnections.push(connection);
+    aggregate.emit('connection', connection);
 });
 
 self.port.on('update-blocklist', function(domain) {
     console.log("in update-blocklist in content-script.js");
-/*
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist', domain);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
-    }
-*/
+    aggregate.emit('update-blocklist', domain);
 });
 
 self.port.on('update-blocklist-all', function(domains) {
     console.log("in update-blocklist-all in content-script.js");
-/*
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist-all', domains);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update all blocklist: ' + unsafeWindow);
-    }
-*/
+    aggregate.emit('update-blocklist-all', domains);
 });
 
 self.port.on('init', function(lightbeamToken) {
     console.log('content-script::init()');
     // localStorage.lightbeamToken = lightbeamToken;
 
-/*
-    if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
-        //unsafeWindow.allConnections = getAllConnections();
-        //unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
-    } else {
-        console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
-    }
-*/
+    allConnections = getAllConnections();
+    aggregate.emit('load', allConnections);
 
     // FIXME: temporary solution for now.  need to clean up the code
 /*

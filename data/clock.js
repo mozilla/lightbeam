@@ -2,7 +2,7 @@
 
 // Visualization of tracking data over 24 hours
 
-(function(visualizations){
+(function(global){
 "use strict";
 const CX = 0;
 const CY = 0;
@@ -20,7 +20,7 @@ var times, timeAmPmLabels, timeslots, offsets;
 // TODO: Make visualization an event emitter, so I can call on('connection', fn) and emit('connection', connection)
 
 var clock = new Emitter();
-visualizations.clock = clock;
+global.visualizations.clock = clock;
 clock.name = "clock";
 
 clock.on('init', onInit);
@@ -470,5 +470,5 @@ clockLegend.querySelector(".legend-toggle").addEventListener("click", function(e
 
 
 
-})(visualizations);
+})(this);
 
