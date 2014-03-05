@@ -1,8 +1,6 @@
 (function(global) {
 
 'use strict';
-// Convert to namespace? yes
-
 
 const roundOffFactor = 5*60*1000; // in milliseconds
 var visualizations = {};
@@ -45,6 +43,14 @@ document.querySelector('.world-map').addEventListener('load', function(event){
   initMap();
 }, false);
 
+
+// Exported globals
+global.visualizations = visualizations;
+global.currentVisualization = currentVisualization;
+global.currentFilter = currentFilter;
+global.allConnections = allConnections;
+global.userSettings = userSettings;
+global.vizcanvas = vizcanvas; // for ui.js
 
 // DOM Utility
 
@@ -91,21 +97,21 @@ function elem(name, attributes, children){
    return e;
 };
 
-window.addEventListener('load', function(evt){
-    console.log('window onload');
-    addon.emit('uiready');
-    localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
-    // Wire up events
-    document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
-    var visualizationName = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
-    currentVisualization = visualizations[visualizationName];
-    // switchVisualization(visualization);
-    if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
-        startUploadTimer();
-    }
-    saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('lightbeam load() ended');
-});
+function onLoad(event) {
+  console.log('window onload');
+  global.self.port.emit('uiready');
+  //global.localStorage.numLaunch = parseInt(global.localStorage.numLaunch, 10)+1 || 1;
+  global.currentVisualization = global.visualizations[global.visualizationName];
+  // switchVisualization(visualization);
+  if (global.localStorage.userHasOptedIntoSharing && global.localStorage.userHasOptedIntoSharing === 'true' ){
+    startUploadTimer();
+  }
+  // save to localStorage every 5 minutes
+  saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000);
+  console.log('lightbeam load() ended');
+}
 
+window.addEventListener('load', onLoad);
 
 window.addEventListener('beforeunload', function(){
     saveConnections(allConnections);
@@ -335,13 +341,5 @@ function updateStatsBar(){
     document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
-
-// Exported globals
-global.visualizations = visualizations;
-global.currentVisualization = currentVisualization;
-global.currentFilter = currentFilter;
-global.allConnections = allConnections;
-global.userSettings = userSettings;
-global.vizcanvas = viscanvas; // for ui.js
 
 })(this);

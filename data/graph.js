@@ -8,8 +8,8 @@
 
 // The graph is an emitter with a default size.
 var graph = {};
-global.visualizations.graph = graph;
 graph.name = "graph";
+global.visualizations.graph = graph;
 var width = 750, height = 750;
 var force, vis;
 var edges, nodes;
