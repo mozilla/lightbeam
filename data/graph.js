@@ -3,7 +3,11 @@
 
 // Visualization of tracking data interconnections
 
+console.log("loading graph.js");
+self.port.on("init", function() { console.log("got init in graph.js"); });
+
 (function(global){
+
 "use strict";
 
 // The graph is an emitter with a default size.
@@ -47,16 +51,15 @@ function onUpdate(){
 }
 
 function onInit(){
-    console.log('graph::onInit()');
     console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     // Handles all of the panning and scaling.
-    vis = d3.select(vizcanvas);
+    vis = d3.select(global.vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     // This binds our data to the D3 visualization and sets up the callbacks
     initGraph();
     aggregate.on('update', onUpdate);
     // Differenct visualizations may have different viewBoxes, so make sure we use the right one
-    vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
+    global.vizcanvas.setAttribute('viewBox', [0,0,width,height].join(' '));
     // console.log('graph::onInit end');
     document.querySelector(".filter-display").classList.remove("hidden");
 };
@@ -284,12 +287,12 @@ function addTriangle(selection){
 // FIXME: Move this out of visualization so multiple visualizations can use it.
 function resetCanvas(){
     // You will still need to remove timer events
-    var parent = vizcanvas.parentNode;
-    var newcanvas = vizcanvas.cloneNode(false);
+    var parent = global.vizcanvas.parentNode;
+    var newcanvas = global.vizcanvas.cloneNode(false);
     var vizcanvasDefs = document.querySelector(".vizcanvas defs").cloneNode(true);
     newcanvas.appendChild(vizcanvasDefs);
-    parent.replaceChild(newcanvas, vizcanvas);
-    vizcanvas = newcanvas;
+    parent.replaceChild(newcanvas, global.vizcanvas);
+    global.vizcanvas = newcanvas;
     aggregate.off('update', onUpdate);
 }
 
@@ -342,5 +345,7 @@ global.self.port.on('init', onInit);
 // graph.on('connection', onConnection);
 global.self.port.on('remove', onRemove);
 global.self.port.on('reset', onReset);
+
+console.log("finished reading graph.js");
 
 })(this); // namespace

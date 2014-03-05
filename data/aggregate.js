@@ -12,10 +12,7 @@ self.port.on("update-blocklist-all", function() {
 
 // An emitter that lists nodes and edges so we can build the data structure
 // used by all 3 visualizers.
-//var aggregate = new Emitter();
-var aggregate = {};
-aggregate.on = function() {};
-aggregate.emit = function() {};
+var aggregate = new Emitter();
 global.aggregate = aggregate;
 global.filteredAggregate = {
     nodes: [],
@@ -44,7 +41,7 @@ function resetData(){
     if (currentVisualization){
         currentVisualization.emit('reset');
     }
-    //updateStatsBar();
+    updateStatsBar();
 }
 
 aggregate.getAllNodes = function() {
@@ -142,7 +139,7 @@ function onLoad(connections){
     filteredAggregate = currentFilter();
     // Tell the visualization that we're ready.
     currentVisualization.emit('init');
-    //updateStatsBar();
+    updateStatsBar();
     // console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
@@ -250,11 +247,13 @@ function onConnection(conn){
     if (updated){
         aggregate.update();
     }
-    //updateStatsBar();
+    updateStatsBar();
 }
 
 
 function onBlocklistUpdate({ domain, flag }) {
+  console.log("onBlocklistUpdate");
+/*
   if (flag === true) {
     // Make sure we have blocked domains in localStorage, no matter what.
     // If localStorage is cleared the domains will still be blocked,
@@ -264,11 +263,14 @@ function onBlocklistUpdate({ domain, flag }) {
   else if (userSettings[domain] == 'block') {
     delete userSettings[domain];
   }
+*/
 }
 
 // Make sure all the blocklist is in local storage.
 function onBlocklistUpdateAll(domains) {
-  (domains || []).forEach(onBlocklistUpdate);
+  //console.log("onBlocklistUpdateAll", domains);
+  console.log("onBlocklistUpdateAll");
+  //(domains || []).forEach(onBlocklistUpdate);
 }
 
 // Used only by the graph view.
@@ -283,7 +285,7 @@ function GraphEdge(source, target, connection){
     if (connection){
         this.cookieCount = connection.cookie ? 1 : 0;
     }
-    // console.log('edge: %s', this.name);
+    console.log('edge: %s', this.name);
 }
 GraphEdge.prototype.lastAccess = function(){
     return (this.source.lastAccess > this.target.lastAccess) ? this.source.lastAccess : this.target.lastAccess;
@@ -530,5 +532,6 @@ global.self.port.on('load', onLoad);
 global.self.port.on('reset', resetData);
 global.self.port.on('update-blocklist', onBlocklistUpdate);
 global.self.port.on('update-blocklist-all', onBlocklistUpdateAll);
+global.self.port.on('update', function() { console.log('aggregate on update'); });
 
 })(this);

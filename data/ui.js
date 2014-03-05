@@ -1,5 +1,9 @@
 // Bunch of utilities related to UI elements.
-// Convert to namespace?
+
+(function(global) {
+
+let vizcanvas = global.vizcanvas;
+
 const graphNodeRadius = {
     "graph": 12,
     "clock": 3
@@ -158,11 +162,10 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     confirmResetDataDialog(function(confirmed){
         if ( confirmed ){
             // currentVisualization.emit('remove');
-            allConnections = [];
-            addon.emit('reset');
-            aggregate.emit('reset');
-            userSettings = {};
-            localStorage.clear();
+            global.allConnections = [];
+            global.self.port.emit('reset');
+            global.userSettings = {};
+            global.localStorage.clear();
             location.reload(); // reload page
         }
     });
@@ -594,3 +597,12 @@ function colourHighlightNodes(highlight){
         }
     }
 }
+
+// Export globals
+global.legendBtnClickHandler = legendBtnClickHandler;
+global.excludePrivateConnection = excludePrivateConnection;
+global.graphNodeRadius = graphNodeRadius;
+global.colourHighlightNodes = colourHighlightNodes;
+global.toArray = toArray;
+
+})(this); // namespace

@@ -3,7 +3,10 @@
 'use strict';
 
 const roundOffFactor = 5*60*1000; // in milliseconds
-var visualizations = {};
+if (!global.visualizations) {
+  global.visualizations = {};
+}
+var visualizations = global.visualizations;
 var currentVisualization;
 var currentFilter;
 var allConnections = [];
@@ -40,7 +43,7 @@ var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  initMap();
+  initMap(mapcanvas, mapDocument);
 }, false);
 
 
@@ -51,6 +54,7 @@ global.currentFilter = currentFilter;
 global.allConnections = allConnections;
 global.userSettings = userSettings;
 global.vizcanvas = vizcanvas; // for ui.js
+global.mapcanvas = mapcanvas;
 
 // DOM Utility
 
@@ -101,7 +105,10 @@ function onLoad(event) {
   console.log('window onload');
   global.self.port.emit('uiready');
   //global.localStorage.numLaunch = parseInt(global.localStorage.numLaunch, 10)+1 || 1;
-  global.currentVisualization = global.visualizations[global.visualizationName];
+  // Wire up events
+  document.querySelector('[data-value=' + (global.localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
+  var visualizationName = global.localStorage.visualization ? ( global.localStorage.visualization.toLowerCase() ) : "graph";
+  global.currentVisualization = global.visualizations[visualizationName];
   // switchVisualization(visualization);
   if (global.localStorage.userHasOptedIntoSharing && global.localStorage.userHasOptedIntoSharing === 'true' ){
     startUploadTimer();
@@ -172,7 +179,7 @@ function resetAdditionalUI(){
 function saveConnections(){
     // console.error('saveConnections( ' + allConnections.length + ' connection)');
     var lastSaved = Number(localStorage.lastSaved || 0);
-    var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
+    var unsavedNonPrivateConn = global.excludePrivateConnection(allConnections).filter(function(connection){
         // console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');
         return ( connection[TIMESTAMP] > lastSaved);
     });
@@ -341,5 +348,12 @@ function updateStatsBar(){
     document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
+
+
+// Export global functions
+global.elem = elem;
+global.updateStatsBar = updateStatsBar;
+global.formattedDate = formattedDate;
+global.switchVisualization = switchVisualization;
 
 })(this);
