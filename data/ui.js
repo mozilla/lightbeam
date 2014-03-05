@@ -604,5 +604,6 @@ global.excludePrivateConnection = excludePrivateConnection;
 global.graphNodeRadius = graphNodeRadius;
 global.colourHighlightNodes = colourHighlightNodes;
 global.toArray = toArray;
+global.singularOrPluralNoun = singularOrPluralNoun;
 
 })(this); // namespace

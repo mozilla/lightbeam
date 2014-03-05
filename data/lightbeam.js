@@ -36,23 +36,21 @@ const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
 // Constants for indexes of properties in array format
-/*
-const SOURCE = 0;
-const TARGET = 1;
-const TIMESTAMP = 2;
-const CONTENT_TYPE = 3;
-const COOKIE = 4;
-const SOURCE_VISITED = 5;
-const SECURE = 6;
-const SOURCE_PATH_DEPTH = 7;
-const SOURCE_QUERY_DEPTH = 8;
-const SOURCE_SUB = 9;
-const TARGET_SUB = 10;
-const METHOD = 11;
-const STATUS = 12;
-const CACHEABLE = 13;
-const FROM_PRIVATE_MODE = 14;
-*/
+global.SOURCE = SOURCE;
+global.TARGET = TARGET;
+global.TIMESTAMP = TIMESTAMP;
+global.CONTENT_TYPE = CONTENT_TYPE;
+global.COOKIE = COOKIE;
+global.SOURCE_VISITED = SOURCE_VISITED;
+global.SECURE = SECURE;
+global.SOURCE_PATH_DEPTH = SOURCE_PATH_DEPTH;
+global.SOURCE_QUERY_DEPTH = SOURCE_QUERY_DEPTH;
+global.SOURCE_SUB = SOURCE_SUB;
+global.TARGET_SUB = TARGET_SUB;
+global.METHOD = METHOD;
+global.STATUS = STATUS;
+global.CACHEABLE = CACHEABLE;
+global.FROM_PRIVATE_MODE = FROM_PRIVATE_MODE;
 
 var vizcanvas = document.querySelector('.vizcanvas');
 var mapDocument, mapcanvas;
