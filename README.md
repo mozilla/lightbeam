@@ -12,7 +12,11 @@ If you only want to see the demo, you don't need any of these; all you need is a
 
 ## Quick Start
 
-First, [install][] the Mozilla Add-on SDK if you haven't already, and activate it in a command line terminal.
+First, [install][] the Mozilla Add-on SDK if you haven't already. We recommend
+using the latest development version, which you can simply clone from
+[Github][SDKGithub].
+
+Once it's installed, activate it in a command line terminal:
 
     cd addon-sdk
     source bin/activate
@@ -31,6 +35,7 @@ This will start Firefox with a temporary profile that has Lightbeam installed. J
 At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `cfx run` again.
 
   [install]: https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Installation
+  [SDKGithub]: https://github.com/mozilla/addon-sdk
 
 ## Software Used
 
