@@ -30,7 +30,7 @@ This will start Firefox with a temporary profile that has Lightbeam installed. J
 
 At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `cfx run` again.
 
-  [install]: https://addons.mozilla.org/en-US/developers/docs/sdk/latest/dev-guide/addon-development/installation.html
+  [install]: https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Installation
 
 ## Software Used
 
