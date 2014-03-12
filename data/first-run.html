@@ -32,12 +32,29 @@
         /* unset default styles */
         list-style-type:none;
         padding:0px;
+        /* counter for custom numbers */
+        counter-reset: steps-counter;
       }
       ol#steps li {
         background:white;
         padding:20px;
         border-radius: 0.5em;
         margin-bottom:24px;
+        position:relative;
+      }
+      ol#steps li:before {
+        content: counter(steps-counter);
+        counter-increment: steps-counter;
+        font-size:34px;
+        font-weight:bold;
+        position: absolute;
+        top: 8px;
+        left: -68px;
+        background:white;
+        width:48px;
+        height:48px;
+        border-radius:24px;
+        text-align:center;
       }
       ol#steps p {
         margin:0; /* unset default styles */
@@ -55,7 +72,7 @@
 
     <ol id="steps">
       <li>
-        You can open Lightbeam by clicking the <img src="icons/lightbeam_logo-only_16x16.png" /> logo in the Add-on bar.
+        Open Lightbeam by clicking the <img src="icons/lightbeam_logo-only_16x16.png" /> logo in the Add-on bar.
       </li>
       <li>
         <p> Lightbeam starts recording connections as soon as it's installed. If you see a blank screen, vist a couple of sites, then check back!</p>
@@ -63,7 +80,7 @@
       </li>
       <li>
         <p>Consider contributing data to Mozilla! We'll use it to study the tracking landscape and develop new privacy-protecting technologies for the web.</p>
-        <p>You can opt in to shraing your data by flipping the "Contribute Data" toggle in the top right corner to "On".</p>
+        <p>You can opt in to sharing your data by flipping the "Contribute Data" toggle in the top right corner to "On".</p>
       </li>
     </ol>
 
