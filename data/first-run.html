@@ -3,67 +3,7 @@
   <head>
     <meta charset="utf-8"/>
     <title>Welcome to Lightbeam!</title>
-    <style>
-      @font-face {
-        font-family: "OpenSans Bold";
-        src: url("font/OpenSans-Bold.ttf");
-      }
-      @font-face {
-        font-family: "OpenSans Light";
-        src: url("font/OpenSans-Light.ttf");
-      }
-
-      body {
-        background: #cedff2;
-        color:#333;
-        font-family: "OpenSans Light", sans-serif;
-      }
-      h1,h2,h3 {
-        font-family: "OpenSans Bold", serif;
-        font-weight: normal; /* font is already bold */
-      }
-
-      .center { text-align: center; }
-      img.center { display: block; margin: 0 auto; }
-
-      ol { width: 578px; margin: 0 auto; }
-
-      ol#steps {
-        /* unset default styles */
-        list-style-type:none;
-        padding:0px;
-        /* counter for custom numbers */
-        counter-reset: steps-counter;
-      }
-      ol#steps li {
-        background:white;
-        padding:20px;
-        border-radius: 0.5em;
-        margin-bottom:24px;
-        position:relative;
-      }
-      ol#steps li:before {
-        content: counter(steps-counter);
-        counter-increment: steps-counter;
-        font-size:34px;
-        font-weight:bold;
-        position: absolute;
-        top: 8px;
-        left: -68px;
-        background:white;
-        width:48px;
-        height:48px;
-        border-radius:24px;
-        text-align:center;
-      }
-      ol#steps p {
-        margin:0; /* unset default styles */
-        margin-bottom: 16px;
-      }
-      ol#steps li p:last-child {
-        margin-bottom: 0;
-      }
-    </style>
+    <link rel="stylesheet" href="first-run.css" />
   </head>
   <body>
 
