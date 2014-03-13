@@ -2,6 +2,7 @@ body {
   background: #cedff2;
   color:#333;
   font-family: "Open Sans", sans-serif;
+  padding-bottom:16px;
 }
 
 .center { text-align: center; }
