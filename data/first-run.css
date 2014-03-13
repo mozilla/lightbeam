@@ -1,20 +1,7 @@
-@font-face {
-  font-family: "OpenSans Bold";
-  src: url("font/OpenSans-Bold.ttf");
-}
-@font-face {
-  font-family: "OpenSans Light";
-  src: url("font/OpenSans-Light.ttf");
-}
-
 body {
   background: #cedff2;
   color:#333;
-  font-family: "OpenSans Light", sans-serif;
-}
-h1,h2,h3 {
-  font-family: "OpenSans Bold", serif;
-  font-weight: normal; /* font is already bold */
+  font-family: "Open Sans", sans-serif;
 }
 
 .center { text-align: center; }
