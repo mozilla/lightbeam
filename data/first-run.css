@@ -26,7 +26,7 @@ ol#steps li {
 ol#steps li:before {
   content: counter(steps-counter);
   counter-increment: steps-counter;
-  font-size:34px;
+  font-size:31px;
   font-weight:bold;
   position: absolute;
   top: 8px;
