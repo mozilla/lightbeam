@@ -1,5 +1,5 @@
 body {
-  background: #cedff2;
+  background: #5d667a;
   color:#333;
   font-family: "Open Sans", sans-serif;
   padding-bottom:16px;
@@ -7,6 +7,8 @@ body {
 
 .center { text-align: center; }
 img.center { display: block; margin: 0 auto; }
+
+img#lightbeam-logo { margin-bottom:-18px; }
 
 ol { width: 578px; margin: 0 auto; }
 
@@ -44,4 +46,11 @@ ol#steps p {
 }
 ol#steps li p:last-child {
   margin-bottom: 0;
+}
+
+ol#contact-methods {
+  color:#dddddd;
+}
+ol#contact-methods a {
+  color: #87BBFF;
 }
