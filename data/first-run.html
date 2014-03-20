@@ -5,6 +5,23 @@
     <title>Welcome to Lightbeam!</title>
     <link rel="stylesheet" href="OpenSans.css" />
     <link rel="stylesheet" href="first-run.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const firefoxVersionRe = /Firefox\/(([0-9]+)\.([0-9]+))/;
+        const firefoxMajorVersion = Number(firefoxVersionRe.exec(window.navigator.userAgent)[2]);
+        const usingAustralis = firefoxMajorVersion >= 29 ? true : false;
+
+        const australisSubs = {
+          ".platform-dependent, #icon-placement": '<img src="icons/lightbeam_logo-only_32x32.png" style="width:20px;"/> logo in the Toolbar.'
+        }
+
+        if (usingAustralis) {
+          for (var qs in australisSubs) {
+            document.querySelector(qs).innerHTML = australisSubs[qs];
+          }
+        }
+      });
+    </script>
   </head>
   <body>
 
@@ -15,7 +32,7 @@
 
     <ol id="steps">
       <li>
-        <strong>Open the Lightbeam tab</strong> by clicking the <img src="icons/lightbeam_logo-only_16x16.png" /> logo in the Add-on bar.
+        <strong>Open the Lightbeam tab</strong> by clicking the <span class="platform-dependent" id="icon-placement"><img src="icons/lightbeam_logo-only_16x16.png" /> logo in the Add-on bar.</span>
       </li>
       <li>
         <p>Lightbeam starts recording connections as soon as it's installed. If you open it now, you'll see a blank screen because nothing's been recorded yet.</p>
