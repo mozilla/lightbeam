@@ -2,6 +2,7 @@ body {
   background: #5d667a;
   color:#333;
   font-family: "Open Sans", sans-serif;
+  margin:0; /* unset browser styles */
   padding-bottom:16px;
 }
 
@@ -10,7 +11,7 @@ img.center { display: block; margin: 0 auto; }
 
 img#lightbeam-logo { margin-bottom:-18px; }
 
-ol { width: 578px; margin: 0 auto; }
+body > ol, body > ul { width: 578px; margin: 0 auto; }
 
 ol#steps {
   /* unset default styles */
@@ -19,14 +20,14 @@ ol#steps {
   /* counter for custom numbers */
   counter-reset: steps-counter;
 }
-ol#steps li {
+ol#steps > li {
   background:white;
   padding:20px;
   border-radius: 0.5em;
   margin-bottom:24px;
   position:relative;
 }
-ol#steps li:before {
+ol#steps > li:before {
   content: counter(steps-counter);
   counter-increment: steps-counter;
   font-size:31px;
@@ -44,13 +45,10 @@ ol#steps p {
   margin:0; /* unset default styles */
   margin-bottom: 16px;
 }
-ol#steps li p:last-child {
+ol#steps > li p:last-child {
   margin-bottom: 0;
 }
 
-ol#contact-methods {
-  color:#dddddd;
-}
-ol#contact-methods a {
-  color: #87BBFF;
+ul#contact {
+  padding-left:16px
 }
