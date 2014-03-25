@@ -4,20 +4,12 @@
 
 // Display data in tabular format
 
-(function(visualizations){
+(function(global){
 
 var list = new Emitter();
 var breadcrumbStack = [];
 visualizations.list = list;
 list.name = "list";
-
-list.on("init", onInit);
-// list.on("connection", onConnection);
-list.on("remove", onRemove);
-list.on("showFilteredTable", function(filter){
-    showFilteredTable(filter);
-});
-list.on('reset', onReset);
 
 function onReset(){
     onRemove();
@@ -26,7 +18,7 @@ function onReset(){
 
 function onInit(){
     // console.log('list::onInit()');
-    vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
+    global.vizcanvas.classList.add("hide"); // we don't need vizcanvas here, so hide it
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
     // This binds our data to the D3 visualization and sets up the callbacks
     initList();
@@ -278,7 +270,7 @@ function getNodes(filter){
 
 
 function nodeToRow(node){
-    var settings = userSettings[node.name] || (node.nodeType == 'blocked' ? 'block' : '');
+    var settings = global.userSettings[node.name] || (node.nodeType == 'blocked' ? 'block' : '');
     var iconUrl = node.nodeType === 'blocked'? 'icons/lightbeam_icon_empty_list.png' : 'icons/lightbeam_icon_list.png';
     var listIcon = elem('img', {'src': iconUrl, 'class': node.nodeType === 'blocked'? 'no-update' :'update-table', 'role': 'gridcell'});
     var row = elem('tr', {
@@ -425,7 +417,7 @@ function resetCanvas(){
         selectedLabel.parentElement.removeChild(selectedLabel);
     }
     document.querySelector('.stage-stack').removeEventListener('click', listStageStackClickHandler, false);
-    vizcanvas.classList.remove("hide");
+    global.vizcanvas.classList.remove("hide");
 }
 
 function getAllRows() {
@@ -445,7 +437,7 @@ function setUserSetting(row, pref) {
     var site = row.dataset.name;
 
     // change setting
-    userSettings[site] = pref;
+    global.userSettings[site] = pref;
 
     // send change through to add-on
     addon.emit('updateBlocklist', site, pref === 'block');
@@ -641,4 +633,12 @@ function toggleShowHideHiddenButton(){
     }
 }
 
-})(visualizations);
+list.on("init", onInit);
+// list.on("connection", onConnection);
+list.on("remove", onRemove);
+list.on("showFilteredTable", function(filter){
+    showFilteredTable(filter);
+});
+list.on('reset', onReset);
+
+})(this);

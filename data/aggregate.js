@@ -38,7 +38,6 @@ function resetData(){
     }
     updateStatsBar();
 }
-aggregate.on('reset', resetData);
 
 aggregate.getAllNodes = function() {
   var blockedDomains = Object.keys(userSettings).filter(function(domain) {
@@ -124,7 +123,6 @@ function applyFilter(filter){
     currentFilter = filter;
 }
 
-aggregate.on('filter', applyFilter);
 
 // Pass the list of connections to build the graph structure to pass to d3 for
 // visualizations.
@@ -139,8 +137,6 @@ function onLoad(connections){
     updateStatsBar();
     // console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
-
-aggregate.on('load', onLoad);
 
 // Constants for indexes of properties in array format
 //const SOURCE = 0;
@@ -249,10 +245,10 @@ function onConnection(conn){
     updateStatsBar();
 }
 
-aggregate.on('connection', onConnection);
-
 
 function onBlocklistUpdate({ domain, flag }) {
+  console.log("onBlocklistUpdate");
+/*
   if (flag === true) {
     // Make sure we have blocked domains in localStorage, no matter what.
     // If localStorage is cleared the domains will still be blocked,
@@ -262,14 +258,15 @@ function onBlocklistUpdate({ domain, flag }) {
   else if (userSettings[domain] == 'block') {
     delete userSettings[domain];
   }
+*/
 }
-aggregate.on('update-blocklist', onBlocklistUpdate);
 
 // Make sure all the blocklist is in local storage.
 function onBlocklistUpdateAll(domains) {
-  (domains || []).forEach(onBlocklistUpdate);
+  //console.log("onBlocklistUpdateAll", domains);
+  console.log("onBlocklistUpdateAll");
+  //(domains || []).forEach(onBlocklistUpdate);
 }
-aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
 
 // Used only by the graph view.
 function GraphEdge(source, target, connection){
@@ -283,7 +280,7 @@ function GraphEdge(source, target, connection){
     if (connection){
         this.cookieCount = connection.cookie ? 1 : 0;
     }
-    // console.log('edge: %s', this.name);
+    //console.log('edge: %s', this.name);
 }
 GraphEdge.prototype.lastAccess = function(){
     return (this.source.lastAccess > this.target.lastAccess) ? this.source.lastAccess : this.target.lastAccess;
@@ -474,7 +471,8 @@ aggregate.filters = {
     }
 };
 
-var currentFilter = aggregate.filters[localStorage.currentFilter || 'daily'];
+//var currentFilter = aggregate.filters[localStorage.currentFilter || 'daily'];
+var currentFilter = aggregate.filters['daily'];
 
 function switchFilter(name){
     // console.log('switchFilter(' + name + ')');
@@ -523,5 +521,28 @@ aggregate.update = debounce(function update(){
     }
     updateStatsBar();
 });
+
+function getAllConnections() {
+    var allConnectionsAsArray = [];
+    Object.keys(localStorage).sort().forEach(function(key) {
+        if (key.charAt(0) == "2") { // date keys are in the format of yyyy-mm-dd
+            var conns = JSON.parse(localStorage.getItem(key));
+            allConnectionsAsArray = allConnectionsAsArray.concat(conns);
+        }
+    });
+    console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
+    global.allConnections = allConnectionsAsArray;
+    onLoad(allConnectionsAsArray);
+    return allConnectionsAsArray;
+}
+
+aggregate.on('connection', onConnection);
+aggregate.on('filter', applyFilter);
+aggregate.on('load', onLoad);
+aggregate.on('load-all', getAllConnections);
+aggregate.on('reset', resetData);
+aggregate.on('update-blocklist', onBlocklistUpdate);
+aggregate.on('update-blocklist-all', onBlocklistUpdateAll);
+// Update is set by each visualization separately
 
 })(this);

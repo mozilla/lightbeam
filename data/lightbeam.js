@@ -1,3 +1,5 @@
+(function(global) {
+
 'use strict';
 
 const roundOffFactor = 5*60*1000; // in milliseconds
@@ -11,7 +13,6 @@ try{
 }catch(e){
     userSettings = {};
 }
-var uploadServer = 'https://lightbeamdb.org/shareData';
 var isRobot = false; // Used for spidering the web only
 var uploadTimer;
 var saveTimer;
@@ -33,14 +34,42 @@ const STATUS = 12;
 const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
+// Constants for indexes of properties in array format
+global.SOURCE = SOURCE;
+global.TARGET = TARGET;
+global.TIMESTAMP = TIMESTAMP;
+global.CONTENT_TYPE = CONTENT_TYPE;
+global.COOKIE = COOKIE;
+global.SOURCE_VISITED = SOURCE_VISITED;
+global.SECURE = SECURE;
+global.SOURCE_PATH_DEPTH = SOURCE_PATH_DEPTH;
+global.SOURCE_QUERY_DEPTH = SOURCE_QUERY_DEPTH;
+global.SOURCE_SUB = SOURCE_SUB;
+global.TARGET_SUB = TARGET_SUB;
+global.METHOD = METHOD;
+global.STATUS = STATUS;
+global.CACHEABLE = CACHEABLE;
+global.FROM_PRIVATE_MODE = FROM_PRIVATE_MODE;
+
 var vizcanvas = document.querySelector('.vizcanvas');
 var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  initMap();
+  initMap(mapcanvas, mapDocument);
 }, false);
 
+
+// Exported globals
+global.visualizations = visualizations;
+global.currentVisualization = currentVisualization;
+global.currentFilter = currentFilter;
+global.allConnections = allConnections;
+global.userSettings = userSettings;
+global.vizcanvas = vizcanvas; // for ui.js
+global.mapcanvas = mapcanvas;
+global.isRobot = isRobot;
+global.uploadTimer = uploadTimer;
 
 // DOM Utility
 
@@ -87,21 +116,24 @@ function elem(name, attributes, children){
    return e;
 };
 
-window.addEventListener('load', function(evt){
-    // console.log('window onload');
-    addon.emit('uiready');
-    localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
-    // Wire up events
-    document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
-    var visualizationName = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
-    currentVisualization = visualizations[visualizationName];
-    // switchVisualization(visualization);
-    if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
-        startUploadTimer();
-    }
-    saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('lightbeam load() ended');
-});
+function onLoad(event) {
+  console.log('window onload');
+  global.self.port.emit('uiready');
+  //global.localStorage.numLaunch = parseInt(global.localStorage.numLaunch, 10)+1 || 1;
+  // Wire up events
+  document.querySelector('[data-value=' + (global.localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
+  var visualizationName = global.localStorage.visualization ? ( global.localStorage.visualization.toLowerCase() ) : "graph";
+  global.currentVisualization = global.visualizations[visualizationName];
+  // switchVisualization(visualization);
+  if (global.localStorage.userHasOptedIntoSharing && global.localStorage.userHasOptedIntoSharing === 'true' ){
+    startUploadTimer();
+  }
+  // save to localStorage every 5 minutes
+  saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000);
+  console.log('lightbeam load() ended');
+}
 
+window.addEventListener('load', onLoad);
 
 window.addEventListener('beforeunload', function(){
     saveConnections(allConnections);
@@ -162,7 +194,7 @@ function resetAdditionalUI(){
 function saveConnections(){
     // console.error('saveConnections( ' + allConnections.length + ' connection)');
     var lastSaved = Number(localStorage.lastSaved || 0);
-    var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
+    var unsavedNonPrivateConn = global.excludePrivateConnection(allConnections).filter(function(connection){
         // console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');
         return ( connection[TIMESTAMP] > lastSaved);
     });
@@ -320,4 +352,12 @@ function updateStatsBar(){
 }
 
 
+// Export global functions
+global.elem = elem;
+global.updateStatsBar = updateStatsBar;
+global.formattedDate = formattedDate;
+global.switchVisualization = switchVisualization;
+global.saveConnectionsByDate = saveConnectionsByDate;
+global.startSharing = startSharing;
 
+})(this);

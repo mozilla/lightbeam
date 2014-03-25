@@ -1,76 +1,63 @@
 // This is the e10s/message passing content script that ties the workers to the
-// addon. It can see most of the addon, the window is either not visible or not
-// mutable so we use unsafeWindow below. This handles the post message
+// addon. It can see most of the addon.  This handles the post message
 // connections and does a little UI work on the side.
 self.port.on('log', function log(args) {
-    if (unsafeWindow && unsafeWindow.console) {
-        unsafeWindow.console.log.call(unsafeWindow, args);
-    } else {
-        console.log('cannot call browser logging: ' + unsafeWindow);
-    }
+    console.log(args);
 });
 
 self.port.on('connection', function(connection) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.allConnections.push(connection);
-        unsafeWindow.aggregate.emit('connection', connection);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
-    }
+    allConnections.push(connection);
+    aggregate.emit('connection', connection);
 });
 
 self.port.on('update-blocklist', function(domain) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist', domain);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
-    }
+    console.log("in update-blocklist in content-script.js");
+    aggregate.emit('update-blocklist', domain);
 });
 
 self.port.on('update-blocklist-all', function(domains) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist-all', domains);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
-    }
+    console.log("in update-blocklist-all in content-script.js");
+    aggregate.emit('update-blocklist-all', domains);
 });
 
 self.port.on('init', function(lightbeamToken) {
-    console.error('content-script::init()');
+    console.log('content-script::init()');
     // localStorage.lightbeamToken = lightbeamToken;
 
-    if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
-        unsafeWindow.allConnections = getAllConnections();
-        unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
-    } else {
-        console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
+    if (!aggregate.initialized) {
+      aggregate.emit('load-all');
     }
-
     // FIXME: temporary solution for now.  need to clean up the code
-    if (unsafeWindow && unsafeWindow.showPromptToShareDialog) {
-        unsafeWindow.showPromptToShareDialog();
+    // If the user has launched Lightbeam a certain number of times, show them
+    // the prompt sharing dialog once. Disable this for now.
+    /*
+    if (showPromptToShareDialog) {
+        showPromptToShareDialog();
     } else {
-        console.error('cannot call unsafeWindow.showPromptToShare: %s', unsafeWindow);
+        console.error('cannot call showPromptToShare');
     }
+    */
 });
 
 
 self.port.on("passTempConnections", function(connReceived) {
+    console.log("in passTempConnections in content-script.js");
     // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
     self.port.emit("tempConnectionTransferred", true);
 
     localStorage.lastSaved = Date.now();
-
     var nonPrivateConnections = connReceived.filter(function(connection) {
-        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
+        return (connection[FROM_PRIVATE_MODE] == false);
     });
-    unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
+    saveConnectionsByDate(nonPrivateConnections);
 });
 
 self.port.on("promptToSaveOldData", function(data) {
-    unsafeWindow.promptToSaveOldDataDialog(data);
+    console.log("in promptToSaveOldData in content-script.js");
+    promptToSaveOldDataDialog(data);
 });
 
+/*
 function getAllConnections() {
     var allConnectionsAsArray = [];
     Object.keys(localStorage).sort().forEach(function(key) {
@@ -82,13 +69,17 @@ function getAllConnections() {
     console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
     return allConnectionsAsArray;
 }
+*/
 
 self.port.on("private-browsing", function() {
-    unsafeWindow.informUserOfUnsafeWindowsDialog();
+    informUserOfUnsafeWindowsDialog();
 });
 
+/*
+// WTF?!!
 try {
     unsafeWindow.addon = self.port;
 } catch (e) {
     console.error('unable to add "addon" to unsafeWindow: %s', e);
 }
+*/

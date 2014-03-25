@@ -1,7 +1,9 @@
 // Used for managing the DOM for infobar part of the page
 'use strict';
 
-function initMap(){
+(function(global) {
+
+function initMap(mapcanvas, mapDocument){
 
 var oriMapViewBox = mapcanvas.getAttribute('viewBox');
 
@@ -130,7 +132,7 @@ function showFirstAndLastAccess(site){
 
 function showSitePref(nodeName){
     var prefTag = document.querySelector(".pref-tag");
-    var sitePref = userSettings[nodeName];
+    var sitePref = global.userSettings[nodeName];
     if ( sitePref ){
         prefTag.querySelector("img").src = "icons/lightbeam_icon_"+sitePref+".png";
         prefTag.querySelector("span").className = "";
@@ -234,6 +236,8 @@ mapDocument.addEventListener("wheel",function(event){
 
 
 }
+// Export globals
+global.initMap = initMap;
 
 
 /* Info Panel Tabs ======================================== */
@@ -317,4 +321,4 @@ function hideAllInfoPanelContentExcept(elmToShow){
     }
 }
 
-
+})(this); // namespace

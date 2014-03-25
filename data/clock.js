@@ -2,7 +2,7 @@
 
 // Visualization of tracking data over 24 hours
 
-(function(visualizations){
+(function(global){
 "use strict";
 const CX = 0;
 const CY = 0;
@@ -470,5 +470,5 @@ clockLegend.querySelector(".legend-toggle").addEventListener("click", function(e
 
 
 
-})(visualizations);
+})(this);
 

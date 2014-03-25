@@ -3,14 +3,17 @@
 
 // Visualization of tracking data interconnections
 
-(function(visualizations){
-"use strict";
+console.log("loading graph.js");
+self.port.on("init", function() { console.log("got init in graph.js"); });
 
+(function(global){
+
+"use strict";
 
 // The graph is an emitter with a default size.
 var graph = new Emitter();
-visualizations.graph = graph;
 graph.name = "graph";
+visualizations.graph = graph;
 var width = 750, height = 750;
 var force, vis;
 var edges, nodes;
@@ -19,11 +22,6 @@ var edges, nodes;
 // init does initialization and receives the existing set of connections
 // connection notifies of a new connection that matches existing filter
 // remove lets the visualization know it is about to be switched out so it can clean up
-graph.on('init', onInit);
-// graph.on('connection', onConnection);
-graph.on('remove', onRemove);
-graph.on('reset', onReset);
-
 /* for Highlighting and Colouring -------------------- */
 
 var highlight = {
@@ -53,8 +51,7 @@ function onUpdate(){
 }
 
 function onInit(){
-    // console.log('graph::onInit()');
-    // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
+    console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
     // Handles all of the panning and scaling.
     vis = d3.select(vizcanvas);
     // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
@@ -344,5 +341,11 @@ graphLegend.querySelector(".legend-toggle").addEventListener("click", function(e
     toggleLegendSection(event.target,graphLegend);
 });
 
+graph.on('init', onInit);
+// graph.on('connection', onConnection);
+graph.on('remove', onRemove);
+graph.on('reset', onReset);
 
-})(visualizations);
+console.log("finished reading graph.js");
+
+})(this); // namespace
