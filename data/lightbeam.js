@@ -272,33 +272,16 @@ function startSharing(askForConfirmation,callback){
 }
 
 function sharingData(){
+    console.log("Beginning Upload...");
     var lastUpload = localStorage.lastUpload;
     var connections = allConnections.filter(function(connection){
         return ( connection[TIMESTAMP] ) > lastUpload;
     });
     var data = exportFormat(connections,true); // round off timestamp
+    addon.emit('upload', data);
     console.log('data: %s (%s characters total)', data.slice(0,40), data.length);
-    var request = new XMLHttpRequest();
-    //request.open("POST", uploadServer, true);
-    request.open("POST", metricsServer, true);
-    request.setRequestHeader("Collusion-Share-Data","collusion");
-    request.setRequestHeader("Content-type","application/json");
-    request.send(data);
-    request.onload = function(){
-        console.log("upload response", request.responseText);
-        let status = Number(request.status);
-        if (status >= 200 && status < 300) {
-            console.log("upload success");
-            localStorage.lastUpload = Date.now();
-        } else {
-            console.log("upload failure", request.status);
-        }
-    };
-    request.onerror = function(){
-        console.log("Share data attempt failed");
-        console.log("Status: %s - %s", request.status, request.statusText);
-        console.log('Response: %s - %s', request.responseType, request.responseText);
-    };
+    // This is completely and totally broken. However, just leave it here for
+    // now.
     startUploadTimer();
 }
 
