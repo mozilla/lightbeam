@@ -13,8 +13,6 @@ try{
 }catch(e){
     userSettings = {};
 }
-var uploadServer = 'https://lightbeamdb.org/shareData';
-var metricsServer = "https://data.mozilla.com/submit/lightbeam";
 var isRobot = false; // Used for spidering the web only
 var uploadTimer;
 var saveTimer;

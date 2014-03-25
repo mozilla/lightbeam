@@ -2,11 +2,6 @@
 
 // Visualization of tracking data interconnections
 
-self.port.on("update-blocklist", function() {
-  console.log("got update-blocklist in aggregate.js"); });
-self.port.on("update-blocklist-all", function() {
-  console.log("got update-blocklist-all in aggregate.js"); });
-
 (function(global){
 "use strict";
 
@@ -536,8 +531,8 @@ function getAllConnections() {
         }
     });
     console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
-    allConnections = allConnectionsArray;
-    onLoad(allConnectionsArray);
+    global.allConnections = allConnectionsAsArray;
+    onLoad(allConnectionsAsArray);
     return allConnectionsAsArray;
 }
 
