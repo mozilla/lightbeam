@@ -1,7 +1,6 @@
 // Bunch of utilities related to UI elements.
 const graphNodeRadius = {
-    "graph": 12,
-    "clock": 3
+    "graph": 12
 };
 
 /* Convert a NodeList to Array */
@@ -52,7 +51,6 @@ btnGroupArray.forEach(function(btnGroup){
     dropdownGroup(btnGroup, function(val){
         val = val.toLowerCase();
         switch(val){
-            case 'clock':
             case 'graph':
             case 'list':
                 switchVisualization(val);
@@ -217,13 +215,10 @@ function setZoom(box,canvas){
 
 /* define viewBox limits
 *  graph view default viewBox = " 0 0 750 750 "
-*  clock                      = " -350 -495 700 500 "
 *  map                        = " 0 0 2711.3 1196.7 "
 */
 const graphZoomInLimit   = { w:250, h:250 };
 const graphZoomOutLimit  = { w:4000, h:4000 };
-const clockZoomInLimit   = { w:350, h:250 };
-const clockZoomOutLimit  = { w:2800, h:2800 };
 const mapZoomInLimit     = { w:(2711.3/5), h:(1196.7/5) };
 const mapZoomOutLimit    = { w:2711.3, h:1196.7 };
 const svgZoomingRatio   = 1.1;
@@ -232,9 +227,6 @@ document.querySelector(".stage").addEventListener("wheel",function(event){
     if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && currentVisualization.name != "list" ){
         if ( currentVisualization.name == "graph" ){
             zoomWithinLimit(event.deltaY, vizcanvas, graphZoomInLimit, graphZoomOutLimit);
-        }
-        if ( currentVisualization.name == "clock" ){ // clock view
-            zoomWithinLimit(event.deltaY, vizcanvas, clockZoomInLimit, clockZoomOutLimit);
         }
     }
 },false);
@@ -414,7 +406,7 @@ function legendBtnClickHandler(legendElm){
 /* Glowing Effect for Graph/Clock & Highlighting Effect for List ============= */
 
 function selectedNodeEffect(name){
-    if ( currentVisualization.name == "graph" || currentVisualization.name == "clock"){
+    if ( currentVisualization.name == "graph") {
         resetAllGlow("all");
         addGlow(name,"selected");
     }
@@ -475,19 +467,13 @@ function calculateGlowSize(gNode,viz){
         glowProps.radius = radius * 4;
     }
 
-    if ( viz == "clock" && shape == "polygon" ){
-        var transform = siteNode.getAttribute("transform");
-        var translate = transform.slice(transform.indexOf("translate("));
-        glowProps.cx = translate.substring(10,translate.indexOf(","));
-    }else{
-        glowProps.cx = siteNode.getAttribute("cx") || 0;
-        glowProps.cy = siteNode.getAttribute("cy") || 0;    
-    }
+    glowProps.cx = siteNode.getAttribute("cx") || 0;
+    glowProps.cy = siteNode.getAttribute("cy") || 0;    
     
     return glowProps;
 }
 
-// for Graph & Clock
+// for Graph
 function resetAllGlow(type){
     var selectedGlow;
     var connectedGlow;

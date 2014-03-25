@@ -712,18 +712,6 @@ text {
     visibility: hidden;
 }
 
-.clock-inner-curve{
-    fill: none;
-    stroke: #fff;
-    stroke-width: 2;
-}
-
-.clock-outer-curve{
-    fill: none;
-    stroke: #333;
-    stroke-width: 2;
-}
-
 .times-label{
     font-size: 15px;
 }
@@ -731,24 +719,6 @@ text {
 .times-am-pm-label{
     fill: #3E454D;
     font-size: 10px;
-}
-
-.clock-time{
-    font-size: 24px;
-    font-weight: bold;
-    fill: #4CC7E6;
-    visibility: visible;
-    stroke: none;
-    font-variant: normal;
-}
-
-.clock-date{
-    font-size: 28px;
-    font-weight: lighter;
-    fill: #CCC;
-    visibility: visible;
-    stroke: none;
-    font-variant: normal;
 }
 
 .tracker rect{
@@ -1053,10 +1023,9 @@ text {
 
 
 
-/* Legend for Graph and Clock and Site Preferences for List*/
+/* Legend for Graph and Site Preferences for List*/
 
 .graph-footer,
-.clock-footer,
 .list-footer{
     margin-right: 8px;
     flex: none;
@@ -1139,28 +1108,24 @@ text {
     font-size: 10px;
 }
 
-.graph-footer .btn,
-.clock-footer .btn{
+.graph-footer .btn {
     width: 170px;
     margin-right: 30px;
     margin-bottom: 8px;
 }
 
-.graph-footer .btn a,
-.clock-footer .btn a{
+.graph-footer .btn a{
     border-top: 2px solid #171E25;
     color: #555;
 }
 
-.graph-footer .btn a:hover,
-.clock-footer .btn a:hover{
+.graph-footer .btn a:hover{
     border-top: 2px solid #fff !important;
     opacity: 1;
     color: #fff;
 }
 
-.graph-footer .btn.active a,
-.clock-footer .btn.active a{
+.graph-footer .btn.active a{
     border-top: 2px solid #6FC3E5;
     background: #73A4B8;
     color: #fff;

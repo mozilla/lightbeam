@@ -513,7 +513,7 @@ var debounce = function debounce(func, wait, immediate) {
 };
 
 aggregate.update = debounce(function update(){
-    // FIXME: Don't do this for clock view, maybe not for list view
+    // FIXME: maybe not for list view
     if (currentVisualization.name !== 'graph'){
         console.log('do not update aggregate for %s view', currentVisualization.name);
     }
