@@ -309,7 +309,6 @@ function showInfoPanelTab(tabClicked, contentToBeShown){
 function hideAllInfoPanelContentExcept(elmToShow){
     document.querySelector(".site-profile-content").classList.add("hidden");
     document.querySelector(".help-content .graph-view-help").classList.add("hidden");
-    document.querySelector(".help-content .clock-view-help").classList.add("hidden");
     document.querySelector(".help-content .list-view-help").classList.add("hidden");
     document.querySelector(".about-content").classList.add("hidden");
     if (elmToShow){
