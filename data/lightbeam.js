@@ -88,14 +88,15 @@ function elem(name, attributes, children){
 };
 
 window.addEventListener('load', function(evt){
-    // console.log('window onload');
+    console.log('window onload');
     addon.emit('uiready');
     localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     var visualizationName = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
+    console.log("current vis", visualizationName);
     currentVisualization = visualizations[visualizationName];
-    // switchVisualization(visualization);
+    switchVisualization(visualizationName);
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
         startUploadTimer();
     }
@@ -114,11 +115,10 @@ function initCap(str){
 
 function switchVisualization(name){
     // var startTime = Date.now();
-    // console.log('switchVisualizations(' + name + ')');
+    console.log('switchVisualizations(' + name + ')');
     saveConnections(allConnections);
     // console.log('it took %s ms to save connections', Date.now() - startTime)
-    if (currentVisualization){
-        if (currentVisualization === visualizations[name]) return;
+    if (currentVisualization != visualizations[name]) {
         currentVisualization.emit('remove');
     }
     localStorage.visualization = initCap(name);
@@ -128,9 +128,6 @@ function switchVisualization(name){
     // addon.emit('uiready'); // is this needed?
     // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
-
-
-
 
 function resetAdditionalUI(){
     // toggle off info panel
