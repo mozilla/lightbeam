@@ -8,5 +8,12 @@
     "id": "jid1-F9UJ2thwoAm5gQ",
     "permissions": {
         "private-browsing": true
-    }
+    },
+    "preferences": [{
+        "name": "contributeData",
+        "title": "Contribute data",
+        "description": "Contribute your Lightbeam data to Mozilla",
+        "type": "bool",
+        "value": false
+    }]
 }

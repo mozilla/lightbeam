@@ -87,18 +87,13 @@ function elem(name, attributes, children){
 window.addEventListener('load', function(evt){
     console.log('window onload');
     addon.emit('uiready');
-    localStorage.numLaunch = parseInt(localStorage.numLaunch, 10)+1 || 1;
     // Wire up events
     document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
     var visualizationName = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
     console.log("current vis", visualizationName);
     currentVisualization = visualizations[visualizationName];
     switchVisualization(visualizationName);
-    if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
-      // Propagate pref to addon process
-    }
 });
-
 
 function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
@@ -146,15 +141,13 @@ function resetAdditionalUI(){
 
 
 function startSharing(askForConfirmation, callback) {
-  if (askForConfirmation){
+  let result = true;
+  if (askForConfirmation) {
     askForDataSharingConfirmationDialog(function(confirmed) {
-    if (confirmed) {
-      localStorage.userHasOptedIntoSharing = true;
-    }
-    callback(confirmed);        
+      result = confirmed;
+      callback(confirmed);
     });
   } else {
-    localStorage.userHasOptedIntoSharing = true;
     callback(true);
   }
 }

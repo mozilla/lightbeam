@@ -73,50 +73,57 @@ btnGroupArray.forEach(function(btnGroup){
 
 var shareDataToggle = document.querySelector(".toggle-btn.share-btn");
 
-document.querySelector(".toggle-btn.share-btn").addEventListener("click",function(event){
+document.querySelector(".toggle-btn.share-btn").addEventListener("click",
+  function(event){
     var elmClicked = event.target;
-    if ( elmClicked.mozMatchesSelector("input") ){
-        if ( elmClicked.checked ){
-            confirmStartSharing(true,elmClicked);
-        }else{
-            confirmStopSharing(elmClicked);
-        }
+    if (elmClicked.mozMatchesSelector("input")) {
+      if (elmClicked.checked){
+        confirmStartSharing(true, elmClicked);
+      } else {
+        confirmStopSharing(elmClicked);
+      }
     }
 });
 
-function confirmStartSharing(askForConfirmation,elmClicked){
-    startSharing(askForConfirmation,function(confirmed){
-        if ( confirmed ){
-            toggleBtnOnEffect( document.querySelector(".share-btn") );
-            disablePromptToShareDataDialog();
-        }else{
-            elmClicked.checked = false;
-        }
-    });
+function confirmStartSharing(askForConfirmation, elmClicked) {
+  startSharing(askForConfirmation, function(confirmed) {
+    if (confirmed) {
+      toggleBtnOnEffect(document.querySelector(".share-btn") );
+      addon.emit("prefChanged", { "contributeData" : true });
+    } else {
+      elmClicked.checked = false;
+    }
+  });
 }
 
-function confirmStopSharing(elmClicked){
-     stopSharingDialog(function(confirmed){
-        if ( confirmed ){
-            toggleBtnOffEffect( document.querySelector(".share-btn") );
-        }else{
-           elmClicked.checked = true;
-        }
-    });
+function confirmStopSharing(elmClicked) {
+  stopSharingDialog(function(confirmed) {
+    if (confirmed) {
+      toggleBtnOffEffect(document.querySelector(".share-btn"));
+      addon.emit("prefChanged", { "contributeData" : false });
+    } else {
+      elmClicked.checked = true;
+    }
+  });
 }
 
-
-if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
+function setPrefs(event) {
+  if ("contributeData" in event && event["contributeData"]) {
     var toggleBtn = document.querySelector(".share-btn");
     toggleBtn.querySelector("input").checked = true;
-    toggleBtnOnEffect( toggleBtn );
+    toggleBtnOnEffect(toggleBtn);
+  } else {
+    var toggleBtn = document.querySelector(".share-btn");
+    toggleBtn.querySelector("input").checked = false;
+    toggleBtnOffEffect(toggleBtn);
+  }
 }
 
 function toggleBtnOnEffect(toggleBtn){
-    toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
-    toggleBtn.querySelector(".switch").classList.add("checked");
-    toggleBtn.querySelector(".on-off-text").classList.add("checked");
-    toggleBtn.querySelector(".on-off-text").textContent = "ON";
+  toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
+  toggleBtn.querySelector(".switch").classList.add("checked");
+  toggleBtn.querySelector(".on-off-text").classList.add("checked");
+  toggleBtn.querySelector(".on-off-text").textContent = "ON";
 }
 
 function toggleBtnOffEffect(toggleBtn){
@@ -465,41 +472,6 @@ function resetHighlightedRow(){
     }
 }
 
-
-/**************************************************
-*   Special dialog handler for promptToShareDataDialog
-*   FIXME: temporary solution for now.  need to clean up the code a bit.
-*/
-
-
-const promptToShareDialogShowLimit = 3;
-function showPromptToShareDialog(){
-    var showTimes, today, shownToday, belowLimit;
-    showTimes = localStorage.promptToShareDialogShowTimes || "[]";
-    showTimes = JSON.parse(showTimes);
-    today = formattedDate(Date.now());
-    shownToday = showTimes.indexOf(today) > -1;
-    belowLimit = showTimes.length < promptToShareDialogShowLimit;
-    if ( Number(localStorage.numLaunch) > 1 && !doNotShowDialog(dialogNames.promptToShare) && !shownToday && belowLimit){
-        showTimes.push(today);
-        localStorage.promptToShareDialogShowTimes = JSON.stringify(showTimes);
-        showPromptToShareDialog(function(confirmed){
-            if( confirmed ){
-                var sharingToggle = document.querySelector(".toggle-btn.share-btn input");
-                confirmStartSharing(false,sharingToggle);
-                disablePromptToShareDataDialog();
-            }
-        });
-    }
-}
-
-function disablePromptToShareDataDialog(){
-    if ( !doNotShowDialog(dialogNames.promptToShare) ){
-        addToDoNotShowAgainList(dialogNames.promptToShare);
-    }
-}
-
-
 /**************************************************
 *   Singular / Plural Noun
 */
@@ -510,14 +482,12 @@ function singularOrPluralNoun(num,str){
     return ( num > 1) ? str+"s" : str;
 }
 
-
 /**************************************************
 *   Check if a site has certain preference set to it
 */
 function siteHasPref(site,pref){
     return ( Object.keys(userSettings).indexOf(site) > -1 && userSettings[site].contains(pref) );
 }
-
 
 /**************************************************
 *   When initializing Graph View / Clock View

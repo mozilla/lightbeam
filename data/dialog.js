@@ -21,10 +21,6 @@ const allDialogs = {
     'Private Browsing Notification': informUserOfUnsafeWindowsDialog,
 };
 
-
-
-
-
 // options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
 function dialog(options,callback){
     if ( doNotShowDialog(options.name) ) return; // according to user pref, do not show this dialog
@@ -149,7 +145,6 @@ function addDialogEventHandlers(modal,options,callback){
     restrictTabWithinDialog(modal);
 }
 
-
 function addToDoNotShowAgainList(dialogName){
     var dnsPref = localStorage.dnsDialogs || "[]";
     if (dnsPref === 'undefined'){
@@ -159,7 +154,6 @@ function addToDoNotShowAgainList(dialogName){
     dnsPref.push(dialogName);
     localStorage.dnsDialogs = JSON.stringify(dnsPref);
 }
-
 
 function restrictTabWithinDialog(modal){
     var dialogContainer = modal.modalElem;

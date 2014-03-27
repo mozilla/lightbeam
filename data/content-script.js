@@ -55,8 +55,15 @@ self.port.on("private-browsing", function() {
     unsafeWindow.informUserOfUnsafeWindowsDialog();
 });
 
+self.port.on("setPrefs", function(prefs) {
+  if (unsafeWindow && unsafeWindow.aggregate) {
+    unsafeWindow.aggregate.emit("setPrefs", prefs);
+  }
+});
+
 try {
     unsafeWindow.addon = self.port;
+    console.log('Added "addon" to unsafeWindow');
 } catch (e) {
     console.error('unable to add "addon" to unsafeWindow: %s', e);
 }
