@@ -19,6 +19,12 @@ self.port.on('connection', function(connection) {
     }
 });
 
+self.port.on('passStoredConnections', function(connections) {
+    if (unsafeWindow) {
+        unsafeWindow.allConnections = connections;
+    }
+});
+
 self.port.on('update-blocklist', function(domain) {
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.aggregate.emit('update-blocklist', domain);
