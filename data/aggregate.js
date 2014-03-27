@@ -130,8 +130,8 @@ aggregate.on('filter', applyFilter);
 // visualizations.
 function onLoad(connections){
     var startTime = Date.now();
-    console.log("aggregate::onLoad", connections.length, "connections,"
-                currentFilter, "filter");
+    //console.log("aggregate::onLoad", connections.length, "connections,"
+    //            currentFilter, "filter");
     connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
@@ -140,10 +140,10 @@ function onLoad(connections){
     // Tell the visualization that we're ready.
     currentVisualization.emit('init');
     updateStatsBar();
-    console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
+    //console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 aggregate.on('load', onLoad);
-aggregate.on("setPrefs", setPrefs);
+//aggregate.on("setPrefs", setPrefs);
 
 // Constants for indexes of properties in array format
 //const SOURCE = 0;

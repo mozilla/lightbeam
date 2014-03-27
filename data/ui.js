@@ -107,18 +107,6 @@ function confirmStopSharing(elmClicked) {
   });
 }
 
-function setPrefs(event) {
-  if ("contributeData" in event && event["contributeData"]) {
-    var toggleBtn = document.querySelector(".share-btn");
-    toggleBtn.querySelector("input").checked = true;
-    toggleBtnOnEffect(toggleBtn);
-  } else {
-    var toggleBtn = document.querySelector(".share-btn");
-    toggleBtn.querySelector("input").checked = false;
-    toggleBtnOffEffect(toggleBtn);
-  }
-}
-
 function toggleBtnOnEffect(toggleBtn){
   toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
   toggleBtn.querySelector(".switch").classList.add("checked");
@@ -514,4 +502,19 @@ function colourHighlightNodes(highlight){
             blockedSites[i].classList.remove("blockedSites");
         }
     }
+}
+
+function setPrefs(event) {
+  console.log("got set prefs");
+/*
+  if ("contributeData" in event && event["contributeData"]) {
+    var toggleBtn = document.querySelector(".share-btn");
+    toggleBtn.querySelector("input").checked = true;
+    toggleBtnOnEffect(toggleBtn);
+  } else {
+    var toggleBtn = document.querySelector(".share-btn");
+    toggleBtn.querySelector("input").checked = false;
+    toggleBtnOffEffect(toggleBtn);
+  }
+*/
 }
