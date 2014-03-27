@@ -19,7 +19,6 @@ const allDialogs = {
     'Upload Data Confirmation': askForDataSharingConfirmationDialog,
     'Stop Uploading Data Confirmation': stopSharingDialog,
     'Private Browsing Notification': informUserOfUnsafeWindowsDialog,
-    'Save Data From Earlier Format': promptToSaveOldDataDialog,
     'Help the Ecosystem by Sharing': showPromptToShareDialog
 };
 
@@ -251,28 +250,6 @@ function informUserOfUnsafeWindowsDialog(){
     );
 }
 
-
-/******************************************
-*  Prompt to save data from older Collusion format
-*/
-
-function promptToSaveOldDataDialog(data){
-    dialog({
-        "type": "message",
-        "name": dialogNames.saveOldData,
-        "dnsPrompt": false,
-        "title": "Save Data from Earlier Format",
-        "message": "<p>Lightbeam has been updated with a new data format.</p>" + 
-                   "<p>The old data you have stored from the beta (Collusion) is no longer supported and will be deleted.</p>" + 
-                   "<p>If you would like to save a copy of the old data before it is deleted, press OK. If you press Cancel, the old data will be gone.</p>"
-    },
-    function(confirmed){
-        if (confirmed){
-            downloadAsJson(data, 'oldformatCollusionData.json');
-        }
-    });
-
-}
 
 function confirmBlockSitesDialog(callback){
     dialog( {   "name" : dialogNames.blockSites,

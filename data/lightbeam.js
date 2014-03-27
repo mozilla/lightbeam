@@ -11,10 +11,7 @@ try{
 }catch(e){
     userSettings = {};
 }
-var uploadServer = 'https://lightbeamdb.org/shareData';
 var isRobot = false; // Used for spidering the web only
-var uploadTimer;
-var saveTimer;
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -98,9 +95,8 @@ window.addEventListener('load', function(evt){
     currentVisualization = visualizations[visualizationName];
     switchVisualization(visualizationName);
     if ( localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true' ){
-        startUploadTimer();
+      // Propagate pref to addon process
     }
-    saveTimer = setInterval(function(){saveConnections();}, 5 * 60 * 1000); // save to localStorage every 5 minutes    console.log('lightbeam load() ended');
 });
 
 
@@ -116,8 +112,6 @@ function initCap(str){
 function switchVisualization(name){
     // var startTime = Date.now();
     console.log('switchVisualizations(' + name + ')');
-    saveConnections(allConnections);
-    // console.log('it took %s ms to save connections', Date.now() - startTime)
     if (currentVisualization != visualizations[name]) {
         currentVisualization.emit('remove');
     }
@@ -125,7 +119,6 @@ function switchVisualization(name){
     currentVisualization = visualizations[name];
     resetAdditionalUI();
     currentVisualization.emit('init');
-    // addon.emit('uiready'); // is this needed?
     // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
 
@@ -152,103 +145,22 @@ function resetAdditionalUI(){
 
 
 /****************************************
-*   Save connections
-*/
-function saveConnections(){
-    // console.error('saveConnections( ' + allConnections.length + ' connection)');
-    var lastSaved = Number(localStorage.lastSaved || 0);
-    var unsavedNonPrivateConn = excludePrivateConnection(allConnections).filter(function(connection){
-        // console.log(connection[TIMESTAMP] + ' > ' + lastSaved + ' (' + (connection[TIMESTAMP] > lastSaved) + ' [' + (typeof connection[TIMESTAMP]) + ']');
-        return ( connection[TIMESTAMP] > lastSaved);
-    });
-    // console.error(unsavedNonPrivateConn.length + ' unsaved, non-private connections');
-    if ( unsavedNonPrivateConn.length > 0 ){
-        saveConnectionsByDate(unsavedNonPrivateConn);
-    }
-    localStorage.lastSaved = Date.now();
-}
-
-
-function saveConnectionsByDate(connections){
-    var connByDateSet = {};
-    var conn, key;
-    // group connections by date
-    for ( var i=0; i<connections.length; i++ ){
-        conn = connections[i];
-        key = dateAsKey( conn[TIMESTAMP] );
-        if ( connByDateSet[key] ){
-            connByDateSet[key].push(conn);
-        }else{
-            connByDateSet[key] = [conn];
-        }
-    }
-    // save each group of connections to localStorage
-    for(var date in connByDateSet){
-        saveConnToLocalStorage(date,connByDateSet[date]);
-    }
-}
-
-
-function saveConnToLocalStorage(date,connections){
-    if ( !localStorage.getItem(date) ){
-        saveToLocalStorage(date, JSON.stringify(connections));
-    }else{
-        saveToLocalStorage(date, localStorage.getItem(date).slice(0,-1) + "," + JSON.stringify(connections).slice(1,-1) + "]");
-    }
-}
-
-
-function dateAsKey(timestamp){
-    var theDate = new Date(timestamp);
-    var year = theDate.getFullYear();
-    var month = "00" + (theDate.getMonth()+1);
-    var date = "00" + theDate.getDate();
-    month = month.substr(-2); // fix the format
-    date = date.substr(-2);
-    return year+ "-" + month + "-" + date; // in the format of YYYY-MM-DD
-}
-
-
-/****************************************
 *   Upload data
 */
 
 
-function startSharing(askForConfirmation,callback){
-    if ( askForConfirmation ){
-        askForDataSharingConfirmationDialog( function(confirmed){
-            if ( confirmed ){
-                localStorage.lastUpload = Date.now();
-                localStorage.userHasOptedIntoSharing = true;
-                sharingData();
-            }
-            callback(confirmed);        
-        });
-    }else{
-        localStorage.lastUpload = Date.now();
-        localStorage.userHasOptedIntoSharing = true;
-        sharingData();
-        callback(true);
+function startSharing(askForConfirmation, callback) {
+  if (askForConfirmation){
+    askForDataSharingConfirmationDialog(function(confirmed) {
+    if (confirmed) {
+      localStorage.userHasOptedIntoSharing = true;
     }
-}
-
-function sharingData(){
-    console.log("Beginning Upload...");
-    var lastUpload = localStorage.lastUpload;
-    var connections = allConnections.filter(function(connection){
-        return ( connection[TIMESTAMP] ) > lastUpload;
+    callback(confirmed);        
     });
-    var data = exportFormat(connections,true); // round off timestamp
-    addon.emit('upload', data);
-    console.log('data: %s (%s characters total)', data.slice(0,40), data.length);
-    // This is completely and totally broken. However, just leave it here for
-    // now.
-    startUploadTimer();
-}
-
-function startUploadTimer(){
-    localStorage.lastUpload = Date.now();
-    uploadTimer = setTimeout(function(){sharingData();}, 10 * 60 * 1000); // upload every 10 minutes
+  } else {
+    localStorage.userHasOptedIntoSharing = true;
+    callback(true);
+  }
 }
 
 // Save user settings on exit

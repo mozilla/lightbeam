@@ -37,10 +37,8 @@ self.port.on('update-blocklist-all', function(domains) {
 
 self.port.on('init', function(lightbeamToken) {
     console.error('content-script::init()');
-    // localStorage.lightbeamToken = lightbeamToken;
 
     if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
-        unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     } else {
         console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
@@ -56,32 +54,16 @@ self.port.on('init', function(lightbeamToken) {
 
 
 self.port.on("passTempConnections", function(connReceived) {
-    // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
-    self.port.emit("tempConnectionTransferred", true);
+  // connReceived is a possibly-empty array of connection arrays [ [], [], [] ]
+  self.port.emit("tempConnectionTransferred", true);
 
-    localStorage.lastSaved = Date.now();
+  localStorage.lastSaved = Date.now();
 
-    var nonPrivateConnections = connReceived.filter(function(connection) {
-        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
-    });
-    unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
+  var nonPrivateConnections = connReceived.filter(function(connection) {
+    return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
+  });
+  unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
 });
-
-self.port.on("promptToSaveOldData", function(data) {
-    unsafeWindow.promptToSaveOldDataDialog(data);
-});
-
-function getAllConnections() {
-    var allConnectionsAsArray = [];
-    Object.keys(localStorage).sort().forEach(function(key) {
-        if (key.charAt(0) == "2") { // date keys are in the format of yyyy-mm-dd
-            var conns = JSON.parse(localStorage.getItem(key));
-            allConnectionsAsArray = allConnectionsAsArray.concat(conns);
-        }
-    });
-    console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
-    return allConnectionsAsArray;
-}
 
 self.port.on("private-browsing", function() {
     unsafeWindow.informUserOfUnsafeWindowsDialog();

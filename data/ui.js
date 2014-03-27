@@ -112,7 +112,6 @@ if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing
     toggleBtnOnEffect( toggleBtn );
 }
 
-
 function toggleBtnOnEffect(toggleBtn){
     toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
     toggleBtn.querySelector(".switch").classList.add("checked");
@@ -336,39 +335,6 @@ document.querySelector(".stage").addEventListener("mouseleave",function(event){
     vizcanvas.style.cursor = "default";
 },false);
 
-
-/* Export ========== */
-
-function exportFormat(connections, roundOff){
-    var tempConnections = excludePrivateConnection(connections).slice(0);
-    if ( roundOff ){
-        tempConnections = roundOffTimestamp(tempConnections);
-    }
-    var exportSet = {
-        format: 'Lightbeam Save File',
-        version: '1.1',
-        connections: tempConnections
-    }
-    if (isRobot){
-        exportSet.isRobot = true;
-    }
-    return JSON.stringify(exportSet, null, "  ");
-}
-
-/* Filter out connections collected in Private Mode */
-function excludePrivateConnection(connections){
-    return connections.filter(function(connection){
-        return !connection[FROM_PRIVATE_MODE];
-    })
-}
-
-function roundOffTimestamp(connections){
-    return  connections.map(function(conn){
-                var tempConn = conn.slice(0);
-                tempConn[TIMESTAMP] -= ( tempConn[TIMESTAMP] % roundOffFactor );
-                return tempConn;
-            });
-}
 
 /* Legend & Controls ===================================== */
 
