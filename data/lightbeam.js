@@ -100,10 +100,6 @@ window.addEventListener('load', function(evt){
 });
 
 
-window.addEventListener('beforeunload', function(){
-    saveConnections(allConnections);
-}, false);
-
 function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
 }

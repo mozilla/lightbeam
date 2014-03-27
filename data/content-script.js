@@ -43,26 +43,6 @@ self.port.on('init', function(lightbeamToken) {
     } else {
         console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
     }
-
-    // FIXME: temporary solution for now.  need to clean up the code
-    if (unsafeWindow && unsafeWindow.showPromptToShareDialog) {
-        unsafeWindow.showPromptToShareDialog();
-    } else {
-        console.error('cannot call unsafeWindow.showPromptToShare: %s', unsafeWindow);
-    }
-});
-
-
-self.port.on("passTempConnections", function(connReceived) {
-  // connReceived is a possibly-empty array of connection arrays [ [], [], [] ]
-  self.port.emit("tempConnectionTransferred", true);
-
-  localStorage.lastSaved = Date.now();
-
-  var nonPrivateConnections = connReceived.filter(function(connection) {
-    return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
-  });
-  unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
 });
 
 self.port.on("private-browsing", function() {

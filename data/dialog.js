@@ -19,7 +19,6 @@ const allDialogs = {
     'Upload Data Confirmation': askForDataSharingConfirmationDialog,
     'Stop Uploading Data Confirmation': stopSharingDialog,
     'Private Browsing Notification': informUserOfUnsafeWindowsDialog,
-    'Help the Ecosystem by Sharing': showPromptToShareDialog
 };
 
 
@@ -285,21 +284,6 @@ function confirmResetDataDialog(callback){
         "imageUrl": "image/lightbeam_popup_warningreset.png"
     },callback
     );
-}
-
-function showPromptToShareDialog(callback){
-    dialog( {
-        "name": dialogNames.promptToShare,
-        "dnsPrompt": true,
-        "title": "Help the Ecosystem by Sharing",
-        "message":  "<p>As a user of Lightbeam, you can help contribute to build our data ecosystem.</p>" + 
-                    "<p>By sharing your data you can help us and others to understand third-party relationships on the web and promote further research in the field of online tracking and privacy.</p>  "+
-                    "<p>Do you want to upload your data to the <a href='http://mozilla.org/en-US/lightbeam/database/'>public database</a> now?</p>",
-        "imageUrl": "image/lightbeam_popup_startsharing.png"
-    },
-    callback
-    );
-
 }
 
 // Helper function for testing so we can trigger any dialog.
