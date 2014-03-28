@@ -1,7 +1,8 @@
+(function(global) {
 // Used for managing the DOM for infobar part of the page
 'use strict';
 
-function initMap(){
+global.initMap = function initMap(mapcanvas, mapDocument){
 
 var oriMapViewBox = mapcanvas.getAttribute('viewBox');
 
@@ -316,4 +317,4 @@ function hideAllInfoPanelContentExcept(elmToShow){
     }
 }
 
-
+})(this);

@@ -1,12 +1,12 @@
+(function(global) {
+
 'use strict';
 
-const roundOffFactor = 5*60*1000; // in milliseconds
 var visualizations = {};
 var currentVisualization;
 var currentFilter;
-var allConnections = [];
-var isRobot = false; // Used for spidering the web only
 var userSettings = {};
+var allConnections = [];
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -30,9 +30,16 @@ var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  initMap();
+  initMap(mapcanvas, mapDocument);
 }, false);
 
+// Export everything
+global.visualizations = visualizations;
+global.currentVisualization = currentVisualization;
+global.currentFilter = currentFilter;
+global.userSettings = userSettings;
+global.vizcanvas = vizcanvas;
+global.allConnections = allConnections;
 
 // DOM Utility
 
@@ -161,12 +168,19 @@ function formattedDate(date,format){
 }
 
 
+function singularOrPluralNoun(num,str){
+    if ( typeof num != "number" ){
+        num = parseFloat(num);
+    }
+    return ( num > 1) ? str+"s" : str;
+}
+
 /****************************************
 *   update Stats Bar
 */
-function updateStatsBar(){
+global.updateStatsBar = function updateStatsBar(){
     var dateSince = "just now";
-    if ( allConnections.length > 0 ){
+    if (global.allConnections.length > 0 ){
         dateSince = formattedDate(allConnections[0][2]);
     }
     document.querySelector(".top-bar .date-gathered").textContent = dateSince;
@@ -174,5 +188,4 @@ function updateStatsBar(){
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
 
-
-
+})(this);

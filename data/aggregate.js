@@ -2,7 +2,8 @@
 
 // Visualization of tracking data interconnections
 
-(function(global){
+(function(global) {
+
 "use strict";
 
 // An emitter that lists nodes and edges so we can build the data structure
@@ -40,7 +41,7 @@ function resetData(){
     aggregate.trackerCount = 0;
     aggregate.siteCount = 0;
     aggregate.recentSites = [];
-    currentVisualization.emit('reset');
+    global.currentVisualization.emit('reset');
     updateStatsBar();
 }
 aggregate.on('reset', resetData);
@@ -132,40 +133,46 @@ aggregate.connectionAsObject = function(conn){
 // visualizations.
 function onLoad(connections){
     var startTime = Date.now();
-    console.log("aggregate::onLoad", connections.length, "connections", aggregate.currentFilter);
-    connections.forEach(onConnection);
+    if (connections) {
+      console.log("aggregate::onLoad", connections.length, "connections", aggregate.currentFilter);
+      connections.forEach(onConnection);
+    }
     aggregate.initialized = true;
     filteredAggregate = aggregate.filters[aggregate.currentFilter]();
 
     // Tell the visualization that we're ready.
-    currentVisualization.emit('init');
+    if (global.currentVisualization) {
+      global.currentVisualization.emit('init');
+    }
     updateStatsBar();
     console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
 function setPrefs(prefs) {
   console.log("in aggregate prefs");
-  global.setPrefs(prefs);
+  if (global.setPrefs) {
+    global.setPrefs(prefs);
+  }
 }
 
 aggregate.on('load', onLoad);
 aggregate.on("setPrefs", setPrefs);
 
 // Constants for indexes of properties in array format
-//const SOURCE = 0;
-//const TARGET = 1;
-//const TIMESTAMP = 2;
-//const CONTENT_TYPE = 3;
-//const COOKIE = 4;
-//const SOURCE_VISITED = 5;
-//const SECURE = 6;
-//const SOURCE_PATH_DEPTH = 7;
-//const SOURCE_QUERY_DEPTH = 8;
-//const SOURCE_SUB = 9;
-//const TARGET_SUB = 10;
-//const METHOD = 11;
-//const STATUS = 12;
-//const CACHEABLE = 13;
+const SOURCE = 0;
+const TARGET = 1;
+const TIMESTAMP = 2;
+const CONTENT_TYPE = 3;
+const COOKIE = 4;
+const SOURCE_VISITED = 5;
+const SECURE = 6;
+const SOURCE_PATH_DEPTH = 7;
+const SOURCE_QUERY_DEPTH = 8;
+const SOURCE_SUB = 9;
+const TARGET_SUB = 10;
+const METHOD = 11;
+const STATUS = 12;
+const CACHEABLE = 13;
 
 // Check that recent sites include the domain. This is another potential source
 // of false positives.
@@ -499,7 +506,7 @@ var debounce = function debounce(func, wait, immediate) {
 
 aggregate.update = debounce(function update(){
     // FIXME: maybe not for list view
-    if (currentVisualization.name !== 'graph'){
+    if (global.currentVisualization && global.currentVisualization.name !== 'graph'){
         console.log('do not update aggregate for %s view', currentVisualization.name);
     }
     if (aggregate.initialized){

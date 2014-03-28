@@ -3,9 +3,13 @@
 
 // Visualization of tracking data interconnections
 
-(function(visualizations){
+(function(visualizations, global){
 "use strict";
 
+// Bunch of utilities related to UI elements.
+const graphNodeRadius = {
+    "graph": 12
+};
 
 // The graph is an emitter with a default size.
 var graph = new Emitter();
@@ -46,7 +50,7 @@ function onUpdate(){
         force.links(filteredAggregate.edges);
         force.start();
         updateGraph();
-        colourHighlightNodes(highlight);
+        global.colourHighlightNodes(highlight);
     }else{
         console.log('the force is not with us');
     }
@@ -80,7 +84,7 @@ function onRemove(){
 
 function onReset(){
     onRemove();
-    aggregate.emit('load', allConnections);
+    aggregate.emit('load', global.allConnections);
 }
 
 // UTILITIES FOR CREATING POLYGONS
@@ -123,6 +127,11 @@ function nodeName(node){
     }
     return undefined;
 }
+global.siteHasPref = function siteHasPref(site,pref){
+  return (Object.keys(userSettings).indexOf(site) > -1 &&
+          userSettings[site].contains(pref));
+}
+
 function watchSite(node){
     return siteHasPref(node.name,"watch");
 }
@@ -135,6 +144,29 @@ function blockSite(node){
 var ticking = false;
 
 function charge(d){ return -(500 +  d.weight * 25); }
+
+global.colourHighlightNodes = function colourHighlightNodes(highlight){
+    var watchedSites = document.querySelectorAll(".watched");
+    var blockedSites = document.querySelectorAll(".blocked");
+    if ( highlight.watched ){
+        for (var i=0; i<watchedSites.length; i++){
+            watchedSites[i].classList.add("watchedSites");
+        }
+    }else{
+        for (var i=0; i<watchedSites.length; i++){
+            watchedSites[i].classList.remove("watchedSites");
+        }
+    }
+    if ( highlight.blocked ){
+        for (var i=0; i<blockedSites.length; i++){
+            blockedSites[i].classList.add("blockedSites");
+        }
+    }else{
+        for (var i=0; i<blockedSites.length; i++){
+            blockedSites[i].classList.remove("blockedSites");
+        }
+    }
+}
 
 function initGraph(){
     // Initialize D3 layout and bind data
@@ -302,7 +334,9 @@ function resetCanvas(){
 
 var graphLegend = document.querySelector(".graph-footer");
 
-legendBtnClickHandler(graphLegend);
+if (global.legendBtnClickHandler) {
+  global.legendBtnClickHandler(graphLegend);
+}
 
 graphLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".visitedYes");
@@ -344,4 +378,4 @@ graphLegend.querySelector(".legend-toggle").addEventListener("click", function(e
 });
 
 
-})(visualizations);
+})(visualizations, this);

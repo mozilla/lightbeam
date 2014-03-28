@@ -4,7 +4,7 @@
 
 // Display data in tabular format
 
-(function(visualizations){
+(function(visualizations, global){
 
 var list = new Emitter();
 var breadcrumbStack = [];
@@ -23,7 +23,7 @@ function onReset(){
     console.log("reset list");
     breadcrumbStack = [];
     onRemove();
-    aggregate.emit('load', allConnections);
+    aggregate.emit('load', global.allConnections);
 }
 
 function onInit(){
@@ -608,4 +608,4 @@ function toggleShowHideHiddenButton(){
     }
 }
 
-})(visualizations);
+})(visualizations, this);
