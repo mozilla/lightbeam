@@ -20,6 +20,8 @@ list.on("showFilteredTable", function(filter){
 list.on('reset', onReset);
 
 function onReset(){
+    console.log("reset list");
+    breadcrumbStack = [];
     onRemove();
     aggregate.emit('load', allConnections);
 }
@@ -238,6 +240,7 @@ function resetSelectedRows() {
 var lastFilter = null;
 
 function showFilteredTable(filter){
+    console.log("showFilteredTable", filter);
     if ( lastFilter != filter ) updateBreadcrumb(filter);
     lastFilter = filter;
     // remove existing table tbodys, if any
@@ -246,6 +249,7 @@ function showFilteredTable(filter){
     var tbodyParent = tbody.parentElement;
     tbodyParent.removeChild(tbody);
     var nodes = getNodes(filter);
+    console.log("getNodes", nodes);
     tbodyParent.appendChild( createBody(nodes) );
     resort(table);
     // update other UI elements

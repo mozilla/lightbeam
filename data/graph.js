@@ -83,7 +83,6 @@ function onReset(){
     aggregate.emit('load', allConnections);
 }
 
-
 // UTILITIES FOR CREATING POLYGONS
 
 function point(angle, size){

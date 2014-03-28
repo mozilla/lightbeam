@@ -99,7 +99,6 @@ function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
 }
 
-
 function switchVisualization(name){
     // var startTime = Date.now();
     console.log('switchVisualizations(' + name + ')');
@@ -160,32 +159,9 @@ window.addEventListener('beforeunload', function(event){
             delete userSettings[key];
         } 
     });
+    // Get rid of this.
     localStorage.userSettings = JSON.stringify(userSettings);
 }, false);
-
-function saveToLocalStorage(key,value){
-    try{
-        localStorage.setItem(key,value);
-    }catch(error){
-        console.log(error);
-        if ( error.code == 1014 ){ // QUOTA_EXCEEDED_ERR
-            console.log("localStorage reaches its quota, deleting the oldest connections set.");
-            var dateKeyArray = [];
-            Object.keys(localStorage).sort().forEach(function(key){
-                if ( key.charAt(0) == "2" ){ // date keys are in the format of yyyy-mm-dd
-                    dateKeyArray.push(key);
-                }
-            });
-            if ( dateKeyArray.length == 0 ){ // exceed localStorage quota and there are no more connections can be deleted
-                console.log("[ Error ] Failed to store data to localStorage.");
-                return;
-            }
-            localStorage.removeItem( dateKeyArray.shift() );
-            saveToLocalStorage(key,value); // try saving again
-        }
-    }
-}
-
 
 /****************************************
 *   Format date string
