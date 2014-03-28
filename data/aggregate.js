@@ -119,7 +119,6 @@ aggregate.connectionAsObject = function(conn){
 
 }
 
-
 function applyFilter(filter){
     currentFilter = filter;
 }
@@ -135,15 +134,20 @@ function onLoad(connections){
     connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
-    // Set the contribute data button
 
     // Tell the visualization that we're ready.
     currentVisualization.emit('init');
     updateStatsBar();
     //console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
+
+function setPrefs(prefs) {
+  console.log("in aggregate prefs");
+  global.setPrefs(prefs);
+}
+
 aggregate.on('load', onLoad);
-//aggregate.on("setPrefs", setPrefs);
+aggregate.on("setPrefs", setPrefs);
 
 // Constants for indexes of properties in array format
 //const SOURCE = 0;

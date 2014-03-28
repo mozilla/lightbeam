@@ -56,8 +56,11 @@ self.port.on("private-browsing", function() {
 });
 
 self.port.on("setPrefs", function(prefs) {
+  console.log("Got set prefs", prefs);
   if (unsafeWindow && unsafeWindow.aggregate) {
     unsafeWindow.aggregate.emit("setPrefs", prefs);
+  } else {
+    console.error("cannot call aggregate.setPrefs");
   }
 });
 

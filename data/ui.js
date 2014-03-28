@@ -159,34 +159,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
     });
 });
 
-// function handleDisclosureToggle(elem){
-//     console.log('disclosure toggled');
-// }
-
-// function handleUserSettingToggle(elem){
-//     console.log('User setting changed');
-// }
-
-// document.querySelector('.stage').addEventListener('click', function(event){
-//     // demultiplex "live" event handlers
-//     if (event.target.mozMatchesSelector('.disclosure')){
-//         handleDisclosureToggle(event.target);
-//         event.preventDefault();
-//         event.stopPropagation();
-//     }else if (event.target.mozMatchesSelector('.userSetting')){
-//         handleUserSettingToggle(event.target);
-//         event.stopPropagation();
-//     }else if (event.target.mozMatchesSelector('[type=checkbox]')){
-//         event.stopPropagation();
-//         if (event.target.mozMatchesSelector('selectedHeader')){
-//             // what to do here, select all or sort?
-//         }
-//     }else{
-//         console.log('so what is it, then? %o', event.target);
-//     }
-// });
-
-
 function getZoom(canvas){
     try{
     var box = canvas.getAttribute('viewBox')
@@ -505,8 +477,6 @@ function colourHighlightNodes(highlight){
 }
 
 function setPrefs(event) {
-  console.log("got set prefs");
-/*
   if ("contributeData" in event && event["contributeData"]) {
     var toggleBtn = document.querySelector(".share-btn");
     toggleBtn.querySelector("input").checked = true;
@@ -516,5 +486,4 @@ function setPrefs(event) {
     toggleBtn.querySelector("input").checked = false;
     toggleBtnOffEffect(toggleBtn);
   }
-*/
 }
