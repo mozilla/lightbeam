@@ -19,24 +19,11 @@ const allDialogs = {
     'Upload Data Confirmation': askForDataSharingConfirmationDialog,
     'Stop Uploading Data Confirmation': stopSharingDialog,
     'Private Browsing Notification': informUserOfUnsafeWindowsDialog,
-    'Save Data From Earlier Format': promptToSaveOldDataDialog,
-    'Help the Ecosystem by Sharing': showPromptToShareDialog
 };
-
-
-
-
 
 // options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
 function dialog(options,callback){
-    if ( doNotShowDialog(options.name) ) return; // according to user pref, do not show this dialog
     createDialog(options,callback);
-}
-
-function doNotShowDialog(dialogName){
-    var dnsPref = localStorage.dnsDialogs || "[]";
-    dnsPref = JSON.parse(dnsPref);
-    return ( dnsPref.indexOf(dialogName) > -1 ) ? true : false;
 }
 
 function createDialog(options,callback){
@@ -105,7 +92,6 @@ function addDialogEventHandlers(modal,options,callback){
     var okButton = dialogContainer.querySelector(".pico-close.dialog-ok");
     okButton.addEventListener("click",function(){
         if ( dialogContainer.querySelector(".dialog-dns input") && dialogContainer.querySelector(".dialog-dns input").checked ){ // Do Not Show
-            addToDoNotShowAgainList(options.name);
         }
         modal.close();
         callback(true);
@@ -116,7 +102,6 @@ function addDialogEventHandlers(modal,options,callback){
         cancelButton.addEventListener("click",function(){
             if (options.name == dialogNames.promptToShare){
                 if ( dialogContainer.querySelector(".dialog-dns input").checked ){
-                    addToDoNotShowAgainList(options.name);
                 }
             }
             modal.close();
@@ -150,18 +135,6 @@ function addDialogEventHandlers(modal,options,callback){
 
     restrictTabWithinDialog(modal);
 }
-
-
-function addToDoNotShowAgainList(dialogName){
-    var dnsPref = localStorage.dnsDialogs || "[]";
-    if (dnsPref === 'undefined'){
-        dnsPref = "[]";
-    }
-    dnsPref = JSON.parse(dnsPref);
-    dnsPref.push(dialogName);
-    localStorage.dnsDialogs = JSON.stringify(dnsPref);
-}
-
 
 function restrictTabWithinDialog(modal){
     var dialogContainer = modal.modalElem;
@@ -224,14 +197,7 @@ function stopSharingDialog(callback){
                 "imageUrl": "image/lightbeam_popup_stopsharing2.png"
             },
             function(confirmed){
-                if ( confirmed ){
-                    localStorage.userHasOptedIntoSharing = false;
-                    if (uploadTimer){
-                        clearTimeout(uploadTimer);
-                        uploadTimer = null;
-                    }
-                }
-                callback(confirmed);
+              callback(confirmed);
             }
     );
 }
@@ -251,28 +217,6 @@ function informUserOfUnsafeWindowsDialog(){
     );
 }
 
-
-/******************************************
-*  Prompt to save data from older Collusion format
-*/
-
-function promptToSaveOldDataDialog(data){
-    dialog({
-        "type": "message",
-        "name": dialogNames.saveOldData,
-        "dnsPrompt": false,
-        "title": "Save Data from Earlier Format",
-        "message": "<p>Lightbeam has been updated with a new data format.</p>" + 
-                   "<p>The old data you have stored from the beta (Collusion) is no longer supported and will be deleted.</p>" + 
-                   "<p>If you would like to save a copy of the old data before it is deleted, press OK. If you press Cancel, the old data will be gone.</p>"
-    },
-    function(confirmed){
-        if (confirmed){
-            downloadAsJson(data, 'oldformatCollusionData.json');
-        }
-    });
-
-}
 
 function confirmBlockSitesDialog(callback){
     dialog( {   "name" : dialogNames.blockSites,
@@ -309,34 +253,3 @@ function confirmResetDataDialog(callback){
     },callback
     );
 }
-
-function showPromptToShareDialog(callback){
-    dialog( {
-        "name": dialogNames.promptToShare,
-        "dnsPrompt": true,
-        "title": "Help the Ecosystem by Sharing",
-        "message":  "<p>As a user of Lightbeam, you can help contribute to build our data ecosystem.</p>" + 
-                    "<p>By sharing your data you can help us and others to understand third-party relationships on the web and promote further research in the field of online tracking and privacy.</p>  "+
-                    "<p>Do you want to upload your data to the <a href='http://mozilla.org/en-US/lightbeam/database/'>public database</a> now?</p>",
-        "imageUrl": "image/lightbeam_popup_startsharing.png"
-    },
-    callback
-    );
-
-}
-
-// Helper function for testing so we can trigger any dialog.
-function showDialog(name){
-    if (Object.keys(allDialogs).indexOf(name) > -1){
-        var tempPref = localStorage.dnsDialogs;
-        localStorage.dnsDialogs = '[]';
-        allDialogs[name](function(){});
-        localStorage.dnsDialogs = tempPref;
-    }else{
-        console.log('Use: showDialog("name") where name is one of');
-        Object.keys(allDialogs).forEach(function(name){
-            console.log('\t%s', name);
-        });
-    }
-}
-
