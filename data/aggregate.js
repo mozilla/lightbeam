@@ -129,8 +129,7 @@ aggregate.on('filter', applyFilter);
 // visualizations.
 function onLoad(connections){
     var startTime = Date.now();
-    //console.log("aggregate::onLoad", connections.length, "connections,"
-    //            currentFilter, "filter");
+    console.log("aggregate::onLoad", connections.length, "connections");
     connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
@@ -138,7 +137,7 @@ function onLoad(connections){
     // Tell the visualization that we're ready.
     currentVisualization.emit('init');
     updateStatsBar();
-    //console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
+    console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
 function setPrefs(prefs) {

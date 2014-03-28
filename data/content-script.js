@@ -22,6 +22,7 @@ self.port.on('connection', function(connection) {
 self.port.on('passStoredConnections', function(connections) {
     if (unsafeWindow) {
         unsafeWindow.allConnections = connections;
+        unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     }
 });
 
@@ -41,9 +42,8 @@ self.port.on('update-blocklist-all', function(domains) {
     }
 });
 
-self.port.on('init', function(lightbeamToken) {
+self.port.on('init', function() {
     console.error('content-script::init()');
-
     if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     } else {
