@@ -23,14 +23,7 @@ const allDialogs = {
 
 // options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
 function dialog(options,callback){
-    if ( doNotShowDialog(options.name) ) return; // according to user pref, do not show this dialog
     createDialog(options,callback);
-}
-
-function doNotShowDialog(dialogName){
-    var dnsPref = localStorage.dnsDialogs || "[]";
-    dnsPref = JSON.parse(dnsPref);
-    return ( dnsPref.indexOf(dialogName) > -1 ) ? true : false;
 }
 
 function createDialog(options,callback){
@@ -99,7 +92,6 @@ function addDialogEventHandlers(modal,options,callback){
     var okButton = dialogContainer.querySelector(".pico-close.dialog-ok");
     okButton.addEventListener("click",function(){
         if ( dialogContainer.querySelector(".dialog-dns input") && dialogContainer.querySelector(".dialog-dns input").checked ){ // Do Not Show
-            addToDoNotShowAgainList(options.name);
         }
         modal.close();
         callback(true);
@@ -110,7 +102,6 @@ function addDialogEventHandlers(modal,options,callback){
         cancelButton.addEventListener("click",function(){
             if (options.name == dialogNames.promptToShare){
                 if ( dialogContainer.querySelector(".dialog-dns input").checked ){
-                    addToDoNotShowAgainList(options.name);
                 }
             }
             modal.close();
@@ -143,16 +134,6 @@ function addDialogEventHandlers(modal,options,callback){
     }
 
     restrictTabWithinDialog(modal);
-}
-
-function addToDoNotShowAgainList(dialogName){
-    var dnsPref = localStorage.dnsDialogs || "[]";
-    if (dnsPref === 'undefined'){
-        dnsPref = "[]";
-    }
-    dnsPref = JSON.parse(dnsPref);
-    dnsPref.push(dialogName);
-    localStorage.dnsDialogs = JSON.stringify(dnsPref);
 }
 
 function restrictTabWithinDialog(modal){
@@ -216,14 +197,7 @@ function stopSharingDialog(callback){
                 "imageUrl": "image/lightbeam_popup_stopsharing2.png"
             },
             function(confirmed){
-                if ( confirmed ){
-                    localStorage.userHasOptedIntoSharing = false;
-                    if (uploadTimer){
-                        clearTimeout(uploadTimer);
-                        uploadTimer = null;
-                    }
-                }
-                callback(confirmed);
+              callback(confirmed);
             }
     );
 }
@@ -279,19 +253,3 @@ function confirmResetDataDialog(callback){
     },callback
     );
 }
-
-// Helper function for testing so we can trigger any dialog.
-function showDialog(name){
-    if (Object.keys(allDialogs).indexOf(name) > -1){
-        var tempPref = localStorage.dnsDialogs;
-        localStorage.dnsDialogs = '[]';
-        allDialogs[name](function(){});
-        localStorage.dnsDialogs = tempPref;
-    }else{
-        console.log('Use: showDialog("name") where name is one of');
-        Object.keys(allDialogs).forEach(function(name){
-            console.log('\t%s', name);
-        });
-    }
-}
-

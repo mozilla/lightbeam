@@ -5,13 +5,8 @@ var visualizations = {};
 var currentVisualization;
 var currentFilter;
 var allConnections = [];
-var userSettings;
-try{
-    userSettings = JSON.parse(localStorage.userSettings || '{}');
-}catch(e){
-    userSettings = {};
-}
 var isRobot = false; // Used for spidering the web only
+var userSettings = {};
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -88,8 +83,8 @@ window.addEventListener('load', function(evt){
     console.log('window onload');
     addon.emit('uiready');
     // Wire up events
-    document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
-    var visualizationName = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
+    document.querySelector('[data-value=Graph]').setAttribute("data-selected", true);
+    var visualizationName = "graph";
     console.log("current vis", visualizationName);
     currentVisualization = visualizations[visualizationName];
     switchVisualization(visualizationName);
@@ -105,10 +100,10 @@ function switchVisualization(name){
     if (currentVisualization != visualizations[name]) {
         currentVisualization.emit('remove');
     }
-    localStorage.visualization = initCap(name);
     currentVisualization = visualizations[name];
     resetAdditionalUI();
     currentVisualization.emit('init');
+    addon.emit("prefChanged", { defaultVisualization: name });
     // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
 
@@ -150,18 +145,6 @@ function startSharing(askForConfirmation, callback) {
     callback(true);
   }
 }
-
-// Save user settings on exit
-window.addEventListener('beforeunload', function(event){
-    // don't need to store empty settings
-    Object.keys(userSettings).forEach(function(key){
-        if (!userSettings[key]){
-            delete userSettings[key];
-        } 
-    });
-    // Get rid of this.
-    localStorage.userSettings = JSON.stringify(userSettings);
-}, false);
 
 /****************************************
 *   Format date string

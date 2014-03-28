@@ -41,10 +41,6 @@ function dropdownGroup(btnGroup, callback){
     });
 }
 
-// Default selections
-document.querySelector('a[data-value=' + (localStorage.currentFilter || 'daily') + ']').dataset.selected = true;
-document.querySelector(".filter-display header").textContent = document.querySelector(".btn_group.session").querySelector("[data-selected]").textContent;
-
 /* Bind click event listener to each of the btn_group memebers */
 var btnGroupArray = toArray(document.querySelectorAll(".btn_group"));
 btnGroupArray.forEach(function(btnGroup){
@@ -152,7 +148,6 @@ document.querySelector('.reset-data').addEventListener('click', function(){
             allConnections = [];
             addon.emit('reset');
             aggregate.emit('reset');
-            localStorage.clear();
             location.reload(); // reload page
         }
     });
@@ -342,9 +337,6 @@ function selectedNodeEffect(name){
         resetAllGlow("all");
         addGlow(name,"selected");
     }
-    // if ( currentVisualization.name == "graph" ){
-    //     addGlow(name,"selected");
-    // }
     if ( currentVisualization.name == "list" ){
         resetHighlightedRow();
     }
@@ -445,7 +437,8 @@ function singularOrPluralNoun(num,str){
 *   Check if a site has certain preference set to it
 */
 function siteHasPref(site,pref){
-    return ( Object.keys(userSettings).indexOf(site) > -1 && userSettings[site].contains(pref) );
+  return (Object.keys(userSettings).indexOf(site) > -1 &&
+          userSettings[site].contains(pref));
 }
 
 /**************************************************
@@ -476,13 +469,26 @@ function colourHighlightNodes(highlight){
 }
 
 function setPrefs(event) {
-  if ("contributeData" in event && event["contributeData"]) {
+  console.log("Setting content script prefs", JSON.stringify(event));
+  if ("contributeData" in event) {
     var toggleBtn = document.querySelector(".share-btn");
-    toggleBtn.querySelector("input").checked = true;
-    toggleBtnOnEffect(toggleBtn);
-  } else {
-    var toggleBtn = document.querySelector(".share-btn");
-    toggleBtn.querySelector("input").checked = false;
-    toggleBtnOffEffect(toggleBtn);
+    if (event["contributeData"]) {
+      toggleBtn.querySelector("input").checked = true;
+      toggleBtnOnEffect(toggleBtn);
+    } else {
+      toggleBtn.querySelector("input").checked = false;
+      toggleBtnOffEffect(toggleBtn);
+    }
+  }
+  if ("defaultVisualization" in event) {
+    currentVisualization = visualizations[event["defaultVisualization"]];
+  }
+  // This is not working quite
+  if ("defaultFilter" in event) {
+    aggregate.currentFilter = event["defaultFilter"];
+    document.querySelector('a[data-value=' + aggregate.currentFilter + ']').
+      dataset.selected = true;
+    document.querySelector(".filter-display header").textContent =
+      document.querySelector(".btn_group.session").querySelector("[data-selected]").textContent;
   }
 }

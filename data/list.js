@@ -251,7 +251,6 @@ function showFilteredTable(filter){
     var nodes = getNodes(filter);
     console.log("getNodes", nodes);
     tbodyParent.appendChild( createBody(nodes) );
-    resort(table);
     // update other UI elements
     document.querySelector('.selected-header').checked = false;
     updateNumTotalRowsLabel();
@@ -363,14 +362,10 @@ function sortTableOnColumn(table, n){
             }
         });
         if (sorted){
-            localStorage.lastSortColumn = n;
-            localStorage.lastSortDirection = 'reversed';
             evt.target.classList.remove('sorted');
             evt.target.classList.add('reverse-sorted');
             rows.sort(reverseSort);
         }else{
-            localStorage.lastSortColumn = n;
-            localStorage.lastSortDirection = 'forward';
             evt.target.classList.remove('reverse-sorted');
             evt.target.classList.add('sorted');
             rows.sort(sort);
@@ -378,9 +373,6 @@ function sortTableOnColumn(table, n){
 
         var frag = document.createDocumentFragment();
         var preFrag = document.createDocumentFragment();
-
-        // Is this the preference column?
-        var prefCol = localStorage.lastSortColumn === '2';
 
         rows.forEach(function(row){
             var rowElement = row[1];
@@ -399,18 +391,6 @@ function sortTableOnColumn(table, n){
 
          tbody.appendChild(preFrag);
          tbody.appendChild(frag);
-    }
-}
-
-function resort(table){
-    var direction = localStorage.lastSortDirection;
-    if (direction){
-        var index = parseInt(localStorage.lastSortColumn, 10) + 1; // nth child is 1-based
-        var header = table.querySelector('th:nth-child(' + index + ')');
-        // set the opposite class on header, then click it to get the right sorting
-        header.classList.remove(direction === 'forward' ? 'sorted' : 'reverse-sorted');
-        header.classList.add(direction === 'forward' ? 'reverse-sorted' : 'sorted');
-        header.dispatchEvent(new MouseEvent('click'))
     }
 }
 
@@ -460,11 +440,6 @@ function setUserSetting(row, pref) {
     // Add sort order to preference column
     row.querySelector('.preferences').dataset.sortKey = pref;
 
-    // Re-sort if sorted by preference
-    if(localStorage.lastSortColumn === '2'){
-        resort(document.querySelector(".list-table"));
-    }
-
     // uncheck the row
     row.querySelector('[type=checkbox]').checked = false;
     row.classList.remove("checked");
@@ -505,24 +480,12 @@ function toggleHiddenSites(target){
         target.dataset.state = 'hidden';
         target.textContent = 'Show Hidden';
         document.querySelector('.stage-stack').classList.add('hide-hidden-rows');
-        localStorage.listViewHideRows = true;
     }else{
         target.dataset.state = 'shown';
         target.textContent = 'Hide Hidden';
         document.querySelector('.stage-stack').classList.remove('hide-hidden-rows');
-        localStorage.listViewHideRows = false;
     }
 }
-
-// Restore state on load
-if (localStorage.listViewHideRows){
-    var button = document.querySelector('.toggle-hidden a');
-    button.dataset.state = 'hidden';
-    button.textContent = 'Show Hidden';
-    document.querySelector('.stage-stack').classList.add('hide-hidden-rows');
-}
-
-
 
 var listStageStackClickHandler = function(event){
     var target = event.target;
