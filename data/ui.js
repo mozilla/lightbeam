@@ -138,7 +138,7 @@ function downloadAsJson(data, defaultFilename){
 
 document.querySelector(".download").addEventListener('click', function(evt) {
     // console.log('received export data');
-    downloadAsJson([exportFormat(allConnections)], 'lightbeamData.json');
+    downloadAsJson([JSON.stringify(allConnections)], 'lightbeamData.json');
     evt.preventDefault();
     // window.open('data:application/json,' + exportFormat(allConnections));
 });
