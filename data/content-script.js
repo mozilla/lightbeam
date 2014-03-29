@@ -5,53 +5,31 @@
 // mutable so we use unsafeWindow below. This handles the post message
 // connections and does a little UI work on the side.
 self.port.on('connection', function(connection) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        global.allConnections.push(connection);
-        unsafeWindow.aggregate.emit('connection', connection);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
-    }
+    global.allConnections.push(connection);
+    global.aggregate.emit('connection', connection);
 });
 
 self.port.on('passStoredConnections', function(connections) {
     global.allConnections = connections;
-    if (unsafeWindow) {
-        unsafeWindow.aggregate.emit('load', global.allConnections);
-    }
+    global.aggregate.emit('load', global.allConnections);
 });
 
 self.port.on('update-blocklist', function(domain) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist', domain);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
-    }
+    global.aggregate.emit('update-blocklist', domain);
 });
 
 self.port.on('update-blocklist-all', function(domains) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist-all', domains);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
-    }
+    global.aggregate.emit('update-blocklist-all', domains);
 });
 
 self.port.on('init', function() {
     console.log('content-script::init()');
-    if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
-        unsafeWindow.aggregate.emit('load', global.allConnections);
-    } else {
-        console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
-    }
+    global.aggregate.emit('load', global.allConnections);
 });
 
 self.port.on("setPrefs", function(prefs) {
   console.log("Got set prefs", prefs);
-  if (unsafeWindow && unsafeWindow.aggregate) {
-    unsafeWindow.aggregate.emit("setPrefs", prefs);
-  } else {
-    console.error("cannot call aggregate.setPrefs");
-  }
+  global.aggregate.emit("setPrefs", prefs);
 });
 try {
     unsafeWindow.addon = self.port;

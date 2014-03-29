@@ -43,7 +43,7 @@ global.allConnections = allConnections;
 
 // DOM Utility
 
-function elem(name, attributes, children){
+global.elem = function elem(name, attributes, children){
    // name is the tagName of an element
    // [optional] attributes can be null or undefined, or an object of key/values to setAttribute on, attribute values can be functions to call to get the actual value
    // [optional] children can be an element, text or an array (or null or undefined). If an array, can contain strings or elements
@@ -88,7 +88,7 @@ function elem(name, attributes, children){
 
 window.addEventListener('load', function(evt){
     console.log('window onload');
-    addon.emit('uiready');
+    self.port.emit('uiready');
     // Wire up events
     document.querySelector('[data-value=Graph]').setAttribute("data-selected", true);
     var visualizationName = "graph";
@@ -101,7 +101,7 @@ function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
 }
 
-function switchVisualization(name){
+global.switchVisualization = function switchVisualization(name){
     // var startTime = Date.now();
     console.log('switchVisualizations(' + name + ')');
     if (currentVisualization != visualizations[name]) {
@@ -110,7 +110,7 @@ function switchVisualization(name){
     currentVisualization = visualizations[name];
     resetAdditionalUI();
     currentVisualization.emit('init');
-    addon.emit("prefChanged", { defaultVisualization: name });
+    self.port.emit("prefChanged", { defaultVisualization: name });
     // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
 
@@ -181,7 +181,7 @@ function singularOrPluralNoun(num,str){
 global.updateStatsBar = function updateStatsBar(){
     var dateSince = "just now";
     if (global.allConnections.length > 0 ){
-        dateSince = formattedDate(allConnections[0][2]);
+        dateSince = formattedDate(global.allConnections[0][2]);
     }
     document.querySelector(".top-bar .date-gathered").textContent = dateSince;
     document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 

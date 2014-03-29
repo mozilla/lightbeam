@@ -363,7 +363,7 @@ global.connectedNodeEffect = function connectedNodeEffect(name){
 }
 
 // for Graph & Clock
-globa..addGlow = function addGlow(name,type){
+global.addGlow = function addGlow(name,type){
     type = ( type == "selected") ? "selected-glow" : "connected-glow";
     var viz = global.currentVisualization.name;
     var gNodes = document.querySelectorAll(".node[data-name='"+name+"']");
