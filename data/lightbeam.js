@@ -141,7 +141,7 @@ function resetAdditionalUI(){
 */
 
 
-function startSharing(askForConfirmation, callback) {
+global.startSharing = function startSharing(askForConfirmation, callback) {
   let result = true;
   if (askForConfirmation) {
     askForDataSharingConfirmationDialog(function(confirmed) {
@@ -156,7 +156,7 @@ function startSharing(askForConfirmation, callback) {
 /****************************************
 *   Format date string
 */
-function formattedDate(date,format){
+global.formattedDate = function formattedDate(date,format){
     var d = ( typeof date == "number" ) ? new Date(date) : date;
     var month = [ "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" ][d.getMonth()];
     var formatted = month + " " + d.getDate() + ", " + d.getFullYear();
@@ -168,7 +168,7 @@ function formattedDate(date,format){
 }
 
 
-function singularOrPluralNoun(num,str){
+global.singularOrPluralNoun = function singularOrPluralNoun(num,str){
     if ( typeof num != "number" ){
         num = parseFloat(num);
     }

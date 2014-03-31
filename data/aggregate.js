@@ -477,7 +477,7 @@ function switchFilter(name){
     return;
   }
   aggregate.currentFilter = name;
-  addon.emit("prefChanged", { defaultFilter: name });
+  global.self.port.emit("prefChanged", { defaultFilter: name });
   aggregate.update();
 }
 

@@ -432,7 +432,7 @@ function setUserSetting(row, pref) {
     userSettings[site] = pref;
 
     // send change through to add-on
-    addon.emit('updateBlocklist', site, pref === 'block');
+    global.self.port.emit('updateBlocklist', site, pref === 'block');
 
     // modify row
     row.dataset.pref = pref;

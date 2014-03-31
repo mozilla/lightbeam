@@ -31,10 +31,4 @@ self.port.on("setPrefs", function(prefs) {
   console.log("Got set prefs", prefs);
   global.aggregate.emit("setPrefs", prefs);
 });
-try {
-    unsafeWindow.addon = self.port;
-    console.log('Added "addon" to unsafeWindow');
-} catch (e) {
-    console.error('unable to add "addon" to unsafeWindow: %s', e);
-}
 })(this);

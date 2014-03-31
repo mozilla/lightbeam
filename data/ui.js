@@ -83,10 +83,10 @@ document.querySelector(".toggle-btn.share-btn").addEventListener("click",
 });
 
 global.confirmStartSharing = function confirmStartSharing(askForConfirmation, elmClicked) {
-  startSharing(askForConfirmation, function(confirmed) {
+  global.startSharing(askForConfirmation, function(confirmed) {
     if (confirmed) {
       toggleBtnOnEffect(document.querySelector(".share-btn") );
-      addon.emit("prefChanged", { "contributeData" : true });
+      global.self.port.emit("prefChanged", { "contributeData" : true });
     } else {
       elmClicked.checked = false;
     }
@@ -97,7 +97,7 @@ global.confirmStopSharing = function confirmStopSharing(elmClicked) {
   stopSharingDialog(function(confirmed) {
     if (confirmed) {
       toggleBtnOffEffect(document.querySelector(".share-btn"));
-      addon.emit("prefChanged", { "contributeData" : false });
+      global.self.port.emit("prefChanged", { "contributeData" : false });
     } else {
       elmClicked.checked = true;
     }
@@ -147,7 +147,7 @@ document.querySelector('.reset-data').addEventListener('click', function(){
         if ( confirmed ){
             // currentVisualization.emit('remove');
             allConnections = [];
-            addon.emit('reset');
+            global.self.port.emit('reset');
             aggregate.emit('reset');
             location.reload(); // reload page
         }
