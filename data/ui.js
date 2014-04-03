@@ -475,7 +475,7 @@ function colourHighlightNodes(highlight){
     }
 }
 
-function setPrefs(event) {
+function updateUIFromPrefs(event) {
   if ("contributeData" in event && event["contributeData"]) {
     var toggleBtn = document.querySelector(".share-btn");
     toggleBtn.querySelector("input").checked = true;

@@ -55,12 +55,12 @@ self.port.on("private-browsing", function() {
     unsafeWindow.informUserOfUnsafeWindowsDialog();
 });
 
-self.port.on("setPrefs", function(prefs) {
+self.port.on("updateUIFromPrefs", function(prefs) {
   console.log("Got set prefs", prefs);
   if (unsafeWindow && unsafeWindow.aggregate) {
-    unsafeWindow.aggregate.emit("setPrefs", prefs);
+    unsafeWindow.aggregate.emit("updateUIFromPrefs", prefs);
   } else {
-    console.error("cannot call aggregate.setPrefs");
+    console.error("cannot call aggregate.updateUIFromPrefs");
   }
 });
 
