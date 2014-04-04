@@ -434,16 +434,8 @@ global.singularOrPluralNoun = function singularOrPluralNoun(num,str){
     return ( num > 1) ? str+"s" : str;
 }
 
-/**************************************************
-*   Check if a site has certain preference set to it
-*/
-/**************************************************
-*   When initializing Graph View / Clock View
-*   if the "Watched Sites" or "Blocked Sites" toggles are on, apply colour to the corresponding nodes
-*/
-function setPrefs(event) {
-  console.log("Setting content script prefs", JSON.stringify(event));
-  if ("contributeData" in event) {
+function updateUIFromPrefs(event) {
+  if ("contributeData" in event && event["contributeData"]) {
     var toggleBtn = document.querySelector(".share-btn");
     if (event["contributeData"]) {
       toggleBtn.querySelector("input").checked = true;
@@ -472,5 +464,5 @@ function setPrefs(event) {
 }
 
 // Exports
-global.setPrefs = setPrefs;
+global.updateUIFromPrefs = updateUIFromPrefs;
 })(this);

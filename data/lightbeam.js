@@ -142,10 +142,8 @@ function resetAdditionalUI(){
 
 
 global.startSharing = function startSharing(askForConfirmation, callback) {
-  let result = true;
   if (askForConfirmation) {
     askForDataSharingConfirmationDialog(function(confirmed) {
-      result = confirmed;
       callback(confirmed);
     });
   } else {

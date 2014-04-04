@@ -27,8 +27,8 @@ self.port.on('init', function() {
     global.aggregate.emit('load', global.allConnections);
 });
 
-self.port.on("setPrefs", function(prefs) {
+self.port.on("updateUIFromPrefs", function(prefs) {
   console.log("Got set prefs", prefs);
-  global.aggregate.emit("setPrefs", prefs);
+  global.aggregate.emit("updateUIFromPrefs", prefs);
 });
 })(this);

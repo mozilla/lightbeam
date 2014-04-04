@@ -148,15 +148,13 @@ function onLoad(connections){
     console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
-function setPrefs(prefs) {
+function updateUIFromPrefs(prefs) {
   console.log("in aggregate prefs");
-  if (global.setPrefs) {
-    global.setPrefs(prefs);
-  }
+  global.updateUIFromPrefs(prefs);
 }
 
 aggregate.on('load', onLoad);
-aggregate.on("setPrefs", setPrefs);
+aggregate.on("updateUIFromPrefs", updateUIFromPrefs);
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
