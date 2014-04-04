@@ -19,6 +19,13 @@ self.port.on('connection', function(connection) {
     }
 });
 
+self.port.on('passStoredConnections', function(connections) {
+    if (unsafeWindow) {
+        unsafeWindow.allConnections = connections;
+        unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
+    }
+});
+
 self.port.on('update-blocklist', function(domain) {
     if (unsafeWindow && unsafeWindow.aggregate) {
         unsafeWindow.aggregate.emit('update-blocklist', domain);
@@ -35,60 +42,31 @@ self.port.on('update-blocklist-all', function(domains) {
     }
 });
 
-self.port.on('init', function(lightbeamToken) {
+self.port.on('init', function() {
     console.error('content-script::init()');
-    // localStorage.lightbeamToken = lightbeamToken;
-
     if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
-        unsafeWindow.allConnections = getAllConnections();
         unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
     } else {
         console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
     }
-
-    // FIXME: temporary solution for now.  need to clean up the code
-    if (unsafeWindow && unsafeWindow.showPromptToShareDialog) {
-        unsafeWindow.showPromptToShareDialog();
-    } else {
-        console.error('cannot call unsafeWindow.showPromptToShare: %s', unsafeWindow);
-    }
 });
-
-
-self.port.on("passTempConnections", function(connReceived) {
-    // connReceived can be an empty array [] or an array of connection arrays [ [], [], [] ]
-    self.port.emit("tempConnectionTransferred", true);
-
-    localStorage.lastSaved = Date.now();
-
-    var nonPrivateConnections = connReceived.filter(function(connection) {
-        return (connection[unsafeWindow.FROM_PRIVATE_MODE] == false);
-    });
-    unsafeWindow.saveConnectionsByDate(nonPrivateConnections);
-});
-
-self.port.on("promptToSaveOldData", function(data) {
-    unsafeWindow.promptToSaveOldDataDialog(data);
-});
-
-function getAllConnections() {
-    var allConnectionsAsArray = [];
-    Object.keys(localStorage).sort().forEach(function(key) {
-        if (key.charAt(0) == "2") { // date keys are in the format of yyyy-mm-dd
-            var conns = JSON.parse(localStorage.getItem(key));
-            allConnectionsAsArray = allConnectionsAsArray.concat(conns);
-        }
-    });
-    console.log('returning %s connections from getAllConnections', allConnectionsAsArray.length);
-    return allConnectionsAsArray;
-}
 
 self.port.on("private-browsing", function() {
     unsafeWindow.informUserOfUnsafeWindowsDialog();
 });
 
+self.port.on("updateUIFromPrefs", function(prefs) {
+  console.log("Got set prefs", prefs);
+  if (unsafeWindow && unsafeWindow.aggregate) {
+    unsafeWindow.aggregate.emit("updateUIFromPrefs", prefs);
+  } else {
+    console.error("cannot call aggregate.updateUIFromPrefs");
+  }
+});
+
 try {
     unsafeWindow.addon = self.port;
+    console.log('Added "addon" to unsafeWindow');
 } catch (e) {
     console.error('unable to add "addon" to unsafeWindow: %s', e);
 }

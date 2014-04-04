@@ -26,6 +26,10 @@ aggregate.edgemap = {};
 
 function resetData(){
     console.log('aggregate::resetData');
+    aggregate.getBlockedDomains().filter(function(domain) {
+      console.log("deleting", domain);
+      delete userSettings[domain];
+    });
     aggregate.nodemap = {};
     aggregate.edgemap = {};
     aggregate.nodes = [];
@@ -33,15 +37,15 @@ function resetData(){
     aggregate.trackerCount = 0;
     aggregate.siteCount = 0;
     aggregate.recentSites = [];
-    if (currentVisualization){
+    if (currentVisualization) {
         currentVisualization.emit('reset');
     }
     updateStatsBar();
 }
 aggregate.on('reset', resetData);
 
-aggregate.getAllNodes = function() {
-  var blockedDomains = Object.keys(userSettings).filter(function(domain) {
+aggregate.getBlockedDomains = function() {
+  return Object.keys(userSettings).filter(function(domain) {
     // ignore domains already known
     var nodes = aggregate.nodes;
     for (var i = nodes.length - 1; i >= 0; i--) {
@@ -49,9 +53,13 @@ aggregate.getAllNodes = function() {
         return false;
       }
     }
-
     return userSettings[domain] == 'block';
   });
+}
+
+aggregate.getAllNodes = function() {
+  var blockedDomains = aggregate.getBlockedDomains();
+  console.log("getAllNodes", JSON.stringify(blockedDomains));
 
   return aggregate.nodes.concat(blockedDomains.map(function(domain) {
     return {
@@ -119,7 +127,6 @@ aggregate.connectionAsObject = function(conn){
 
 }
 
-
 function applyFilter(filter){
     currentFilter = filter;
 }
@@ -129,18 +136,25 @@ aggregate.on('filter', applyFilter);
 // Pass the list of connections to build the graph structure to pass to d3 for
 // visualizations.
 function onLoad(connections){
-    // var startTime = Date.now();
-    // console.log('aggregate::onLoad with %s connections', connections.length);
+    var startTime = Date.now();
+    console.log("aggregate::onLoad", connections.length, "connections");
     connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = currentFilter();
+
     // Tell the visualization that we're ready.
     currentVisualization.emit('init');
     updateStatsBar();
-    // console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
+    console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
+}
+
+function updateUIFromPrefs(prefs) {
+  console.log("in aggregate prefs");
+  global.updateUIFromPrefs(prefs);
 }
 
 aggregate.on('load', onLoad);
+aggregate.on("updateUIFromPrefs", updateUIFromPrefs);
 
 // Constants for indexes of properties in array format
 //const SOURCE = 0;

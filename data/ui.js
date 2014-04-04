@@ -73,51 +73,45 @@ btnGroupArray.forEach(function(btnGroup){
 
 var shareDataToggle = document.querySelector(".toggle-btn.share-btn");
 
-document.querySelector(".toggle-btn.share-btn").addEventListener("click",function(event){
+document.querySelector(".toggle-btn.share-btn").addEventListener("click",
+  function(event){
     var elmClicked = event.target;
-    if ( elmClicked.mozMatchesSelector("input") ){
-        if ( elmClicked.checked ){
-            confirmStartSharing(true,elmClicked);
-        }else{
-            confirmStopSharing(elmClicked);
-        }
+    if (elmClicked.mozMatchesSelector("input")) {
+      if (elmClicked.checked){
+        confirmStartSharing(true, elmClicked);
+      } else {
+        confirmStopSharing(elmClicked);
+      }
     }
 });
 
-function confirmStartSharing(askForConfirmation,elmClicked){
-    startSharing(askForConfirmation,function(confirmed){
-        if ( confirmed ){
-            toggleBtnOnEffect( document.querySelector(".share-btn") );
-            disablePromptToShareDataDialog();
-        }else{
-            elmClicked.checked = false;
-        }
-    });
+function confirmStartSharing(askForConfirmation, elmClicked) {
+  startSharing(askForConfirmation, function(confirmed) {
+    if (confirmed) {
+      toggleBtnOnEffect(document.querySelector(".share-btn") );
+      addon.emit("prefChanged", { "contributeData" : true });
+    } else {
+      elmClicked.checked = false;
+    }
+  });
 }
 
-function confirmStopSharing(elmClicked){
-     stopSharingDialog(function(confirmed){
-        if ( confirmed ){
-            toggleBtnOffEffect( document.querySelector(".share-btn") );
-        }else{
-           elmClicked.checked = true;
-        }
-    });
+function confirmStopSharing(elmClicked) {
+  stopSharingDialog(function(confirmed) {
+    if (confirmed) {
+      toggleBtnOffEffect(document.querySelector(".share-btn"));
+      addon.emit("prefChanged", { "contributeData" : false });
+    } else {
+      elmClicked.checked = true;
+    }
+  });
 }
-
-
-if (localStorage.userHasOptedIntoSharing && localStorage.userHasOptedIntoSharing === 'true'){
-    var toggleBtn = document.querySelector(".share-btn");
-    toggleBtn.querySelector("input").checked = true;
-    toggleBtnOnEffect( toggleBtn );
-}
-
 
 function toggleBtnOnEffect(toggleBtn){
-    toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
-    toggleBtn.querySelector(".switch").classList.add("checked");
-    toggleBtn.querySelector(".on-off-text").classList.add("checked");
-    toggleBtn.querySelector(".on-off-text").textContent = "ON";
+  toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
+  toggleBtn.querySelector(".switch").classList.add("checked");
+  toggleBtn.querySelector(".on-off-text").classList.add("checked");
+  toggleBtn.querySelector(".on-off-text").textContent = "ON";
 }
 
 function toggleBtnOffEffect(toggleBtn){
@@ -144,7 +138,7 @@ function downloadAsJson(data, defaultFilename){
 
 document.querySelector(".download").addEventListener('click', function(evt) {
     // console.log('received export data');
-    downloadAsJson([exportFormat(allConnections)], 'lightbeamData.json');
+    downloadAsJson([JSON.stringify(allConnections)], 'lightbeamData.json');
     evt.preventDefault();
     // window.open('data:application/json,' + exportFormat(allConnections));
 });
@@ -158,40 +152,11 @@ document.querySelector('.reset-data').addEventListener('click', function(){
             allConnections = [];
             addon.emit('reset');
             aggregate.emit('reset');
-            userSettings = {};
             localStorage.clear();
             location.reload(); // reload page
         }
     });
 });
-
-// function handleDisclosureToggle(elem){
-//     console.log('disclosure toggled');
-// }
-
-// function handleUserSettingToggle(elem){
-//     console.log('User setting changed');
-// }
-
-// document.querySelector('.stage').addEventListener('click', function(event){
-//     // demultiplex "live" event handlers
-//     if (event.target.mozMatchesSelector('.disclosure')){
-//         handleDisclosureToggle(event.target);
-//         event.preventDefault();
-//         event.stopPropagation();
-//     }else if (event.target.mozMatchesSelector('.userSetting')){
-//         handleUserSettingToggle(event.target);
-//         event.stopPropagation();
-//     }else if (event.target.mozMatchesSelector('[type=checkbox]')){
-//         event.stopPropagation();
-//         if (event.target.mozMatchesSelector('selectedHeader')){
-//             // what to do here, select all or sort?
-//         }
-//     }else{
-//         console.log('so what is it, then? %o', event.target);
-//     }
-// });
-
 
 function getZoom(canvas){
     try{
@@ -337,39 +302,6 @@ document.querySelector(".stage").addEventListener("mouseleave",function(event){
 },false);
 
 
-/* Export ========== */
-
-function exportFormat(connections, roundOff){
-    var tempConnections = excludePrivateConnection(connections).slice(0);
-    if ( roundOff ){
-        tempConnections = roundOffTimestamp(tempConnections);
-    }
-    var exportSet = {
-        format: 'Lightbeam Save File',
-        version: '1.1',
-        connections: tempConnections
-    }
-    if (isRobot){
-        exportSet.isRobot = true;
-    }
-    return JSON.stringify(exportSet, null, "  ");
-}
-
-/* Filter out connections collected in Private Mode */
-function excludePrivateConnection(connections){
-    return connections.filter(function(connection){
-        return !connection[FROM_PRIVATE_MODE];
-    })
-}
-
-function roundOffTimestamp(connections){
-    return  connections.map(function(conn){
-                var tempConn = conn.slice(0);
-                tempConn[TIMESTAMP] -= ( tempConn[TIMESTAMP] % roundOffFactor );
-                return tempConn;
-            });
-}
-
 /* Legend & Controls ===================================== */
 
 function toggleLegendSection(eventTarget,legendElm){
@@ -499,41 +431,6 @@ function resetHighlightedRow(){
     }
 }
 
-
-/**************************************************
-*   Special dialog handler for promptToShareDataDialog
-*   FIXME: temporary solution for now.  need to clean up the code a bit.
-*/
-
-
-const promptToShareDialogShowLimit = 3;
-function showPromptToShareDialog(){
-    var showTimes, today, shownToday, belowLimit;
-    showTimes = localStorage.promptToShareDialogShowTimes || "[]";
-    showTimes = JSON.parse(showTimes);
-    today = formattedDate(Date.now());
-    shownToday = showTimes.indexOf(today) > -1;
-    belowLimit = showTimes.length < promptToShareDialogShowLimit;
-    if ( Number(localStorage.numLaunch) > 1 && !doNotShowDialog(dialogNames.promptToShare) && !shownToday && belowLimit){
-        showTimes.push(today);
-        localStorage.promptToShareDialogShowTimes = JSON.stringify(showTimes);
-        showPromptToShareDialog(function(confirmed){
-            if( confirmed ){
-                var sharingToggle = document.querySelector(".toggle-btn.share-btn input");
-                confirmStartSharing(false,sharingToggle);
-                disablePromptToShareDataDialog();
-            }
-        });
-    }
-}
-
-function disablePromptToShareDataDialog(){
-    if ( !doNotShowDialog(dialogNames.promptToShare) ){
-        addToDoNotShowAgainList(dialogNames.promptToShare);
-    }
-}
-
-
 /**************************************************
 *   Singular / Plural Noun
 */
@@ -544,14 +441,12 @@ function singularOrPluralNoun(num,str){
     return ( num > 1) ? str+"s" : str;
 }
 
-
 /**************************************************
 *   Check if a site has certain preference set to it
 */
 function siteHasPref(site,pref){
     return ( Object.keys(userSettings).indexOf(site) > -1 && userSettings[site].contains(pref) );
 }
-
 
 /**************************************************
 *   When initializing Graph View / Clock View
@@ -578,4 +473,16 @@ function colourHighlightNodes(highlight){
             blockedSites[i].classList.remove("blockedSites");
         }
     }
+}
+
+function updateUIFromPrefs(event) {
+  if ("contributeData" in event && event["contributeData"]) {
+    var toggleBtn = document.querySelector(".share-btn");
+    toggleBtn.querySelector("input").checked = true;
+    toggleBtnOnEffect(toggleBtn);
+  } else {
+    var toggleBtn = document.querySelector(".share-btn");
+    toggleBtn.querySelector("input").checked = false;
+    toggleBtnOffEffect(toggleBtn);
+  }
 }
