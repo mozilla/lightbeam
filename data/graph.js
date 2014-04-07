@@ -127,8 +127,8 @@ function nodeName(node){
     }
     return undefined;
 }
-global.siteHasPref = function siteHasPref(site,pref){
-  return (Object.keys(userSettings).indexOf(site) > -1 &&
+function siteHasPref(site,pref){
+  return (userSettings.hasOwnProperty(pref) &&
           userSettings[site].contains(pref));
 }
 
@@ -145,7 +145,7 @@ var ticking = false;
 
 function charge(d){ return -(500 +  d.weight * 25); }
 
-global.colourHighlightNodes = function colourHighlightNodes(highlight){
+function colourHighlightNodes(highlight){
     var watchedSites = document.querySelectorAll(".watched");
     var blockedSites = document.querySelectorAll(".blocked");
     if ( highlight.watched ){
@@ -334,9 +334,19 @@ function resetCanvas(){
 
 var graphLegend = document.querySelector(".graph-footer");
 
-if (global.legendBtnClickHandler) {
-  global.legendBtnClickHandler(graphLegend);
+function legendBtnClickHandler(legendElm){
+    legendElm.querySelector(".legend-controls").addEventListener("click", function(event){
+        if (event.target.mozMatchesSelector(".btn, .btn *")){
+            var btn = event.target;
+            while(btn.mozMatchesSelector('.btn *')){
+                btn = btn.parentElement;
+            }
+            btn.classList.toggle("active");
+        }
+    });
 }
+
+legendBtnClickHandler(graphLegend);
 
 graphLegend.querySelector(".legend-toggle-visited").addEventListener("click", function(event){
     var visited = document.querySelectorAll(".visitedYes");

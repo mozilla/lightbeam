@@ -133,10 +133,8 @@ aggregate.connectionAsObject = function(conn){
 // visualizations.
 function onLoad(connections){
     var startTime = Date.now();
-    if (connections) {
-      console.log("aggregate::onLoad", connections.length, "connections", aggregate.currentFilter);
-      connections.forEach(onConnection);
-    }
+    console.log("aggregate::onLoad", connections.length, "connections", aggregate.currentFilter);
+    connections.forEach(onConnection);
     aggregate.initialized = true;
     filteredAggregate = aggregate.filters[aggregate.currentFilter]();
 

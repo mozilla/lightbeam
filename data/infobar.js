@@ -252,7 +252,7 @@ document.querySelector(".toggle-site-profile").addEventListener("click", functio
 /* Toggle Help Sections */
 document.querySelector(".toggle-help").addEventListener("click", function(){
     var tabClicked = document.querySelector(".toggle-help");
-    var contentToBeShown = document.querySelector(".help-content ." + currentVisualization.name +"-view-help");
+    var contentToBeShown = document.querySelector(".help-content ." + global.currentVisualization + "-view-help");
     toggleInfoPanelTab(tabClicked, contentToBeShown);
 });
 

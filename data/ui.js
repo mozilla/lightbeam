@@ -317,18 +317,6 @@ global.toggleVizElements = function toggleVizElements(elements,classToggle){
     });
 }
 
-global.legendBtnClickHandler = function legendBtnClickHandler(legendElm){
-    legendElm.querySelector(".legend-controls").addEventListener("click", function(event){
-        if (event.target.mozMatchesSelector(".btn, .btn *")){
-            var btn = event.target;
-            while(btn.mozMatchesSelector('.btn *')){
-                btn = btn.parentElement;
-            }
-            btn.classList.toggle("active");
-        }
-    });
-}
-
 
 
 /* Glowing Effect for Graph/Clock & Highlighting Effect for List ============= */
@@ -456,10 +444,11 @@ function updateUIFromPrefs(event) {
   // This is not working quite
   if ("defaultFilter" in event) {
     aggregate.currentFilter = event["defaultFilter"];
-    document.querySelector('a[data-value=' + aggregate.currentFilter + ']').
-      dataset.selected = true;
+    document.querySelector('a[data-value=' + aggregate.currentFilter + ']')
+            .dataset.selected = true;
     document.querySelector(".filter-display header").textContent =
-      document.querySelector(".btn_group.session").querySelector("[data-selected]").textContent;
+      document.querySelector(".btn_group.session")
+              .querySelector("[data-selected]").textContent;
   }
 }
 
