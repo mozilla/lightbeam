@@ -25,12 +25,20 @@ const STATUS = 12;
 const CACHEABLE = 13;
 const FROM_PRIVATE_MODE = 14;
 
+/* Toggle Help Sections */
+document.querySelector(".toggle-help").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-help");
+    var contentToBeShown = document.querySelector(".help-content ." + currentVisualization.name + "-view-help");
+    toggleInfoPanelTab(tabClicked, contentToBeShown);
+});
+
+
 var vizcanvas = document.querySelector('.vizcanvas');
 var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  initMap(mapcanvas, mapDocument);
+  initMap(mapcanvas, mapDocument, currentVisualization);
 }, false);
 
 // Export everything

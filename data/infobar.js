@@ -249,14 +249,6 @@ document.querySelector(".toggle-site-profile").addEventListener("click", functio
     }
 });
 
-/* Toggle Help Sections */
-document.querySelector(".toggle-help").addEventListener("click", function(){
-    var tabClicked = document.querySelector(".toggle-help");
-    var contentToBeShown = document.querySelector(".help-content ." + global.currentVisualization + "-view-help");
-    toggleInfoPanelTab(tabClicked, contentToBeShown);
-});
-
-
 /* Toggle About */
 document.querySelector(".toggle-about").addEventListener("click", function(){
     var tabClicked = document.querySelector(".toggle-about");
@@ -265,7 +257,7 @@ document.querySelector(".toggle-about").addEventListener("click", function(){
 });
 
 
-function toggleInfoPanelTab(tabClicked, contentToBeShown){
+global.toggleInfoPanelTab = function toggleInfoPanelTab(tabClicked, contentToBeShown){
     var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
     var isActiveTab = tabClicked.classList.contains("active");
     if( infoPanelOpen ){
