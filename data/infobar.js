@@ -2,6 +2,7 @@
 // Used for managing the DOM for infobar part of the page
 'use strict';
 
+var g = global;
 global.initMap = function initMap(mapcanvas, mapDocument){
 
 var oriMapViewBox = mapcanvas.getAttribute('viewBox');
@@ -256,8 +257,16 @@ document.querySelector(".toggle-about").addEventListener("click", function(){
     toggleInfoPanelTab(tabClicked, contentToBeShown);
 });
 
+/* Toggle Help Sections */
+document.querySelector(".toggle-help").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-help");
+    var contentToBeShown = document.querySelector(".help-content ." + g.currentVisualization.name + "-view-help");
+    toggleInfoPanelTab(tabClicked, contentToBeShown);
+});
 
-global.toggleInfoPanelTab = function toggleInfoPanelTab(tabClicked, contentToBeShown){
+
+
+function toggleInfoPanelTab(tabClicked, contentToBeShown){
     var infoPanelOpen = document.querySelector("#content").classList.contains("showinfo");
     var isActiveTab = tabClicked.classList.contains("active");
     if( infoPanelOpen ){
