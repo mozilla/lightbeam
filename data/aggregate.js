@@ -2,17 +2,21 @@
 
 // Visualization of tracking data interconnections
 
-(function(global){
+(function(global) {
+
 "use strict";
 
 // An emitter that lists nodes and edges so we can build the data structure
 // used by all 3 visualizers.
 var aggregate = new Emitter();
+
 global.aggregate = aggregate;
 global.filteredAggregate = {
     nodes: [],
     edges: []
 };
+// The name of the current filter (daily, weekly, recent, last10sites)
+aggregate.currentFilter = "daily";
 
 aggregate.trackerCount = 0;
 aggregate.siteCount = 0;
@@ -37,9 +41,7 @@ function resetData(){
     aggregate.trackerCount = 0;
     aggregate.siteCount = 0;
     aggregate.recentSites = [];
-    if (currentVisualization) {
-        currentVisualization.emit('reset');
-    }
+    global.currentVisualization.emit('reset');
     updateStatsBar();
 }
 aggregate.on('reset', resetData);
@@ -127,23 +129,19 @@ aggregate.connectionAsObject = function(conn){
 
 }
 
-function applyFilter(filter){
-    currentFilter = filter;
-}
-
-aggregate.on('filter', applyFilter);
-
 // Pass the list of connections to build the graph structure to pass to d3 for
 // visualizations.
 function onLoad(connections){
     var startTime = Date.now();
-    console.log("aggregate::onLoad", connections.length, "connections");
+    console.log("aggregate::onLoad", connections.length, "connections", aggregate.currentFilter);
     connections.forEach(onConnection);
     aggregate.initialized = true;
-    filteredAggregate = currentFilter();
+    filteredAggregate = aggregate.filters[aggregate.currentFilter]();
 
     // Tell the visualization that we're ready.
-    currentVisualization.emit('init');
+    if (global.currentVisualization) {
+      global.currentVisualization.emit('init');
+    }
     updateStatsBar();
     console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
@@ -157,20 +155,20 @@ aggregate.on('load', onLoad);
 aggregate.on("updateUIFromPrefs", updateUIFromPrefs);
 
 // Constants for indexes of properties in array format
-//const SOURCE = 0;
-//const TARGET = 1;
-//const TIMESTAMP = 2;
-//const CONTENT_TYPE = 3;
-//const COOKIE = 4;
-//const SOURCE_VISITED = 5;
-//const SECURE = 6;
-//const SOURCE_PATH_DEPTH = 7;
-//const SOURCE_QUERY_DEPTH = 8;
-//const SOURCE_SUB = 9;
-//const TARGET_SUB = 10;
-//const METHOD = 11;
-//const STATUS = 12;
-//const CACHEABLE = 13;
+const SOURCE = 0;
+const TARGET = 1;
+const TIMESTAMP = 2;
+const CONTENT_TYPE = 3;
+const COOKIE = 4;
+const SOURCE_VISITED = 5;
+const SECURE = 6;
+const SOURCE_PATH_DEPTH = 7;
+const SOURCE_QUERY_DEPTH = 8;
+const SOURCE_SUB = 9;
+const TARGET_SUB = 10;
+const METHOD = 11;
+const STATUS = 12;
+const CACHEABLE = 13;
 
 // Check that recent sites include the domain. This is another potential source
 // of false positives.
@@ -268,9 +266,6 @@ aggregate.on('connection', onConnection);
 
 function onBlocklistUpdate({ domain, flag }) {
   if (flag === true) {
-    // Make sure we have blocked domains in localStorage, no matter what.
-    // If localStorage is cleared the domains will still be blocked,
-    // this is wahy the update is necessary.
     userSettings[domain] = 'block';
   }
   else if (userSettings[domain] == 'block') {
@@ -279,7 +274,7 @@ function onBlocklistUpdate({ domain, flag }) {
 }
 aggregate.on('update-blocklist', onBlocklistUpdate);
 
-// Make sure all the blocklist is in local storage.
+// Read the blocklist to memory
 function onBlocklistUpdateAll(domains) {
   (domains || []).forEach(onBlocklistUpdate);
 }
@@ -432,30 +427,23 @@ aggregate.filters = {
         var now = Date.now();
         var then = now - (24 * 60 * 60 * 1000);
         var sortedNodes = sitesSortedByDate();
-        // console.log('daily filter before: %s', aggregate.recentSites.length);
-        // filter
         // find index where we go beyond date
         var i;
         for (i = sortedNodes.length - 1; i > -1; i--){
-            // console.log(sortedNodes[i].lastAccess.valueOf() + ' < ' + then + ': ' + (sortedNodes[i].lastAccess.valueOf() < then));
             if (sortedNodes[i].lastAccess.valueOf() < then){
                 break;
             }
         }
         // i is always 1 too low at the point
         i++; // put it back
-        // console.log('slicing on index %s', i);
         var filteredNodes = sortedNodes.slice(i);
         // Done filtering
-        // console.log('daily filter after: %s', filteredNodes.length);
         return aggregateFromNodes(filteredNodes);
     },
     weekly: function weekly(){
         var now = Date.now();
         var then = now - (7 * 24 * 60 * 60 * 1000);
         var sortedNodes = sitesSortedByDate();
-        // console.log('weekly filter before: %s', sortedNodes.length);
-        // filter
         // find index where we go beyond date
         var i;
         for (i = sortedNodes.length - 1; i > -1; i--){
@@ -470,37 +458,23 @@ aggregate.filters = {
     },
     last10sites: function last10sites(){
         var sortedNodes = sitesSortedByDate();
-        // console.log('last10sites filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-10);
-        // console.log('last10sites filter after: %s', filteredNodes.length)
-        // console.log('last 10 sites before joining with linked nodes:');
-        // console.log('\t%o', filteredNodes.map(function(node){return node.name}));
         return aggregateFromNodes(filteredNodes);
     },
     recent: function recent(){
         var sortedNodes = sitesSortedByDate();
-        // console.log('recent filter before: %s', sortedNodes.length);
         var filteredNodes = sortedNodes.slice(-1);
-        // console.log('recent filter after: %s', filteredNodes.length);
-        // console.log('recent nodes before joining with linked nodes:');
-        // console.log('\t%o', filteredNodes.map(function(node){return node.name;}));
         return aggregateFromNodes(filteredNodes);
     }
 };
 
-var currentFilter = aggregate.filters[localStorage.currentFilter || 'daily'];
-
 function switchFilter(name){
-    // console.log('switchFilter(' + name + ')');
-    if (currentFilter && currentFilter === aggregate.filters[name]) return;
-    currentFilter = aggregate.filters[name];
-    if (currentFilter){
-        localStorage.currentFilter = name;
-        aggregate.emit('filter', currentFilter);
-    }else{
-        console.log('unable to switch filter to %s', name);
-    }
-    aggregate.update();
+  if (aggregate.currentFilter == name) {
+    return;
+  }
+  aggregate.currentFilter = name;
+  global.self.port.emit("prefChanged", { defaultFilter: name });
+  aggregate.update();
 }
 
 aggregate.switchFilter = switchFilter;
@@ -528,11 +502,11 @@ var debounce = function debounce(func, wait, immediate) {
 
 aggregate.update = debounce(function update(){
     // FIXME: maybe not for list view
-    if (currentVisualization.name !== 'graph'){
-        console.log('do not update aggregate for %s view', currentVisualization.name);
+    if (global.currentVisualization && global.currentVisualization.name !== 'graph'){
+        console.log('do not update aggregate for view', currentVisualization.name);
     }
     if (aggregate.initialized){
-        global.filteredAggregate = currentFilter();
+        global.filteredAggregate = aggregate.filters[aggregate.currentFilter]();
         aggregate.emit('update');
     }
     updateStatsBar();

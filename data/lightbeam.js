@@ -1,17 +1,12 @@
+(function(global) {
+
 'use strict';
 
-const roundOffFactor = 5*60*1000; // in milliseconds
 var visualizations = {};
-var currentVisualization;
 var currentFilter;
+var userSettings = {};
 var allConnections = [];
-var userSettings;
-try{
-    userSettings = JSON.parse(localStorage.userSettings || '{}');
-}catch(e){
-    userSettings = {};
-}
-var isRobot = false; // Used for spidering the web only
+var g = global;
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -35,13 +30,19 @@ var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  initMap();
+  initMap(mapcanvas, mapDocument);
 }, false);
 
+// Export everything
+global.visualizations = visualizations;
+global.currentFilter = currentFilter;
+global.userSettings = userSettings;
+global.vizcanvas = vizcanvas;
+global.allConnections = allConnections;
 
 // DOM Utility
 
-function elem(name, attributes, children){
+global.elem = function elem(name, attributes, children){
    // name is the tagName of an element
    // [optional] attributes can be null or undefined, or an object of key/values to setAttribute on, attribute values can be functions to call to get the actual value
    // [optional] children can be an element, text or an array (or null or undefined). If an array, can contain strings or elements
@@ -86,12 +87,12 @@ function elem(name, attributes, children){
 
 window.addEventListener('load', function(evt){
     console.log('window onload');
-    addon.emit('uiready');
+    self.port.emit('uiready');
     // Wire up events
-    document.querySelector('[data-value=' + (localStorage.visualization || 'Graph') + ']').setAttribute("data-selected", true);
-    var visualizationName = localStorage.visualization ? ( localStorage.visualization.toLowerCase() ) : "graph";
+    document.querySelector('[data-value=Graph]').setAttribute("data-selected", true);
+    var visualizationName = "graph";
     console.log("current vis", visualizationName);
-    currentVisualization = visualizations[visualizationName];
+    g.currentVisualization = visualizations[visualizationName];
     switchVisualization(visualizationName);
 });
 
@@ -99,16 +100,16 @@ function initCap(str){
     return str[0].toUpperCase() + str.slice(1);
 }
 
-function switchVisualization(name){
+global.switchVisualization = function switchVisualization(name){
     // var startTime = Date.now();
     console.log('switchVisualizations(' + name + ')');
-    if (currentVisualization != visualizations[name]) {
-        currentVisualization.emit('remove');
+    if (g.currentVisualization != visualizations[name]) {
+        g.currentVisualization.emit('remove');
     }
-    localStorage.visualization = initCap(name);
-    currentVisualization = visualizations[name];
+    g.currentVisualization = visualizations[name];
     resetAdditionalUI();
-    currentVisualization.emit('init');
+    g.currentVisualization.emit('init');
+    self.port.emit("prefChanged", { defaultVisualization: name });
     // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
 
@@ -129,7 +130,7 @@ function resetAdditionalUI(){
     // toggle footer section accordingly
     document.querySelector(".graph-footer").classList.add("hidden");
     document.querySelector(".list-footer").classList.add("hidden");
-    var vizName = currentVisualization.name;
+    var vizName = g.currentVisualization.name;
     document.querySelector("." + vizName + "-footer").classList.remove("hidden");
 }
 
@@ -139,7 +140,7 @@ function resetAdditionalUI(){
 */
 
 
-function startSharing(askForConfirmation, callback) {
+global.startSharing = function startSharing(askForConfirmation, callback) {
   if (askForConfirmation) {
     askForDataSharingConfirmationDialog(function(confirmed) {
       callback(confirmed);
@@ -149,22 +150,10 @@ function startSharing(askForConfirmation, callback) {
   }
 }
 
-// Save user settings on exit
-window.addEventListener('beforeunload', function(event){
-    // don't need to store empty settings
-    Object.keys(userSettings).forEach(function(key){
-        if (!userSettings[key]){
-            delete userSettings[key];
-        } 
-    });
-    // Get rid of this.
-    localStorage.userSettings = JSON.stringify(userSettings);
-}, false);
-
 /****************************************
 *   Format date string
 */
-function formattedDate(date,format){
+global.formattedDate = function formattedDate(date,format){
     var d = ( typeof date == "number" ) ? new Date(date) : date;
     var month = [ "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" ][d.getMonth()];
     var formatted = month + " " + d.getDate() + ", " + d.getFullYear();
@@ -176,18 +165,24 @@ function formattedDate(date,format){
 }
 
 
+global.singularOrPluralNoun = function singularOrPluralNoun(num,str){
+    if ( typeof num != "number" ){
+        num = parseFloat(num);
+    }
+    return ( num > 1) ? str+"s" : str;
+}
+
 /****************************************
 *   update Stats Bar
 */
-function updateStatsBar(){
+global.updateStatsBar = function updateStatsBar(){
     var dateSince = "just now";
-    if ( allConnections.length > 0 ){
-        dateSince = formattedDate(allConnections[0][2]);
+    if (global.allConnections.length > 0 ){
+        dateSince = formattedDate(global.allConnections[0][2]);
     }
     document.querySelector(".top-bar .date-gathered").textContent = dateSince;
     document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount,"THIRD PARTY SITE"); 
     document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount  + " " + singularOrPluralNoun(aggregate.siteCount,"SITE");
 }
 
-
-
+})(this);

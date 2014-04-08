@@ -1,72 +1,34 @@
+(function(global) {
+
 // This is the e10s/message passing content script that ties the workers to the
 // addon. It can see most of the addon, the window is either not visible or not
 // mutable so we use unsafeWindow below. This handles the post message
 // connections and does a little UI work on the side.
-self.port.on('log', function log(args) {
-    if (unsafeWindow && unsafeWindow.console) {
-        unsafeWindow.console.log.call(unsafeWindow, args);
-    } else {
-        console.log('cannot call browser logging: ' + unsafeWindow);
-    }
-});
-
 self.port.on('connection', function(connection) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.allConnections.push(connection);
-        unsafeWindow.aggregate.emit('connection', connection);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate: ' + unsafeWindow);
-    }
+    global.allConnections.push(connection);
+    global.aggregate.emit('connection', connection);
 });
 
 self.port.on('passStoredConnections', function(connections) {
-    if (unsafeWindow) {
-        unsafeWindow.allConnections = connections;
-        unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
-    }
+    global.allConnections = connections;
+    global.aggregate.emit('load', global.allConnections);
 });
 
 self.port.on('update-blocklist', function(domain) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist', domain);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
-    }
+    global.aggregate.emit('update-blocklist', domain);
 });
 
 self.port.on('update-blocklist-all', function(domains) {
-    if (unsafeWindow && unsafeWindow.aggregate) {
-        unsafeWindow.aggregate.emit('update-blocklist-all', domains);
-    } else {
-        console.log('cannot call unsafeWindow.aggregate to update blocklist: ' + unsafeWindow);
-    }
+    global.aggregate.emit('update-blocklist-all', domains);
 });
 
 self.port.on('init', function() {
-    console.error('content-script::init()');
-    if (unsafeWindow && unsafeWindow.aggregate && !unsafeWindow.aggregate.initialized) {
-        unsafeWindow.aggregate.emit('load', unsafeWindow.allConnections);
-    } else {
-        console.error('cannot call unsafeWindow.aggregate: %s', unsafeWindow);
-    }
-});
-
-self.port.on("private-browsing", function() {
-    unsafeWindow.informUserOfUnsafeWindowsDialog();
+    console.log('content-script::init()');
+    global.aggregate.emit('load', global.allConnections);
 });
 
 self.port.on("updateUIFromPrefs", function(prefs) {
   console.log("Got set prefs", prefs);
-  if (unsafeWindow && unsafeWindow.aggregate) {
-    unsafeWindow.aggregate.emit("updateUIFromPrefs", prefs);
-  } else {
-    console.error("cannot call aggregate.updateUIFromPrefs");
-  }
+  global.aggregate.emit("updateUIFromPrefs", prefs);
 });
-
-try {
-    unsafeWindow.addon = self.port;
-    console.log('Added "addon" to unsafeWindow');
-} catch (e) {
-    console.error('unable to add "addon" to unsafeWindow: %s', e);
-}
+})(this);

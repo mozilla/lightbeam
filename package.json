@@ -9,11 +9,33 @@
     "permissions": {
         "private-browsing": true
     },
-    "preferences": [{
-        "name": "contributeData",
+    "preferences": [
+      { "name": "contributeData",
         "title": "Contribute data",
         "description": "Contribute your Lightbeam data to Mozilla",
         "type": "bool",
-        "value": false
-    }]
+        "value": false },
+      { "name": "defaultVisualization",
+        "title": "Default visualization",
+        "description": "Graph or list",
+        "type": "menulist",
+        "value": "graph",
+        "options": [
+          { "value": "graph", "label": "Graph" },
+          { "value": "list", "label": "List" }
+        ]
+      },
+      { "name": "defaultFilter",
+        "title": "Default filter",
+        "description": "Time period",
+        "type": "menulist",
+        "value": "daily",
+        "options": [
+          { "value": "daily", "label": "Daily" },
+          { "value": "weekly", "label": "Weekly" },
+          { "value": "recent", "label": "Recent" },
+          { "value": "last10sites", "label": "Last 10 sites" }
+        ]
+      }
+    ]
 }

@@ -1,7 +1,9 @@
+(function(global) {
 // Used for managing the DOM for infobar part of the page
 'use strict';
 
-function initMap(){
+var g = global;
+global.initMap = function initMap(mapcanvas, mapDocument){
 
 var oriMapViewBox = mapcanvas.getAttribute('viewBox');
 
@@ -248,20 +250,20 @@ document.querySelector(".toggle-site-profile").addEventListener("click", functio
     }
 });
 
-/* Toggle Help Sections */
-document.querySelector(".toggle-help").addEventListener("click", function(){
-    var tabClicked = document.querySelector(".toggle-help");
-    var contentToBeShown = document.querySelector(".help-content ." + currentVisualization.name +"-view-help");
-    toggleInfoPanelTab(tabClicked, contentToBeShown);
-});
-
-
 /* Toggle About */
 document.querySelector(".toggle-about").addEventListener("click", function(){
     var tabClicked = document.querySelector(".toggle-about");
     var contentToBeShown = document.querySelector(".about-content");
     toggleInfoPanelTab(tabClicked, contentToBeShown);
 });
+
+/* Toggle Help Sections */
+document.querySelector(".toggle-help").addEventListener("click", function(){
+    var tabClicked = document.querySelector(".toggle-help");
+    var contentToBeShown = document.querySelector(".help-content ." + g.currentVisualization.name + "-view-help");
+    toggleInfoPanelTab(tabClicked, contentToBeShown);
+});
+
 
 
 function toggleInfoPanelTab(tabClicked, contentToBeShown){
@@ -316,4 +318,4 @@ function hideAllInfoPanelContentExcept(elmToShow){
     }
 }
 
-
+})(this);
