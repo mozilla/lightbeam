@@ -4,6 +4,7 @@ const graphNodeRadius = {
     "graph": 12
 };
 
+var g = global;
 global.graphNodeRadius = graphNodeRadius;
 
 /* Convert a NodeList to Array */
@@ -185,8 +186,8 @@ const mapZoomOutLimit    = { w:2711.3, h:1196.7 };
 const svgZoomingRatio   = 1.1;
 
 document.querySelector(".stage").addEventListener("wheel",function(event){
-    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && global.currentVisualization.name != "list" ){
-        if ( global.currentVisualization.name == "graph" ){
+    if ( event.target.mozMatchesSelector(".vizcanvas, .vizcanvas *") && g.currentVisualization.name != "list" ){
+        if ( g.currentVisualization.name == "graph" ){
             zoomWithinLimit(event.deltaY, vizcanvas, graphZoomInLimit, graphZoomOutLimit);
         }
     }
@@ -322,18 +323,18 @@ global.toggleVizElements = function toggleVizElements(elements,classToggle){
 /* Glowing Effect for Graph/Clock & Highlighting Effect for List ============= */
 
 global.selectedNodeEffect = function selectedNodeEffect(name){
-    if ( global.currentVisualization.name == "graph") {
+    if (g.currentVisualization.name == "graph") {
         resetAllGlow("all");
         addGlow(name,"selected");
     }
-    if ( global.currentVisualization.name == "list" ){
+    if (g.currentVisualization.name == "list" ){
         resetHighlightedRow();
     }
 }
 
 global.connectedNodeEffect = function connectedNodeEffect(name){
     // console.log(name);
-    if ( global.currentVisualization.name != "list" ){
+    if ( g.currentVisualization.name != "list" ){
         var glow = document.querySelector(".connected-glow");
         while( glow ){
             glow = document.querySelector(".connected-glow"); 
@@ -353,7 +354,7 @@ global.connectedNodeEffect = function connectedNodeEffect(name){
 // for Graph & Clock
 global.addGlow = function addGlow(name,type){
     type = ( type == "selected") ? "selected-glow" : "connected-glow";
-    var viz = global.currentVisualization.name;
+    var viz = g.currentVisualization.name;
     var gNodes = document.querySelectorAll(".node[data-name='"+name+"']");
     toArray(gNodes).forEach(function(gNode){
         var glowProps = calculateGlowSize(gNode,viz);
@@ -372,7 +373,7 @@ global.calculateGlowSize = function calculateGlowSize(gNode,viz){
     var glowProps = {};
     var siteNode = gNode.childNodes[0];
     var shape = siteNode.nodeName.toLowerCase();
-    var radius = graphNodeRadius[global.currentVisualization.name];
+    var radius = graphNodeRadius[g.currentVisualization.name];
     if ( viz == "graph" ){
         if ( shape == "polygon" ) radius *= 2.2;
         glowProps.radius = radius + 22;

@@ -503,7 +503,7 @@ var debounce = function debounce(func, wait, immediate) {
 aggregate.update = debounce(function update(){
     // FIXME: maybe not for list view
     if (global.currentVisualization && global.currentVisualization.name !== 'graph'){
-        console.log('do not update aggregate for %s view', currentVisualization.name);
+        console.log('do not update aggregate for view', currentVisualization.name);
     }
     if (aggregate.initialized){
         global.filteredAggregate = aggregate.filters[aggregate.currentFilter]();

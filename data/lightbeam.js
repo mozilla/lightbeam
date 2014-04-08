@@ -3,10 +3,10 @@
 'use strict';
 
 var visualizations = {};
-var currentVisualization;
 var currentFilter;
 var userSettings = {};
 var allConnections = [];
+var g = global;
 
 // Constants for indexes of properties in array format
 const SOURCE = 0;
@@ -28,7 +28,7 @@ const FROM_PRIVATE_MODE = 14;
 /* Toggle Help Sections */
 document.querySelector(".toggle-help").addEventListener("click", function(){
     var tabClicked = document.querySelector(".toggle-help");
-    var contentToBeShown = document.querySelector(".help-content ." + currentVisualization.name + "-view-help");
+    var contentToBeShown = document.querySelector(".help-content ." + g.currentVisualization.name + "-view-help");
     toggleInfoPanelTab(tabClicked, contentToBeShown);
 });
 
@@ -38,12 +38,11 @@ var mapDocument, mapcanvas;
 document.querySelector('.world-map').addEventListener('load', function(event){
   mapDocument = event.target.contentDocument;
   mapcanvas = mapDocument.querySelector('.mapcanvas');
-  initMap(mapcanvas, mapDocument, currentVisualization);
+  initMap(mapcanvas, mapDocument);
 }, false);
 
 // Export everything
 global.visualizations = visualizations;
-global.currentVisualization = currentVisualization;
 global.currentFilter = currentFilter;
 global.userSettings = userSettings;
 global.vizcanvas = vizcanvas;
@@ -101,7 +100,7 @@ window.addEventListener('load', function(evt){
     document.querySelector('[data-value=Graph]').setAttribute("data-selected", true);
     var visualizationName = "graph";
     console.log("current vis", visualizationName);
-    currentVisualization = visualizations[visualizationName];
+    g.currentVisualization = visualizations[visualizationName];
     switchVisualization(visualizationName);
 });
 
@@ -112,12 +111,12 @@ function initCap(str){
 global.switchVisualization = function switchVisualization(name){
     // var startTime = Date.now();
     console.log('switchVisualizations(' + name + ')');
-    if (currentVisualization != visualizations[name]) {
-        currentVisualization.emit('remove');
+    if (g.currentVisualization != visualizations[name]) {
+        g.currentVisualization.emit('remove');
     }
-    currentVisualization = visualizations[name];
+    g.currentVisualization = visualizations[name];
     resetAdditionalUI();
-    currentVisualization.emit('init');
+    g.currentVisualization.emit('init');
     self.port.emit("prefChanged", { defaultVisualization: name });
     // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
 }
@@ -139,7 +138,7 @@ function resetAdditionalUI(){
     // toggle footer section accordingly
     document.querySelector(".graph-footer").classList.add("hidden");
     document.querySelector(".list-footer").classList.add("hidden");
-    var vizName = currentVisualization.name;
+    var vizName = g.currentVisualization.name;
     document.querySelector("." + vizName + "-footer").classList.remove("hidden");
 }
 
