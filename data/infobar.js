@@ -96,6 +96,26 @@ function updateMap(countryCode){
     setZoom(newViewBox, mapcanvas);
 }
 
+document.querySelector(".pref-action .block").addEventListener('click', function(evt) {
+    var site = this.dataset.siteName;
+    confirmBlockSitesDialog(function(confirmed) {
+        if (confirmed) {
+            userSettings[site] = 'block';
+            global.self.port.emit('updateBlocklist', site, true);
+            showSitePref(site);
+        }
+    });
+    evt.preventDefault();
+});
+
+document.querySelector(".pref-action .unblock").addEventListener('click', function(evt) {
+    var site = this.dataset.siteName;
+    userSettings[site] = '';
+    global.self.port.emit('updateBlocklist', site, false);
+    showSitePref(site);
+    evt.preventDefault();
+});
+
 // updates info on the info panel
 function updateInfo(nodeName){
 
@@ -132,6 +152,8 @@ function showFirstAndLastAccess(site){
 
 function showSitePref(nodeName){
     var prefTag = document.querySelector(".pref-tag");
+    var blockButton = document.querySelector(".pref-action .block");
+    var unblockButton = document.querySelector(".pref-action .unblock");
     var sitePref = userSettings[nodeName];
     if ( sitePref ){
         prefTag.querySelector("img").src = "icons/lightbeam_icon_"+sitePref+".png";
@@ -139,9 +161,20 @@ function showSitePref(nodeName){
         prefTag.querySelector("span").classList.add(sitePref + "-text");
         prefTag.querySelector("span").textContent = (sitePref=="hide") ? "hidden" : sitePref + "ed";
         prefTag.classList.remove("hidden");
+        if (sitePref == "block") {
+            unblockButton.classList.remove("hidden");
+            blockButton.classList.add("hidden");
+        } else {
+            unblockButton.classList.add("hidden");
+            blockButton.classList.remove("hidden");
+        }
     }else{
         prefTag.classList.add("hidden");
+        unblockButton.classList.add("hidden");
+        blockButton.classList.remove("hidden");
     }
+    unblockButton.dataset.siteName = nodeName;
+    blockButton.dataset.siteName = nodeName;
 }
 
 function showConnectionsList(nodeName,nodeList){
