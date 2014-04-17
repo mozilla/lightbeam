@@ -128,7 +128,7 @@ function nodeName(node){
     return undefined;
 }
 function siteHasPref(site,pref){
-  return (userSettings.hasOwnProperty(pref) &&
+  return (userSettings.hasOwnProperty(site) &&
           userSettings[site].contains(pref));
 }
 
