@@ -282,7 +282,7 @@ function getNodes(filter){
 
 function nodeToRow(node){
     var settings = userSettings[node.name] || (node.nodeType == 'blocked' ? 'block' : '');
-    var iconUrl = node.nodeType === 'blocked'? 'icons/lightbeam_icon_empty_list.png' : 'icons/lightbeam_icon_list.png';
+    var iconUrl = node.nodeType === 'blocked'? 'icons/lightbeam_icon_empty_list.png' : 'image/lightbeam_icon_list.png';
     var listIcon = elem('img', {'src': iconUrl, 'class': node.nodeType === 'blocked'? 'no-update' :'update-table', 'role': 'gridcell'});
     var row = elem('tr', {
             'class': 'node ' + node.nodeType,
