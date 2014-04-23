@@ -467,7 +467,7 @@ function updateUIFromPrefs(event) {
       console.error("NO viz");
     }
   }
-  // This is not working quite
+
   if ("defaultFilter" in event) {
     aggregate.currentFilter = event["defaultFilter"];
     document.querySelector('a[data-value=' + aggregate.currentFilter + ']')
