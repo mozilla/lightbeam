@@ -20,7 +20,7 @@ function svgdataset(elem) {
       // act as getter
       value = elem.getAttribute(dataKeyToAttr(key));
       try {
-        get
+        get;
         return JSON.parse(value);
       } catch (e) {
         return value;

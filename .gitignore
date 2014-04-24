@@ -8,3 +8,4 @@ data/deployment.json
 *.xpi
 exported_graphs
 *.swp
+/node_modules
