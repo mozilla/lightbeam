@@ -26,9 +26,11 @@ function svgdataset(elem) {
         return value;
       }
     } else {
-      elem.setAttribute(dataKeyToAttr(key), JSON.stringify(value));
+      var s = JSON.stringify(value);
+      elem.setAttribute(dataKeyToAttr(key), s);
+      return s;
     }
-  }
+  };
   // Create read-only shortcuts for convenience
   Array.prototype.forEach.call(elem.attributes, function (attr) {
     if (attr.name.startsWith('data-')) {

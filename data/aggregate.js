@@ -286,6 +286,7 @@ function GraphEdge(source, target, connection) {
   if (connection) {
     this.cookieCount = connection.cookie ? 1 : 0;
   }
+  return this;
   // console.log('edge: %s', this.name);
 }
 GraphEdge.prototype.lastAccess = function () {

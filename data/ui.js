@@ -182,6 +182,7 @@ global.getZoom = function getZoom(canvas) {
   } catch (e) {
     console.log('error in getZoom, called with %o instead of an element');
     console.log('Caller: %o', caller);
+    return null;
   }
 }
 
