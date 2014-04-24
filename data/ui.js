@@ -156,7 +156,12 @@ document.querySelector('.reset-data').addEventListener('click', function () {
       allConnections = [];
       global.self.port.emit('reset');
       aggregate.emit('reset');
-      location.reload(); // reload page
+      // WARNING: this is a race condition. Since the event emitters are
+      // async, we were running into the situation where the page was reloaded
+      // before aggregate::resetData was finished, resulting in #506
+      //
+      // TODO: using a short timeout for now, would be better to use a Promise
+      setTimeout(500, function () { location.reload(); /* reload page */ });
     }
   });
 });
