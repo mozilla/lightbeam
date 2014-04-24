@@ -51,7 +51,7 @@ function onUpdate() {
     force.links(filteredAggregate.edges);
     force.start();
     updateGraph();
-    global.colourHighlightNodes(highlight);
+    colourHighlightNodes(highlight);
   } else {
     console.log('the force is not with us');
   }
