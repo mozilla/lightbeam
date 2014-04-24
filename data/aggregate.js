@@ -29,9 +29,9 @@ aggregate.nodemap = {};
 aggregate.edgemap = {};
 
 function resetData() {
-  console.log('aggregate::resetData');
+  console.debug('aggregate::resetData');
   aggregate.getBlockedDomains().forEach(function (domain) {
-    console.log("deleting", domain);
+    console.debug("deleting", domain);
     delete userSettings[domain];
   });
   aggregate.nodemap = {};
@@ -54,7 +54,7 @@ aggregate.getBlockedDomains = function () {
 
 aggregate.getAllNodes = function () {
   var blockedDomains = aggregate.getBlockedDomains();
-  console.log("getAllNodes", JSON.stringify(blockedDomains));
+  console.debug("getAllNodes", JSON.stringify(blockedDomains));
 
   return aggregate.nodes.concat(blockedDomains.map(function (domain) {
     return {
@@ -126,7 +126,7 @@ aggregate.connectionAsObject = function (conn) {
 // visualizations.
 function onLoad(connections) {
   var startTime = Date.now();
-  console.log("aggregate::onLoad", connections.length, "connections", aggregate.currentFilter);
+  console.debug("aggregate::onLoad", connections.length, "connections", aggregate.currentFilter);
   connections.forEach(onConnection);
   aggregate.initialized = true;
   filteredAggregate = aggregate.filters[aggregate.currentFilter]();
@@ -136,11 +136,11 @@ function onLoad(connections) {
     global.currentVisualization.emit('init');
   }
   updateStatsBar();
-  console.log('aggregate::onLoad end, took %s ms', Date.now() - startTime);
+  console.debug('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
 function updateUIFromPrefs(prefs) {
-  console.log("in aggregate prefs");
+  console.debug("in aggregate prefs");
   global.updateUIFromPrefs(prefs);
 }
 

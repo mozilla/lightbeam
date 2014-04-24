@@ -467,7 +467,7 @@ function updateUIFromPrefs(event) {
   if ("defaultVisualization" in event) {
     global.currentVisualization = visualizations[event["defaultVisualization"]];
     if (global.currentVisualization) {
-      console.log("Got viz");
+      console.debug("Got viz");
     } else {
       console.error("NO viz");
     }
