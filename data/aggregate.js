@@ -30,7 +30,7 @@ aggregate.edgemap = {};
 
 function resetData() {
   console.log('aggregate::resetData');
-  aggregate.getBlockedDomains().filter(function (domain) {
+  aggregate.getBlockedDomains().forEach(function (domain) {
     console.log("deleting", domain);
     delete userSettings[domain];
   });
@@ -48,13 +48,6 @@ aggregate.on('reset', resetData);
 
 aggregate.getBlockedDomains = function () {
   return Object.keys(userSettings).filter(function (domain) {
-    // ignore domains already known
-    var nodes = aggregate.nodes;
-    for (var i = nodes.length - 1; i >= 0; i--) {
-      if (nodes[i].name == domain) {
-        return false;
-      }
-    }
     return userSettings[domain] == 'block';
   });
 }
