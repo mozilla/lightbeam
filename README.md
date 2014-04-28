@@ -42,16 +42,11 @@ At this point, any changes you make to the web front-end simply require reloadin
 The following software is bundled with the repository and doesn't need to be manually obtained.
 
 * [D3][]
-* [jQuery][]
-
-## Data Used
-
-Contained within the repository is a JSON file listing all public trackers on the internet. It came with the [TrackerBlock][] add-on.
+* [PicoModal][]
 
   [ASDK]: https://addons.mozilla.org/en-US/developers/builder
   [D3]: http://mbostock.github.com/d3/
-  [jQuery]: https://github.com/jquery/jquery
-  [TrackerBlock]: http://www.privacychoice.org/trackerblock/firefox
+  [PicoModal]: https://github.com/Nycto/PicoModal
   [Firefox 18]: http://www.mozilla.com/en-US/firefox/fx/
 
 ## LICENSE
