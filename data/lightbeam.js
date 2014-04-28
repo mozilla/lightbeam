@@ -86,12 +86,12 @@ global.elem = function elem(name, attributes, children) {
 };
 
 window.addEventListener('load', function (evt) {
-  console.log('window onload');
+  console.debug('window onload');
   self.port.emit('uiready');
   // Wire up events
   document.querySelector('[data-value=Graph]').setAttribute("data-selected", true);
   var visualizationName = "graph";
-  console.log("current vis", visualizationName);
+  console.debug("current vis", visualizationName);
   g.currentVisualization = visualizations[visualizationName];
   switchVisualization(visualizationName);
 });
@@ -102,7 +102,7 @@ function initCap(str) {
 
 global.switchVisualization = function switchVisualization(name) {
   // var startTime = Date.now();
-  console.log('switchVisualizations(' + name + ')');
+  console.debug('switchVisualizations(' + name + ')');
   if (g.currentVisualization != visualizations[name]) {
     g.currentVisualization.emit('remove');
   }

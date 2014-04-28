@@ -23,12 +23,12 @@ self.port.on('update-blocklist-all', function (domains) {
 });
 
 self.port.on('init', function () {
-  console.log('content-script::init()');
+  console.debug('content-script::init()');
   global.aggregate.emit('load', global.allConnections);
 });
 
 self.port.on("updateUIFromPrefs", function (prefs) {
-  console.log("Got set prefs", prefs);
+  console.debug("Got set prefs", prefs);
   global.aggregate.emit("updateUIFromPrefs", prefs);
 });
 })(this);
