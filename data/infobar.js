@@ -48,7 +48,7 @@ global.initMap = function initMap(mapcanvas, mapDocument) {
       if (currentRequest === info.host) {
         callback((request.status === 200) ? JSON.parse(request.responseText) : false);
       }
-    }
+    };
     request.send(null);
   }
 
@@ -271,7 +271,7 @@ global.initMap = function initMap(mapcanvas, mapDocument) {
   }, false);
 
 
-}
+};
 
 
 /* Info Panel Tabs ======================================== */

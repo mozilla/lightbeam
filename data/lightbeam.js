@@ -1,3 +1,4 @@
+/* jshint moz: true */
 (function (global) {
 
 'use strict';
@@ -66,7 +67,7 @@ global.elem = function elem(name, attributes, children) {
         }
       });
     }
-  } catch (e) {
+  } catch (err) {
     console.log('attributes: not what we think they are: %o', attributes);
   }
   if (children) {
@@ -113,7 +114,7 @@ global.switchVisualization = function switchVisualization(name) {
     defaultVisualization: name
   });
   // console.log('it took %s ms to switch visualizations', Date.now() - startTime);
-}
+};
 
 function resetAdditionalUI() {
   // toggle off info panel
@@ -150,7 +151,7 @@ global.startSharing = function startSharing(askForConfirmation, callback) {
   } else {
     callback(true);
   }
-}
+};
 
 /****************************************
  *   Format date string
@@ -164,7 +165,7 @@ global.formattedDate = function formattedDate(date, format) {
     formatted = dayInWeek + ", " + formatted + " " + ((d.getHours() == 12) ? 12 : (d.getHours() % 12)) + ':' + d.toLocaleFormat('%M') + ['AM', 'PM'][Math.floor(d.getHours() / 12)];
   }
   return formatted;
-}
+};
 
 
 global.singularOrPluralNoun = function singularOrPluralNoun(num, str) {
@@ -172,7 +173,7 @@ global.singularOrPluralNoun = function singularOrPluralNoun(num, str) {
     num = parseFloat(num);
   }
   return (num !== 1) ? str + "s" : str;
-}
+};
 
 /****************************************
  *   update Stats Bar
@@ -185,6 +186,6 @@ global.updateStatsBar = function updateStatsBar() {
   document.querySelector(".top-bar .date-gathered").textContent = dateSince;
   document.querySelector(".top-bar .third-party-sites").textContent = aggregate.trackerCount + " " + singularOrPluralNoun(aggregate.trackerCount, "THIRD PARTY SITE");
   document.querySelector(".top-bar .first-party-sites").textContent = aggregate.siteCount + " " + singularOrPluralNoun(aggregate.siteCount, "SITE");
-}
+};
 
 })(this);

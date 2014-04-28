@@ -1,3 +1,4 @@
+/* jshint moz: true */
 /* Dialog / Popup ===================================== */
 
 // dialog names (used as dialog identifiers)
@@ -118,7 +119,7 @@ function addDialogEventHandlers(modal, options, callback) {
       modal.close();
       callback(false);
     }
-  }
+  };
   document.addEventListener("keydown", keyDownHandler);
 
   modal.onClose(function () {

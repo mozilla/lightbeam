@@ -1,3 +1,4 @@
+/* jshint moz: true */
 // Graph Visualization
 
 // Visualization of tracking data interconnections
@@ -50,7 +51,7 @@ aggregate.getBlockedDomains = function () {
   return Object.keys(userSettings).filter(function (domain) {
     return userSettings[domain] == 'block';
   });
-}
+};
 
 aggregate.getAllNodes = function () {
   var blockedDomains = aggregate.getBlockedDomains();
@@ -63,7 +64,7 @@ aggregate.getAllNodes = function () {
       name: domain
     };
   }));
-}
+};
 
 aggregate.getConnectionCount = function (node) {
   if (node.nodeType === 'blocked')
@@ -71,11 +72,11 @@ aggregate.getConnectionCount = function (node) {
 
   let connections = Object.keys(aggregate.nodeForKey(node.name)).length;
   return connections - 1 > 0 ? connections - 1 : 0;
-}
+};
 
 aggregate.nodeForKey = function (key) {
   var result = {};
-  var linkedNodes = new Array();
+  var linkedNodes = [];
 
   if (aggregate.nodemap[key]) {
     linkedNodes = aggregate.nodemap[key].linkedFrom.concat(aggregate.nodemap[key].linkedTo);
@@ -120,7 +121,7 @@ aggregate.connectionAsObject = function (conn) {
   }
   return conn;
 
-}
+};
 
 // Pass the list of connections to build the graph structure to pass to d3 for
 // visualizations.
@@ -167,7 +168,7 @@ const CACHEABLE = 13;
 // of false positives.
 aggregate.isDomainVisited = function isDomainVisited(domain) {
   return aggregate.recentSites.length && (aggregate.recentSites.indexOf(domain) > -1);
-}
+};
 
 
 function onConnection(conn) {
@@ -236,7 +237,7 @@ function onConnection(conn) {
       aggregate.trackerCount++;
     }
     // console.log('new target: %s, now %s nodes', targetnode.name, aggregate.nodes.length);
-    updated = true
+    updated = true;
   }
   // Create edge objects. Could probably do this lazily just for the graph view
   if (aggregate.edgemap[connection.source + '->' + connection.target]) {
@@ -286,17 +287,18 @@ function GraphEdge(source, target, connection) {
   if (connection) {
     this.cookieCount = connection.cookie ? 1 : 0;
   }
+  return this;
   // console.log('edge: %s', this.name);
 }
 GraphEdge.prototype.lastAccess = function () {
   return (this.source.lastAccess > this.target.lastAccess) ? this.source.lastAccess : this.target.lastAccess;
-}
+};
 GraphEdge.prototype.firstAccess = function () {
   return (this.source.firstAccess < this.target.firstAccess) ? this.source.firstAccess : this.target.firstAccess;
-}
+};
 GraphEdge.prototype.update = function (connection) {
   this.cookieCount = connection.cookie ? this.cookieCount + 1 : this.cookieCount;
-}
+};
 
 // A graph node represents one end of a connection, either a target or a source
 // Where a connection is a point in time with a timestamp, a graph node has a  time range

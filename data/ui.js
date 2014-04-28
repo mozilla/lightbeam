@@ -1,3 +1,4 @@
+/* jshint moz: true */
 (function (global) {
 // Bunch of utilities related to UI elements.
 const graphNodeRadius = {
@@ -10,7 +11,7 @@ global.graphNodeRadius = graphNodeRadius;
 /* Convert a NodeList to Array */
 global.toArray = function toArray(nl) {
   return Array.prototype.slice.call(nl, 0);
-}
+};
 
 /**************************************************
  *   For accessibility:
@@ -94,7 +95,7 @@ global.confirmStartSharing = function confirmStartSharing(askForConfirmation, el
       elmClicked.checked = false;
     }
   });
-}
+};
 
 global.confirmStopSharing = function confirmStopSharing(elmClicked) {
   stopSharingDialog(function (confirmed) {
@@ -107,7 +108,7 @@ global.confirmStopSharing = function confirmStopSharing(elmClicked) {
       elmClicked.checked = true;
     }
   });
-}
+};
 
 function toggleBtnOnEffect(toggleBtn) {
   toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
@@ -135,7 +136,7 @@ function downloadAsJson(data, defaultFilename) {
     a.target = '_blank';
     document.body.appendChild(a);
     a.click();
-  }
+  };
   reader.readAsDataURL(file);
 }
 
@@ -182,13 +183,14 @@ global.getZoom = function getZoom(canvas) {
   } catch (e) {
     console.log('error in getZoom, called with %o instead of an element');
     console.log('Caller: %o', caller);
+    return null;
   }
-}
+};
 
 global.setZoom = function setZoom(box, canvas) {
   // TODO: code cleanup if both cases use basically the same code
   canvas.setAttribute('viewBox', [box.x, box.y, box.w, box.h].join(' '));
-}
+};
 
 
 /* Scroll over visualization to zoom in/out ========================= */
@@ -243,15 +245,16 @@ function checkWithinZoomLimit(targetSvg, zoomType, zoomLimit) {
 // Check to see if the viewBox of the targeting svg is within the limit we define
 // if yes, zoom
 function zoomWithinLimit(scrollDist, targetSvg, zoomInLimit, zoomOutLimit) {
+  var i;
   if (scrollDist >= 1) { // scroll up to zoom out
-    for (var i = 1; i <= scrollDist; i++) {
+    for (i = 1; i <= scrollDist; i++) {
       if (checkWithinZoomLimit(targetSvg, "out", zoomOutLimit)) {
         svgZooming(targetSvg, (1 / svgZoomingRatio));
       }
     }
   }
   if (scrollDist <= -1) { // scroll down to zoom in
-    for (var i = scrollDist; i <= -1; i++) {
+    for (i = scrollDist; i <= -1; i++) {
       if (checkWithinZoomLimit(targetSvg, "in", zoomInLimit)) {
         svgZooming(targetSvg, svgZoomingRatio);
       }
@@ -340,13 +343,13 @@ global.toggleLegendSection = function toggleLegendSection(eventTarget, legendElm
     elmToToggle.classList.add("hidden");
     eventTarget.textContent = "Show";
   }
-}
+};
 
 global.toggleVizElements = function toggleVizElements(elements, classToggle) {
   toArray(elements).forEach(function (elm) {
     elm.classList.toggle(classToggle);
   });
-}
+};
 
 
 
@@ -360,7 +363,7 @@ global.selectedNodeEffect = function selectedNodeEffect(name) {
   if (g.currentVisualization.name == "list") {
     resetHighlightedRow();
   }
-}
+};
 
 global.connectedNodeEffect = function connectedNodeEffect(name) {
   // console.log(name);
@@ -379,7 +382,7 @@ global.connectedNodeEffect = function connectedNodeEffect(name) {
     }
   }
 
-}
+};
 
 // for Graph & Clock
 global.addGlow = function addGlow(name, type) {
@@ -397,7 +400,7 @@ global.addGlow = function addGlow(name, type) {
       .classed(type, true);
 
   });
-}
+};
 
 global.calculateGlowSize = function calculateGlowSize(gNode, viz) {
   var glowProps = {};
@@ -415,7 +418,7 @@ global.calculateGlowSize = function calculateGlowSize(gNode, viz) {
   glowProps.cy = siteNode.getAttribute("cy") || 0;
 
   return glowProps;
-}
+};
 
 // for Graph
 global.resetAllGlow = function resetAllGlow(type) {
@@ -433,7 +436,7 @@ global.resetAllGlow = function resetAllGlow(type) {
       connectedGlow.parentNode.removeChild(connectedGlow);
     }
   }
-}
+};
 
 // for List
 global.resetHighlightedRow = function resetHighlightedRow() {
@@ -441,7 +444,7 @@ global.resetHighlightedRow = function resetHighlightedRow() {
   if (preHighlighted) {
     preHighlighted.classList.remove("selected-connected-row");
   }
-}
+};
 
 /**************************************************
  *   Singular / Plural Noun
@@ -451,12 +454,12 @@ global.singularOrPluralNoun = function singularOrPluralNoun(num, str) {
     num = parseFloat(num);
   }
   return (num > 1) ? str + "s" : str;
-}
+};
 
 function updateUIFromPrefs(event) {
-  if ("contributeData" in event && event["contributeData"]) {
+  if ("contributeData" in event && event.contributeData) {
     var toggleBtn = document.querySelector(".share-btn");
-    if (event["contributeData"]) {
+    if (event.contributeData) {
       toggleBtn.querySelector("input").checked = true;
       toggleBtnOnEffect(toggleBtn);
     } else {
@@ -465,7 +468,7 @@ function updateUIFromPrefs(event) {
     }
   }
   if ("defaultVisualization" in event) {
-    global.currentVisualization = visualizations[event["defaultVisualization"]];
+    global.currentVisualization = visualizations[event.defaultVisualization];
     if (global.currentVisualization) {
       console.debug("Got viz");
     } else {
@@ -474,7 +477,7 @@ function updateUIFromPrefs(event) {
   }
 
   if ("defaultFilter" in event) {
-    aggregate.currentFilter = event["defaultFilter"];
+    aggregate.currentFilter = event.defaultFilter;
     document.querySelector('a[data-value=' + aggregate.currentFilter + ']')
       .dataset.selected = true;
     document.querySelector(".filter-display header").textContent =

@@ -1,3 +1,4 @@
+/* jshint moz: true */
 // Graph Visualization (one of 3 views: graph, clock, and list). This is way
 // too heavyweight for mobile right now.
 
@@ -70,7 +71,7 @@ function onInit() {
   vizcanvas.setAttribute('viewBox', [0, 0, width, height].join(' '));
   // console.log('graph::onInit end');
   document.querySelector(".filter-display").classList.remove("hidden");
-};
+}
 
 function onRemove() {
   // var startTime = Date.now();
@@ -81,7 +82,7 @@ function onRemove() {
   resetCanvas();
   document.querySelector(".filter-display").classList.add("hidden");
   // console.log('it took %s ms to remove graph view', Date.now() - startTime);
-};
+}
 
 function onReset() {
   onRemove();
@@ -161,23 +162,24 @@ function charge(d) {
 }
 
 function colourHighlightNodes(highlight) {
+  var i;
   var watchedSites = document.querySelectorAll(".watched");
   var blockedSites = document.querySelectorAll(".blocked");
   if (highlight.watched) {
-    for (var i = 0; i < watchedSites.length; i++) {
+    for (i = 0; i < watchedSites.length; i++) {
       watchedSites[i].classList.add("watchedSites");
     }
   } else {
-    for (var i = 0; i < watchedSites.length; i++) {
+    for (i = 0; i < watchedSites.length; i++) {
       watchedSites[i].classList.remove("watchedSites");
     }
   }
   if (highlight.blocked) {
-    for (var i = 0; i < blockedSites.length; i++) {
+    for (i = 0; i < blockedSites.length; i++) {
       blockedSites[i].classList.add("blockedSites");
     }
   } else {
-    for (var i = 0; i < blockedSites.length; i++) {
+    for (i = 0; i < blockedSites.length; i++) {
       blockedSites[i].classList.remove("blockedSites");
     }
   }
@@ -243,7 +245,7 @@ function initGraph() {
     });
     nodes.each(function (d, i) {
       // `this` is the DOM node
-      this.setAttribute('transform', 'translate(' + d.x + ',' + d.y + ') scale(' + (1 + .05 * d.weight) + ')');
+      this.setAttribute('transform', 'translate(' + d.x + ',' + d.y + ') scale(' + (1 + 0.05 * d.weight) + ')');
       this.setAttribute('data-timestamp', d.lastAccess.toISOString());
       if (d.nodeType === 'site' || d.nodeType === 'both') {
         this.classList.add('visitedYes');
@@ -317,7 +319,7 @@ function addCircle(selection) {
     .append('circle')
     .attr('cx', 0)
     .attr('cy', 0)
-    .attr('r', graphNodeRadius["graph"])
+    .attr('r', graphNodeRadius.graph)
     .classed('site', true);
 }
 

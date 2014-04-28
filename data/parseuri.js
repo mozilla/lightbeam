@@ -16,7 +16,7 @@ function parseUri(str) {
   });
 
   return uri;
-};
+}
 
 parseUri.options = {
   strictMode: false,

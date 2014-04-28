@@ -20,15 +20,17 @@ function svgdataset(elem) {
       // act as getter
       value = elem.getAttribute(dataKeyToAttr(key));
       try {
-        get
+        get;
         return JSON.parse(value);
       } catch (e) {
         return value;
       }
     } else {
-      elem.setAttribute(dataKeyToAttr(key), JSON.stringify(value));
+      var s = JSON.stringify(value);
+      elem.setAttribute(dataKeyToAttr(key), s);
+      return s;
     }
-  }
+  };
   // Create read-only shortcuts for convenience
   Array.prototype.forEach.call(elem.attributes, function (attr) {
     if (attr.name.startsWith('data-')) {

@@ -1,10 +1,10 @@
-'use strict';
-
+/* jshint moz: true */
 // List Visualization
 
 // Display data in tabular format
 
 (function (visualizations, global) {
+"use strict";
 
 var list = new Emitter();
 var breadcrumbStack = [];
@@ -482,7 +482,7 @@ function sortTableOnColumn(table, n) {
 
     tbody.appendChild(preFrag);
     tbody.appendChild(frag);
-  }
+  };
 }
 
 function resetCanvas() {
@@ -511,7 +511,7 @@ function getSelectedRows() {
   // returns selected rows as an Array
   return getAllRows().filter(function (item) {
     return item.querySelector('.selected-row:checked');
-  })
+  });
 }
 
 // Event handlers
@@ -539,16 +539,17 @@ function setUserSetting(row, pref) {
 
 // selectAllRows should only select VISIBLE rows
 function selectAllRows(flag) {
+  var i;
   // apply flag to ALL rows first
   var rows = document.querySelectorAll(".body-table tr");
-  for (var i = 0; i < rows.length; i++) {
+  for (i = 0; i < rows.length; i++) {
     rows[i].querySelector(".selected-row").checked = flag;
     highlightRow(rows[i], flag);
   }
   // and then exclude all the hidden rows
   if (document.querySelector(".hide-hidden-rows")) {
     var hiddenRows = document.querySelectorAll(".list-table .body-table tr[data-pref=hide]");
-    for (var i = 0; i < hiddenRows.length; i++) {
+    for (i = 0; i < hiddenRows.length; i++) {
       hiddenRows[i].querySelector(".selected-row").checked = false; // makes sure the hidden rows are always unchecked
       highlightRow(hiddenRows[i], false);
     }
@@ -645,7 +646,7 @@ function initializeHandlers() {
       });
       showFilteredTable(lastFilter);
       selected = getAllRows().filter(function (row) {
-        return wereSelected.indexOf(row.dataset.name) > -1
+        return wereSelected.indexOf(row.dataset.name) > -1;
       })
         .map(function (rowToSelect) {
           rowToSelect.querySelector("[type=checkbox]").checked = true;
