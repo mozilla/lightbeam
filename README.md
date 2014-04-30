@@ -43,9 +43,11 @@ The following software is bundled with the repository and doesn't need to be man
 
 * [D3][]
 * [PicoModal][]
+* [parseUri][]
 
   [ASDK]: https://addons.mozilla.org/en-US/developers/builder
   [D3]: http://mbostock.github.com/d3/
+  [parseUri]: http://blog.stevenlevithan.com/code
   [PicoModal]: https://github.com/Nycto/PicoModal
   [Firefox 18]: http://www.mozilla.com/en-US/firefox/fx/
 
