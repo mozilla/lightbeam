@@ -14,7 +14,7 @@
         "title": "Contribute data",
         "description": "Contribute your Lightbeam data to Mozilla",
         "type": "bool",
-        "value": false },
+        "value": true },
       { "name": "defaultVisualization",
         "title": "Default visualization",
         "description": "Graph or list",
