@@ -177,7 +177,6 @@ function assignTabIndices(modal) {
 }
 
 function askForDataSharingConfirmationDialog(callback) {
-  console.log("callback in ask for data start sharing", callback);
   dialog({
       "name": dialogNames.startUploadData,
       "title": "Upload Data",
