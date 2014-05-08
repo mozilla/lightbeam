@@ -2,9 +2,10 @@
 
 As we have gained experience with Lightbeam for Firefox and built more visualization, talked with folks in the security arena, etc., we've identified more information that would be useful to track than what was included in Format 1.0. This documents the new format, paying special attention to the extensions.
 
-Version 1.1 is an extension of 1.0 and 1.0 files should still be processable with 1.1. The only change to existing data is that source and target will now be only the top-level domain, with the subdomain path moved to sourceSub and targetSub. New in Version 1.1: sourceSub, targetSub, method, status, cacheable.
+Version 1.2 is an extension of 1.1.
+New in Version 1.2: userId, userAgentData.
 
-## Format 1.1
+## Format 1.2
 
 This format has the following structure:
 
@@ -12,7 +13,7 @@ A root object whose keys are `format`, `version`, `connections`, `userId`, and `
 
 The `format` value is the string "Lightbeam Save File" and is for documentation and identification of JSON files which are Lightbeam for Firefox-specific. 
 
-The `version` value is the string "1.1" and identifies the specific format documented here. A missing `version` key is the same as a `version` value of "0" and should be parsed and interpreted as specified for Format 0 above. 
+The `version` value is the string "1.2" and identifies the specific format documented here. A missing `version` key is the same as a `version` value of "0" and should be parsed and interpreted as specified for Format 0 above. 
 
 The `userId` value is a string with the format <identifier>:<timestamp>. User
 Ids will never be shared publicly. User IDs are rotated every three months and
@@ -47,12 +48,12 @@ The `sourcePathDepth` is a metric of how many path elements there were in the so
 
 The `sourceQueryDepth` is a metric of how many items there were in the query string. This is not a test of unique keys, just simple breaking after the "?" and splitting on "&" and ";". Again, http://example.com/ has a depth of 0, as does http://example.com/?, while http://example.com/?captain=kirk&ship=enterprise, http://example.com/?captain=kirk&captain=picard, and http://example.com/?captain=kirk;ship=enterprise all have a depth of 2.
 
-The `sourceSub` is the remainder of the domain after stripping off the top-level domain (so for "ec2.amazon.com", the source would be "amazon.com" and the source-sub would be "ec2"). This attribute is new in the 1.1 format.
+The `sourceSub` is the remainder of the domain after stripping off the top-level domain (so for "ec2.amazon.com", the source would be "amazon.com" and the source-sub would be "ec2").
 
-The `targetSub` is the same as "sourceSub", but for targets. This attribute is new in the 1.1 format.
+The `targetSub` is the same as "sourceSub", but for targets.
 
-The `method` attribute is whether this connection was loaded via GET, POST, PUT, etc. This attribute is new in the 1.1 format.
+The `method` attribute is whether this connection was loaded via GET, POST, PUT, etc.
 
-The `status` attribute is the numeric status of the response (200, 404, 500, etc.) as an integer. This attribute is new in the 1.1 format.
+The `status` attribute is the numeric status of the response (200, 404, 500, etc.) as an integer.
 
 The `cacheable` attribute will be false if the server responded with any of a variety of mechanisms (as headers) for preventing cacheing such as "Cache-control: no-cache", "Pragma: no-cache", "Expires: 0", or "Expires" with a date value in the past relative to the value of the "Date" header.
