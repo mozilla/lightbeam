@@ -142,21 +142,6 @@ function resetAdditionalUI() {
 
 
 /****************************************
- *   Upload data
- */
-
-
-global.startSharing = function startSharing(askForConfirmation, callback) {
-  if (askForConfirmation) {
-    askForDataSharingConfirmationDialog(function (confirmed) {
-      callback(confirmed);
-    });
-  } else {
-    callback(true);
-  }
-};
-
-/****************************************
  *   Format date string
  */
 global.formattedDate = function formattedDate(date, format) {

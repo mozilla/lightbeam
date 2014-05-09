@@ -87,9 +87,10 @@ document.querySelector(".toggle-btn.share-btn").addEventListener("click",
     }
   });
 
-global.confirmStartSharing = function confirmStartSharing(askForConfirmation, elmClicked) {
-  global.startSharing(askForConfirmation, function (confirmed) {
+function confirmStartSharing(askForConfirmation, elmClicked) {
+  let callback = function (confirmed) {
     if (confirmed) {
+      console.log("Sharing confirmed!");
       toggleBtnOnEffect(document.querySelector(".share-btn"));
       global.self.port.emit("prefChanged", {
         "contributeData": true
@@ -97,7 +98,13 @@ global.confirmStartSharing = function confirmStartSharing(askForConfirmation, el
     } else {
       elmClicked.checked = false;
     }
-  });
+  };
+  if (askForConfirmation) {
+    askForDataSharingConfirmationDialog(callback);
+  } else {
+    callback(true);
+  }
+
 };
 
 global.confirmStopSharing = function confirmStopSharing(elmClicked) {
