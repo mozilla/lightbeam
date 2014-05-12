@@ -18,7 +18,11 @@
         <p><strong>Major changes this release</strong> include an updated
 data format, refactoring the content scripts to omit references to <a
 href="blog.mozilla.org/addons/2014/04/10/changes-to-unsafewindow-for-the-add-on-sdk/">unsafeWindow</a>,
-and refactoring storage. For a complete list of changes, please visit <a
+and refactoring storage. <strong>Due to storage changes, previously stored
+connections will be wiped out with this upgrade</strong>. We expect users'
+connections graph to be restored to their normal state in a few days, since
+quota limits restrict the amount of data stored anyway. For a complete list
+of changes, please visit <a
 href=https://github.com/mozilla/lightbeam/compare/1.0.9...1.0.10>our github
 repository</a>.</p>
      </li>
