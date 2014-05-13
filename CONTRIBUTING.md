@@ -8,9 +8,13 @@ This contributors document should be the canonical place for answers to:
 
 # Before submitting a pull request
 
-To install jshint, simply `npm install jshint` from the root directory of the project. Then run like it like this:
+You can run the test suite like this:
 
-    node_modules/.bin/jshint data/*.js
+    make test
+
+In addition to running the tests, you should lint the code. To install jshint, simply `npm install jshint` from the root directory of the project. Then run like it like this:
+
+    make lint
 
 and make sure your changes are not adding any new warnings or errors.
 
