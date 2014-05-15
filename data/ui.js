@@ -3,6 +3,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 /* jshint moz: true */
 (function (global) {
+
+// In 1.0.9 and before, the contribute data pref was kept in localStorage. In
+// 1.0.10, all prefs are stored in the pref manager. If a previous pref exists,
+// send it back to the addon. This logic is ridiculous but it's what existed
+// prior to 1.0.9, so just keep it in.
+if (localStorage.userHasOptedIntoSharing &&
+    localStorage.userHasOptedIntoSharing === 'true') {
+  console.log("Restoring contribute data pref from localStorage");
+  let e = { "contributeData": true };
+  global.self.port.emit("prefChanged", e);
+  updateUIFromPrefs(e);
+  localStorage.clear();
+}
+
 // Bunch of utilities related to UI elements.
 const graphNodeRadius = {
   "graph": 12
