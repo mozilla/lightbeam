@@ -118,7 +118,7 @@ function confirmStartSharing(askForConfirmation, elmClicked) {
     callback(true);
   }
 
-};
+}
 
 global.confirmStopSharing = function confirmStopSharing(elmClicked) {
   stopSharingDialog(function (confirmed) {
