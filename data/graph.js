@@ -267,7 +267,9 @@ function initGraph() {
     });
     var endDraw = Date.now();
     draws.push(endDraw - lastTick);
-    nodes.call(force.drag);
+    if (force) {
+      nodes.call(force.drag);
+    }
 
     ticking = false;
   });
