@@ -30,8 +30,14 @@ self.port.on('init', function () {
   global.aggregate.emit('load', global.allConnections);
 });
 
+self.port.on("updateUIFromMetadata", function (metadata) {
+  console.debug("Got add-on metadata", metadata);
+  global.aggregate.emit("updateUIFromMetadata", metadata);
+});
+
 self.port.on("updateUIFromPrefs", function (prefs) {
   console.debug("Got set prefs", prefs);
   global.aggregate.emit("updateUIFromPrefs", prefs);
 });
+
 })(this);
