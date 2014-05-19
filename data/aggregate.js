@@ -143,12 +143,18 @@ function onLoad(connections) {
   console.debug('aggregate::onLoad end, took %s ms', Date.now() - startTime);
 }
 
+function updateUIFromMetadata(metadata) {
+  console.debug("in aggregate metadata");
+  global.updateUIFromMetadata(metadata);
+}
+
 function updateUIFromPrefs(prefs) {
   console.debug("in aggregate prefs");
   global.updateUIFromPrefs(prefs);
 }
 
 aggregate.on('load', onLoad);
+aggregate.on("updateUIFromMetadata", updateUIFromMetadata);
 aggregate.on("updateUIFromPrefs", updateUIFromPrefs);
 
 // Constants for indexes of properties in array format

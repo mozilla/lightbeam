@@ -479,6 +479,10 @@ global.singularOrPluralNoun = function singularOrPluralNoun(num, str) {
   return (num > 1) ? str + "s" : str;
 };
 
+function updateUIFromMetadata(event) {
+  document.querySelector('#version-number').textContent = event.version;
+}
+
 function updateUIFromPrefs(event) {
   if ("contributeData" in event && event.contributeData) {
     var toggleBtn = document.querySelector(".share-btn");
@@ -510,5 +514,6 @@ function updateUIFromPrefs(event) {
 }
 
 // Exports
+global.updateUIFromMetadata = updateUIFromMetadata;
 global.updateUIFromPrefs = updateUIFromPrefs;
 })(this);
