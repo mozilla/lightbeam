@@ -382,7 +382,7 @@ GraphNode.prototype.update = function (connection, isSource) {
   this.howMany++;
   if (this.visitedCount / this.howMany == 1) {
     this.nodeType = 'site';
-  } else if (this.visitedCount / this.howMany == 0) {
+  } else if (this.visitedCount / this.howMany === 0) {
     this.nodeType = 'thirdparty';
   } else {
     this.nodeType = 'both';
