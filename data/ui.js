@@ -103,7 +103,7 @@ document.querySelector(".toggle-btn.share-btn").addEventListener("click",
 function confirmStartSharing(askForConfirmation, elmClicked) {
   let callback = function (confirmed) {
     if (confirmed) {
-      console.log("Sharing confirmed!");
+      console.debug("Sharing confirmed!");
       toggleBtnOnEffect(document.querySelector(".share-btn"));
       global.self.port.emit("prefChanged", {
         "contributeData": true
