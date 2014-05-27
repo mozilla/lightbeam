@@ -7,6 +7,8 @@
 
 var g = global;
 global.initMap = function initMap(mapcanvas, mapDocument) {
+  var onDragMap = false;
+  var mapDragStart = {};
 
   var oriMapViewBox = mapcanvas.getAttribute('viewBox');
 

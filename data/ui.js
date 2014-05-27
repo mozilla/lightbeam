@@ -315,9 +315,7 @@ function generateNewViewBox(target, box, ratio) {
 /* Pan by dragging ======================================== */
 
 var onDragGraph = false;
-var onDragMap = false;
 var graphDragStart = {};
-var mapDragStart = {};
 
 /* vizcanvas */
 document.querySelector(".stage").addEventListener("mousedown", function (event) {
