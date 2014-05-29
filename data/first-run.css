@@ -10,7 +10,7 @@ body {
 }
 
 .center { text-align: center; }
-img.center { display: block; margin: 0 auto; }
+img.center, button.center { display: block; margin: 0 auto; }
 
 img#lightbeam-logo { margin-bottom:-18px; }
 
@@ -54,4 +54,10 @@ ol#steps > li p:last-child {
 
 ul#contact {
   padding-left:16px
+}
+
+button#openLightbeam {
+  font-size:18px;
+  font-weight:strong;
+  padding:8px;
 }
