@@ -1,7 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-/* jshint moz: true */
 // List Visualization
 
 // Display data in tabular format
@@ -474,7 +473,7 @@ function sortTableOnColumn(table, n) {
       // Check if there are any preferences set for this row
       var prefVal = rowElement.attributes.getNamedItem('data-pref').value;
 
-      if (prefCol && prefVal != '') {
+      if (prefVal) {
         // This row is marked with a preference and should
         // be appended to the top fragment.
         preFrag.appendChild(rowElement);

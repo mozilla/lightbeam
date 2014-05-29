@@ -1,7 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-/* jshint moz: true */
 (function (global) {
 
 // In 1.0.9 and before, the contribute data pref was kept in localStorage. In
@@ -118,7 +117,7 @@ function confirmStartSharing(askForConfirmation, elmClicked) {
     callback(true);
   }
 
-};
+}
 
 global.confirmStopSharing = function confirmStopSharing(elmClicked) {
   stopSharingDialog(function (confirmed) {

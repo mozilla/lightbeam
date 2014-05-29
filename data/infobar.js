@@ -202,7 +202,7 @@ global.initMap = function initMap(mapcanvas, mapDocument) {
   }
 
   function showServerLocation(serverData) {
-    if (serverData == false || serverData.country_name === "Reserved") {
+    if (!serverData || serverData.country_name === "Reserved") {
       document.querySelector("#country").textContent = "(Unable to find server location)";
       resetMap();
     } else {

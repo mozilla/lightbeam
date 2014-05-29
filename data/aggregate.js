@@ -1,7 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-/* jshint moz: true */
 // Graph Visualization
 
 // Visualization of tracking data interconnections
@@ -382,7 +381,7 @@ GraphNode.prototype.update = function (connection, isSource) {
   this.howMany++;
   if (this.visitedCount / this.howMany == 1) {
     this.nodeType = 'site';
-  } else if (this.visitedCount / this.howMany == 0) {
+  } else if (this.visitedCount / this.howMany === 0) {
     this.nodeType = 'thirdparty';
   } else {
     this.nodeType = 'both';
