@@ -1,0 +1,11 @@
+#!/bin/bash
+# Pre-push hook. If you want to test with a different version of firefox, put
+# the path in the CFX_FIREFOX environment variable.
+
+cmd='cfx test'
+if [ -n "$CFX_FIREFOX" ];
+then
+  cmd="$cmd -b $CFX_FIREFOX"
+fi
+echo $cmd
+$cmd
