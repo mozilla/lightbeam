@@ -90,7 +90,7 @@ function dialogControls(options) {
 }
 
 function addDialogEventHandlers(modal, options, callback) {
-  var dialogContainer = modal.modalElem;
+  var dialogContainer = modal.modalElem();
   // OK button click event handler
   var okButton = dialogContainer.querySelector(".pico-close.dialog-ok");
   okButton.addEventListener("click", function () {
@@ -124,7 +124,7 @@ function addDialogEventHandlers(modal, options, callback) {
   };
   document.addEventListener("keydown", keyDownHandler);
 
-  modal.onClose(function () {
+  modal.afterClose(function () {
     document.removeEventListener("keydown", keyDownHandler);
   });
 
@@ -139,7 +139,7 @@ function addDialogEventHandlers(modal, options, callback) {
 }
 
 function restrictTabWithinDialog(modal) {
-  var dialogContainer = modal.modalElem;
+  var dialogContainer = modal.modalElem();
   assignTabIndices(modal);
   dialogContainer.addEventListener("keypress", function (event) {
     event.stopPropagation();
@@ -163,7 +163,7 @@ function restrictTabWithinDialog(modal) {
 }
 
 function assignTabIndices(modal) {
-  var dialogContainer = modal.modalElem;
+  var dialogContainer = modal.modalElem();
   var allElemsInDialog = dialogContainer.querySelectorAll("*");
   var tabIndex = 0;
   toArray(allElemsInDialog).forEach(function (elem, i) {
