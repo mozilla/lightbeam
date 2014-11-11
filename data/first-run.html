@@ -9,16 +9,12 @@
       document.addEventListener("DOMContentLoaded", function() {
         const firefoxVersionRe = /Firefox\/(([0-9]+)\.([0-9]+))/;
         const firefoxMajorVersion = Number(firefoxVersionRe.exec(window.navigator.userAgent)[2]);
-        const usingAustralis = firefoxMajorVersion >= 29 ? true : false;
-
         const australisSubs = {
           ".platform-dependent, #icon-placement": '<img src="icons/lightbeam_logo-only_32x32.png" style="width:20px;"/> logo in the Toolbar.'
         }
 
-        if (usingAustralis) {
-          for (var qs in australisSubs) {
-            document.querySelector(qs).innerHTML = australisSubs[qs];
-          }
+        for (var qs in australisSubs) {
+          document.querySelector(qs).innerHTML = australisSubs[qs];
         }
       });
     </script>
