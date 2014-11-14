@@ -299,12 +299,13 @@ document.querySelector(".toggle-about").addEventListener("click", function () {
 });
 
 /* Toggle Help Sections */
-document.querySelector(".toggle-help").addEventListener("click", function () {
+global.helpOnClick = function helpOnClick() {
   var tabClicked = document.querySelector(".toggle-help");
-  var contentToBeShown = document.querySelector(".help-content ." + g.currentVisualization.name + "-view-help");
+  var contentToBeShown = document.querySelector(".help-content ." + global.currentVisualization.name + "-view-help");
   toggleInfoPanelTab(tabClicked, contentToBeShown);
-});
+};
 
+document.querySelector(".toggle-help").addEventListener("click", helpOnClick);
 
 
 function toggleInfoPanelTab(tabClicked, contentToBeShown) {

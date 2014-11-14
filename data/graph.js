@@ -48,7 +48,7 @@ var highlight = {
 function onUpdate() {
   // new nodes, reheat graph simulation
   if (force) {
-    // console.log('restarting graph due to update');
+    console.debug('restarting graph due to update');
     force.stop();
     force.nodes(filteredAggregate.nodes);
     force.links(filteredAggregate.edges);
@@ -61,29 +61,30 @@ function onUpdate() {
 }
 
 function onInit() {
-  // console.log('graph::onInit()');
-  // console.log('initializing graph from %s connections', filteredAggregate.nodes.length);
+  console.debug('graph::onInit()');
+  console.debug('initializing graph from ' + filteredAggregate.nodes.length +
+                ' connections');
   // Handles all of the panning and scaling.
   vis = d3.select(vizcanvas);
   // A D3 visualization has a two main components, data-shaping, and setting up the D3 callbacks
   // This binds our data to the D3 visualization and sets up the callbacks
   initGraph();
   aggregate.on('update', onUpdate);
-  // Differenct visualizations may have different viewBoxes, so make sure we use the right one
+  // Different visualizations may have different viewBoxes, so make sure we use the right one
   vizcanvas.setAttribute('viewBox', [0, 0, width, height].join(' '));
-  // console.log('graph::onInit end');
+  console.debug('graph::onInit end');
   document.querySelector(".filter-display").classList.remove("hidden");
 }
 
 function onRemove() {
-  // var startTime = Date.now();
+  var startTime = Date.now();
   if (force) {
     force.stop();
     force = null;
   }
   resetCanvas();
   document.querySelector(".filter-display").classList.add("hidden");
-  // console.log('it took %s ms to remove graph view', Date.now() - startTime);
+  console.debug('it took %s ms to remove graph view', Date.now() - startTime);
 }
 
 function onReset() {
@@ -189,7 +190,7 @@ function colourHighlightNodes(highlight) {
 
 function initGraph() {
   // Initialize D3 layout and bind data
-  // console.log('initGraph()');
+  console.debug('initGraph()');
   force = d3.layout.force()
     .nodes(filteredAggregate.nodes)
     .links(filteredAggregate.edges)
@@ -197,6 +198,10 @@ function initGraph() {
     .size([width, height])
     .start();
   updateGraph();
+  // Terrible hack. Something about the d3 setup is wrong, and forcing onClick
+  // causes d3 to redraw in a way that most of the graph is visible on screen.
+	global.helpOnClick();
+  global.helpOnClick();
   colourHighlightNodes(highlight);
 
   // update method
@@ -275,7 +280,7 @@ function initGraph() {
 }
 
 function updateGraph() {
-  // console.log('updateGraph()');
+  console.debug('updateGraph()');
   // Data binding for links
   edges = vis.selectAll('.edge')
     .data(filteredAggregate.edges, nodeName);
