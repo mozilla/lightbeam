@@ -10,11 +10,6 @@
         "private-browsing": true
     },
     "preferences": [
-      { "name": "contributeData",
-        "title": "Contribute data",
-        "description": "Contribute your Lightbeam data to Mozilla",
-        "type": "bool",
-        "value": false },
       { "name": "defaultVisualization",
         "title": "Default visualization",
         "description": "Graph or list",
