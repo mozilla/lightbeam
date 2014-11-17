@@ -438,7 +438,21 @@ global.singularOrPluralNoun = function singularOrPluralNoun(num, str) {
 };
 
 function updateUIFromMetadata(event) {
-  document.querySelector('#version-number').textContent = event.version;
+  if ("version" in event) {
+    document.querySelector('#version-number').textContent = event.version;
+  }
+
+  if ("browserVersion" in event) {
+    const firefoxVersionRe = /^([0-9]+)(\.([0-9]+))?/;
+    var majorVersion = Number(firefoxVersionRe.exec(event.browserVersion)[1]);
+
+    var section = document.querySelector('.tracking-section');
+    if (majorVersion >= 35) {
+      section.classList.remove("hidden");
+    } else {
+      section.classList.add("hidden");
+    }
+  }
 }
 
 function updateUIFromBrowserPrefs(event) {
