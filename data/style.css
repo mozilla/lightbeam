@@ -377,26 +377,6 @@ a:hover{
     margin-right: 20px;
 }
 
-.sharing-section{
-    float: right;
-    text-align: center;
-}
-
-.share-btn label{
-    position: relative;
-    top: 10px;
-}
-
-.sharing-section .label{
-    color: #3E454D;
-    margin-right: 5px;
-}
-
-.sharing-section div{
-    display: inline-block;
-}
-
-
 .info{
     width: 8px;
     height: 100%;

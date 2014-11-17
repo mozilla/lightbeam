@@ -72,54 +72,6 @@ btnGroupArray.forEach(function (btnGroup) {
   });
 });
 
-
-/* Share Data Toggle */
-
-document.querySelector(".toggle-btn.share-btn").addEventListener("click",
-  function (event) {
-    var elmClicked = event.target;
-    if (elmClicked.mozMatchesSelector("input")) {
-      if (elmClicked.checked) {
-        confirmStartSharing(true, elmClicked);
-      } else {
-        confirmStopSharing(elmClicked);
-      }
-    }
-  });
-
-function confirmStartSharing(askForConfirmation, elmClicked) {
-  let callback = function (confirmed) {
-    if (confirmed) {
-      console.debug("Sharing confirmed!");
-      toggleBtnOnEffect(document.querySelector(".share-btn"));
-      global.self.port.emit("prefChanged", {
-        "contributeData": true
-      });
-    } else {
-      elmClicked.checked = false;
-    }
-  };
-  if (askForConfirmation) {
-    askForDataSharingConfirmationDialog(callback);
-  } else {
-    callback(true);
-  }
-
-}
-
-global.confirmStopSharing = function confirmStopSharing(elmClicked) {
-  stopSharingDialog(function (confirmed) {
-    if (confirmed) {
-      toggleBtnOffEffect(document.querySelector(".share-btn"));
-      global.self.port.emit("prefChanged", {
-        "contributeData": false
-      });
-    } else {
-      elmClicked.checked = true;
-    }
-  });
-};
-
 function toggleBtnOnEffect(toggleBtn) {
   toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
   toggleBtn.querySelector(".switch").classList.add("checked");
@@ -469,16 +421,6 @@ function updateUIFromMetadata(event) {
 }
 
 function updateUIFromPrefs(event) {
-  if ("contributeData" in event && event.contributeData) {
-    var toggleBtn = document.querySelector(".share-btn");
-    if (event.contributeData) {
-      toggleBtn.querySelector("input").checked = true;
-      toggleBtnOnEffect(toggleBtn);
-    } else {
-      toggleBtn.querySelector("input").checked = false;
-      toggleBtnOffEffect(toggleBtn);
-    }
-  }
   if ("defaultVisualization" in event) {
     global.currentVisualization = visualizations[event.defaultVisualization];
     if (global.currentVisualization) {
