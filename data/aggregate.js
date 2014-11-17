@@ -147,6 +147,11 @@ function updateUIFromMetadata(metadata) {
   global.updateUIFromMetadata(metadata);
 }
 
+function updateUIFromBrowserPrefs(browserPrefs) {
+  console.debug("in aggregate browser prefs");
+  global.updateUIFromBrowserPrefs(browserPrefs);
+}
+
 function updateUIFromPrefs(prefs) {
   console.debug("in aggregate prefs");
   global.updateUIFromPrefs(prefs);
@@ -154,6 +159,7 @@ function updateUIFromPrefs(prefs) {
 
 aggregate.on('load', onLoad);
 aggregate.on("updateUIFromMetadata", updateUIFromMetadata);
+aggregate.on("updateUIFromBrowserPrefs", updateUIFromBrowserPrefs);
 aggregate.on("updateUIFromPrefs", updateUIFromPrefs);
 
 // Constants for indexes of properties in array format

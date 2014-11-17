@@ -72,6 +72,27 @@ btnGroupArray.forEach(function (btnGroup) {
   });
 });
 
+document.querySelector(".toggle-btn.tracking-btn").addEventListener("click",
+  function (event) {
+    var elmClicked = event.target;
+    if (elmClicked.mozMatchesSelector("input")) {
+      var toggleBtn = document.querySelector(".tracking-btn");
+      if (elmClicked.checked) {
+        elmClicked.checked = true;
+        toggleBtnOnEffect(toggleBtn);
+        global.self.port.emit("browserPrefChanged", {
+          "trackingProtection": true
+        });
+      } else {
+        elmClicked.checked = false;
+        toggleBtnOffEffect(toggleBtn);
+        global.self.port.emit("browserPrefChanged", {
+          "trackingProtection": false
+        });
+      }
+    }
+  });
+
 function toggleBtnOnEffect(toggleBtn) {
   toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
   toggleBtn.querySelector(".switch").classList.add("checked");
@@ -420,6 +441,19 @@ function updateUIFromMetadata(event) {
   document.querySelector('#version-number').textContent = event.version;
 }
 
+function updateUIFromBrowserPrefs(event) {
+  if ("trackingProtection" in event) {
+    var toggleBtn = document.querySelector(".tracking-btn");
+    if (event.trackingProtection) {
+      toggleBtn.querySelector("input").checked = true;
+      toggleBtnOnEffect(toggleBtn);
+    } else {
+      toggleBtn.querySelector("input").checked = false;
+      toggleBtnOffEffect(toggleBtn);
+    }
+  }
+}
+
 function updateUIFromPrefs(event) {
   if ("defaultVisualization" in event) {
     global.currentVisualization = visualizations[event.defaultVisualization];
@@ -442,5 +476,6 @@ function updateUIFromPrefs(event) {
 
 // Exports
 global.updateUIFromMetadata = updateUIFromMetadata;
+global.updateUIFromBrowserPrefs = updateUIFromBrowserPrefs;
 global.updateUIFromPrefs = updateUIFromPrefs;
 })(this);
