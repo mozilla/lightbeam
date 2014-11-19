@@ -3,18 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 (function (global) {
 
-// In 1.0.9 and before, the contribute data pref was kept in localStorage. In
-// 1.0.10, all prefs are stored in the pref manager. If a previous pref exists,
-// send it back to the addon. This logic is ridiculous but it's what existed
-// prior to 1.0.9, so just keep it in.
-if (localStorage.userHasOptedIntoSharing === 'true') {
-  console.log("Restoring contribute data pref from localStorage");
-  let e = { "contributeData": true };
-  global.self.port.emit("prefChanged", e);
-  updateUIFromPrefs(e);
-  localStorage.clear();
-}
-
 // Bunch of utilities related to UI elements.
 const graphNodeRadius = {
   "graph": 12
@@ -83,54 +71,6 @@ btnGroupArray.forEach(function (btnGroup) {
     }
   });
 });
-
-
-/* Share Data Toggle */
-
-document.querySelector(".toggle-btn.share-btn").addEventListener("click",
-  function (event) {
-    var elmClicked = event.target;
-    if (elmClicked.mozMatchesSelector("input")) {
-      if (elmClicked.checked) {
-        confirmStartSharing(true, elmClicked);
-      } else {
-        confirmStopSharing(elmClicked);
-      }
-    }
-  });
-
-function confirmStartSharing(askForConfirmation, elmClicked) {
-  let callback = function (confirmed) {
-    if (confirmed) {
-      console.debug("Sharing confirmed!");
-      toggleBtnOnEffect(document.querySelector(".share-btn"));
-      global.self.port.emit("prefChanged", {
-        "contributeData": true
-      });
-    } else {
-      elmClicked.checked = false;
-    }
-  };
-  if (askForConfirmation) {
-    askForDataSharingConfirmationDialog(callback);
-  } else {
-    callback(true);
-  }
-
-}
-
-global.confirmStopSharing = function confirmStopSharing(elmClicked) {
-  stopSharingDialog(function (confirmed) {
-    if (confirmed) {
-      toggleBtnOffEffect(document.querySelector(".share-btn"));
-      global.self.port.emit("prefChanged", {
-        "contributeData": false
-      });
-    } else {
-      elmClicked.checked = true;
-    }
-  });
-};
 
 function toggleBtnOnEffect(toggleBtn) {
   toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
@@ -481,16 +421,6 @@ function updateUIFromMetadata(event) {
 }
 
 function updateUIFromPrefs(event) {
-  if ("contributeData" in event && event.contributeData) {
-    var toggleBtn = document.querySelector(".share-btn");
-    if (event.contributeData) {
-      toggleBtn.querySelector("input").checked = true;
-      toggleBtnOnEffect(toggleBtn);
-    } else {
-      toggleBtn.querySelector("input").checked = false;
-      toggleBtnOffEffect(toggleBtn);
-    }
-  }
   if ("defaultVisualization" in event) {
     global.currentVisualization = visualizations[event.defaultVisualization];
     if (global.currentVisualization) {
