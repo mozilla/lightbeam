@@ -6,7 +6,7 @@ This is an add-on for Firefox that helps to visualize sites that may be tracking
 ## Prerequisites
 
 * [Mozilla Add-on SDK][ASDK]
-* [Firefox 18][] or higher.
+* [Firefox 29][] or higher.
 
 If you only want to see the demo, you don't need any of these; all you need is a modern browser.
 
@@ -46,4 +46,4 @@ The following software is bundled with the repository and doesn't need to be man
   [D3]: http://mbostock.github.com/d3/
   [parseUri]: http://blog.stevenlevithan.com/code
   [PicoModal]: https://github.com/Nycto/PicoModal
-  [Firefox 18]: http://www.mozilla.com/en-US/firefox/fx/
+  [Firefox 29]: http://www.mozilla.com/en-US/firefox/fx/
