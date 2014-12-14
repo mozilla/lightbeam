@@ -232,19 +232,13 @@ function svgZooming(target, ratio) {
 }
 
 function generateNewViewBox(target, box, ratio) {
-  var oldWidth = box.w;
-  var newWidth = oldWidth / ratio;
-  var offsetX = (newWidth - oldWidth) / 2;
-
-  var oldHeight = box.h;
-  var newHeight = oldHeight / ratio;
-  var offsetY = (newHeight - oldHeight) / 2;
-
+  var x0 = 350.0
+  var y0 = 350.0
   box.w = box.w / ratio;
   box.h = box.h / ratio;
-  box.x = box.x - offsetX;
-  box.y = box.y - offsetY;
-
+  box.x = x0 - (x0 - box.x) / ratio;
+  box.y = y0 - (y0 - box.y) / ratio;
+  
   return box;
 }
 
