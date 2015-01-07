@@ -351,6 +351,7 @@ a:hover{
     z-index: 0;
     border-top: 1px solid #555555;
     height: 100%;
+    min-height: 0;
 }
 
 .content-flex{
@@ -634,6 +635,7 @@ a:hover{
 
 .stage{
     flex: 1;
+    min-height: 0;
     /*margin: 20px 0px;*/
 }
 .showinfo .stage-stack{
