@@ -56,7 +56,7 @@ function onUpdate() {
     updateGraph();
     colourHighlightNodes(highlight);
   } else {
-    console.log('the force is not with us');
+    console.debug('the force is not with us');
   }
 }
 
