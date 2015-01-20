@@ -7,23 +7,6 @@
 var tooltipTimer;
 var tooltip;
 
-// for Clock view
-function showTooltip(event) {
-  if (!tooltip) {
-    tooltip = document.getElementById('tooltip');
-  }
-  tooltip.style.left = '-1000px';
-  tooltip.style.display = 'inline-block';
-  // console.error(event, event.target, event.target.dataset);
-  tooltip.textContent = event.target.getAttribute(["data-name"]);
-  var rect = event.target.querySelector(":last-child").getClientRects()[0];
-  var tooltipWidth = tooltip.offsetWidth;
-  tooltip.style.top = (rect.top - 40) + 'px';
-  tooltip.style.left = (rect.left + (rect.width / 2) - (tooltipWidth / 2)) + 'px';
-  setTooltipTimeout();
-  return false;
-}
-
 // for Graph view
 function d3ShowTooltip(node, idx) {
   if (!tooltip) {
@@ -77,17 +60,6 @@ function hideTooltip() {
   timeoutTooltip();
   return false;
 }
-
-function add(node) {
-  node.addEventListener('mouseenter', showTooltip, false);
-  node.addEventListener('mouseleave', hideTooltip, false);
-}
-
-function remove(node) {
-  node.removeEventListener('mouseenter', showTooltip);
-  node.removeEventListener('mouseleave', hideTooltip);
-}
-
 
 global.tooltip = {
   add: add,
