@@ -78,10 +78,16 @@ document.querySelector(".toggle-btn.tracking-btn").addEventListener("click",
     if (elmClicked.mozMatchesSelector("input")) {
       var toggleBtn = document.querySelector(".tracking-btn");
       if (elmClicked.checked) {
-        elmClicked.checked = true;
-        toggleBtnOnEffect(toggleBtn);
-        global.self.port.emit("browserPrefChanged", {
-          "trackingProtection": true
+        confirmTrackingProtectionDialog(function (confirmed) {
+          if (confirmed) {
+            elmClicked.checked = true;
+            toggleBtnOnEffect(toggleBtn);
+            global.self.port.emit("browserPrefChanged", {
+              "trackingProtection": true
+            });
+          } else {
+            elmClicked.checked = false;
+          }
         });
       } else {
         elmClicked.checked = false;
