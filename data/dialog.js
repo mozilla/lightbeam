@@ -14,13 +14,6 @@ const dialogNames = {
   "saveOldData": "saveOldData"
 };
 
-const allDialogs = {
-  'Reset Data Confirmation': confirmResetDataDialog,
-  'Block Sites Confirmation': confirmBlockSitesDialog,
-  'Hide Sites Confirmation': confirmHideSitesDialog,
-  'Private Browsing Notification': informUserOfUnsafeWindowsDialog,
-};
-
 // options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
 function dialog(options, callback) {
   createDialog(options, callback);
