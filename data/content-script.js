@@ -35,6 +35,11 @@ self.port.on("updateUIFromMetadata", function (metadata) {
   global.aggregate.emit("updateUIFromMetadata", metadata);
 });
 
+self.port.on("updateUIFromBrowserPrefs", function (browserPrefs) {
+  console.debug("Got set browser prefs", browserPrefs);
+  global.aggregate.emit("updateUIFromBrowserPrefs", browserPrefs);
+});
+
 self.port.on("updateUIFromPrefs", function (prefs) {
   console.debug("Got set prefs", prefs);
   global.aggregate.emit("updateUIFromPrefs", prefs);

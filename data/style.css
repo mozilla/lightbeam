@@ -378,6 +378,25 @@ a:hover{
     margin-right: 20px;
 }
 
+.tracking-section{
+    float: right;
+    text-align: center;
+}
+
+.tracking-btn label{
+    position: relative;
+    top: 10px;
+}
+
+.tracking-section .label{
+    color: #3E454D;
+    margin-right: 5px;
+}
+
+.tracking-section div{
+    display: inline-block;
+}
+
 .info{
     width: 8px;
     height: 100%;

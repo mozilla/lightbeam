@@ -11,14 +11,8 @@ const dialogNames = {
   "startUploadData": "startUploadData",
   "stopUploadData": "stopUploadData",
   "privateBrowsing": "privateBrowsing",
+  "trackingProtection": "trackingProtection",
   "saveOldData": "saveOldData"
-};
-
-const allDialogs = {
-  'Reset Data Confirmation': confirmResetDataDialog,
-  'Block Sites Confirmation': confirmBlockSitesDialog,
-  'Hide Sites Confirmation': confirmHideSitesDialog,
-  'Private Browsing Notification': informUserOfUnsafeWindowsDialog,
 };
 
 // options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
@@ -218,5 +212,18 @@ function confirmResetDataDialog(callback) {
     "message": "<p>Pressing OK will delete all Lightbeam information including connection history, user preferences, block sites list etc.</p>" +
       "<p>Your browser will be returned to the state of a fresh install of Lightbeam.</p>",
     "imageUrl": "image/lightbeam_popup_warningreset.png"
+  }, callback);
+}
+
+function confirmTrackingProtectionDialog(callback) {
+  dialog({
+    "name": dialogNames.trackingProtection,
+    "title": "Tracking Protection",
+    "message": "<p><b>Warning:</b></p>" +
+      "<p>Enabling this experimental feature will block elements that track your online behavior.</p>" +
+      "<p>This can prevent some sites from working and degrade your internet experience. Please use this feature carefully.</p>" +
+      "<p>Please report any problems you find.</p>" +
+      '<p><a href="https://support.mozilla.org/kb/tracking-protection-firefox#w_how-to-use-tracking-protection">Learn more...</a></p>',
+      "imageUrl": "image/lightbeam_popup_blocked.png"
   }, callback);
 }

@@ -72,6 +72,33 @@ btnGroupArray.forEach(function (btnGroup) {
   });
 });
 
+document.querySelector(".toggle-btn.tracking-btn").addEventListener("click",
+  function (event) {
+    var elmClicked = event.target;
+    if (elmClicked.mozMatchesSelector("input")) {
+      var toggleBtn = document.querySelector(".tracking-btn");
+      if (elmClicked.checked) {
+        confirmTrackingProtectionDialog(function (confirmed) {
+          if (confirmed) {
+            elmClicked.checked = true;
+            toggleBtnOnEffect(toggleBtn);
+            global.self.port.emit("browserPrefChanged", {
+              "trackingProtection": true
+            });
+          } else {
+            elmClicked.checked = false;
+          }
+        });
+      } else {
+        elmClicked.checked = false;
+        toggleBtnOffEffect(toggleBtn);
+        global.self.port.emit("browserPrefChanged", {
+          "trackingProtection": false
+        });
+      }
+    }
+  });
+
 function toggleBtnOnEffect(toggleBtn) {
   toggleBtn.querySelector(".toggle-btn-innner").classList.add("checked");
   toggleBtn.querySelector(".switch").classList.add("checked");
@@ -417,7 +444,34 @@ global.singularOrPluralNoun = function singularOrPluralNoun(num, str) {
 };
 
 function updateUIFromMetadata(event) {
-  document.querySelector('#version-number').textContent = event.version;
+  if ("version" in event) {
+    document.querySelector('#version-number').textContent = event.version;
+  }
+
+  if ("browserVersion" in event) {
+    const firefoxVersionRe = /^([0-9]+)(\.([0-9]+))?/;
+    var majorVersion = Number(firefoxVersionRe.exec(event.browserVersion)[1]);
+
+    var section = document.querySelector('.tracking-section');
+    if (majorVersion >= 35) {
+      section.classList.remove("hidden");
+    } else {
+      section.classList.add("hidden");
+    }
+  }
+}
+
+function updateUIFromBrowserPrefs(event) {
+  if ("trackingProtection" in event) {
+    var toggleBtn = document.querySelector(".tracking-btn");
+    if (event.trackingProtection) {
+      toggleBtn.querySelector("input").checked = true;
+      toggleBtnOnEffect(toggleBtn);
+    } else {
+      toggleBtn.querySelector("input").checked = false;
+      toggleBtnOffEffect(toggleBtn);
+    }
+  }
 }
 
 function updateUIFromPrefs(event) {
@@ -442,5 +496,6 @@ function updateUIFromPrefs(event) {
 
 // Exports
 global.updateUIFromMetadata = updateUIFromMetadata;
+global.updateUIFromBrowserPrefs = updateUIFromBrowserPrefs;
 global.updateUIFromPrefs = updateUIFromPrefs;
 })(this);
