@@ -604,7 +604,6 @@ a:hover{
 .sorted:after, .reverse-sorted:after{
     padding:0px 5px;
     content: '▾';
-    display: inline-block;
     position: relative;
     -moz-transition:all 0.3s linear;
 }
