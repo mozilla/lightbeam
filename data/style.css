@@ -303,7 +303,7 @@ a:hover{
     display: inline-block;
     background: #5F6771;
     border-radius: 5px;
-    width: 60px;
+    width: 5.5em;
     height: 28px;
     padding: 3px;
     cursor: pointer;
@@ -1163,7 +1163,7 @@ text {
 
 .list-footer .align-left .btn{
     float: left;
-    width: 140px;
+    width: 160px;
     margin-right: 20px;
 }
 
