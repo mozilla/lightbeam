@@ -10,7 +10,7 @@ You can run the test suite like this:
 
     cfx test
 
-In addition to running the tests, you should lint the code. To install jshint, simply `npm install jshint` from the root directory of the project. Then run like it like this:
+In addition to running the tests, you should lint the code. To install jshint, simply `npm install jshint` from the root directory of the project. Then run it like this:
 
     ./hooks/pre-commit
 
