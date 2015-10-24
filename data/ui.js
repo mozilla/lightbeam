@@ -440,7 +440,7 @@ global.singularOrPluralNoun = function singularOrPluralNoun(num, str) {
   if (typeof num != "number") {
     num = parseFloat(num);
   }
-  return (num > 1) ? str + "s" : str;
+  return (num === 1) ? str : str + "s";
 };
 
 function updateUIFromMetadata(event) {
