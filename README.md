@@ -6,18 +6,13 @@ This is an add-on for Firefox that helps to visualize sites that may be tracking
 ## Prerequisites
 
 * [Mozilla Add-on SDK][ASDK]
-* [Firefox 29][] or higher.
+* [Firefox 38][] or higher.
 
 If you only want to see the demo, you don't need any of these; all you need is a modern browser.
 
 ## Quick Start
 
 First, [install][] the Mozilla Add-on SDK if you haven't already.
-
-Once it's installed, activate it in a command line terminal:
-
-    cd addon-sdk
-    source bin/activate
 
 Then, check out the Lightbeam repository and enter it (do this where you want the lightbeam directory, not in the addon-sdk directory):
 
@@ -26,13 +21,13 @@ Then, check out the Lightbeam repository and enter it (do this where you want th
 
 Finally, run:
 
-    cfx run
+    jpm run
 
 This will start Firefox with a temporary profile that has Lightbeam installed. Just click on the Lightbeam icon at the bottom-right of the browser window to open the web front-end.
 
-At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `cfx run` again.
+At this point, any changes you make to the web front-end simply require reloading the tab containing it. Changing the add-on, however, will require quitting Firefox and running `jpm run` again.
 
-  [install]: https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Installation$revision/894679
+  [install]: https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm#Installation
 
 ## Software Used
 
@@ -42,8 +37,8 @@ The following software is bundled with the repository and doesn't need to be man
 * [PicoModal][]
 * [parseUri][]
 
-  [ASDK]: https://addons.mozilla.org/en-US/developers/builder
+  [ASDK]: https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm
   [D3]: http://mbostock.github.com/d3/
   [parseUri]: http://blog.stevenlevithan.com/code
   [PicoModal]: https://github.com/Nycto/PicoModal
-  [Firefox 29]: http://www.mozilla.com/en-US/firefox/fx/
+  [Firefox 38]: http://www.mozilla.com/en-US/firefox/fx/

@@ -1,11 +1,7 @@
 #!/bin/bash
 # Pre-push hook. If you want to test with a different version of firefox, put
-# the path in the CFX_FIREFOX environment variable.
+# the path in the JPM_FIREFOX_BINARY environment variable.
 
-cmd='cfx test'
-if [ -n "$CFX_FIREFOX" ];
-then
-  cmd="$cmd -b $CFX_FIREFOX"
-fi
+cmd='jpm test'
 echo $cmd
 $cmd
