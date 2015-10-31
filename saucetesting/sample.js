@@ -1,6 +1,7 @@
 var webdriver = require('wd')
   , assert = require('assert');
 
+// defining remotebrowser
 var browser = webdriver.remote(
   "ondemand.saucelabs.com"
   , 80
@@ -8,14 +9,17 @@ var browser = webdriver.remote(
   , "6b6df5e4-65b8-457d-9896-6dbf23c74e71"
 );
 
+// log browser status
 browser.on('status', function(info){
   console.log('\x1b[36m%s\x1b[0m', info);
 });
 
+// log browser command
 browser.on('command', function(meth, path){
   console.log(' > \x1b[33m%s\x1b[0m: %s', meth, path);
 });
 
+// test fetch of iphone browser running on mac
 var desired = {
   browserName: 'iphone'
   , version: '5.0'
