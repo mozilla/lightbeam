@@ -2,7 +2,7 @@
 
 const tabs = require('sdk/tabs');
 
-const { getLightbeamTab, mainPage, openOrSwitchToOrClose } = require('ui');
+const { getLightbeamTab, mainPage, openOrSwitchToOrClose } = require('../lib/ui');
 
 exports.testGetLightbeamTab = function(assert, done) {
   tabs.open({
