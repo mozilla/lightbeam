@@ -1,4 +1,6 @@
-# Before submitting a pull request
+# Contributing to the `lightbeam` project
+
+## Before submitting a pull request
 
 Install the git hooks for this project by:
 
