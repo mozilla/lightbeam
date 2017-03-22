@@ -4,11 +4,10 @@
     "description": "Lightbeam is a Firefox add-on that allows you to see the third parties that are collecting information about your browsing activity, with and without your consent. Using interactive visualizations, Lightbeam shows you the relationships between these third parties and the sites you visit.",
     "author": "Mozilla Foundation",
     "license": "MPL 2.0",
-    "version": "1.3.1",
+    "version": "1.3.0",
     "id": "jid1-F9UJ2thwoAm5gQ@jetpack",
     "main": "lib/main.js",
     "permissions": {
-        "multiprocess": true,
         "private-browsing": true
     },
     "preferences": [
