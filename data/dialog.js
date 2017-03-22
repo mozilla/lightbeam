@@ -12,7 +12,8 @@ const dialogNames = {
   "stopUploadData": "stopUploadData",
   "privateBrowsing": "privateBrowsing",
   "trackingProtection": "trackingProtection",
-  "saveOldData": "saveOldData"
+  "saveOldData": "saveOldData",
+  "cookiesDisabled": "cookiesDisabled"
 };
 
 // options: name, title, message, type, dnsPrompt(Do Not Show), imageUrl
@@ -161,6 +162,19 @@ function assignTabIndices(modal) {
     }
   });
   dialogContainer.querySelector("[tabIndex='0']").focus();
+}
+
+function informUserofDisabledCookiesDialog() {
+    dialog({
+       "type": "alert",
+        "name": dialogNames.cookiesDisabled,
+        "dnsPrompt": true,
+        "title": "Cookies Disabled",
+        "message": "<p>You have disabled cookies.</p>" +
+            "<p>Lightbeam may not behave as expected. For full unhindered functionality please enable cookies.</p>"
+      },
+      function (confirmed) {}
+    );
 }
 
 function informUserOfUnsafeWindowsDialog() {
