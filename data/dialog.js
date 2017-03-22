@@ -19,7 +19,7 @@ const dialogNames = {
 function dialog(options, callback) {
   createDialog(options, callback);
 }
-
+// creates a Dialog with callback with fixed style (black background but slightly transparent)
 function createDialog(options, callback) {
   var modal = picoModal({
     content: createDialogContent(options),
